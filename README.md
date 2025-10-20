@@ -1,0 +1,3 @@
+# TFM : Posprocesamiento acelerado por GPU para termografía activa infrarroja
+
+Las técnicas de posprocesamiento utilizadas en la termografía activa infrarroja están diseñadas para mejorar la relación señal-ruido (SNR), con el fin de optimizar la detectabilidad en los sistemas de inspección infrarroja. Estos sistemas ofrecen ventajas respecto a otras técnicas empleadas en ensayos no destructivos como mayor facilidad de uso y seguridad, lo que ha incrementado su popularidad. Sin embargo, las técnicas de posprocesamiento existentes, como TSR, PCT o PPT, tienen el inconveniente de ser computacionalmente costosas. El objetivo de este trabajo es explorar el uso de la GPU para acelerar dicho procesamiento y comparar su rendimiento con la ejecución en la CPU.
