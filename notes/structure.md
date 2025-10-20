@@ -1,0 +1,6 @@
+-   Introducción a PyTorch
+-   Procesamiento de imágenes
+-   Algoritmos de procesamiento de imágenes
+-   Implementación de algoritmos en GPU
+-   Desarrollo de interfaz para creación de pipelines sobre procesamiento de imágenes
+-   Benchmarking
