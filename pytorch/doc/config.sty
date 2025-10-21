@@ -1,0 +1,108 @@
+\ProvidesPackage{config}
+
+\newcommand{\rowmajor}{\textit{Row-Major order}}
+\newcommand{\colmajor}{\textit{Column-Major order}}
+\newcommand{\zorder}{\textit{Z-Order}}
+\newcommand{\C}{\textit{C}}
+\newcommand{\python}{\textit{Python}}
+
+% HYPERREF % 
+\AtBeginDocument{\renewcommand{\lstlistingname}{Fragmento}}
+
+% TIKZ SECTION %
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\tikzstyle{startstop} = [
+  circle,
+  rounded corners,
+  minimum width=1cm,
+  minimum height=1cm,
+  text centered,
+  draw=black,
+  fill=black
+]
+\tikzstyle{process} = [
+  rectangle,
+  minimum width=3cm,
+  minimum height=1cm,
+  text width=3cm,
+  text centered,
+  draw=black,
+  fill=blue!20
+]
+\tikzstyle{decision} = [
+  diamond,
+  minimum width=3cm,
+  minimum height=1cm,
+  text width=3cm,
+  text centered,
+  draw=black,
+  fill=green!30
+]
+\tikzstyle{stack} = [
+  rectangle,
+  minimum width=3cm,
+  minimum height=6cm,
+  text width=3cm,
+  text centered,
+  draw=black
+]
+\tikzstyle{dot} = [
+  circle,
+  minimum width=1px,
+  minimum height=1px,
+  text width=20px,
+  text centered,
+  draw=black,
+  fill=white
+]
+\tikzstyle{arrow} = [
+  thick,
+  ->,
+  >=stealth
+]
+\tikzstyle{dorrow} = [
+  thick,
+  dotted,
+  ->,
+  >=stealth
+]
+\tikzstyle{darrow} = [
+  thick,
+  <->,
+  >=stealth
+]
+
+% LSTLISTING %
+\RequirePackage{listings}
+\RequirePackage{xcolor}
+
+% Dockerfile %
+\lstdefinelanguage{Dockerfile}{
+  morekeywords={[1]FROM, RUN, CMD, LABEL, MAINTAINER, EXPOSE, ENV, ADD, COPY, ENTRYPOINT, VOLUME, USER, WORKDIR, ARG, ONBUILD, STOPSIGNAL, HEALTHCHECK, SHELL},
+  keywordstyle=[1]\color{blue}\bfseries,
+  morecomment=[l]{\#},
+  commentstyle=\color{gray}\itshape,
+  morestring=[b]",
+  stringstyle=\color{red}
+}
+
+\lstset{
+    language=Dockerfile,
+    basicstyle=\footnotesize\ttfamily\fontfamily{cmtt}\selectfont,
+    columns=fullflexible,
+    keepspaces=false,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    frame=single,
+    captionpos=b,
+    rulecolor=\color{black},
+    breaklines=true,
+    tabsize=4,
+    showstringspaces=false,
+    xleftmargin=.1\textwidth, 
+    xrightmargin=.1\textwidth
+}
+
+\endinput
