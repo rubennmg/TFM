@@ -1,0 +1,27 @@
+\pagestyle{fancy}
+\fancyhead[l]{\autorUO}
+\fancyfoot[l]{\asignaturaAbbr}
+\fancyfoot[r]{\fecha}
+
+\section{\pytorch} \label{sec:intro_pytorch}
+
+\subsection{Instalación de \pytorch} \label{sec:intro_install}
+\begin{lstlisting}[language=bash, caption={Comando de instalación de \pytorch\ con soporte CUDA 13.0}, label={lst: intro_install_pytorch}]
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+\end{lstlisting}
+
+\begin{lstlisting}[language=python, caption={Código de prueba de instalación de \pytorch}, label={lst: intro_test_pytorch}]
+import torch
+x = torch.rand(5, 3)
+print(x)
+print(torch.cuda.is_available())
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash, caption={Salida esperada del código de prueba de instalación de \pytorch}, label={lst: intro_test_pytorch_output}]
+tensor([[0.6557, 0.0198, 0.0169],
+        [0.0468, 0.2888, 0.0026],
+        [0.4243, 0.1107, 0.6735],
+        [0.1006, 0.6152, 0.9174],
+        [0.1755, 0.9582, 0.8951]])
+True
+\end{lstlisting}

@@ -1,10 +1,9 @@
 \ProvidesPackage{config}
 
-\newcommand{\rowmajor}{\textit{Row-Major order}}
-\newcommand{\colmajor}{\textit{Column-Major order}}
-\newcommand{\zorder}{\textit{Z-Order}}
 \newcommand{\C}{\textit{C}}
 \newcommand{\python}{\textit{Python}}
+\newcommand{\pyenv}{\textit{pyenv}}
+\newcommand{\pytorch}{\textit{PyTorch}}
 
 % HYPERREF % 
 \AtBeginDocument{\renewcommand{\lstlistingname}{Fragmento}}
@@ -88,10 +87,10 @@
 }
 
 \lstset{
-    language=Dockerfile,
-    basicstyle=\footnotesize\ttfamily\fontfamily{cmtt}\selectfont,
-    columns=fullflexible,
-    keepspaces=false,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{black}\bfseries,
+    commentstyle=\itshape\color{gray},
+    stringstyle=\color{red},
     numbers=left,
     numberstyle=\tiny,
     stepnumber=1,
@@ -99,10 +98,14 @@
     captionpos=b,
     rulecolor=\color{black},
     breaklines=true,
-    tabsize=4,
+    tabsize=2,
+    keepspaces=true,
     showstringspaces=false,
-    xleftmargin=.1\textwidth, 
-    xrightmargin=.1\textwidth
+    columns=fullflexible,
+    aboveskip=1em,
+    belowskip=1em,
+    framexleftmargin=1.5em,
+    xleftmargin=0.075\textwidth,
+    xrightmargin=0.05\textwidth
 }
-
 \endinput
