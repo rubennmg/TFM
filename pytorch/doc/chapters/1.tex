@@ -4,5 +4,20 @@
 \fancyfoot[r]{\fecha}
 
 \section{Sistema de desarrollo} \label{sec:intro_dev_system}
+Para trabajar de manera eficiente con \pytorch\ y aprovechar la aceleración mediante GPU, es necesario contar con un sistema de 
+desarrollo adecuado. Este abarca tanto el sistema operativo como las herramientas necesarias para gestionar dependencias y bibliotecas externas.
 
 \subsection{Sistema operativo} \label{sec:intro_os}
+Aunque \pytorch\ ofrece compatibilidad multiplataforma, el ecosistema de desarrollo más utilizado para aplicaciones de computación acelerada 
+por GPU es Linux. Las distribuciones de Linux proporcionan un entorno muy flexible y personalizable, ampliamente compatible con las bibliotecas 
+y controladores necesarios para trabajar con \pytorch. A lo largo de este documento se asumirá el uso de un sistema operativo basado en Linux 
+—concretamente Fedora Linux 42—, aunque las instrucciones pueden adaptarse fácilmente a otros sistemas operativos como Windows o macOS. 
+
+\vspace{0.35cm}
+\noindent{Entre las ventajas de utilizar Linux para este proyecto destacan:}
+\begin{itemize}
+    \item Facilidad de instalación de \textit{drivers} y herramientas CUDA
+    \item Compatibilidad con bibliotecas científicas de alto rendimiento
+    \item Amplia documentación en entornos de computación científica
+    \item Comunidad activa y soporte para desarrolladores
+\end{itemize}
