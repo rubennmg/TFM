@@ -9,6 +9,8 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumitem}
+\usepackage{tocloft}
+\usepackage{newfloat}
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage{setspace}
@@ -34,6 +36,28 @@
 \geometry{left=2.3cm, right=2.3cm, top=3cm, bottom=3.5cm}
 \setlength{\headheight}{22.54448pt}
 \setlist{itemsep=0.5ex, topsep=0.5ex}
+
+% Equations Index + Captions... Redefine %
+\newcommand{\listequationsname}{Índice de ecuaciones}
+\newlistof{myequations}{equ}{\listequationsname}
+\setlength{\cftmyequationsindent}{1.4em}
+\makeatletter
+\renewcommand{\listofmyequations}{%
+  {
+   \section*{\Large \listequationsname}%
+   \@starttoc{equ}}%
+}
+\makeatother
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+
+\DeclareFloatingEnvironment[
+    fileext=loe,
+    listname=Índice de ecuaciones,
+    name=Ecuación,
+    placement=tbhp
+]{myequation}
+\captionsetup[myequation]{skip=0pt}
 
 % Constants
 \newcommand{\titulo}{Aprendiendo}

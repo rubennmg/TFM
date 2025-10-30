@@ -4,8 +4,13 @@
 \fancyfoot[r]{\fecha}
 
 \section{\pytorch} \label{sec:intro_pytorch}
+\pytorch\footnote{\url{https://pytorch.org/}} es una biblioteca de cómputo científico diseñada principalmente para el desarrollo de algoritmos de 
+aprendizaje automático, aunque su estructura y diseño la convierten en una herramienta muy versátil para el cálculo numérico general y el procesamiento 
+de datos de alta dimensión.
 
-\subsection{Instalación de \pytorch} \label{sec:intro_install}
+\subsection{Instalación} \label{sec:intro_install}
+Redactar...
+
 \begin{lstlisting}[language=bash, caption={Comando de instalación de \pytorch\ con soporte CUDA 13.0}, label={lst: intro_install_pytorch}]
 pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130
 \end{lstlisting}
@@ -34,4 +39,62 @@ pip install h5py
 \begin{lstlisting}[language=bash, caption={Instalación de \texttt{ipykernel} en un entorno virtual de \texttt{pyenv}} , label={lst:install_ipykernel}]
 pip install ipykernel
 \end{lstlisting}
+
+\newpage
+\subsection{Tensores} \label{sec:intro_tensors}
+Los \textit{tensores} son la base fundamental de \pytorch. Se trata de entidades multidimensionales capaces de representar información numérica de 
+forma compacta y eficiente, permitiendo la ejecución de operaciones matemáticas optimizadas tanto en CPU como en GPU. Desde un punto 
+de vista matemático, un tensor puede entenderse como una generalización de los vectores y las matrices a espacios de dimensión superior. 
+
+Como se muestra en la \autoref{eq:tensor_formal}, un tensor de orden $n$ puede expresarse como:
+
+\begin{myequation}
+\begin{equation}
+T_{i_1 i_2 \ldots i_n} \in \mathbb{R}^{d_1 \times d_2 \times \ldots \times d_n}
+\label{eq:tensor_formal}
+\end{equation}
+\myequations{Representación formal de un tensor de orden $n$.}
+\caption{Representación formal de un tensor de orden $n$}
+\end{myequation}
+
+donde cada índice $i_k$ recorre una dimensión $d_k$ del espacio de datos. Así, un escalar puede considerarse un tensor de orden 0, 
+un vector un tensor de orden 1 y una matriz un tensor de orden 2. Esta generalización permite extender las operaciones algebraicas 
+clásicas a dominios de mayor complejidad, conservando propiedades como la linealidad y la composicionalidad.
+
+Los tensores en \pytorch\ no solo almacenan datos, sino que también encapsulan información sobre su tipo de dato 
+(\texttt{dtype}), dispositivo de ejecución (\texttt{device}) y forma (\texttt{shape}). Esta estructura interna los convierte en 
+objetos altamente versátiles para el procesamiento numérico y gráfico, especialmente en contextos donde el rendimiento computacional 
+es de vital importancia.
+
+\subsection{Operaciones con tensores} \label{sec:intro_tensor_operations}
+La biblioteca proporciona una amplia gama de transformaciones algebraicas y funcionales que pueden ejecutarse de manera vectorizada, 
+evitando la iteración explícita y aprovechando la paralelización inherente al hardware.
+
+Las operaciones básicas incluyen la suma, resta, multiplicación escalar, producto punto y producto matricial. Además, \pytorch\ 
+permite realizar operaciones más avanzadas como transposición, cambio de forma (\texttt{reshape}), concatenación y reducción, 
+todas optimizadas internamente para ejecutarse con la máxima eficiencia posible. 
+
+Desde el punto de vista algebraico, estas operaciones preservan las propiedades fundamentales de la linealidad, de modo que 
+para dos tensores $A$ y $B$ y un escalar $\alpha$ se cumple que, como se muestra en la \autoref{eq:tensor_linearity}:
+
+\begin{myequation}
+\begin{equation}
+\alpha(A + B) = \alpha A + \alpha B
+\label{eq:tensor_linearity}
+\end{equation}
+\myequations{Propiedad de linealidad en operaciones con tensores.}
+\caption{Propiedad de linealidad en operaciones con tensores}
+\end{myequation}
+
+El modelo de ejecución de \pytorch\ está diseñado para que todas las operaciones sobre tensores sean consistentes en 
+términos de dimensiones y tipos, lo que facilita el diseño modular de algoritmos numéricos. Además, el motor interno de la 
+biblioteca realiza comprobaciones automáticas de compatibilidad entre dimensiones, lanzando excepciones cuando las operaciones 
+no son válidas.
+
+\newpage
+\subsection{Representación de imágenes con tensores} \label{sec:intro_image_tensors}
+[...]
+
+\subsection{Tensores en GPU} \label{sec:intro_tensors_gpu}
+[...]
 
