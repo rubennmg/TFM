@@ -1,0 +1,2 @@
+-   ¿Es necesario usar _batches_ para el contexto de este TFM? - Tensores de la forma `[batch_size, C, H, W]` - Creo que no
+-   ¿Con qué formatos de imagen se trabajará?
