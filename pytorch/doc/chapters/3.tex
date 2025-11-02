@@ -5,8 +5,8 @@
 
 \section{CUDA y drivers NVIDIA} \label{sec:intro_cuda}
 CUDA\footnote{\url{https://developer.nvidia.com/cuda-zone}} (Compute Unified Device Architecture) es la plataforma de computación
-paralela de NVIDIA\footnote{\url{https://www.nvidia.com/}} que permite ejecutar código y algoritmos en la GPU, aprovechando su 
-capacidad de procesamiento masivamente paralelo. \pytorch\ utiliza CUDA para acelerar las operaciones de tensores y cálculos matemáticos, 
+paralela de NVIDIA\footnote{\url{https://www.nvidia.com/}} que permite ejecutar código y algoritmos en la GPU, aprovechando su
+capacidad de procesamiento masivamente paralelo. \pytorch\ utiliza CUDA para acelerar las operaciones de tensores y cálculos matemáticos,
 por lo que es fundamental contar con una instalación adecuada de CUDA y los drivers de NVIDIA en el sistema de desarrollo.
 \subsection{Instalación de drivers NVIDIA} \label{sec:intro_nvidia_drivers}
 Para instalar los drivers de NVIDIA en un sistema Linux, se pueden seguir los pasos detallados en
@@ -18,8 +18,8 @@ La instalación de CUDA puede realizarse descargando el instalador desde la pág
 Es recomendable seguir las instrucciones específicas para la distribución de Linux utilizada en el sistema de desarrollo.
 
 \vspace{0.3cm}
-\noindent{Después de la instalación, es importante verificar que CUDA y los drivers de NVIDIA funcionan correctamente con 
-el comando especificado en el \autoref{lst:intro_verify_cuda}.}
+\noindent{Después de la instalación, es importante verificar que CUDA y los drivers de NVIDIA funcionan correctamente con
+	el comando especificado en el \autoref{lst:intro_verify_cuda}.}
 \begin{lstlisting}[language=bash, caption={Verificación de la instalación de CUDA y los drivers de NVIDIA}, label={lst:intro_verify_cuda}]
 nvidia-smi
 \end{lstlisting}

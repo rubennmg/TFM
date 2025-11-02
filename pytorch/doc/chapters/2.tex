@@ -4,22 +4,22 @@
 \fancyfoot[r]{\fecha}
 
 \section{\python} \label{sec:intro_python}
-\python\footnote{\url{https://www.python.org/}} es un lenguaje de programación interpretado, de alto nivel y propósito general. 
+\python\footnote{\url{https://www.python.org/}} es un lenguaje de programación interpretado, de alto nivel y propósito general.
 En los últimos años, se ha consolidado como uno de los lenguajes más populares en la comunidad científica y en el procesamiento de datos,
 debido a su simplicidad, sintaxis clara y gran variedad de bibliotecas especializadas. \pytorch, al ser una biblioteca de \python,
 requiere el uso de este lenguaje para su desarrollo y ejecución.
 
 \subsection{Entornos virtuales} \label{sec:intro_virtualenv}
-El uso de entornos virtuales es fundamental para el desarrollo ordenado de proyectos en \python. Permiten aislar dependencias y versiones 
-de paquetes entre distintos proyectos sin interferencias. Para crear entornos virtuales se puede utilizar la herramienta nativa 
-\textit{venv}\footnote{\url{https://docs.python.org/es/3/library/venv.html}} o herramientas avanzadas como 
+El uso de entornos virtuales es fundamental para el desarrollo ordenado de proyectos en \python. Permiten aislar dependencias y versiones
+de paquetes entre distintos proyectos sin interferencias. Para crear entornos virtuales se puede utilizar la herramienta nativa
+\textit{venv}\footnote{\url{https://docs.python.org/es/3/library/venv.html}} o herramientas avanzadas como
 \textit{virtualenv}\footnote{\url{https://virtualenv.pypa.io/en/latest/}} o \textit{conda}\footnote{\url{https://docs.conda.io/projects/conda/en/stable/}}.
 En este proyecto se opta por \pyenv.
 
 \subsubsection{\pyenv} \label{sec:intro_pyenv}
 \pyenv\footnote{\url{https://github.com/pyenv/pyenv}} es una sencilla herramienta herramienta de gestión de versiones de \python.
 Permite instalar múltiples versiones de \python\ y crear entornos virtuales asociados a cada una de ellas, facilitando
-el cambio entre versiones y la gestión de dependencias específicas para cada proyecto. 
+el cambio entre versiones y la gestión de dependencias específicas para cada proyecto.
 
 \vspace{0.2cm}
 \noindent{Con esta herramienta, puede instalarse cualquier versión de \python, tal como se puede observar en el \autoref{lst:install_pyenv_python}.}
@@ -40,8 +40,8 @@ Este será el método empleado para gestionar las versiones de \python\ y los en
 \newpage
 \subsection{\textit{pip}} \label{sec:intro_pip}
 \textit{pip}\footnote{\url{https://pip.pypa.io/en/stable/}} es el gestor de paquetes oficial de \python. Permite instalar, actualizar y
-eliminar paquetes y bibliotecas de \python\ desde el Python Package Index (PyPI) y otros índices de paquetes. 
-Es una herramienta esencial para gestionar las dependencias de los proyectos en \python. Permite instalar paquetes de manera 
+eliminar paquetes y bibliotecas de \python\ desde el Python Package Index (PyPI) y otros índices de paquetes.
+Es una herramienta esencial para gestionar las dependencias de los proyectos en \python. Permite instalar paquetes de manera
 sencilla mediante comandos en la terminal, como se muestra en el \autoref{lst:intro_install_package}.
 \begin{lstlisting}[language=bash, caption={Instalación de un paquete con \textit{pip}}, label={lst:intro_install_package}]
 pip install <package_name>
