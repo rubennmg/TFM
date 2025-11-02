@@ -11,6 +11,7 @@
 \usepackage{fancyhdr}
 \usepackage{colortbl}
 \usepackage{caption}
+\usepackage{subcaption}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumitem}
@@ -101,7 +102,7 @@
 % ----------------------------------------
 % Custom Equation List
 % ----------------------------------------
-\newcommand{\listequationsname}{\textbf{Índice de Ecuaciones}}
+\newcommand{\listequationsname}{\textbf{Índice de ecuaciones}}
 \newlistof{myequations}{equ}{\listequationsname}
 \cftsetindents{myequations}{1.5em}{2.25em}
 \makeatletter
@@ -140,7 +141,7 @@
 % Listings Configuration
 % ----------------------------------------
 \AtBeginDocument{\renewcommand{\lstlistingname}{Fragmento}
-\AtBeginDocument{\renewcommand{\lstlistlistingname}{Índice de Fragmentos}}}
+\AtBeginDocument{\renewcommand{\lstlistlistingname}{Índice de fragmentos}}}
 
 \lstdefinelanguage{Dockerfile}{
   morekeywords={[1]FROM, RUN, CMD, LABEL, MAINTAINER, EXPOSE, ENV, ADD, COPY, ENTRYPOINT, VOLUME, USER, WORKDIR, ARG, ONBUILD, STOPSIGNAL, HEALTHCHECK, SHELL},

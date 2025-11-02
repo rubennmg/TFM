@@ -93,7 +93,57 @@ no son válidas.
 
 \newpage
 \subsection{Representación de imágenes con tensores} \label{sec:intro_image_tensors}
-[...]
+Una de las aplicaciones más relevantes de los tensores en el contexto de este Trabajo Fin de Máster es la representación de imágenes digitales. 
+En este caso, una imagen puede modelarse como un tensor tridimensional $I \in \mathbb{R}^{W \times H \times C}$, donde $W$ 
+representa el ancho, $H$ la altura y $C$ el número de canales de color (por ejemplo, $C = 3$ para imágenes RGB).
+
+Cada elemento $I_{w,h,c}$ del tensor almacena la intensidad del píxel ubicado en la posición $(h, w)$ del canal $c$. Esta representación 
+facilita la manipulación matemática de imágenes, permitiendo aplicar transformaciones geométricas, filtrados y operaciones convolucionales 
+mediante simples operaciones tensoriales. Puede observarse una representación conceptual de una imagen RGB como tensor tridimensional en la
+\autoref{fig:image_tensor}.
+
+\begin{figure}[h]
+\centering
+	% --- Subfigure 1 ---
+	\begin{subfigure}[b]{0.45\textwidth}
+	\centering
+	\begin{tikzpicture}
+	[
+		x={(1cm, 0cm)},
+		y={(0cm, 1cm)},
+		z={(0.5cm, 0.5cm)}
+	]
+		% RGB Planes
+		\foreach \z/\color in {3/blue!30, 1.5/green!30, 0/red!30} {
+		\filldraw[fill=\color, draw=black!50]
+			(0,0,\z) -- ++(3,0,0) -- ++(0,3,0) -- ++(-3,0,0) -- cycle;
+		}
+		% Edges
+		\draw[thick] (0,0,0) -- (4,0,0) node[right] {\textrm{($W$)}};
+		\draw[thick] (0,0,0) -- (0,4,0) node[above] {\textrm{($H$)}};
+		\end{tikzpicture}
+	\caption{}
+	\end{subfigure}
+\hfill
+% --- Subfigure 2 ---
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\begin{tikzpicture}
+		% RGB Planes
+		\foreach \z/\color in {0/red!30,1.25/green!30,2.5/blue!30} {
+			\filldraw[fill=\color, draw=black!50] 
+				(\z,0,0) -- ++(0,3,0) -- ++(0,0,3) -- ++(0,-3,0) -- cycle;
+		}
+		% Edges
+		\draw[thick] (0,0,0) -- (3,0,0) node[right] {\textrm{($C$)}};
+		\draw[thick] (0,0,0) -- (0,3.5,0) node[above] {\textrm{($H$)}};
+		\draw[thick] (0,0,0) -- (0,0,4) node[above left] {\textrm{($W$)}};
+		\end{tikzpicture}
+		\caption{}
+	\end{subfigure}
+\caption{Representación conceptual de una imagen RGB como tensor tridimensional}
+\label{fig:image_tensor}
+\end{figure}
 
 \subsection{Tensores en GPU} \label{sec:intro_tensors_gpu}
 [...]
