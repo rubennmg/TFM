@@ -1,0 +1,21 @@
+\pagestyle{fancy}
+\fancyhead[l]{\autorUO}
+\fancyfoot[l]{\asignaturaAbbr}
+\fancyfoot[r]{\fecha}
+
+\section{Instalación} \label{sec:instalacion}
+\subsection{Creación de un entorno virtual con \textit{pyenv}} \label{subsec:pyenv}
+\begin{lstlisting}[language=bash, caption={Creación de un entorno virtual con pyenv}, label={lst:pyenv}]
+pyenv install 3.11.4
+pyenv virtualenv 3.11.4 pyqt-env
+pyenv activate pyqt-env
+\end{lstlisting}
+\begin{lstlisting}[language=bash, caption={Instalación de pyqt6}, label={lst:instalacion}]
+pip install pyqt6
+\end{lstlisting}
+\begin{lstlisting}[language=bash, caption={Instalación de opencv}, label={lst:opencv}]
+pip install opencv
+\end{lstlisting}
+\begin{lstlisting}[language=bash, caption={Instalación de numpy}, label={lst:numpy}]
+pip install numpy
+\end{lstlisting}
