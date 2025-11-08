@@ -1,0 +1,178 @@
+\ProvidesPackage{config}
+
+% ----------------------------------------
+% Packages
+% ----------------------------------------
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[hidelinks, hyperfootnotes=false]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{colortbl}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{tocloft}
+\usepackage{newfloat}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{tcolorbox}
+\usepackage{adjustbox}
+\usepackage{multirow}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% ----------------------------------------
+% Fonts
+% ----------------------------------------
+\usepackage{baskervillef}
+\usepackage[varqu,varl,var0]{inconsolata}
+\usepackage[scale=.90,type1]{cabin}
+\usepackage[cal=boondoxo]{mathalfa}
+
+% ----------------------------------------
+% General Document Settings
+% ----------------------------------------
+\renewcommand{\baselinestretch}{1.2}
+\geometry{left=2.3cm, right=2.3cm, top=3cm, bottom=3.5cm}
+\setlength{\headheight}{22.54448pt}
+\setlist{itemsep=0.5ex, topsep=0.5ex}
+
+% ----------------------------------------
+% Custom Colors
+% ----------------------------------------
+\definecolor{darkred}{RGB}{139,0,0}
+\definecolor{darkgreen}{RGB}{0,100,0}
+\definecolor{darkblue}{RGB}{0,0,139}
+
+% ----------------------------------------
+% Document Constants
+% ----------------------------------------
+% Front Page Information
+% ----------------------------------------
+\newcommand{\titulo}{Documentación}
+\newcommand{\sesion}{TFM}
+\newcommand{\asignatura}{Trabajo Fin de M\'aster}
+\newcommand{\asignaturaAbbr}{TFM}
+\newcommand{\master}{M\'aster en Ingenier\'ia Inform\'atica}
+\newcommand{\autor}{Rub\'en Mart\'inez Ginzo}
+\newcommand{\autorUO}{Rub\'en Mart\'inez Ginzo, UO282651}
+\newcommand{\email}{UO282651@uniovi.es}
+\newcommand{\fecha}{Noviembre 2025}
+\newcommand{\imagen}{img/UniOvi_bn.jpg}
+% ----------------------------------------
+% Document References
+% ----------------------------------------
+\newcommand{\pytorch}{\textit{PyTorch}}
+\newcommand{\python}{\textit{Python}}
+\newcommand{\pyenv}{\textit{pyenv}}
+
+% ----------------------------------------
+% Title Page Command
+% ----------------------------------------
+\newcommand{\frontpage}{%
+\begin{titlepage}
+    \begin{center}
+        {\fontsize{38pt}{42pt}\selectfont \textbf{\titulo}} \\
+        \vspace{0.75cm}
+        {\fontsize{34pt}{40pt}\selectfont \textbf{\sesion}} \\
+        \vspace{0.75cm}
+        {\fontsize{22pt}{26pt}\selectfont \textbf{\asignatura}} \\
+        \vspace{0.5cm}
+        {\fontsize{16pt}{20pt}\selectfont \textbf{\master}} \\
+        \vspace{2.5cm}
+        \includegraphics[width=0.5\textwidth]{\imagen}
+        \vspace{3cm}
+
+        {\Large \textbf{\textit{Author:}}} \\
+        \vspace{0.4cm}
+        {\Large \textit{\autor, \email}}
+        \vfill
+
+        \vspace{1cm}
+        {\Large {\fecha}}
+    \end{center}
+\end{titlepage}}
+
+% ----------------------------------------
+% Custom Equation List
+% ----------------------------------------
+\newcommand{\listequationsname}{\textbf{Índice de ecuaciones}}
+\newlistof{myequations}{equ}{\listequationsname}
+\cftsetindents{myequations}{1.5em}{2.25em}
+\makeatletter
+\renewcommand{\listofmyequations}{%
+  {\section*{\Large \listequationsname}%
+   \@starttoc{equ}}%
+}
+\makeatother
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+
+\DeclareFloatingEnvironment[
+    fileext=loe,
+    listname=\listequationsname,
+    name=Ecuación,
+    placement=tbhp
+]{myequation}
+\captionsetup[myequation]{skip=0pt}
+
+% ----------------------------------------
+% TikZ Styles
+% ----------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+
+\tikzstyle{startstop} = [circle, rounded corners, minimum width=1cm, minimum height=1cm, text centered, draw=black, fill=black]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=blue!20]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=green!30]
+\tikzstyle{stack} = [rectangle, minimum width=3cm, minimum height=6cm, text width=3cm, text centered, draw=black]
+\tikzstyle{dot} = [circle, minimum width=1px, minimum height=1px, text width=20px, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+\tikzstyle{dorrow} = [thick, dotted, ->, >=stealth]
+\tikzstyle{darrow} = [thick, <->, >=stealth]
+
+% ----------------------------------------
+% Listings Configuration
+% ----------------------------------------
+\AtBeginDocument{\renewcommand{\lstlistingname}{Fragmento}
+\AtBeginDocument{\renewcommand{\lstlistlistingname}{Índice de fragmentos}}}
+
+\lstdefinelanguage{Dockerfile}{
+  morekeywords={[1]FROM, RUN, CMD, LABEL, MAINTAINER, EXPOSE, ENV, ADD, COPY, ENTRYPOINT, VOLUME, USER, WORKDIR, ARG, ONBUILD, STOPSIGNAL, HEALTHCHECK, SHELL},
+  keywordstyle=[1]\color{blue}\bfseries,
+  morecomment=[l]{\#},
+  commentstyle=\color{gray}\itshape,
+  morestring=[b]",
+  stringstyle=\color{red}
+}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{black}\bfseries,
+    commentstyle=\itshape\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    frame=single,
+    captionpos=b,
+    rulecolor=\color{black},
+    breaklines=true,
+    tabsize=2,
+    keepspaces=true,
+    showstringspaces=false,
+    columns=fullflexible,
+    aboveskip=1em,
+    belowskip=1em,
+    framexleftmargin=1.5em,
+    xleftmargin=0.075\textwidth,
+    xrightmargin=0.05\textwidth
+}
+
+\endinput
