@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from numpy.typing import NDArray
 
 # Define image dimensions
-width: int= 4096
+width: int = 4096
 height: int = 2168
 
 # Load raw data
@@ -25,6 +25,8 @@ show_image(image)
 #%%
 import enum
 import torch
+from enhance_contrast_sigmoid import enhance_contrast_torch
+from typing import Literal
 
 class Layout(enum.Enum):
     """Possible Bayer color filter array layouts.
@@ -126,9 +128,7 @@ class Debayer5x5(torch.nn.Module):
 
         xpad = torch.nn.functional.pad(x, (2, 2, 2, 2), mode="reflect")
         planes = torch.nn.functional.conv2d(xpad, self.kernels, stride=1)
-        planes = torch.cat(
-            (planes, x), 1
-        )  # Concat with input to give identity kernel Bx5xHxW
+        planes = torch.cat((planes, x), 1)  # Concat with input to give identity kernel Bx5xHxW
         rgb = torch.gather(
             planes,
             1,
@@ -177,30 +177,39 @@ class Debayer5x5(torch.nn.Module):
             Layout.BGGR: torch.roll(rggb, (1, 1), (-1, -2)),
         }.get(layout, rggb)
 
-debayer_processor = Debayer5x5(layout=Layout.RGGB).cuda()
+debayer_processor: Debayer5x5 = Debayer5x5(layout=Layout.RGGB).cuda()
 
 # La imagen es de 12 bits, por lo que el valor máximo es 4095.
-scale = 4095
+scale: int = 4095
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-float_datatype = torch.float32
+device: Literal["cuda", "cpu"] = "cuda" if torch.cuda.is_available() else "cpu"
+float_datatype: torch.dtype = torch.float32
 
-img_cuda = torch.asarray(image).to(device)
-scale_tensor = torch.tensor(scale, dtype=float_datatype)
+img_cuda: torch.Tensor = torch.asarray(image).to(device)
+scale_tensor: torch.Tensor = torch.tensor(scale, dtype=float_datatype)
 img_cuda = img_cuda / scale_tensor
-bayer_tensor = img_cuda.unsqueeze(0).unsqueeze(0)
+bayer_tensor: torch.Tensor = img_cuda.unsqueeze(0).unsqueeze(0)
 img_cuda = debayer_processor(bayer_tensor)
-img_cuda = img_cuda.squeeze().permute(1, 2, 0)
+final_img_cuda: torch.Tensor = img_cuda.squeeze().permute(1, 2, 0)
 
 # Force contiguous memory for performance in next steps
-img_res = img_cuda.contiguous()
+img_res: torch.Tensor = final_img_cuda.contiguous()
 
 # Convertir a color ubyte para visualizar
-img8 = (img_res * 255).round().type(torch.uint8)
-img_cpu = img8.cpu().numpy()
+img8: torch.Tensor = (img_res * 255).round().type(torch.uint8)
+img_cpu: np.ndarray = img8.cpu().numpy()
 # Mostrar la imagen
 plt.imshow(img_cpu)
 plt.title('Debayered Image')
+plt.axis('off')
+plt.show()
+# %%
+enhanced_img: torch.Tensor = enhance_contrast_torch(img_cuda, gain=10.0, cutoff=-1.0)
+final_enhanced_img: torch.Tensor = enhanced_img.squeeze().permute(1, 2, 0).contiguous()
+enhanced_img8: torch.Tensor = (final_enhanced_img * 255).round().type(torch.uint8)
+enhanced_img_cpu: np.ndarray = enhanced_img8.cpu().numpy()
+plt.imshow(enhanced_img_cpu)
+plt.title('Enhanced Contrast Image')
 plt.axis('off')
 plt.show()
 # %%
