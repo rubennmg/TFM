@@ -27,9 +27,8 @@ class ImageViewer(QWidget):
         elif tensor.ndim != 3:
             raise ValueError("Tensor shape must be (C,H,W) or (H,W,C)")
 
-        img_np: np.ndarray = tensor.detach().cpu().numpy()
-        img_np = np.clip(img_np, 0, 1)
-        img_np = (img_np * 255).astype(np.uint8)
+        tensor = (tensor * 255).round().type(torch.uint8)
+        img_np: np.ndarray = tensor.cpu().numpy()
 
         if img_np.shape[2] == 1:
             qimg: QImage = QImage(img_np.tobytes(), img_np.shape[1], img_np.shape[0], img_np.strides[0], QImage.Format.Format_Grayscale8)

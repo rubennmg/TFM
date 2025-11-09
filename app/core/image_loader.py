@@ -4,6 +4,7 @@ import numpy as np
 from pathlib import Path
 from typing import Union
 
+torch_float_datatype: torch.dtype = torch.float32
 
 def load_image(path: Union[str, Path]) -> torch.Tensor:
     path = Path(path)
@@ -12,7 +13,7 @@ def load_image(path: Union[str, Path]) -> torch.Tensor:
         height: int = 2168 # default -- CHANGE
         with open(path, "rb") as f:
             raw_data: np.typing.NDArray[np.uint16] = np.fromfile(f, dtype=np.uint16).reshape((height, width))
-        t_img: torch.Tensor = torch.tensor(raw_data, dtype=torch.float32) / 4095.0
+        t_img: torch.Tensor = torch.tensor(raw_data, dtype=torch_float_datatype) / 4095.0  # normalize assuming 12-bit depth 2^12 - 1
         t_img = t_img.unsqueeze(0).unsqueeze(0)  # 1x1xHxW
         return t_img
     else:
