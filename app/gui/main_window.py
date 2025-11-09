@@ -9,7 +9,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.controller = controller
         self.setWindowTitle("Image Viewer")
-        self.resize(1200, 800)
+        self.resize(1600, 800)
 
         central_widget = QWidget()
         main_layout = QHBoxLayout()
@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
         self.controls_panel = ControlsPanel(controller)
 
         main_layout.addWidget(self.load_panel, stretch=1)
-        main_layout.addWidget(self.viewer, stretch=3)
+        main_layout.addWidget(self.viewer, stretch=6)
         main_layout.addWidget(self.controls_panel, stretch=1)
 
         central_widget.setLayout(main_layout)

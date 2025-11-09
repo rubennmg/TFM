@@ -14,8 +14,8 @@ class ImageViewer(QWidget):
     def _setup_ui(self) -> None:
         layout: QVBoxLayout = QVBoxLayout()
         self.label: QLabel = QLabel("No image loaded")
+        self.label.setObjectName("imageLabel")
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label.setStyleSheet("background-color: #222; color: #aaa; border: 1px solid #333;")
         layout.addWidget(self.label)
         self.setLayout(layout)
 

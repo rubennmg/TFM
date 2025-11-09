@@ -17,6 +17,10 @@ class ControlsPanel(QWidget):
         label_title.setStyleSheet("font-weight: bold;")
         layout.addWidget(label_title)
 
+        # Debayer 5x5 button
+        self.button_debayer: QPushButton = QPushButton("Debayer 5x5")
+        self.button_debayer.clicked.connect(self._on_debayer_clicked)
+
         # Gain control
         self.label_gain: QLabel = QLabel("Gain:")
         self.spin_gain: QDoubleSpinBox = QDoubleSpinBox()
@@ -34,16 +38,13 @@ class ControlsPanel(QWidget):
         # Apply button
         self.button_apply: QPushButton = QPushButton("Apply sigmoid contrast")
         self.button_apply.clicked.connect(self._on_apply_clicked)
-        # Debayer 5x5 button
-        self.button_debayer: QPushButton = QPushButton("Debayer 5x5")
-        self.button_debayer.clicked.connect(self._on_debayer_clicked)
 
+        layout.addWidget(self.button_debayer)
         layout.addWidget(self.label_gain)
         layout.addWidget(self.spin_gain)
         layout.addWidget(self.label_cutoff)
         layout.addWidget(self.spin_cutoff)
         layout.addWidget(self.button_apply)
-        layout.addWidget(self.button_debayer)
         layout.addStretch()
 
         self.setLayout(layout)

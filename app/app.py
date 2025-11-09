@@ -1,5 +1,4 @@
 import sys
-import torch
 
 from PyQt6.QtWidgets import QApplication
 from torch import Tensor
@@ -9,7 +8,7 @@ from core.debayer import Debayer5x5
 from gui.main_window import MainWindow
 from models.image_model import ImageData
 from core.layouts import Layout
-from core.utils import get_device
+from utils.utils import get_device, load_stylesheet
 
 
 class Controller:
@@ -52,6 +51,11 @@ class Controller:
 
 def main():
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+    
+    qss = load_stylesheet("styles/main.qss")
+    app.setStyleSheet(qss)
+    
     controller = Controller()
     window = MainWindow(controller)
     controller.window = window
