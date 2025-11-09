@@ -1,7 +1,9 @@
 import torch
 import numpy as np
+
 from pathlib import Path
 from typing import Union
+
 
 def load_image(path: Union[str, Path]) -> torch.Tensor:
     path = Path(path)

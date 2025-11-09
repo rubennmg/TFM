@@ -1,8 +1,9 @@
+import numpy as np
+import torch
+
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout
 from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.QtCore import Qt
-import numpy as np
-import torch
 
 
 class ImageViewer(QWidget):
@@ -39,4 +40,3 @@ class ImageViewer(QWidget):
         self.label.setPixmap(pixmap.scaled(
             self.label.size(), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation
         ))
-
