@@ -4,6 +4,7 @@ import numpy as np
 from pathlib import Path
 from typing import Union
 
+
 torch_float_datatype: torch.dtype = torch.float32
 
 def load_image(path: Union[str, Path]) -> torch.Tensor:
