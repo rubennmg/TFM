@@ -1,6 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QLabel
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QFileDialog, QVBoxLayout, QWidget
 from torch import Tensor
+
+from .helpers.labelled_button import LabelledButton
 
 
 class LoadPanel(QWidget):
@@ -13,12 +15,17 @@ class LoadPanel(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        self.label: QLabel = QLabel("Load image:")
-        self.button_load: QPushButton = QPushButton("Open file...")
-        self.button_load.clicked.connect(self._on_load_clicked)
+        self.load_control: LabelledButton = LabelledButton(
+            "Load image:", "Open file..."
+        )
+        self.load_control.clicked.connect(self._on_load_clicked)
 
-        layout.addWidget(self.label)
-        layout.addWidget(self.button_load)
+        self.reset_control: LabelledButton = LabelledButton("Reset:", "Reset image")
+        self.reset_control.clicked.connect(self._on_reset_clicked)
+
+        layout.addWidget(self.load_control)
+        layout.addWidget(self.reset_control)
+
         layout.addStretch()
 
         self.setLayout(layout)
@@ -28,11 +35,18 @@ class LoadPanel(QWidget):
             self,
             "Select RAW or RGB image",
             "",
-            "Images (*.raw *.png *.jpg *.jpeg *.bmp *.tiff);;All files (*)"
+            "Images (*.raw *.RAW *.png *.PNG *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.tiff *.TIFF "
+            "*.nef *.NEF *.cr2 *.CR2 *.arw *.ARW *.dng *.DNG *.rw2 *.RW2 *.orf *.ORF);;"
+            "All files (*)",
         )
         if not file_path:
             return
 
         tensor: Tensor = self.controller.load_image(file_path)
+        if tensor is not None:
+            self.controller.update_viewer(tensor)
+
+    def _on_reset_clicked(self) -> None:
+        tensor: Tensor = self.controller.reset_image()
         if tensor is not None:
             self.controller.update_viewer(tensor)

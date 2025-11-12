@@ -104,9 +104,7 @@ class Debayer5x5(torch.nn.Module):
                 1,
                 int(torch.div(H, 2, rounding_mode="floor").item()),
                 int(torch.div(W, 2, rounding_mode="floor").item()),
-            ).expand(
-                B, -1, -1, -1
-            ),  # expand for singleton batch dimension is faster
+            ).expand(B, -1, -1, -1),  # expand for singleton batch dimension is faster
         )
         return torch.clamp(rgb, 0, 1)
 
@@ -144,12 +142,13 @@ class Debayer5x5(torch.nn.Module):
             Layout.BGGR: torch.roll(rggb, (1, 1), (-1, -2)),
         }.get(layout, rggb)
 
-def apply_debayer5x5(tensor: Tensor, device: torch.device) -> Tensor:            
+
+def apply_debayer5x5(tensor: Tensor, device: torch.device) -> Tensor:
     t: Tensor = tensor.to(device)
     debayer5x5: Debayer5x5 = Debayer5x5(layout=Layout.RGGB).to(device)
     rgb: Tensor = debayer5x5(t)
     rgb = rgb.squeeze().permute(1, 2, 0)
     rgb = rgb.contiguous()
     rgb = rgb.cpu()
-    
+
     return rgb

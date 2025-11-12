@@ -1,7 +1,8 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QHBoxLayout
-from .load_panel import LoadPanel
+from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QWidget
+
 from .controls_panel import ControlsPanel
 from .image_viewer import ImageViewer
+from .load_panel import LoadPanel
 
 
 class MainWindow(QMainWindow):

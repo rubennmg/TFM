@@ -1,6 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QDoubleSpinBox
 from PyQt6.QtCore import Qt
-from torch import Tensor
+from PyQt6.QtWidgets import QDoubleSpinBox, QLabel, QPushButton, QVBoxLayout, QWidget
 
 
 class ControlsPanel(QWidget):
@@ -17,10 +16,6 @@ class ControlsPanel(QWidget):
         label_title.setStyleSheet("font-weight: bold;")
         layout.addWidget(label_title)
 
-        # Debayer 5x5 button
-        self.button_debayer: QPushButton = QPushButton("Debayer 5x5")
-        self.button_debayer.clicked.connect(self._on_debayer_clicked)
-
         # Gain control
         self.label_gain: QLabel = QLabel("Gain:")
         self.spin_gain: QDoubleSpinBox = QDoubleSpinBox()
@@ -36,15 +31,23 @@ class ControlsPanel(QWidget):
         self.spin_cutoff.setSingleStep(0.1)
 
         # Apply button
+        self.label_enhance: QLabel = QLabel("Enhance Contrast:")
         self.button_apply: QPushButton = QPushButton("Apply sigmoid contrast")
         self.button_apply.clicked.connect(self._on_apply_clicked)
 
-        layout.addWidget(self.button_debayer)
+        # Debayer 5x5 button
+        self.label_debayer: QLabel = QLabel("Debayer 5x5:")
+        self.button_debayer: QPushButton = QPushButton("Apply Debayer 5x5")
+        self.button_debayer.clicked.connect(self._on_debayer_clicked)
+
         layout.addWidget(self.label_gain)
         layout.addWidget(self.spin_gain)
         layout.addWidget(self.label_cutoff)
         layout.addWidget(self.spin_cutoff)
+        layout.addWidget(self.label_enhance)
         layout.addWidget(self.button_apply)
+        layout.addWidget(self.label_debayer)
+        layout.addWidget(self.button_debayer)
         layout.addStretch()
 
         self.setLayout(layout)
@@ -52,9 +55,9 @@ class ControlsPanel(QWidget):
     def _on_apply_clicked(self) -> None:
         gain: float = float(self.spin_gain.value())
         cutoff: float = float(self.spin_cutoff.value())
-        tensor: Tensor | None = self.controller.apply_contrast(gain, cutoff)
-        if tensor is not None:
-            self.controller.update_viewer(tensor)
+        self.controller.apply_contrast(gain, cutoff)
+        # if tensor is not None:
+        #     self.controller.update_viewer(tensor)
 
     def _on_debayer_clicked(self) -> None:
         self.controller.apply_debayer5x5()

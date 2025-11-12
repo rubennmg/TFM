@@ -56,6 +56,7 @@ PyQt6-Qt6==6.10.0
 PyQt6_sip==13.10.2
 python-dateutil==2.9.0.post0
 pyzmq==27.1.0
+rawpy==0.25.1
 setuptools==70.2.0
 six==1.17.0
 stack-data==0.6.3
