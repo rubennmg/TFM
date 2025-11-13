@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
 
 
-class LabelledButton(QWidget):
+class LabelledButtonWidget(QWidget):
     def __init__(self, label_text: str, button_text: str, parent=None):
         super().__init__(parent)
         self.label: QLabel = QLabel(label_text)

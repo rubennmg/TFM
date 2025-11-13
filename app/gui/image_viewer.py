@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional
+
 import numpy as np
 import torch
 from PyQt6.QtCore import QEvent, QSize, Qt
@@ -22,7 +26,7 @@ class ImageViewer(QWidget):
         self.label.setObjectName("imageLabel")
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.scroll_area = QScrollArea()
+        self.scroll_area: QScrollArea = QScrollArea()
         self.scroll_area.setWidget(self.label)
         self.scroll_area.setWidgetResizable(False)
 
@@ -31,7 +35,7 @@ class ImageViewer(QWidget):
         except Exception:
             pass
 
-        viewport = self.scroll_area.viewport()
+        viewport: Optional[QWidget] = self.scroll_area.viewport()
         if viewport is not None:
             viewport.installEventFilter(self)
         layout.addWidget(self.scroll_area)
@@ -74,11 +78,11 @@ class ImageViewer(QWidget):
             return
 
         self.label.setText("")
-        pix_to_show = self._pixmap
+        pix_to_show: QPixmap = self._pixmap
 
         if self._zoom != 1.0:
-            w = max(1, int(pix_to_show.width() * self._zoom))
-            h = max(1, int(pix_to_show.height() * self._zoom))
+            w: int = max(1, int(pix_to_show.width() * self._zoom))
+            h: int = max(1, int(pix_to_show.height() * self._zoom))
             pix_to_show = pix_to_show.scaled(
                 QSize(w, h),
                 Qt.AspectRatioMode.KeepAspectRatio,
@@ -119,4 +123,6 @@ class ImageViewer(QWidget):
                 else:
                     self.zoom_out()
                 return True
+        elif a1.type() == QEvent.Type.Resize:
+            pass
         return super().eventFilter(a0, a1)

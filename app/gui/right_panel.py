@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QDoubleSpinBox, QLabel, QPushButton, QVBoxLayout, QWidget
 
 
-class ControlsPanel(QWidget):
+class RightPanel(QWidget):
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
@@ -16,26 +18,26 @@ class ControlsPanel(QWidget):
         label_title.setStyleSheet("font-weight: bold;")
         layout.addWidget(label_title)
 
-        # Gain control
+        # gain control
         self.label_gain: QLabel = QLabel("Gain:")
         self.spin_gain: QDoubleSpinBox = QDoubleSpinBox()
         self.spin_gain.setRange(0.0, 50.0)
         self.spin_gain.setValue(10.0)
         self.spin_gain.setSingleStep(0.5)
 
-        # Cutoff control
+        # cutoff control
         self.label_cutoff: QLabel = QLabel("Cutoff:")
         self.spin_cutoff: QDoubleSpinBox = QDoubleSpinBox()
         self.spin_cutoff.setRange(-1.0, 1.0)
         self.spin_cutoff.setValue(0.5)
         self.spin_cutoff.setSingleStep(0.1)
 
-        # Apply button
+        # apply button
         self.label_enhance: QLabel = QLabel("Enhance Contrast:")
         self.button_apply: QPushButton = QPushButton("Apply sigmoid contrast")
         self.button_apply.clicked.connect(self._on_apply_clicked)
 
-        # Debayer 5x5 button
+        # debayer 5x5 button
         self.label_debayer: QLabel = QLabel("Debayer 5x5:")
         self.button_debayer: QPushButton = QPushButton("Apply Debayer 5x5")
         self.button_debayer.clicked.connect(self._on_debayer_clicked)
@@ -56,10 +58,6 @@ class ControlsPanel(QWidget):
         gain: float = float(self.spin_gain.value())
         cutoff: float = float(self.spin_cutoff.value())
         self.controller.apply_contrast(gain, cutoff)
-        # if tensor is not None:
-        #     self.controller.update_viewer(tensor)
 
     def _on_debayer_clicked(self) -> None:
         self.controller.apply_debayer5x5()
-        # if tensor is not None:
-        #     self.controller.update_viewer(tensor)

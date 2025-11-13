@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sys
 
 from PyQt6.QtWidgets import QApplication
@@ -8,17 +10,17 @@ from utils.utils import load_stylesheet
 
 
 def main():
-    app = QApplication(sys.argv)
+    app: QApplication = QApplication(sys.argv)
     app.setStyle("Fusion")
 
-    qss = load_stylesheet("styles/main.qss")
+    qss: str = load_stylesheet("styles/main.qss")
     app.setStyleSheet(qss)
 
-    controller = Controller()
-    window = MainWindow(controller)
+    controller: Controller = Controller()
+    window: MainWindow = MainWindow(controller)
     controller.window = window
 
-    window.show()
+    window.showMaximized()
     sys.exit(app.exec())
 
 
