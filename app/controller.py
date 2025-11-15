@@ -20,33 +20,32 @@ class Controller:
         self.window: MainWindow | None = None
         self._device: device = get_device()
 
-    def update_viewer(self, tensor: Tensor) -> None:
+    def __update_viewer(self, tensor: Tensor) -> None:
         if self.window is not None:
-            # show image in viewer
             self.window.viewer.show_tensor(tensor)
-            # update histogram in left panel if available
             try:
                 img_np: np.ndarray = tensor_to_uint8_np(tensor)
                 self.window.left_panel.update_histogram(img_np)
             except Exception:
                 pass
 
-    def _show_error(self, exc: Exception) -> None:
+    def __show_error(self, exc: Exception) -> None:
         tb: str = traceback.format_exc()
         show_error_dialog("Error", str(exc), detailed=tb)
 
-    def load_image(self, path: str) -> Tensor | None:
+    def load_image(self, path: str) -> None:
         try:
             tensor: Tensor = image_loader.load_image(path)
             self.current_image = ImageData(
                 tensor=tensor, path=path, name="test", is_raw=path.endswith(".raw")
             )
-            return tensor
+            if self.window is not None:
+                self.window.viewer.reset_zoom()
+            self.__update_viewer(tensor)
         except Exception as e:
-            self._show_error(e)
-            return None
+            self.__show_error(e)
 
-    def reset_image(self) -> Tensor | None:
+    def reset_image(self) -> None:
         if self.current_image is None or self.current_image.path is None:
             return None
 
@@ -58,10 +57,9 @@ class Controller:
                 name=self.current_image.name,
                 is_raw=self.current_image.is_raw,
             )
-            return tensor
+            self.__update_viewer(tensor)
         except Exception as e:
-            self._show_error(e)
-            return None
+            self.__show_error(e)
 
     def apply_debayer5x5(self) -> None:
         if self.current_image is None:
@@ -75,9 +73,9 @@ class Controller:
                 name=self.current_image.name,
                 is_raw=False,
             )
-            self.update_viewer(rgb)
+            self.__update_viewer(rgb)
         except Exception as e:
-            self._show_error(e)
+            self.__show_error(e)
 
     def apply_contrast(self, gain: float, cutoff: float) -> None:
         if self.current_image is None:
@@ -93,8 +91,8 @@ class Controller:
                 name=self.current_image.name,
                 is_raw=self.current_image.is_raw,
             )
-            self.update_viewer(contrasted)
+            self.__update_viewer(contrasted)
         except Exception as e:
-            self._show_error(e)
+            self.__show_error(e)
 
     # more methods...

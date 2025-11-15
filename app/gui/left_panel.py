@@ -5,7 +5,6 @@ from typing import Optional
 import numpy as np
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog, QVBoxLayout, QWidget
-from torch import Tensor
 
 from .helpers.labelled_button_widget import LabelledButtonWidget
 from .helpers.rgb_histogram_widget import RgbHistogramWidget
@@ -61,11 +60,7 @@ class LeftPanel(QWidget):
         if not file_path:
             return
 
-        tensor: Tensor | None = self.controller.load_image(file_path)
-        if tensor is not None:
-            self.controller.update_viewer(tensor)
+        self.controller.load_image(file_path)
 
     def _on_reset_clicked(self) -> None:
-        tensor: Tensor | None = self.controller.reset_image()
-        if tensor is not None:
-            self.controller.update_viewer(tensor)
+        self.controller.reset_image()
