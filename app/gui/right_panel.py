@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QDoubleSpinBox, QLabel, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
+
+from .helpers.operation_control_widget import FloatParamSpec, OperationControlWidget
 
 
 class RightPanel(QWidget):
@@ -14,49 +16,50 @@ class RightPanel(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        label_title: QLabel = QLabel("Transformations:")
+        label_title: QLabel = QLabel("TRANSFORMATIONS")
         label_title.setStyleSheet("font-weight: bold;")
         layout.addWidget(label_title)
 
-        # gain control
-        self.label_gain: QLabel = QLabel("Gain:")
-        self.spin_gain: QDoubleSpinBox = QDoubleSpinBox()
-        self.spin_gain.setRange(0.0, 50.0)
-        self.spin_gain.setValue(10.0)
-        self.spin_gain.setSingleStep(0.5)
+        # sigmoid contrast control
+        sig_params: list[FloatParamSpec] = [
+            FloatParamSpec(
+                key="gain",
+                label="Gain",
+                minimum=0.0,
+                maximum=50.0,
+                step=0.1,
+                default=0.0,
+            ),
+            FloatParamSpec(
+                key="cutoff",
+                label="Cutoff",
+                minimum=-1.0,
+                maximum=1.0,
+                step=0.05,
+                default=0,
+            ),
+        ]
+        self.sigmoid_widget: OperationControlWidget = OperationControlWidget(
+            "Sigmoid contrast", sig_params, self
+        )
+        self.sigmoid_widget.paramsChanged.connect(self._on_sigmoid_params)
 
-        # cutoff control
-        self.label_cutoff: QLabel = QLabel("Cutoff:")
-        self.spin_cutoff: QDoubleSpinBox = QDoubleSpinBox()
-        self.spin_cutoff.setRange(-1.0, 1.0)
-        self.spin_cutoff.setValue(0.5)
-        self.spin_cutoff.setSingleStep(0.1)
-
-        # apply button
-        self.label_enhance: QLabel = QLabel("Enhance Contrast:")
-        self.button_apply: QPushButton = QPushButton("Apply sigmoid contrast")
-        self.button_apply.clicked.connect(self._on_apply_clicked)
+        layout.addWidget(self.sigmoid_widget)
 
         # debayer 5x5 button
-        self.label_debayer: QLabel = QLabel("Debayer 5x5:")
+        self.label_debayer: QLabel = QLabel("Debayer 5x5")
         self.button_debayer: QPushButton = QPushButton("Apply Debayer 5x5")
         self.button_debayer.clicked.connect(self._on_debayer_clicked)
 
-        layout.addWidget(self.label_gain)
-        layout.addWidget(self.spin_gain)
-        layout.addWidget(self.label_cutoff)
-        layout.addWidget(self.spin_cutoff)
-        layout.addWidget(self.label_enhance)
-        layout.addWidget(self.button_apply)
         layout.addWidget(self.label_debayer)
         layout.addWidget(self.button_debayer)
         layout.addStretch()
 
         self.setLayout(layout)
 
-    def _on_apply_clicked(self) -> None:
-        gain: float = float(self.spin_gain.value())
-        cutoff: float = float(self.spin_cutoff.value())
+    def _on_sigmoid_params(self, params: dict) -> None:
+        gain: float = float(params.get("gain", 10.0))
+        cutoff: float = float(params.get("cutoff", 0.5))
         self.controller.apply_contrast(gain, cutoff)
 
     def _on_debayer_clicked(self) -> None:

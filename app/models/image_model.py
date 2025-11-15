@@ -9,6 +9,7 @@ import torch
 @dataclass
 class ImageData:
     tensor: torch.Tensor
+    original_tensor: Optional[torch.Tensor] = None
     path: Optional[str] = None
     name: Optional[str] = None
     bit_depth: int = 12  # assuming 12-bit for RAW images

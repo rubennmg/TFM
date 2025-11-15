@@ -36,6 +36,12 @@ QLabel {
 /* ====== Image area ====== */
 #imageLabel {
     border: 2px solid #555;
-    background-color: #222;
     color: #aaa;
+}
+
+/* ====== Operation control widget ====== */
+#operationControl {
+    border: 2px solid rgba(255,255,255,200);
+    border-radius: 6px;
+    padding: 6px;
 }

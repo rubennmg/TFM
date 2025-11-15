@@ -37,10 +37,15 @@ class Controller:
         try:
             tensor: Tensor = image_loader.load_image(path)
             self.current_image = ImageData(
-                tensor=tensor, path=path, name="test", is_raw=path.endswith(".raw")
+                tensor=tensor,
+                original_tensor=tensor,
+                path=path,
+                name="test",
+                is_raw=path.endswith(".raw"),
             )
             if self.window is not None:
                 self.window.viewer.reset_zoom()
+                self.window.right_panel.sigmoid_widget.reset_controls_to_default()
             self.__update_viewer(tensor)
         except Exception as e:
             self.__show_error(e)
@@ -53,6 +58,7 @@ class Controller:
             tensor: Tensor = image_loader.load_image(self.current_image.path)
             self.current_image = ImageData(
                 tensor=tensor,
+                original_tensor=tensor,
                 path=self.current_image.path,
                 name=self.current_image.name,
                 is_raw=self.current_image.is_raw,
@@ -69,6 +75,7 @@ class Controller:
             rgb: Tensor = apply_debayer5x5(self.current_image.tensor, self._device)
             self.current_image = ImageData(
                 tensor=rgb,
+                original_tensor=rgb,
                 path=self.current_image.path,
                 name=self.current_image.name,
                 is_raw=False,
@@ -82,11 +89,15 @@ class Controller:
             return None
 
         try:
-            contrasted: Tensor = enhance_contrast_torch(
-                self.current_image.tensor, gain, cutoff
+            base: Tensor = (
+                self.current_image.original_tensor
+                if self.current_image.original_tensor is not None
+                else self.current_image.tensor
             )
+            contrasted: Tensor = enhance_contrast_torch(base, gain, cutoff)
             self.current_image = ImageData(
                 tensor=contrasted,
+                original_tensor=base,
                 path=self.current_image.path,
                 name=self.current_image.name,
                 is_raw=self.current_image.is_raw,
