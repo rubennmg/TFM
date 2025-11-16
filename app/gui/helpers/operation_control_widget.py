@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -14,15 +13,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-
-@dataclass
-class FloatParamSpec:
-    key: str
-    label: str
-    minimum: float
-    maximum: float
-    step: float
-    default: float
+from models.float_param_spec import FloatParamSpec
 
 
 class _FloatSlider(QWidget):
