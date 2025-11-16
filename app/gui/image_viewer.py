@@ -23,10 +23,10 @@ class ImageViewer(QWidget):
     def _setup_ui(self) -> None:
         layout: QVBoxLayout = QVBoxLayout()
         self.label: QLabel = QLabel("No image loaded")
-        self.label.setObjectName("imageLabel")
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.scroll_area: QScrollArea = QScrollArea()
+        self.scroll_area.setObjectName("imageScrollArea")
         self.scroll_area.setWidget(self.label)
         self.scroll_area.setWidgetResizable(False)
 

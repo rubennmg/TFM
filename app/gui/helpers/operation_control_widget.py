@@ -130,7 +130,6 @@ class _FloatSlider(QWidget):
 class OperationControlWidget(QWidget):
     """Reusable operation widget: title + parameters + optional extra widgets.
 
-    - White border around the whole widget (via objectName styling).
     - Accepts a list of FloatParamSpec instances to create parameters.
     - Emits paramsChanged(dict) whenever any parameter changes.
     - add_widget(QWidget) allows adding arbitrary custom controls.
@@ -145,12 +144,14 @@ class OperationControlWidget(QWidget):
         parent: Optional[QWidget] = None,
     ) -> None:
         super().__init__(parent)
-        self.setObjectName("operationControl")
 
-        self._title_lbl: QLabel = QLabel(title)
-        self._title_lbl.setStyleSheet("font-weight: bold;")
+        self._container = QWidget()
+        self._container.setObjectName("operationControl")
 
-        self._form: QFormLayout = QFormLayout()
+        self._title_lbl = QLabel(title)
+        self._title_lbl.setObjectName("operationControlTitle")
+
+        self._form = QFormLayout()
         self._form.setFormAlignment(Qt.AlignmentFlag.AlignTop)
         self._form.setLabelAlignment(Qt.AlignmentFlag.AlignLeft)
         self._form.setContentsMargins(0, 0, 0, 0)
@@ -158,25 +159,30 @@ class OperationControlWidget(QWidget):
 
         if params:
             for p in params:
-                slider: _FloatSlider = _FloatSlider(
+                slider = _FloatSlider(
                     p.label, p.minimum, p.maximum, p.step, p.default, self
                 )
                 slider.valueChanged.connect(self._emit_params)
                 self._sliders[p.key] = slider
                 self._form.addRow(slider)
 
-        self._extra_container: QVBoxLayout = QVBoxLayout()
+        self._extra_container = QVBoxLayout()
         self._extra_container.setContentsMargins(0, 0, 0, 0)
 
-        root: QVBoxLayout = QVBoxLayout()
-        root.setContentsMargins(8, 8, 8, 8)
-        root.setSpacing(6)
-        root.addWidget(self._title_lbl)
-        root.addLayout(self._form)
-        root.addLayout(self._extra_container)
-        root.addStretch()
+        inner_layout = QVBoxLayout()
+        inner_layout.setContentsMargins(15, 10, 15, 25)
+        inner_layout.setSpacing(6)
+        inner_layout.addWidget(self._title_lbl)
+        inner_layout.addLayout(self._form)
+        inner_layout.addLayout(self._extra_container)
 
-        self.setLayout(root)
+        self._container.setLayout(inner_layout)
+
+        root_layout = QVBoxLayout()
+        root_layout.setContentsMargins(0, 0, 0, 0)
+        root_layout.addWidget(self._container)
+
+        self.setLayout(root_layout)
 
     def add_widget(self, w: QWidget) -> None:
         self._extra_container.addWidget(w)

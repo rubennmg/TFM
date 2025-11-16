@@ -18,7 +18,8 @@ class RightPanel(QWidget):
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         label_title: QLabel = QLabel("TRANSFORMATIONS")
-        label_title.setStyleSheet("font-weight: bold;")
+        label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label_title.setObjectName("transformationsTitle")
         layout.addWidget(label_title)
 
         # sigmoid contrast control
@@ -44,9 +45,8 @@ class RightPanel(QWidget):
             "Sigmoid contrast", sig_params, self
         )
         self.sigmoid_widget.paramsChanged.connect(self._on_sigmoid_params)
-        self.sigmoid_widget.setToolTip(
-            "Adjust image contrast using a sigmoid function."
-        )
+        self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
+        self.sigmoid_widget.setObjectName("operationControl")
 
         layout.addWidget(self.sigmoid_widget)
 

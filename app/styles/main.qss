@@ -9,9 +9,9 @@ QWidget {
 /* ====== Buttons ====== */
 QPushButton {
     background-color: #3a3f44;
-    border: 1px solid #555;
-    border-radius: 6px;
-    padding: 8px;
+    border: 0.05em solid #555;
+    border-radius: 0.25em;
+    padding: 0.35em;
     color: #ddd;
 }
 
@@ -33,15 +33,30 @@ QLabel {
     color: #ccc;
 }
 
-/* ====== Image area ====== */
-#imageLabel {
-    border: 2px solid #555;
+/* ====== Transformation title label ====== */
+#transformationsTitle {
+    font-weight: bold;
+    font-size: 12pt;
+    margin-bottom: 0.5em;
+}
+
+/* ====== Scroll area ====== */
+#imageScrollArea {
+    border: 0.05em solid #555;
+    border-radius: 0.25em;
     color: #aaa;
 }
 
 /* ====== Operation control widget ====== */
 #operationControl {
-    border: 2px solid rgba(255,255,255,200);
-    border-radius: 6px;
-    padding: 6px;
+    border: 0.05em solid #555;
+    border-radius: 0.25em;
+    margin-bottom: 0.8em;
+}
+
+/* ====== Operation control title label ====== */
+#operationControlTitle {
+    font-weight: bold;
+    font-size: 11pt;
+    margin-bottom: 0.3em;
 }
