@@ -1,10 +1,11 @@
 from __future__ import annotations
+
 import torch
 import torch.nn
 import torch.nn.functional
 from torch import Tensor
 
-from .layouts import Layout
+from core.layouts import Layout
 
 
 class Debayer5x5(torch.nn.Module):

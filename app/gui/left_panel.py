@@ -6,8 +6,8 @@ import numpy as np
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog, QVBoxLayout, QWidget
 
-from .helpers.labelled_button_widget import LabelledButtonWidget
-from .helpers.rgb_histogram_widget import RgbHistogramWidget
+from gui.helpers.labelled_button_widget import LabelledButtonWidget
+from gui.helpers.rgb_histogram_widget import RgbHistogramWidget
 
 
 class LeftPanel(QWidget):

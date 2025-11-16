@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QWidget
 
-from .image_viewer import ImageViewer
-from .left_panel import LeftPanel
-from .right_panel import RightPanel
+from gui.image_viewer import ImageViewer
+from gui.left_panel import LeftPanel
+from gui.right_panel import RightPanel
 
 
 class MainWindow(QMainWindow):

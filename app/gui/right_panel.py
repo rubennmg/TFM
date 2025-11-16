@@ -3,7 +3,8 @@ from __future__ import annotations
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
 
-from .helpers.operation_control_widget import FloatParamSpec, OperationControlWidget
+from gui.helpers.operation_control_widget import OperationControlWidget
+from models.float_param_spec import FloatParamSpec
 
 
 class RightPanel(QWidget):
@@ -43,6 +44,9 @@ class RightPanel(QWidget):
             "Sigmoid contrast", sig_params, self
         )
         self.sigmoid_widget.paramsChanged.connect(self._on_sigmoid_params)
+        self.sigmoid_widget.setToolTip(
+            "Adjust image contrast using a sigmoid function."
+        )
 
         layout.addWidget(self.sigmoid_widget)
 
