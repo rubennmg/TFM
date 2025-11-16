@@ -136,6 +136,7 @@ def collect_watch_paths(extra: List[str], ignore: List[str]) -> List[Path]:
     base = Path(__file__).parent
     default_dirs = ["core", "gui", "models", "styles", "utils"]
     paths = []
+    paths.append(base)
     for d in default_dirs + extra:
         p = base / d
         if p.exists() and p.is_dir() and d not in ignore:
