@@ -1,7 +1,3 @@
-from __future__ import annotations
-
-from typing import Optional
-
 import numpy as np
 import torch
 from PyQt6.QtCore import QEvent, QSize, Qt
@@ -35,7 +31,7 @@ class ImageViewer(QWidget):
         except Exception:
             pass
 
-        viewport: Optional[QWidget] = self.scroll_area.viewport()
+        viewport: QWidget | None = self.scroll_area.viewport()
         if viewport is not None:
             viewport.installEventFilter(self)
         layout.addWidget(self.scroll_area)

@@ -1,16 +1,13 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
-from typing import Optional
 
-import torch
+from torch import Tensor
 
 
 @dataclass
 class ImageData:
-    tensor: torch.Tensor
-    original_tensor: Optional[torch.Tensor] = None
-    path: Optional[str] = None
-    name: Optional[str] = None
+    tensor: Tensor
+    original_tensor: Tensor | None = None
+    path: str | None = None
+    name: str | None = None
     bit_depth: int = 12  # assuming 12-bit for RAW images
     is_raw: bool = False

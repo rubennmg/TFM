@@ -1,12 +1,8 @@
-from __future__ import annotations
-
-from typing import Optional
-
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMessageBox
 
 
-def show_error_dialog(title: str, message: str, detailed: Optional[str] = None) -> None:
+def show_error_dialog(title: str, message: str, detailed: str | None = None) -> None:
     box: QMessageBox = QMessageBox(None)
     box.setWindowModality(Qt.WindowModality.ApplicationModal)
     box.setIcon(QMessageBox.Icon.Critical)

@@ -19,8 +19,6 @@ Options:
 Interrupt with Ctrl+C.
 """
 
-from __future__ import annotations
-
 import argparse
 import os
 import signal
@@ -29,7 +27,7 @@ import sys
 import threading
 import time
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 from watchdog.events import FileSystemEvent, PatternMatchingEventHandler
 from watchdog.observers import Observer
@@ -43,7 +41,7 @@ class DebouncedRestarter:
 
     def __init__(self, delay: float, restart_callback):
         self.delay = delay
-        self._timer: Optional[threading.Timer] = None
+        self._timer: threading.Timer | None = None
         self._lock = threading.Lock()
         self._callback = restart_callback
 
@@ -80,7 +78,7 @@ class HotReloadEventHandler(PatternMatchingEventHandler):
 
 class AppProcess:
     def __init__(self):
-        self._proc: Optional[subprocess.Popen] = None
+        self._proc: subprocess.Popen | None = None
 
     def start(self):
         self.stop()

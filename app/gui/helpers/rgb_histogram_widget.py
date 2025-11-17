@@ -1,7 +1,3 @@
-from __future__ import annotations
-
-from typing import Optional
-
 import numpy as np
 from PyQt6.QtCore import QPoint, QRect, Qt
 from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
@@ -16,11 +12,11 @@ class RgbHistogramWidget(QWidget):
         hist.update_from_array(img_np)  # img_np uint8 HxWxC, C in {1,3}
     """
 
-    def __init__(self, parent: Optional[QWidget] = None, height: int = 120) -> None:
+    def __init__(self, parent: QWidget | None = None, height: int = 120) -> None:
         super().__init__(parent)
-        self._bins_r: Optional[np.ndarray] = None
-        self._bins_g: Optional[np.ndarray] = None
-        self._bins_b: Optional[np.ndarray] = None
+        self._bins_r: np.ndarray | None = None
+        self._bins_g: np.ndarray | None = None
+        self._bins_b: np.ndarray | None = None
         self._max_count: float = 1.0
 
         self._bg: QColor = QColor(0, 0, 0, 160)

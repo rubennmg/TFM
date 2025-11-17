@@ -1,7 +1,3 @@
-from __future__ import annotations
-
-from typing import Optional
-
 import numpy as np
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog, QVBoxLayout, QWidget
@@ -42,7 +38,7 @@ class LeftPanel(QWidget):
 
         self.setLayout(layout)
 
-    def update_histogram(self, img_np: Optional[np.ndarray]) -> None:
+    def update_histogram(self, img_np: np.ndarray | None) -> None:
         if img_np is None or img_np.size == 0:
             self.histogram.clear()
             return

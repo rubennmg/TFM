@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from typing import Dict, List, Optional
+from typing import Dict
 
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
@@ -32,7 +30,7 @@ class _FloatSlider(QWidget):
         maximum: float,
         step: float,
         default: float,
-        parent: Optional[QWidget] = None,
+        parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
 
@@ -140,8 +138,8 @@ class OperationControlWidget(QWidget):
     def __init__(
         self,
         title: str,
-        params: Optional[List[FloatParamSpec]] = None,
-        parent: Optional[QWidget] = None,
+        params: list[FloatParamSpec] | None = None,
+        parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
 
