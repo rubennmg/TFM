@@ -1,7 +1,7 @@
-import enum
+from enum import Enum
 
 
-class Layout(enum.Enum):
+class Layout(Enum):
     """Possible Bayer color filter array layouts.
 
     The value of each entry is the color index (R=0,G=1,B=2)
