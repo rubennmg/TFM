@@ -26,9 +26,10 @@ def load_raw(path: str, device: device) -> Image:
     bayer_pattern = Layout.RGGB
 
     raw_data: np.ndarray = np.fromfile(path, dtype=np.uint16).reshape((height, width))
-    tensor: Tensor = torch.tensor(raw_data, dtype=torch.float32, device=device) / (
-        2**bit_depth - 1
+    tensor: Tensor = (
+        torch.from_numpy(raw_data).to(dtype=torch.float32, device=device).unsqueeze(0)
     )
+    tensor.div_(2**bit_depth - 1)
 
     metadata: RawMetadata = RawMetadata(
         width=width,

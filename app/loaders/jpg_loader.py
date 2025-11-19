@@ -1,6 +1,31 @@
+import torch
+from torch import Tensor, device
+from torchvision.io import decode_image
+
+from enums.image_formats import ImageFormat
 from models.image import Image
 
 
-def load_jpg(path: str, device) -> Image:
-    # TODO: Implement JPG loading logic
-    raise NotImplementedError("JPG loading not implemented yet.")
+def load_jpg(path: str, device: device) -> Image:
+    """Load a JPG image from the given path and return an Image dataclass.
+
+    Args:
+        path (str): Path to the JPG image file.
+        device (device): The device on which the image tensor will be loaded.
+
+    Returns:
+        Image: An Image dataclass containing the loaded image tensor and metadata.
+    """
+    tensor: Tensor = decode_image(path)
+
+    tensor = tensor.to(dtype=torch.float32, device=device)
+    tensor.div_(255.0)  # decode_image loads images as uint8 by default
+
+    return Image(
+        tensor=tensor,
+        original_tensor=tensor.clone(),
+        path=path,
+        name=path.split("/")[-1],
+        image_format=ImageFormat.JPG,
+        raw_metadata=None,
+    )
