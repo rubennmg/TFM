@@ -1,5 +1,3 @@
-import traceback
-
 from torch import device
 
 import core.debayer
@@ -7,7 +5,7 @@ import core.transformers
 from gui.main_window import MainWindow
 from loaders import image_loader
 from models.image import Image
-from utils.error import show_error
+from utils.safe import safe_call
 from utils.torch import get_device
 
 
@@ -20,56 +18,41 @@ class Controller:
     def __update_viewer(self) -> None:
         if self.image is None:
             return
-
-        try:
-            self.window.update_image_view(self.image)
-        except Exception as e:
-            self.__show_error(e)
-
-    def __show_error(self, exc: Exception) -> None:
-        tb: str = traceback.format_exc()
-        show_error("Error", str(exc), detailed=tb)
+        safe_call(self.window.update_image_view, self.image)
 
     def load_image(self, path: str) -> None:
-        try:
-            self.image = image_loader.load_image(path, self._device)
-            self.window.viewer.reset_zoom()
-            self.window.right_panel.sigmoid_widget.reset_controls_to_default()
-            self.__update_viewer()
-        except Exception as e:
-            self.__show_error(e)
+        result = safe_call(image_loader.load_image, path, self._device)
+        if result is None:
+            return
+
+        self.image = result
+        safe_call(self.window.viewer.reset_zoom)
+        safe_call(self.window.right_panel.sigmoid_widget.reset_controls_to_default)
+        safe_call(self.__update_viewer)
 
     def reset_image(self) -> None:
         if self.image is None:
             return
 
-        try:
-            self.image.tensor = self.image.original_tensor.clone()
-            self.__update_viewer()
-            self.window.right_panel.sigmoid_widget.reset_controls_to_default()
-        except Exception as e:
-            self.__show_error(e)
+        self.image.tensor = self.image.original_tensor.clone()
+        safe_call(self.__update_viewer)
+        safe_call(self.window.right_panel.sigmoid_widget.reset_controls_to_default)
 
     def apply_debayer5x5(self) -> None:
         if self.image is None:
             return
-
-        try:
-            core.debayer.apply_debayer5x5(self.image)
-            self.__update_viewer()
-        except Exception as e:
-            self.__show_error(e)
+        safe_call(core.debayer.apply_debayer5x5, self.image)
+        safe_call(self.__update_viewer)
 
     def apply_contrast(self, gain: float, cutoff: float) -> None:
         if self.image is None:
             return
-
-        try:
-            core.transformers.enhance_contrast_torch(
-                self.image, gain=gain, cutoff=cutoff
-            )
-            self.__update_viewer()
-        except Exception as e:
-            self.__show_error(e)
+        safe_call(
+            core.transformers.enhance_contrast_torch,
+            self.image,
+            gain=gain,
+            cutoff=cutoff,
+        )
+        safe_call(self.__update_viewer)
 
     # more methods...
