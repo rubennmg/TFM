@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 
-from torch import Tensor
 import numpy as np
+from torch import Tensor
 
 from enums.image_formats import ImageFormat
 from models.raw_metadata import RawMetadata
-from utils.utils import tensor_to_uint8_np
+from utils.torch import tensor_to_uint8_np
 
 
 @dataclass

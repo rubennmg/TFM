@@ -4,11 +4,11 @@ from torch import device
 
 import core.debayer
 import core.transformers
-from gui.helpers.error_dialog import show_error_dialog
 from gui.main_window import MainWindow
 from loaders import image_loader
 from models.image import Image
-from utils.utils import get_device
+from utils.error import show_error
+from utils.torch import get_device
 
 
 class Controller:
@@ -28,7 +28,7 @@ class Controller:
 
     def __show_error(self, exc: Exception) -> None:
         tb: str = traceback.format_exc()
-        show_error_dialog("Error", str(exc), detailed=tb)
+        show_error("Error", str(exc), detailed=tb)
 
     def load_image(self, path: str) -> None:
         try:

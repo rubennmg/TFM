@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication
 
 from controller import Controller
 from gui.main_window import MainWindow
-from utils.utils import load_stylesheet
+from utils.io import load_stylesheet
 
 
 def main():
