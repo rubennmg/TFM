@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QWidget
 from gui.image_viewer import ImageViewer
 from gui.left_panel import LeftPanel
 from gui.right_panel import RightPanel
+from models.image import Image
 
 
 class MainWindow(QMainWindow):
@@ -25,3 +26,8 @@ class MainWindow(QMainWindow):
 
         central_widget.setLayout(main_layout)
         self.setCentralWidget(central_widget)
+
+    def update_image_view(self, image: Image) -> None:
+        np_array = image.np_array
+        self.viewer.update_image(np_array)
+        self.left_panel.update_histogram(np_array)

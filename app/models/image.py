@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 
 from torch import Tensor
+import numpy as np
 
 from enums.image_formats import ImageFormat
 from models.raw_metadata import RawMetadata
+from utils.utils import tensor_to_uint8_np
 
 
 @dataclass
@@ -14,3 +16,13 @@ class Image:
     name: str
     image_format: ImageFormat
     raw_metadata: RawMetadata | None = None
+
+    @property
+    def np_array(self) -> np.ndarray:
+        """uint8 numpy representation of the current `tensor`.
+        Used to display the image in the GUI.
+
+        Returns:
+            np.ndarray: uint8 numpy array representation of the image tensor.
+        """
+        return tensor_to_uint8_np(self.tensor)

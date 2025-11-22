@@ -1,6 +1,5 @@
 import traceback
 
-import numpy as np
 from torch import device
 
 import core.debayer
@@ -9,11 +8,7 @@ from gui.helpers.error_dialog import show_error_dialog
 from gui.main_window import MainWindow
 from loaders import image_loader
 from models.image import Image
-from utils.utils import (
-    compute_histogram_bins_torch,
-    get_device,
-    tensor_to_uint8_np,
-)
+from utils.utils import get_device
 
 
 class Controller:
@@ -27,15 +22,9 @@ class Controller:
             return
 
         try:
-            np_frame: np.ndarray = tensor_to_uint8_np(self.image.tensor)
-            self.window.viewer.show_numpy_array(np_frame)
-            self.window.left_panel.update_histogram(np_frame)
+            self.window.update_image_view(self.image)
         except Exception as e:
-            try:
-                r, g, b = compute_histogram_bins_torch(self.image.tensor, bins=256)
-                self.window.left_panel.update_histogram_bins(r, g, b)
-            except Exception:
-                self.__show_error(e)
+            self.__show_error(e)
 
     def __show_error(self, exc: Exception) -> None:
         tb: str = traceback.format_exc()

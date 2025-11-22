@@ -14,9 +14,9 @@ class ImageViewer(QWidget):
         self._min_zoom: float = 0.05
         self._max_zoom: float = 10.0
 
-        self._setup_ui()
+        self.__setup_ui()
 
-    def _setup_ui(self) -> None:
+    def __setup_ui(self) -> None:
         layout: QVBoxLayout = QVBoxLayout()
         self.label: QLabel = QLabel("No image loaded")
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -37,19 +37,7 @@ class ImageViewer(QWidget):
         layout.addWidget(self.scroll_area)
         self.setLayout(layout)
 
-    def show_numpy_array(self, np_array: np.ndarray) -> None:
-        if np_array.ndim != 3 or np_array.shape[2] not in (1, 3):
-            raise ValueError(
-                f"Array must be (H, W, C) with C in {{1, 3}}, got {np_array.shape}"
-            )
-
-        if np_array.dtype != np.uint8:
-            np_array = np_array.astype(np.uint8, copy=False)
-
-        if not np_array.flags["C_CONTIGUOUS"]:
-            np_array = np.ascontiguousarray(np_array)
-
-        self._buffer_ref = np_array
+    def update_image(self, np_array: np.ndarray) -> None:
         buf = memoryview(np_array)
 
         h, w, c = np_array.shape
@@ -61,9 +49,9 @@ class ImageViewer(QWidget):
         qimg = QImage(buf, w, h, bytes_per_line, img_format)
         self._qimg = qimg
         self._pixmap = QPixmap.fromImage(self._qimg)
-        self._update_display()
+        self.__update_display()
 
-    def _update_display(self) -> None:
+    def __update_display(self) -> None:
         if self._pixmap is None:
             self.label.setText("No image loaded")
             return
@@ -90,7 +78,7 @@ class ImageViewer(QWidget):
         if abs(self._zoom - factor) < 1e-6:
             return
         self._zoom = factor
-        self._update_display()
+        self.__update_display()
 
     def zoom_in(self) -> None:
         self.set_zoom(self._zoom * self._zoom_step)
