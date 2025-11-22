@@ -1,6 +1,5 @@
 import numpy as np
-import torch
-from PyQt6.QtCore import QEvent, QSize, Qt
+from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QImage, QPixmap, QWheelEvent
 from PyQt6.QtWidgets import QLabel, QScrollArea, QVBoxLayout, QWidget
 
@@ -9,6 +8,7 @@ class ImageViewer(QWidget):
     def __init__(self) -> None:
         super().__init__()
         self._pixmap: QPixmap | None = None
+        self._qimg: QImage | None = None
         self._zoom: float = 0.25
         self._zoom_step: float = 1.15
         self._min_zoom: float = 0.05
@@ -37,35 +37,30 @@ class ImageViewer(QWidget):
         layout.addWidget(self.scroll_area)
         self.setLayout(layout)
 
-    def show_tensor(self, tensor: torch.Tensor) -> None:
-        if tensor.ndim == 4:
-            tensor = tensor.squeeze(0)
-        if tensor.ndim == 3 and tensor.shape[0] in (1, 3):
-            tensor = tensor.permute(1, 2, 0)
-        elif tensor.ndim != 3:
-            raise ValueError("Tensor shape must be (C,H,W) or (H,W,C)")
-
-        tensor = (tensor * 255).round().type(torch.uint8)
-        img_np: np.ndarray = tensor.cpu().numpy()
-
-        if img_np.shape[2] == 1:
-            qimg = QImage(
-                img_np.tobytes(),
-                img_np.shape[1],
-                img_np.shape[0],
-                img_np.strides[0],
-                QImage.Format.Format_Grayscale8,
-            )
-        else:
-            qimg = QImage(
-                img_np.tobytes(),
-                img_np.shape[1],
-                img_np.shape[0],
-                img_np.strides[0],
-                QImage.Format.Format_RGB888,
+    def show_numpy_array(self, np_array: np.ndarray) -> None:
+        if np_array.ndim != 3 or np_array.shape[2] not in (1, 3):
+            raise ValueError(
+                f"Array must be (H, W, C) with C in {{1, 3}}, got {np_array.shape}"
             )
 
-        self._pixmap = QPixmap.fromImage(qimg)
+        if np_array.dtype != np.uint8:
+            np_array = np_array.astype(np.uint8, copy=False)
+
+        if not np_array.flags["C_CONTIGUOUS"]:
+            np_array = np.ascontiguousarray(np_array)
+
+        self._buffer_ref = np_array
+        buf = memoryview(np_array)
+
+        h, w, c = np_array.shape
+        bytes_per_line: int = np_array.strides[0]
+        img_format: QImage.Format = (
+            QImage.Format.Format_Grayscale8 if c == 1 else QImage.Format.Format_RGB888
+        )
+
+        qimg = QImage(buf, w, h, bytes_per_line, img_format)
+        self._qimg = qimg
+        self._pixmap = QPixmap.fromImage(self._qimg)
         self._update_display()
 
     def _update_display(self) -> None:
@@ -73,20 +68,22 @@ class ImageViewer(QWidget):
             self.label.setText("No image loaded")
             return
 
-        self.label.setText("")
-        pix_to_show: QPixmap = self._pixmap
-
-        if self._zoom != 1.0:
-            w: int = max(1, int(pix_to_show.width() * self._zoom))
-            h: int = max(1, int(pix_to_show.height() * self._zoom))
-            pix_to_show = pix_to_show.scaled(
-                QSize(w, h),
+        if self._zoom == 1.0:
+            pix = self._pixmap
+        else:
+            assert self._qimg is not None
+            w = max(1, int(self._qimg.width() * self._zoom))
+            h = max(1, int(self._qimg.height() * self._zoom))
+            scaled_img = self._qimg.scaled(
+                w,
+                h,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             )
+            pix = QPixmap.fromImage(scaled_img)
 
-        self.label.setPixmap(pix_to_show)
-        self.label.setFixedSize(self.label.pixmap().size())
+        self.label.setPixmap(pix)
+        self.label.setFixedSize(pix.size())
 
     def set_zoom(self, factor: float) -> None:
         factor = max(self._min_zoom, min(self._max_zoom, factor))

@@ -33,15 +33,21 @@ class RightPanel(QWidget):
             FloatParamSpec(
                 key="cutoff",
                 label="Cutoff",
-                minimum=-1.0,
+                minimum=0.0,
                 maximum=1.0,
-                step=0.05,
+                step=0.01,
                 default=0,
             ),
         ]
         self.sigmoid_widget: OperationControlWidget = OperationControlWidget(
             "Sigmoid contrast", sig_params, self
         )
+
+        try:
+            self.sigmoid_widget.set_debounce_ms(16)
+        except Exception:
+            pass
+
         self.sigmoid_widget.paramsChanged.connect(self._on_sigmoid_params)
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
         self.sigmoid_widget.setObjectName("operationControl")

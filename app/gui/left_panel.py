@@ -44,6 +44,11 @@ class LeftPanel(QWidget):
             return
         self.histogram.update_from_array(img_np)
 
+    def update_histogram_bins(
+        self, bins_r: np.ndarray, bins_g: np.ndarray, bins_b: np.ndarray
+    ) -> None:
+        self.histogram.update_from_bins(bins_r, bins_g, bins_b)
+
     def _on_load_clicked(self) -> None:
         file_path, _ = QFileDialog.getOpenFileName(
             self,
