@@ -7,6 +7,17 @@ from enums.layouts import Layout
 from models.image import Image
 from models.raw_metadata import RawMetadata
 
+# TODO: Implement reading actual metadata from a sidecar file associated with the RAW image.
+# Currently using default placeholder values for width, height, bit depth, and Bayer pattern.
+METADATA: RawMetadata = RawMetadata(
+    width=4096,
+    height=2168,
+    bit_depth=12,
+    bayer_pattern=Layout.RGGB,
+)
+
+SCALE: float = 1.0 / (2**METADATA.bit_depth - 1)
+
 
 def load_raw(path: str, device: device) -> Image:
     """Load a RAW image from the given path and return an Image dataclass.
@@ -18,25 +29,16 @@ def load_raw(path: str, device: device) -> Image:
     Returns:
         Image: Loaded image dataclass.
     """
-    # TODO: Implement reading actual metadata from a sidecar file associated with the RAW image.
-    # Currently using default placeholder values for width, height, bit depth, and Bayer pattern.
-    width = 4096
-    height = 2168
-    bit_depth = 12
-    bayer_pattern = Layout.RGGB
-
-    raw_data: np.ndarray = np.fromfile(path, dtype=np.uint16).reshape((height, width))
+    raw_data: np.ndarray = np.fromfile(path, dtype=np.uint16).reshape(
+        (METADATA.height, METADATA.width)
+    )
     tensor: Tensor = (
-        torch.from_numpy(raw_data).to(dtype=torch.float32, device=device).unsqueeze(0)
+        torch.from_numpy(raw_data).to(dtype=torch.float32).unsqueeze(0).mul_(SCALE)
     )
-    tensor.div_(2**bit_depth - 1)
+    tensor = tensor.to(device=device, non_blocking=True)
 
-    metadata: RawMetadata = RawMetadata(
-        width=width,
-        height=height,
-        bit_depth=bit_depth,
-        bayer_pattern=bayer_pattern,
-    )
+    if not tensor.is_contiguous():
+        tensor = tensor.contiguous()
 
     return Image(
         tensor=tensor,
@@ -44,5 +46,5 @@ def load_raw(path: str, device: device) -> Image:
         path=path,
         name=path.split("/")[-1],
         image_format=ImageFormat.RAW,
-        raw_metadata=metadata,
+        raw_metadata=METADATA,
     )

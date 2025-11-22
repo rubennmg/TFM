@@ -5,6 +5,8 @@ from torchvision.io import decode_image
 from enums.image_formats import ImageFormat
 from models.image import Image
 
+SCALE: float = 1.0 / 255.0  # decode_image loads images as uint8 by default
+
 
 def load_jpg(path: str, device: device) -> Image:
     """Load a JPG image from the given path and return an Image dataclass.
@@ -16,10 +18,11 @@ def load_jpg(path: str, device: device) -> Image:
     Returns:
         Image: An Image dataclass containing the loaded image tensor and metadata.
     """
-    tensor: Tensor = decode_image(path)
+    tensor: Tensor = decode_image(path).to(dtype=torch.float32).mul_(SCALE)
+    tensor = tensor.to(device=device, non_blocking=True)
 
-    tensor = tensor.to(dtype=torch.float32, device=device)
-    tensor.div_(255.0)  # decode_image loads images as uint8 by default
+    if not tensor.is_contiguous():
+        tensor = tensor.contiguous()
 
     return Image(
         tensor=tensor,

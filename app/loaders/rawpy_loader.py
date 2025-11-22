@@ -6,6 +6,8 @@ from torch import Tensor, device
 from enums.image_formats import ImageFormat
 from models.image import Image
 
+SCALE: float = 1.0 / 65535.0
+
 
 def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
     """Load a RAW image using rawpy from the given path and return an Image dataclass.
@@ -21,9 +23,11 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
     with rawpy.imread(path) as raw:
         raw_data: np.ndarray = raw.postprocess(output_bps=16)
 
-    tensor: Tensor = torch.from_numpy(raw_data).to(dtype=torch.float32)
-    tensor.div_(65535.0)
-    tensor = tensor.to(device=device)
+    tensor: Tensor = torch.from_numpy(raw_data).to(dtype=torch.float32).mul_(SCALE)
+    tensor = tensor.to(device=device, non_blocking=True)
+
+    if not tensor.is_contiguous():
+        tensor = tensor.contiguous()
 
     return Image(
         tensor=tensor,
