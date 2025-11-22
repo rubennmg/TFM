@@ -1,11 +1,11 @@
-from __future__ import annotations
-
 import torch
 import torch.nn
 import torch.nn.functional
-from torch import Tensor
+from torch import Tensor, device
 
-from core.layouts import Layout
+from enums.image_formats import ImageFormat
+from enums.layouts import Layout
+from models.image import Image
 
 
 class Debayer5x5(torch.nn.Module):
@@ -93,21 +93,17 @@ class Debayer5x5(torch.nn.Module):
         """
         B, C, H, W = x.shape
 
+        # ensure kernels are on the same device/dtype as input
+        kernels = self.kernels.to(device=x.device, dtype=x.dtype)
         xpad = torch.nn.functional.pad(x, (2, 2, 2, 2), mode="reflect")
-        planes = torch.nn.functional.conv2d(xpad, self.kernels, stride=1)
+        planes = torch.nn.functional.conv2d(xpad, kernels, stride=1)
         planes = torch.cat(
             (planes, x), 1
-        )  # Concat with input to give identity kernel Bx5xHxW
-        rgb = torch.gather(
-            planes,
-            1,
-            self.index.repeat(
-                1,
-                1,
-                int(torch.div(H, 2, rounding_mode="floor").item()),
-                int(torch.div(W, 2, rounding_mode="floor").item()),
-            ).expand(B, -1, -1, -1),  # expand for singleton batch dimension is faster
-        )
+        )  # concat with input to give identity kernel Bx5xHxW
+        h2 = H // 2
+        w2 = W // 2
+        idx = self.index.repeat(1, 1, h2, w2).expand(B, -1, -1, -1)
+        rgb = torch.gather(planes, 1, idx)
         return torch.clamp(rgb, 0, 1)
 
     def _index_from_layout(self, layout: Layout) -> torch.Tensor:
@@ -145,12 +141,66 @@ class Debayer5x5(torch.nn.Module):
         }.get(layout, rggb)
 
 
-def apply_debayer5x5(tensor: Tensor, device: torch.device) -> Tensor:
-    t: Tensor = tensor.to(device)
-    debayer5x5: Debayer5x5 = Debayer5x5(layout=Layout.RGGB).to(device)
-    rgb: Tensor = debayer5x5(t)
-    rgb = rgb.squeeze().permute(1, 2, 0)
-    rgb = rgb.contiguous()
-    rgb = rgb.cpu()
+def _get_cached_debayer5x5(image: Image) -> Debayer5x5:
+    """Return a Debayer5x5 module cached on the `Image` instance.
 
-    return rgb
+    The module is stored on the image as a private attribute (`_debayer5x5`) along
+    with a small key (`_debayer5x5_key`) that records the layout, device and dtype
+    used. If the image moves device or dtype changes, the module is recreated
+    and replaced.
+
+    Args:
+        image (Image): Image to get debayer module for.
+
+    Raises:
+        ValueError: If the image does not have raw metadata.
+
+    Returns:
+        Debayer5x5: Debayer5x5 module configured for the image.
+    """
+    if image.raw_metadata is None:
+        raise ValueError("Image must have raw_metadata to get a debayer module")
+
+    dev: device = image.tensor.device
+    dtype: torch.dtype = image.tensor.dtype
+    layout: Layout = image.raw_metadata.bayer_pattern
+    cur_key: tuple = (layout, dev.type, getattr(dev, "index", None), dtype)
+
+    module: Debayer5x5 | None = getattr(image, "_debayer5x5", None)
+    if getattr(image, "_debayer5x5_key", None) != cur_key or module is None:
+        module = Debayer5x5(layout=layout).to(
+            device=dev, dtype=dtype, non_blocking=True
+        )
+        setattr(image, "_debayer5x5", module)
+        setattr(image, "_debayer5x5_key", cur_key)
+
+    return module
+
+
+def apply_debayer5x5(image: Image) -> None:
+    """Apply Debayer5x5 on the provided image Tensor.
+
+    Args:
+        image (Image): Image to debayer. The image tensor is modified in place.
+
+    Raises:
+        ValueError: If the image is not RAW or does not have raw metadata.
+    """
+    if image.image_format is not ImageFormat.RAW or image.raw_metadata is None:
+        raise ValueError("Debayering can only be applied to RAW (1xHxW) images.")
+
+    # add batch dimension if missing
+    if image.tensor.ndim == 3:
+        image.tensor = image.tensor.unsqueeze(0)
+
+    debayer5x5: Debayer5x5 = _get_cached_debayer5x5(image)
+
+    with torch.no_grad():
+        out: Tensor = debayer5x5(image.tensor)
+
+    image.tensor = out.squeeze(0)
+    if not image.tensor.is_contiguous():
+        image.tensor = image.tensor.contiguous()
+
+    # TODO: update original tensor?
+    # image.original_tensor = image.tensor.clone()
