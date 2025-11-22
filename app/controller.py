@@ -1,33 +1,41 @@
-from __future__ import annotations
-
 import traceback
 
 import numpy as np
-from torch import Tensor, device
+from torch import device
 
-from core import image_loader
-from core.debayer import apply_debayer5x5
-from core.transformers import enhance_contrast_torch
+import core.debayer
+import core.transformers
 from gui.helpers.error_dialog import show_error_dialog
 from gui.main_window import MainWindow
-from models.image_model import ImageData
-from utils.utils import get_device, tensor_to_uint8_np
+from loaders import image_loader
+from models.image import Image
+from utils.utils import (
+    compute_histogram_bins_torch,
+    get_device,
+    tensor_to_uint8_np,
+)
 
 
 class Controller:
     def __init__(self):
-        self.current_image: ImageData | None = None
-        self.window: MainWindow | None = None
+        self.image: Image | None = None
+        self.window: MainWindow
         self._device: device = get_device()
 
-    def __update_viewer(self, tensor: Tensor) -> None:
-        if self.window is not None:
-            self.window.viewer.show_tensor(tensor)
+    def __update_viewer(self) -> None:
+        if self.image is None:
+            return
+
+        try:
+            np_frame: np.ndarray = tensor_to_uint8_np(self.image.tensor)
+            self.window.viewer.show_numpy_array(np_frame)
+            self.window.left_panel.update_histogram(np_frame)
+        except Exception as e:
             try:
-                img_np: np.ndarray = tensor_to_uint8_np(tensor)
-                self.window.left_panel.update_histogram(img_np)
+                r, g, b = compute_histogram_bins_torch(self.image.tensor, bins=256)
+                self.window.left_panel.update_histogram_bins(r, g, b)
             except Exception:
-                pass
+                self.__show_error(e)
 
     def __show_error(self, exc: Exception) -> None:
         tb: str = traceback.format_exc()
@@ -35,74 +43,43 @@ class Controller:
 
     def load_image(self, path: str) -> None:
         try:
-            tensor: Tensor = image_loader.load_image(path)
-            self.current_image = ImageData(
-                tensor=tensor,
-                original_tensor=tensor,
-                path=path,
-                name="test",
-                is_raw=path.endswith(".raw"),
-            )
-            if self.window is not None:
-                self.window.viewer.reset_zoom()
-                self.window.right_panel.sigmoid_widget.reset_controls_to_default()
-            self.__update_viewer(tensor)
+            self.image = image_loader.load_image(path, self._device)
+            self.window.viewer.reset_zoom()
+            self.window.right_panel.sigmoid_widget.reset_controls_to_default()
+            self.__update_viewer()
         except Exception as e:
             self.__show_error(e)
 
     def reset_image(self) -> None:
-        if self.current_image is None or self.current_image.path is None:
-            return None
+        if self.image is None:
+            return
 
         try:
-            tensor: Tensor = image_loader.load_image(self.current_image.path)
-            self.current_image = ImageData(
-                tensor=tensor,
-                original_tensor=tensor,
-                path=self.current_image.path,
-                name=self.current_image.name,
-                is_raw=self.current_image.is_raw,
-            )
-            self.__update_viewer(tensor)
+            self.image.tensor = self.image.original_tensor.clone()
+            self.__update_viewer()
+            self.window.right_panel.sigmoid_widget.reset_controls_to_default()
         except Exception as e:
             self.__show_error(e)
 
     def apply_debayer5x5(self) -> None:
-        if self.current_image is None:
-            return None
+        if self.image is None:
+            return
 
         try:
-            rgb: Tensor = apply_debayer5x5(self.current_image.tensor, self._device)
-            self.current_image = ImageData(
-                tensor=rgb,
-                original_tensor=rgb,
-                path=self.current_image.path,
-                name=self.current_image.name,
-                is_raw=False,
-            )
-            self.__update_viewer(rgb)
+            core.debayer.apply_debayer5x5(self.image)
+            self.__update_viewer()
         except Exception as e:
             self.__show_error(e)
 
     def apply_contrast(self, gain: float, cutoff: float) -> None:
-        if self.current_image is None:
-            return None
+        if self.image is None:
+            return
 
         try:
-            base: Tensor = (
-                self.current_image.original_tensor
-                if self.current_image.original_tensor is not None
-                else self.current_image.tensor
+            core.transformers.enhance_contrast_torch(
+                self.image, gain=gain, cutoff=cutoff
             )
-            contrasted: Tensor = enhance_contrast_torch(base, gain, cutoff)
-            self.current_image = ImageData(
-                tensor=contrasted,
-                original_tensor=base,
-                path=self.current_image.path,
-                name=self.current_image.name,
-                is_raw=self.current_image.is_raw,
-            )
-            self.__update_viewer(contrasted)
+            self.__update_viewer()
         except Exception as e:
             self.__show_error(e)
 
