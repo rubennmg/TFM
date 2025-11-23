@@ -1,7 +1,7 @@
 from torch import device
 
-import core.debayer
 import core.transformers
+from core.debayer import debayer_manager
 from gui.main_window import MainWindow
 from loaders import image_loader
 from models.image import Image
@@ -37,11 +37,14 @@ class Controller:
         safe_call(self.__update_viewer)
         safe_call(self.window.reset_image_view)
 
-    def apply_debayer5x5(self) -> None:
+    def get_debayer_algorithms(self) -> list[tuple[str, str]]:
+        return debayer_manager.list_debayer_algorithms()
+
+    def apply_debayer(self, algorithm_name: str) -> None:
         if self.image is None:
             return
 
-        safe_call(core.debayer.apply_debayer5x5, self.image)
+        safe_call(debayer_manager.apply_debayer, self.image, algorithm_name)
         safe_call(self.__update_viewer)
 
     def apply_contrast(self, gain: float, cutoff: float) -> None:

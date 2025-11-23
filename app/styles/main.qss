@@ -33,6 +33,18 @@ QLabel {
     color: #ccc;
 }
 
+/* ====== Combo boxes ====== */
+QComboBox {
+    background-color: #3a3f44;
+    padding: 0.4em;
+    color: #ddd;
+}
+
+QComboBox QAbstractItemView {
+    border: 0.05em solid #555;
+    border-radius: 0.25em;
+}
+
 /* ====== Transformation title label ====== */
 #transformationsTitle {
     font-weight: bold;
@@ -45,6 +57,22 @@ QLabel {
     border: 0.05em solid #555;
     border-radius: 0.25em;
     color: #aaa;
+}
+
+/* ====== Image info panel ====== */
+#imageInfoPanel {
+    border: 0.05em solid #555;
+    border-radius: 0.25em;
+    margin-bottom: 0.6em;
+}
+
+#imageInfoTitle {
+    font-weight: bold;
+    color: #ddd;
+}
+
+#imageInfoValue {
+    color: #eee;
 }
 
 /* ====== Operation control widget ====== */

@@ -1,6 +1,7 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 
+from gui.helpers.debayer_control_widget import DebayerControlWidget
 from gui.helpers.operation_control_widget import OperationControlWidget
 from models.float_param_spec import FloatParamSpec
 
@@ -54,15 +55,14 @@ class RightPanel(QWidget):
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
         self.sigmoid_widget.setObjectName("operationControl")
 
+        self.debayer_widget: DebayerControlWidget = DebayerControlWidget(
+            algorithms=self.controller.get_debayer_algorithms(), parent=self
+        )
+        self.debayer_widget.applyClicked.connect(self._on_apply_debayer)
+
         layout.addWidget(self.sigmoid_widget)
+        layout.addWidget(self.debayer_widget)
 
-        # debayer 5x5 button
-        self.label_debayer: QLabel = QLabel("Debayer 5x5")
-        self.button_debayer: QPushButton = QPushButton("Apply Debayer 5x5")
-        self.button_debayer.clicked.connect(self._on_debayer_clicked)
-
-        layout.addWidget(self.label_debayer)
-        layout.addWidget(self.button_debayer)
         layout.addStretch()
 
         self.setLayout(layout)
@@ -72,5 +72,7 @@ class RightPanel(QWidget):
         cutoff: float = float(params.get("cutoff", 0.5))
         self.controller.apply_contrast(gain, cutoff)
 
-    def _on_debayer_clicked(self) -> None:
-        self.controller.apply_debayer5x5()
+    def _on_apply_debayer(self, algorithm_key: str) -> None:
+        if not algorithm_key:
+            return
+        self.controller.apply_debayer(algorithm_key)

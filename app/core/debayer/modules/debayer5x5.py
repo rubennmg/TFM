@@ -93,17 +93,21 @@ class Debayer5x5(torch.nn.Module):
         """
         B, C, H, W = x.shape
 
-        # ensure kernels are on the same device/dtype as input
-        kernels = self.kernels.to(device=x.device, dtype=x.dtype)
         xpad = torch.nn.functional.pad(x, (2, 2, 2, 2), mode="reflect")
-        planes = torch.nn.functional.conv2d(xpad, kernels, stride=1)
+        planes = torch.nn.functional.conv2d(xpad, self.kernels, stride=1)
         planes = torch.cat(
             (planes, x), 1
-        )  # concat with input to give identity kernel Bx5xHxW
-        h2 = H // 2
-        w2 = W // 2
-        idx = self.index.repeat(1, 1, h2, w2).expand(B, -1, -1, -1)
-        rgb = torch.gather(planes, 1, idx)
+        )  # Concat with input to give identity kernel Bx5xHxW
+        rgb = torch.gather(
+            planes,
+            1,
+            self.index.repeat(
+                1,
+                1,
+                int(torch.div(H, 2, rounding_mode="floor")),
+                int(torch.div(W, 2, rounding_mode="floor")),
+            ).expand(B, -1, -1, -1),  # expand for singleton batch dimension is faster
+        )
         return torch.clamp(rgb, 0, 1)
 
     def _index_from_layout(self, layout: Layout) -> torch.Tensor:
