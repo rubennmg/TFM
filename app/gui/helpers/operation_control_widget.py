@@ -159,6 +159,7 @@ class OperationControlWidget(QWidget):
         self._emit_timer: QTimer = QTimer(self)
         self._emit_timer.setSingleShot(True)
         self._emit_timer.timeout.connect(self._emit_params_now)
+        self._suppress_emit: bool = False
 
         if params:
             for p in params:
@@ -195,10 +196,17 @@ class OperationControlWidget(QWidget):
 
     def set_param(self, key: str, value: float) -> None:
         if key in self._sliders:
-            self._sliders[key].setValue(value)
-            self._emit_params_now()
+            # update control programmatically without emitting paramsChanged
+            self._suppress_emit = True
+            try:
+                self._sliders[key].setValue(value)
+            finally:
+                self._suppress_emit = False
 
     def _on_any_param_changed(self, *_args) -> None:
+        if self._suppress_emit:
+            return
+
         if self._debounce_ms == 0:
             self._emit_params_now()
         else:
@@ -208,9 +216,12 @@ class OperationControlWidget(QWidget):
         self.paramsChanged.emit(self.get_params())
 
     def reset_controls_to_default(self) -> None:
-        for slider in self._sliders.values():
-            slider.reset_to_default()
-        self._emit_params_now()
+        self._suppress_emit = True
+        try:
+            for slider in self._sliders.values():
+                slider.reset_to_default()
+        finally:
+            self._suppress_emit = False
 
     def set_debounce_ms(self, ms: int) -> None:
         self._debounce_ms = max(0, int(ms))
