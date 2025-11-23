@@ -30,23 +30,19 @@ def tensor_to_uint8_np(tensor: Tensor) -> np.ndarray:
         t = t.squeeze(0)
 
     if t.ndim == 3 and t.shape[0] in (1, 3):
+        # CHW -> HWC
         t = t.permute(1, 2, 0)
     elif t.ndim != 3:
         raise ValueError(f"Tensor shape must be (C,H,W) or (H,W,C), got {t.shape}")
 
-    if t.dtype != torch.uint8:
-        t = (t * 255).clamp(0, 255).round().to(torch.uint8)
-    else:
-        if t.min().item() < 0 or t.max().item() > 255:
-            t = t.clamp(0, 255)
+    if t.dtype != torch.float32:
+        raise TypeError(f"Expected float32 tensor, got {t.dtype}")
 
-    if not t.is_contiguous():
-        t = t.contiguous()
+    scaled = torch.mul(t, 255.0)
+    scaled = torch.clamp(scaled, 0.0, 255.0)
+    t_u8 = torch.round(scaled).to(torch.uint8)
 
-    cpu_t: Tensor = t.to("cpu", non_blocking=True)
-    if not cpu_t.is_contiguous():
-        cpu_t = cpu_t.contiguous()
-
+    cpu_t: Tensor = t_u8.contiguous().to("cpu", non_blocking=True)
     return cpu_t.numpy()
 
 
@@ -74,27 +70,28 @@ def compute_histogram_bins_torch(
     elif t.ndim != 3:
         raise ValueError("Tensor shape must be (C,H,W) or (H,W,C)")
 
+    if t.dtype != torch.float32:
+        raise TypeError(f"Expected float32 tensor, got {t.dtype}")
+
     dev = t.device
-    dtype = t.dtype if t.is_floating_point() else torch.float32
-    img: Tensor = t.to(device=dev, dtype=dtype)
+    img: Tensor = t.to(device=dev, dtype=torch.float32)
 
-    img = img.clamp(0, 1)
+    img = img.clamp(0.0, 1.0)
 
-    hists: list[np.ndarray] = []
     channels = img.shape[2]
-    if channels not in (1, 3):
-        channels = 1 if img.shape[2] == 1 else 3
 
-    for c in range(min(3, img.shape[2])):
-        ch: Tensor = img[:, :, c]
-        counts: Tensor
+    counts_per_channel: list[Tensor] = []
+    for c in range(min(3, channels)):
+        ch: Tensor = img[:, :, c].flatten()
         counts, _ = torch.histogram(ch, bins=bins, range=(0.0, 1.0))
-        hists.append(counts.to("cpu").to(torch.int64).numpy())
+        counts_per_channel.append(counts)
 
-    if img.shape[2] == 1:
-        h = hists[0]
-        return h, h, h
+    if channels == 1:
+        counts_per_channel = [counts_per_channel[0]] * 3
+    else:
+        while len(counts_per_channel) < 3:
+            counts_per_channel.append(counts_per_channel[-1])
 
-    while len(hists) < 3:
-        hists.append(hists[-1])
-    return hists[0], hists[1], hists[2]
+    stacked = torch.stack(counts_per_channel, dim=0).to("cpu")
+    stacked = stacked.to(torch.int64)
+    return stacked[0].numpy(), stacked[1].numpy(), stacked[2].numpy()

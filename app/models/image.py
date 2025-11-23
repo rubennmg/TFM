@@ -4,7 +4,7 @@ import numpy as np
 from torch import Tensor
 
 from enums.image_formats import ImageFormat
-from models.raw_metadata import RawMetadata
+from models.metadata import Metadata
 from utils.torch import tensor_to_uint8_np
 
 
@@ -15,9 +15,9 @@ class Image:
     path: str
     name: str
     image_format: ImageFormat
+    metadata: Metadata
     debayered: bool = False
     debayered_tensor: Tensor | None = None
-    raw_metadata: RawMetadata | None = None
 
     @property
     def np_array(self) -> np.ndarray:

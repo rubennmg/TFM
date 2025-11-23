@@ -4,8 +4,9 @@ from enums.layouts import Layout
 
 
 @dataclass
-class RawMetadata:
+class Metadata:
     width: int
     height: int
-    bit_depth: int
-    bayer_pattern: Layout
+    bit_depth: int | None
+    channels: int
+    bayer_pattern: Layout | None

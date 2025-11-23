@@ -4,6 +4,7 @@ from torchvision.io import decode_image
 
 from enums.image_formats import ImageFormat
 from models.image import Image
+from models.metadata import Metadata
 
 SCALE: float = 1.0 / 255.0  # decode_image loads images as uint8 by default
 
@@ -30,5 +31,11 @@ def load_jpg(path: str, device: device) -> Image:
         path=path,
         name=path.split("/")[-1],
         image_format=ImageFormat.JPG,
-        raw_metadata=None,
+        metadata=Metadata(
+            width=tensor.shape[2],
+            height=tensor.shape[1],
+            bit_depth=8,
+            channels=tensor.shape[0],
+            bayer_pattern=None,
+        ),
     )

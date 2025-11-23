@@ -5,6 +5,7 @@ from torch import Tensor, device
 
 from enums.image_formats import ImageFormat
 from models.image import Image
+from models.metadata import Metadata
 
 SCALE: float = 1.0 / 65535.0
 
@@ -21,9 +22,10 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
         Image: Loaded image encapsulated in an Image dataclass.
     """
     with rawpy.imread(path) as raw:
-        raw_data: np.ndarray = raw.postprocess(output_bps=16)
+        raw_data: np.ndarray = raw.postprocess(output_bps=16)  # always H,W,C, uint16
 
     tensor: Tensor = torch.from_numpy(raw_data).to(dtype=torch.float32).mul_(SCALE)
+    tensor = tensor.permute(2, 0, 1).contiguous()  # C,H,W
     tensor = tensor.to(device=device, non_blocking=True)
 
     if not tensor.is_contiguous():
@@ -35,5 +37,11 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
         path=path,
         name=path.split("/")[-1],
         image_format=fmt,
-        raw_metadata=None,
+        metadata=Metadata(
+            width=tensor.shape[2],
+            height=tensor.shape[1],
+            bit_depth=16,
+            channels=tensor.shape[0],
+            bayer_pattern=None,
+        ),
     )

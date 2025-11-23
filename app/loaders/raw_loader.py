@@ -5,18 +5,19 @@ from torch import Tensor, device
 from enums.image_formats import ImageFormat
 from enums.layouts import Layout
 from models.image import Image
-from models.raw_metadata import RawMetadata
+from models.metadata import Metadata
 
 # TODO: Implement reading actual metadata from a sidecar file associated with the RAW image.
 # Currently using default placeholder values for width, height, bit depth, and Bayer pattern.
-METADATA: RawMetadata = RawMetadata(
+METADATA: Metadata = Metadata(
     width=4096,
     height=2168,
     bit_depth=12,
+    channels=1,
     bayer_pattern=Layout.RGGB,
 )
 
-SCALE: float = 1.0 / (2**METADATA.bit_depth - 1)
+SCALE: float = 1.0 / (2**METADATA.bit_depth - 1) if METADATA.bit_depth else 1.0
 
 
 def load_raw(path: str, device: device) -> Image:
@@ -46,5 +47,5 @@ def load_raw(path: str, device: device) -> Image:
         path=path,
         name=path.split("/")[-1],
         image_format=ImageFormat.RAW,
-        raw_metadata=METADATA,
+        metadata=METADATA,
     )
