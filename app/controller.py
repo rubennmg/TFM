@@ -18,35 +18,36 @@ class Controller:
     def __update_viewer(self) -> None:
         if self.image is None:
             return
+
         safe_call(self.window.update_image_view, self.image)
 
     def load_image(self, path: str) -> None:
-        result = safe_call(image_loader.load_image, path, self._device)
-        if result is None:
-            return
-
-        self.image = result
-        safe_call(self.window.viewer.reset_zoom)
-        safe_call(self.window.right_panel.sigmoid_widget.reset_controls_to_default)
+        self.image = safe_call(image_loader.load_image, path, device=self._device)
+        safe_call(self.window.reset_image_view)
         safe_call(self.__update_viewer)
 
     def reset_image(self) -> None:
         if self.image is None:
             return
 
+        if self.image.debayered:
+            self.image.debayered = False
+
         self.image.tensor = self.image.original_tensor.clone()
         safe_call(self.__update_viewer)
-        safe_call(self.window.right_panel.sigmoid_widget.reset_controls_to_default)
+        safe_call(self.window.reset_image_view)
 
     def apply_debayer5x5(self) -> None:
         if self.image is None:
             return
+
         safe_call(core.debayer.apply_debayer5x5, self.image)
         safe_call(self.__update_viewer)
 
     def apply_contrast(self, gain: float, cutoff: float) -> None:
         if self.image is None:
             return
+
         safe_call(
             core.transformers.enhance_contrast_torch,
             self.image,

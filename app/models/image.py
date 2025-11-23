@@ -15,6 +15,8 @@ class Image:
     path: str
     name: str
     image_format: ImageFormat
+    debayered: bool = False
+    debayered_tensor: Tensor | None = None
     raw_metadata: RawMetadata | None = None
 
     @property

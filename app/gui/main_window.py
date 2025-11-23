@@ -31,3 +31,7 @@ class MainWindow(QMainWindow):
         np_array = image.np_array
         self.viewer.update_image(np_array)
         self.left_panel.update_histogram(np_array)
+
+    def reset_image_view(self) -> None:
+        self.viewer.reset_zoom()
+        self.right_panel.sigmoid_widget.reset_controls_to_default()

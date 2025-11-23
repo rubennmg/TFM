@@ -202,5 +202,5 @@ def apply_debayer5x5(image: Image) -> None:
     if not image.tensor.is_contiguous():
         image.tensor = image.tensor.contiguous()
 
-    # TODO: update original tensor?
-    # image.original_tensor = image.tensor.clone()
+    image.debayered_tensor = image.tensor.clone()
+    image.debayered = True
