@@ -36,7 +36,8 @@ QLabel {
 /* ====== Combo boxes ====== */
 QComboBox {
     background-color: #3a3f44;
-    padding: 0.4em;
+    margin-bottom: 0.25em;
+    padding: 0.3em;
     color: #ddd;
 }
 
@@ -73,6 +74,18 @@ QComboBox QAbstractItemView {
 
 #imageInfoValue {
     color: #eee;
+}
+
+/* ====== Debayer Control ====== */
+#debayerControl {
+    border: 0.05em solid #555;
+    border-radius: 0.25em;
+}
+
+#debayerControlTitle {
+    font-weight: bold;
+    font-size: 11pt;
+    margin-bottom: 0.3em;
 }
 
 /* ====== Operation control widget ====== */

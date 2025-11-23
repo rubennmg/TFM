@@ -173,7 +173,7 @@ class OperationControlWidget(QWidget):
         self._extra_container.setContentsMargins(0, 0, 0, 0)
 
         inner_layout = QVBoxLayout()
-        inner_layout.setContentsMargins(15, 10, 15, 25)
+        inner_layout.setContentsMargins(14, 10, 15, 25)
         inner_layout.setSpacing(6)
         inner_layout.addWidget(self._title_lbl)
         inner_layout.addLayout(self._form)

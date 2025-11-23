@@ -18,7 +18,7 @@ class RightPanel(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        label_title: QLabel = QLabel("TRANSFORMATIONS")
+        label_title: QLabel = QLabel("TRANSFORMERS")
         label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_title.setObjectName("transformationsTitle")
         layout.addWidget(label_title)
