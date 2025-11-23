@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
 
     def update_image_view(self, image: Image) -> None:
         np_array = image.np_array
-        self.viewer.update_image(np_array)
+        self.viewer.update_image(np_array, image)
         self.left_panel.update_histogram(np_array)
 
     def reset_image_view(self) -> None:

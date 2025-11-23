@@ -1,7 +1,11 @@
 import numpy as np
 from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QImage, QPixmap, QWheelEvent
-from PyQt6.QtWidgets import QLabel, QScrollArea, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
+
+from gui.helpers.image_canvas_widget import ImageCanvas
+from gui.helpers.image_info_widget import ImageInfoWidget
+from models.image import Image
 
 
 class ImageViewer(QWidget):
@@ -9,6 +13,7 @@ class ImageViewer(QWidget):
         super().__init__()
         self._pixmap: QPixmap | None = None
         self._qimg: QImage | None = None
+        self._image: Image | None = None
         self._zoom: float = 0.25
         self._zoom_step: float = 1.15
         self._min_zoom: float = 0.05
@@ -18,12 +23,15 @@ class ImageViewer(QWidget):
 
     def __setup_ui(self) -> None:
         layout: QVBoxLayout = QVBoxLayout()
-        self.label: QLabel = QLabel("No image loaded")
-        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.info_widget: ImageInfoWidget = ImageInfoWidget()
+        layout.addWidget(self.info_widget)
+
+        self.image_canvas: ImageCanvas = ImageCanvas()
 
         self.scroll_area: QScrollArea = QScrollArea()
         self.scroll_area.setObjectName("imageScrollArea")
-        self.scroll_area.setWidget(self.label)
+        self.scroll_area.setWidget(self.image_canvas)
         self.scroll_area.setWidgetResizable(False)
 
         try:
@@ -37,7 +45,7 @@ class ImageViewer(QWidget):
         layout.addWidget(self.scroll_area)
         self.setLayout(layout)
 
-    def update_image(self, np_array: np.ndarray) -> None:
+    def update_image(self, np_array: np.ndarray, image: Image) -> None:
         buf = memoryview(np_array)
 
         h, w, c = np_array.shape
@@ -49,11 +57,14 @@ class ImageViewer(QWidget):
         qimg = QImage(buf, w, h, bytes_per_line, img_format)
         self._qimg = qimg
         self._pixmap = QPixmap.fromImage(self._qimg)
+        self._image = image
+        self.info_widget.update_from_image(self._image)
         self.__update_display()
 
     def __update_display(self) -> None:
         if self._pixmap is None:
-            self.label.setText("No image loaded")
+            self.image_canvas.clear()
+            self.info_widget.update_from_image(None)
             return
 
         if self._zoom == 1.0:
@@ -70,8 +81,7 @@ class ImageViewer(QWidget):
             )
             pix = QPixmap.fromImage(scaled_img)
 
-        self.label.setPixmap(pix)
-        self.label.setFixedSize(pix.size())
+        self.image_canvas.set_pixmap(pix)
 
     def set_zoom(self, factor: float) -> None:
         factor = max(self._min_zoom, min(self._max_zoom, factor))
