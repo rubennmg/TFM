@@ -40,8 +40,10 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
         metadata=Metadata(
             width=tensor.shape[2],
             height=tensor.shape[1],
-            bit_depth=16,
             channels=tensor.shape[0],
+            shape=tensor.shape,
+            dtype=tensor.dtype,
+            bit_depth=16,
             bayer_pattern=None,
         ),
     )

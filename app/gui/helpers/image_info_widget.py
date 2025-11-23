@@ -29,6 +29,8 @@ class ImageInfoWidget(QWidget):
             ("Channels", "channels"),
             ("Bit depth", "bit_depth"),
             ("Bayer pattern", "bayer_pattern"),
+            ("Tensor shape", "shape"),
+            ("Tensor dtype", "dtype"),
         ]
 
         columns = 2
@@ -62,6 +64,8 @@ class ImageInfoWidget(QWidget):
                     "channels": "—",
                     "bit_depth": "—",
                     "bayer_pattern": "—",
+                    "shape": "—",
+                    "dtype": "—",
                 }
             )
             return
@@ -82,6 +86,8 @@ class ImageInfoWidget(QWidget):
                 "channels": str(metadata.channels),
                 "bit_depth": str(bit_depth),
                 "bayer_pattern": bayer_pattern,
+                "shape": str(metadata.shape),
+                "dtype": str(metadata.dtype),
             }
         )
 
