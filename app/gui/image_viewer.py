@@ -46,6 +46,8 @@ class ImageViewer(QWidget):
         self.setLayout(layout)
 
     def update_image(self, np_array: np.ndarray, image: Image) -> None:
+        self.info_widget.update_from_image(image)
+
         buf = memoryview(np_array)
 
         h, w, c = np_array.shape

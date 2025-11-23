@@ -34,9 +34,6 @@ def load_jpg(path: str, device: device) -> Image:
         metadata=Metadata(
             width=tensor.shape[2],
             height=tensor.shape[1],
-            channels=tensor.shape[0],
-            shape=tensor.shape,
-            dtype=tensor.dtype,
             bit_depth=8,
             bayer_pattern=None,
         ),

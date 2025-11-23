@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-from torch import Tensor, device, Size
+from torch import Tensor, device
 
 from enums.image_formats import ImageFormat
 from enums.layouts import Layout
@@ -12,9 +12,6 @@ from models.metadata import Metadata
 METADATA: Metadata = Metadata(
     width=4096,
     height=2168,
-    channels=1,
-    shape=Size((1, 2168, 4096)),
-    dtype=torch.float32,
     bit_depth=12,
     bayer_pattern=Layout.RGGB,
 )
