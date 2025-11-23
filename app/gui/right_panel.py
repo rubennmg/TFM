@@ -4,6 +4,8 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
 from gui.helpers.operation_control_widget import OperationControlWidget
 from models.float_param_spec import FloatParamSpec
 
+DEBOUNCE_MS: int = 75  # miliseconds to debounce slider changes
+
 
 class RightPanel(QWidget):
     def __init__(self, controller):
@@ -44,7 +46,7 @@ class RightPanel(QWidget):
         )
 
         try:
-            self.sigmoid_widget.set_debounce_ms(16)
+            self.sigmoid_widget.set_debounce_ms(DEBOUNCE_MS)
         except Exception:
             pass
 

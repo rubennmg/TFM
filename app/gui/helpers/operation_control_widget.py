@@ -199,7 +199,10 @@ class OperationControlWidget(QWidget):
             self._emit_params_now()
 
     def _on_any_param_changed(self, *_args) -> None:
-        self._emit_timer.start(self._debounce_ms)
+        if self._debounce_ms == 0:
+            self._emit_params_now()
+        else:
+            self._emit_timer.start(self._debounce_ms)
 
     def _emit_params_now(self) -> None:
         self.paramsChanged.emit(self.get_params())

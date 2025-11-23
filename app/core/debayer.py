@@ -196,11 +196,11 @@ def apply_debayer5x5(image: Image) -> None:
     debayer5x5: Debayer5x5 = _get_cached_debayer5x5(image)
 
     with torch.no_grad():
-        out: Tensor = debayer5x5(image.tensor)
+        out: Tensor = debayer5x5(image.tensor).squeeze(0)
 
-    image.tensor = out.squeeze(0)
+    image.tensor = out.clone()
     if not image.tensor.is_contiguous():
         image.tensor = image.tensor.contiguous()
 
-    image.debayered_tensor = image.tensor.clone()
+    image.debayered_tensor = out.clone()
     image.debayered = True
