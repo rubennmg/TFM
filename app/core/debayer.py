@@ -158,12 +158,13 @@ def _get_cached_debayer5x5(image: Image) -> Debayer5x5:
     Returns:
         Debayer5x5: Debayer5x5 module configured for the image.
     """
-    if image.raw_metadata is None:
-        raise ValueError("Image must have raw_metadata to get a debayer module")
-
     dev: device = image.tensor.device
     dtype: torch.dtype = image.tensor.dtype
-    layout: Layout = image.raw_metadata.bayer_pattern
+    layout: Layout = (
+        image.metadata.bayer_pattern
+        if image.metadata.bayer_pattern is not None
+        else Layout.RGGB  # RGGB default
+    )
     cur_key: tuple = (layout, dev.type, getattr(dev, "index", None), dtype)
 
     module: Debayer5x5 | None = getattr(image, "_debayer5x5", None)
@@ -186,7 +187,7 @@ def apply_debayer5x5(image: Image) -> None:
     Raises:
         ValueError: If the image is not RAW or does not have raw metadata.
     """
-    if image.image_format is not ImageFormat.RAW or image.raw_metadata is None:
+    if image.image_format is not ImageFormat.RAW or image.metadata is None:
         raise ValueError("Debayering can only be applied to RAW (1xHxW) images.")
 
     # add batch dimension if missing
