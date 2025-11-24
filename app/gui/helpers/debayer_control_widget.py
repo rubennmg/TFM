@@ -3,6 +3,13 @@ from typing import Iterable, Tuple
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QComboBox, QLabel, QPushButton, QVBoxLayout, QWidget
 
+_ALGORITHMS: Iterable[Tuple[str, str]] = (
+    ("debayer2x2", "Debayer 2x2"),
+    ("debayer3x3", "Debayer 3x3"),
+    ("debayer5x5", "Debayer 5x5"),
+    ("debayersplit", "Debayer Split"),
+)
+
 
 class DebayerControlWidget(QWidget):
     """Compound widget with label, selector and apply button for debayering.
@@ -16,7 +23,6 @@ class DebayerControlWidget(QWidget):
     def __init__(
         self,
         title: str = "Debayer Demosaicing",
-        algorithms: Iterable[Tuple[str, str]] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
@@ -45,8 +51,7 @@ class DebayerControlWidget(QWidget):
         root_layout.addWidget(self._apply_button)
         self.setLayout(root_layout)
 
-        if algorithms:
-            self.set_algorithms(algorithms)
+        self.set_algorithms(_ALGORITHMS)
 
     def set_algorithms(self, algorithms: Iterable[Tuple[str, str]]) -> None:
         self._selector.clear()

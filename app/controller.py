@@ -1,11 +1,11 @@
 from torch import device
 
 import core.transformers
-from core.debayer import debayer_manager
+from core.debayer.debayer import Debayer
 from gui.main_window import MainWindow
 from loaders import image_loader
 from models.image import Image
-from utils.safe import safe_call
+from utils.error import show_error
 from utils.torch import get_device
 
 
@@ -19,12 +19,18 @@ class Controller:
         if self.image is None:
             return
 
-        safe_call(self.window.update_image_view, self.image)
+        try:
+            self.window.update_image_view(self.image)
+        except Exception as e:
+            show_error("Update Viewer Error", str(e))
 
     def load_image(self, path: str) -> None:
-        self.image = safe_call(image_loader.load_image, path, device=self._device)
-        safe_call(self.window.reset_image_view)
-        safe_call(self.__update_viewer)
+        try:
+            self.image = image_loader.load_image(path, self._device)
+            self.window.reset_image_view()
+            self.__update_viewer()
+        except Exception as e:
+            show_error("Load Image Error", str(e))
 
     def reset_image(self) -> None:
         if self.image is None:
@@ -33,30 +39,43 @@ class Controller:
         if self.image.debayered:
             self.image.debayered = False
 
-        self.image.tensor = self.image.original_tensor.clone()
-        safe_call(self.__update_viewer)
-        safe_call(self.window.reset_image_view)
-
-    def get_debayer_algorithms(self) -> list[tuple[str, str]]:
-        return debayer_manager.list_debayer_algorithms()
+        try:
+            self.image.tensor = self.image.original_tensor.clone()
+            self.__update_viewer()
+            self.window.reset_image_view()
+        except Exception as e:
+            show_error("Reset Error", str(e))
 
     def apply_debayer(self, algorithm_name: str) -> None:
         if self.image is None:
             return
 
-        safe_call(debayer_manager.apply_debayer, self.image, algorithm_name)
-        safe_call(self.__update_viewer)
+        if self.image.metadata.bayer_pattern is None:
+            show_error(
+                "Debayer Error",
+                "Image does not have a Bayer pattern or Debayering cannot be applied.",
+            )
+            return
+
+        try:
+            debayer_processor: Debayer = Debayer(
+                algorithm_name, layout=self.image.metadata.bayer_pattern
+            )
+            self.image.tensor = debayer_processor.apply(self.image.tensor)
+            self.image.debayered_tensor = self.image.tensor.clone()
+            self.image.debayered = True
+            self.__update_viewer()
+        except Exception as e:
+            show_error("Debayer Error", str(e))
 
     def apply_contrast(self, gain: float, cutoff: float) -> None:
         if self.image is None:
             return
 
-        safe_call(
-            core.transformers.enhance_contrast_torch,
-            self.image,
-            gain=gain,
-            cutoff=cutoff,
-        )
-        safe_call(self.__update_viewer)
+        try:
+            core.transformers.enhance_contrast_torch(self.image, gain, cutoff)
+            self.__update_viewer()
+        except Exception as e:
+            show_error("Contrast Enhancement Error", str(e))
 
     # more methods...

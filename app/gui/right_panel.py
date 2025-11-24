@@ -55,9 +55,7 @@ class RightPanel(QWidget):
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
         self.sigmoid_widget.setObjectName("operationControl")
 
-        self.debayer_widget: DebayerControlWidget = DebayerControlWidget(
-            algorithms=self.controller.get_debayer_algorithms(), parent=self
-        )
+        self.debayer_widget: DebayerControlWidget = DebayerControlWidget(parent=self)
         self.debayer_widget.applyClicked.connect(self._on_apply_debayer)
 
         layout.addWidget(self.sigmoid_widget)
