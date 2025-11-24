@@ -1,7 +1,7 @@
 from torch import device
 
-import core.transformers
 from core.debayer.debayer import Debayer
+from core.contrast.sigmoid import SigmoidContrast
 from gui.main_window import MainWindow
 from loaders import image_loader
 from models.image import Image
@@ -58,10 +58,10 @@ class Controller:
             return
 
         try:
-            debayer_processor: Debayer = Debayer(
+            operator: Debayer = Debayer(
                 algorithm_name, layout=self.image.metadata.bayer_pattern
             )
-            self.image.tensor = debayer_processor.apply(self.image.tensor)
+            self.image.tensor = operator(self.image.tensor)
             self.image.debayered_tensor = self.image.tensor.clone()
             self.image.debayered = True
             self.__update_viewer()
@@ -73,7 +73,13 @@ class Controller:
             return
 
         try:
-            core.transformers.enhance_contrast_torch(self.image, gain, cutoff)
+            operator = SigmoidContrast(gain, cutoff)
+
+            if self.image.debayered and self.image.debayered_tensor is not None:
+                self.image.tensor = operator(self.image.debayered_tensor)
+            else:
+                self.image.tensor = operator(self.image.original_tensor)
+
             self.__update_viewer()
         except Exception as e:
             show_error("Contrast Enhancement Error", str(e))
