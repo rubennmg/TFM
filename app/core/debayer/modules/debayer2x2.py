@@ -1,11 +1,8 @@
 import torch
 import torch.nn
 import torch.nn.functional
-from torch import Tensor, device
 
-from enums.image_formats import ImageFormat
 from enums.layouts import Layout
-from models.image import Image
 
 
 class Debayer2x2(torch.nn.Module):
@@ -47,7 +44,7 @@ class Debayer2x2(torch.nn.Module):
         )
         return x
 
-    def _kernels_from_layout(self, layout: Layout) -> Tensor:
+    def _kernels_from_layout(self, layout: Layout) -> torch.Tensor:
         v = torch.tensor(layout.value).reshape(2, 2)
         r = torch.zeros(2, 2)
         r[v == 0] = 1.0
