@@ -25,7 +25,7 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
         raw_data: np.ndarray = raw.postprocess(output_bps=16)  # always H,W,C, uint16
 
     tensor: Tensor = torch.from_numpy(raw_data).to(dtype=torch.float32).mul_(SCALE)
-    tensor = tensor.permute(2, 0, 1).contiguous()  # C,H,W
+    tensor = tensor.permute(2, 0, 1).unsqueeze(0).contiguous()  # B,C,H,W
     tensor = tensor.to(device=device, non_blocking=True)
 
     if not tensor.is_contiguous():

@@ -20,6 +20,7 @@ def load_jpg(path: str, device: device) -> Image:
         Image: An Image dataclass containing the loaded image tensor and metadata.
     """
     tensor: Tensor = decode_image(path).to(dtype=torch.float32).mul_(SCALE)
+    tensor = tensor.unsqueeze(0)  # BxCxHxW
     tensor = tensor.to(device=device, non_blocking=True)
 
     if not tensor.is_contiguous():
@@ -32,8 +33,8 @@ def load_jpg(path: str, device: device) -> Image:
         name=path.split("/")[-1],
         image_format=ImageFormat.JPG,
         metadata=Metadata(
-            width=tensor.shape[2],
-            height=tensor.shape[1],
+            width=tensor.shape[3],
+            height=tensor.shape[2],
             bit_depth=8,
             bayer_pattern=None,
         ),

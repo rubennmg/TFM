@@ -35,6 +35,7 @@ def load_raw(path: str, device: device) -> Image:
     tensor: Tensor = (
         torch.from_numpy(raw_data).to(dtype=torch.float32).unsqueeze(0).mul_(SCALE)
     )
+    tensor = tensor.unsqueeze(0)  # BxCxHxW
     tensor = tensor.to(device=device, non_blocking=True)
 
     if not tensor.is_contiguous():

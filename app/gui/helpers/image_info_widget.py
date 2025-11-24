@@ -83,7 +83,7 @@ class ImageInfoWidget(QWidget):
                 "name": image.name,
                 "format": image_format,
                 "resolution": resolution,
-                "channels": str(image.tensor.shape[0]),
+                "channels": str(image.tensor.shape[1]),
                 "bit_depth": str(bit_depth),
                 "bayer_pattern": bayer_pattern,
                 "shape": str(image.tensor.shape),
