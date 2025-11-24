@@ -61,7 +61,47 @@
 -   [x] Dilema de si actualizar o no el tensor original al debayerizar, esto genera un problema al aplicar mejora de contraste y desbayerizar
 -   [x] Mostrar nombre de la imagen
 -   [x] Mostrar RGB, RAW, quizá `shape`...
+-   [x] Implementación de debayers
+-   [x] Actualizar image info de forma dinámica
+-   [ ] Tests de debayers
 -   [ ] Desacoplamiento e implementación de nuevos filtros
 -   [ ] Tests
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+# 24/11/2025
+
+## Notes
+
+## TODOs
+
+-   [ ] Tests de debayers <-> standby de momento
+-   [ ] Desacoplamiento e implementación de nuevos filtros
+    -   [x] Clase abstracta general `Image_Operation`
+    -   [ ] Implementación de Debayer extendiendo clase abstracta
+    -   [ ] Implementación de Mejora de Contraste con Sigmoide extendiendo clase abstracta
+    -   [ ] Estructurar para el resto de filtros/transformadores
+    -   [ ] Implementar siguiendo clase abstracta
+-   [ ] Tests
+-   [ ] Preparar diagrama de Arquitectura COMPLETO:
+    -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
+    -   IMAGE LOADERS - IMAGE FORMATS:
+        -   `raw_loader`
+        -   `rawpy_loader` - `rawpy` :
+            -   `arw_loader`
+            -   `dng_loader`
+        -   `jpg_loader` - `PIL`
+    -   GUI:
+        -   `main_window`
+            -   `left_panel`
+                -   `rgb_histogram`
+                -   `load_control`
+                -   `reset_control`
+            -   `image_viewer`
+                -   `image_canvas` (scrollable)
+                -   `image_info`
+            -   `right_panel`
+                -   `[operation_control]`
+                -   `debayer_control`
 -   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
 -   [ ] Bug: ventana resize tras cargar imagen

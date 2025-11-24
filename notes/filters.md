@@ -1,4 +1,4 @@
-# Conversión de formato y espacios de color
+## Conversión de formato y espacios de color
 
 ## Bayer -> RGB ✅
 
@@ -23,7 +23,7 @@ Conversión desde real.
 
 ## Gris -> Color
 
-# Transformadores
+## Transformadores
 
 ## Normalización min-max
 
