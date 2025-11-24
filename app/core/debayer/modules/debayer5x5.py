@@ -91,19 +91,23 @@ class Debayer5x5(torch.nn.Module):
         B, C, H, W = x.shape
 
         xpad = torch.nn.functional.pad(x, (2, 2, 2, 2), mode="reflect")
-        planes = torch.nn.functional.conv2d(xpad, self.kernels, stride=1)
+        planes = torch.nn.functional.conv2d(
+            xpad, self.kernels.to(device=x.device), stride=1
+        )
         planes = torch.cat(
             (planes, x), 1
         )  # Concat with input to give identity kernel Bx5xHxW
         rgb = torch.gather(
             planes,
             1,
-            self.index.repeat(
+            self.index.to(device=x.device)
+            .repeat(
                 1,
                 1,
                 int(torch.div(H, 2, rounding_mode="floor")),
                 int(torch.div(W, 2, rounding_mode="floor")),
-            ).expand(B, -1, -1, -1),  # expand for singleton batch dimension is faster
+            )
+            .expand(B, -1, -1, -1),  # expand for singleton batch dimension is faster
         )
         return torch.clamp(rgb, 0, 1)
 

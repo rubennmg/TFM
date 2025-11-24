@@ -37,7 +37,7 @@ class Debayer2x2(torch.nn.Module):
         rgb : Bx3xHxW tensor
             Color images in RGB channel order.
         """
-        x = torch.nn.functional.conv2d(x, self.kernels, stride=2)
+        x = torch.nn.functional.conv2d(x, self.kernels.to(device=x.device), stride=2)
 
         x = torch.nn.functional.interpolate(
             x, scale_factor=2, mode="bilinear", align_corners=False
