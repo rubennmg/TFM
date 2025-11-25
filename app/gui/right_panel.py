@@ -29,7 +29,7 @@ class RightPanel(QWidget):
                 key="gain",
                 label="Gain",
                 minimum=0.0,
-                maximum=50.0,
+                maximum=10.0,
                 step=0.1,
                 default=0.0,
             ),
