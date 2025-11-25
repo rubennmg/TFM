@@ -78,10 +78,52 @@
 -   [ ] Tests de debayers <-> standby de momento
 -   [ ] Desacoplamiento e implementación de nuevos filtros
     -   [x] Clase abstracta general `Image_Operation`
-    -   [ ] Implementación de Debayer extendiendo clase abstracta
-    -   [ ] Implementación de Mejora de Contraste con Sigmoide extendiendo clase abstracta
+    -   [x] Implementación de Debayer extendiendo clase abstracta
+    -   [x] Implementación de Mejora de Contraste con Sigmoide extendiendo clase abstracta
     -   [ ] Estructurar para el resto de filtros/transformadores
     -   [ ] Implementar siguiendo clase abstracta
+-   [ ] Debuggear lo del reset de image tras aplicar operaciones mediante controles. Creo que me voy a tener que cargar el procesado "en tiempo real"
+-   [ ] Tests
+-   [ ] Preparar diagrama de Arquitectura COMPLETO:
+    -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
+    -   IMAGE LOADERS - IMAGE FORMATS:
+        -   `raw_loader`
+        -   `rawpy_loader` - `rawpy` :
+            -   `arw_loader`
+            -   `dng_loader`
+        -   `jpg_loader` - `PIL`
+    -   GUI:
+        -   `main_window`
+            -   `left_panel`
+                -   `rgb_histogram`
+                -   `load_control`
+                -   `reset_control`
+            -   `image_viewer`
+                -   `image_canvas` (scrollable)
+                -   `image_info`
+            -   `right_panel`
+                -   `[operation_control]`
+                -   `debayer_control`
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+# 24/11/2025
+
+## Notes
+
+## TODOs
+
+-   [ ] Tests de debayers <-> standby de momento
+-   [x] Desacoplamiento e implementación de nuevos filtros
+    -   [x] Clase abstracta general `Image_Operation`
+    -   [x] Implementación de Debayer extendiendo clase abstracta
+    -   [x] Implementación de Mejora de Contraste con Sigmoide extendiendo clase abstracta
+    -   [x] Estructurar para el resto de filtros/transformadores
+    -   [x] Implementar siguiendo clase abstracta
+-   [x] Debuggear lo del reset de image tras aplicar operaciones mediante controles. Creo que me voy a tener que cargar el procesado "en tiempo real"
+-   [x] Creación de registro de operaciones para futuro benchmark
+-   [ ] Implementación de operaciones CORE + GUI
+-   [ ] Estructura de tests
 -   [ ] Tests
 -   [ ] Preparar diagrama de Arquitectura COMPLETO:
     -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
