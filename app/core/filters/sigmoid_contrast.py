@@ -17,9 +17,22 @@ class SigmoidContrast(ImageOperation):
         Args:
             gain (float): Gain factor for the sigmoid function. Defaults to 1.0.
             cutoff (float): Cutoff value for the sigmoid function. Defaults to 0.5.
+
+        Raises:
+            TypeError: If gain is not a number.
+            ValueError: If gain is negative.
+            TypeError: If cutoff is not a number.
+            ValueError: If cutoff is not between 0 and 1.
         """
-        assert cutoff <= 1
-        assert gain >= 0
+        if not isinstance(gain, (int, float)):
+            raise TypeError(f"Gain must be a number, got {type(gain)}")
+        if gain < 0:
+            raise ValueError("Gain must be non-negative")
+
+        if not isinstance(cutoff, (int, float)):
+            raise TypeError(f"Cutoff must be a number, got {type(cutoff)}")
+        if not (0 <= cutoff <= 1):
+            raise ValueError("Cutoff must be between 0 and 1")
 
         self.gain = gain
         self.cutoff = cutoff
@@ -36,22 +49,16 @@ class SigmoidContrast(ImageOperation):
         if self.gain == 0:
             return x
 
-        t_cutoff = torch.tensor(self.cutoff).to(device=x.device, non_blocking=True)
-
         if self.cutoff < 0:
-            min_valid_estimated_cutoff = 0.4
-            max_valid_estimated_cutoff = 0.6
-            estimated_cutoff = torch.mean(x).to(device=x.device, non_blocking=True)
-            t_cutoff = torch.clip(
-                estimated_cutoff, min_valid_estimated_cutoff, max_valid_estimated_cutoff
-            )
+            estimated = x.mean()
+            t_cutoff = torch.clamp(estimated, 0.4, 0.6)
+        else:
+            t_cutoff = x.new_tensor(self.cutoff, device=x.device, dtype=x.dtype)
 
-        imgf: Tensor = torch.empty_like(x).to(device=x.device, dtype=x.dtype)
+        sigmoid_min = torch.sigmoid(-self.gain * t_cutoff)
+        sigmoid_max = torch.sigmoid(self.gain * (1 - t_cutoff))
 
-        sigmoid_min: Tensor = 1 / (1 + torch.exp(self.gain * (t_cutoff - 0)))
-        sigmoid_max: Tensor = 1 / (1 + torch.exp(self.gain * (t_cutoff - 1)))
-
-        imgf = 1 / (1 + torch.exp(self.gain * (t_cutoff - x)))
+        imgf = torch.sigmoid(self.gain * (x - t_cutoff))
         imgf = (imgf - sigmoid_min) / (sigmoid_max - sigmoid_min)
 
         return imgf
