@@ -1,8 +1,10 @@
 from torch import Tensor
 
 from core.image_operation import ImageOperation
+from core.registry import register_operation
 
 
+@register_operation
 class MinMaxPercentileNormalization(ImageOperation):
     """Class to apply Min-Max Percentile Normalization to image tensors.
 

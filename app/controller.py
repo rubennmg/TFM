@@ -1,6 +1,6 @@
 from torch import device
 
-from core.debayer.debayer import Debayer
+from core.bayer.debayer import Debayer
 from core.filters.sigmoid_contrast import SigmoidContrast
 from gui.main_window import MainWindow
 from loaders import image_loader

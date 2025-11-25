@@ -1,8 +1,10 @@
 from torch import Tensor
 
 from core.image_operation import ImageOperation
+from core.registry import register_operation
 
 
+@register_operation
 class GaussianFilter(ImageOperation):
     """Class to apply Gaussian filter to image tensors.
 

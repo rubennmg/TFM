@@ -1,8 +1,10 @@
 from torch import Tensor
 
 from core.image_operation import ImageOperation
+from core.registry import register_operation
 
 
+@register_operation
 class GrayToColor(ImageOperation):
     """Class to convert grayscale image tensors to color.
 

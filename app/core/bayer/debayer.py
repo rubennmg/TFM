@@ -2,11 +2,12 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
-from core.debayer.modules.debayer2x2 import Debayer2x2
-from core.debayer.modules.debayer3x3 import Debayer3x3
-from core.debayer.modules.debayer5x5 import Debayer5x5
-from core.debayer.modules.debayerSplit import DebayerSplit
+from core.bayer.modules.debayer2x2 import Debayer2x2
+from core.bayer.modules.debayer3x3 import Debayer3x3
+from core.bayer.modules.debayer5x5 import Debayer5x5
+from core.bayer.modules.debayerSplit import DebayerSplit
 from core.image_operation import ImageOperation
+from core.registry import register_operation
 from enums.layouts import Layout
 
 _DEBAYER_REGISTRY = {
@@ -17,6 +18,7 @@ _DEBAYER_REGISTRY = {
 }
 
 
+@register_operation
 class Debayer(ImageOperation):
     """Class to apply debayer operations on RAW tensors.
 
