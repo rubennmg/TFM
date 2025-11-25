@@ -17,7 +17,7 @@ class LeftPanel(QWidget):
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # rgb histogram
-        self.histogram: RgbHistogramWidget = RgbHistogramWidget(self, height=120)
+        self.histogram: RgbHistogramWidget = RgbHistogramWidget(self, height=180)
         layout.addWidget(self.histogram)
 
         # load / reset controls
