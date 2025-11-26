@@ -26,7 +26,7 @@ class Debayer(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target: str = "tensor"
+    target_tensor: str = "tensor"
 
     updates_debayer_state: bool = True
 

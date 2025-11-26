@@ -13,7 +13,7 @@ class SigmoidContrast(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target: str = "original_tensor"
+    target_tensor: str = "original_tensor"
 
     updates_debayer_state: bool = False
 
