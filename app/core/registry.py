@@ -1,10 +1,10 @@
-from typing import Dict, Type, TypeVar
+from typing import Type, TypeVar
 
 from core.image_operation import ImageOperation
 
 T = TypeVar("T", bound=ImageOperation)
 
-OPERATION_REGISTRY: Dict[str, Type[ImageOperation]] = {}
+OPERATION_REGISTRY: dict[str, Type[ImageOperation]] = {}
 
 
 def register_operation(cls: Type[T]) -> Type[T]:

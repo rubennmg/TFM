@@ -27,7 +27,6 @@ import sys
 import threading
 import time
 from pathlib import Path
-from typing import List
 
 from watchdog.events import FileSystemEvent, PatternMatchingEventHandler
 from watchdog.observers import Observer
@@ -55,7 +54,7 @@ class DebouncedRestarter:
 
 
 class HotReloadEventHandler(PatternMatchingEventHandler):
-    def __init__(self, restarter: DebouncedRestarter, patterns: List[str]):
+    def __init__(self, restarter: DebouncedRestarter, patterns: list[str]):
         super().__init__(patterns=patterns, ignore_directories=True)
         self.restarter = restarter
 
@@ -130,7 +129,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     return p
 
 
-def collect_watch_paths(extra: List[str], ignore: List[str]) -> List[Path]:
+def collect_watch_paths(extra: list[str], ignore: list[str]) -> list[Path]:
     base = Path(__file__).parent
     default_dirs = ["core", "gui", "models", "styles", "utils"]
     paths = []

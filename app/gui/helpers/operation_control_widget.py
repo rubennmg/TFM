@@ -1,5 +1,3 @@
-from typing import Dict
-
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from PyQt6.QtWidgets import (
     QDoubleSpinBox,
@@ -153,7 +151,7 @@ class OperationControlWidget(QWidget):
         self._form.setFormAlignment(Qt.AlignmentFlag.AlignTop)
         self._form.setLabelAlignment(Qt.AlignmentFlag.AlignLeft)
         self._form.setContentsMargins(0, 0, 0, 0)
-        self._sliders: Dict[str, _FloatSlider] = {}
+        self._sliders: dict[str, _FloatSlider] = {}
 
         self._debounce_ms: int = 16
         self._emit_timer: QTimer = QTimer(self)
@@ -191,7 +189,7 @@ class OperationControlWidget(QWidget):
     def add_widget(self, w: QWidget) -> None:
         self._extra_container.addWidget(w)
 
-    def get_params(self) -> Dict[str, float]:
+    def get_params(self) -> dict[str, float]:
         return {k: s.value() for k, s in self._sliders.items()}
 
     def set_param(self, key: str, value: float) -> None:

@@ -1,5 +1,3 @@
-from typing import Dict
-
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGridLayout, QLabel, QWidget
 
@@ -12,7 +10,7 @@ class ImageInfoWidget(QWidget):
         self.setObjectName("imageInfoPanel")
         self.setContentsMargins(10, 8, 10, 16)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
-        self._info_fields: Dict[str, QLabel] = {}
+        self._info_fields: dict[str, QLabel] = {}
         self.__setup_ui()
         self.update_from_image(None)
 
@@ -91,6 +89,6 @@ class ImageInfoWidget(QWidget):
             }
         )
 
-    def __set_info_values(self, values: Dict[str, str]) -> None:
+    def __set_info_values(self, values: dict[str, str]) -> None:
         for key, label in self._info_fields.items():
             label.setText(values.get(key, "—"))

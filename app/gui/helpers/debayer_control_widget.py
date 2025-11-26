@@ -1,9 +1,9 @@
-from typing import Iterable, Tuple
+from typing import Iterable
 
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QComboBox, QLabel, QPushButton, QVBoxLayout, QWidget
 
-_ALGORITHMS: Iterable[Tuple[str, str]] = (
+_ALGORITHMS: Iterable[tuple[str, str]] = (
     ("debayer2x2", "Debayer 2x2"),
     ("debayer3x3", "Debayer 3x3"),
     ("debayer5x5", "Debayer 5x5"),
@@ -53,7 +53,7 @@ class DebayerControlWidget(QWidget):
 
         self.set_algorithms(_ALGORITHMS)
 
-    def set_algorithms(self, algorithms: Iterable[Tuple[str, str]]) -> None:
+    def set_algorithms(self, algorithms: Iterable[tuple[str, str]]) -> None:
         self._selector.clear()
         for key, label in algorithms:
             self._selector.addItem(label, userData=key)
