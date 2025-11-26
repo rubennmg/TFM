@@ -1,8 +1,8 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 
-from gui.helpers.debayer_control_widget import DebayerControlWidget
-from gui.helpers.operation_control_widget import OperationControlWidget
+from gui.widgets.debayer_control_widget import DebayerControlWidget
+from gui.widgets.operation_control_widget import OperationControlWidget
 from models.float_param_spec import FloatParamSpec
 
 DEBOUNCE_MS: int = 75  # miliseconds to debounce slider changes
@@ -48,6 +48,7 @@ class RightPanel(QWidget):
 
         try:
             self.sigmoid_widget.set_debounce_ms(DEBOUNCE_MS)
+
         except Exception:
             pass
 
@@ -55,6 +56,7 @@ class RightPanel(QWidget):
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
         self.sigmoid_widget.setObjectName("operationControl")
 
+        # debayer control
         self.debayer_widget: DebayerControlWidget = DebayerControlWidget(parent=self)
         self.debayer_widget.applyClicked.connect(self._on_apply_debayer)
 
@@ -68,9 +70,9 @@ class RightPanel(QWidget):
     def _on_sigmoid_params(self, params: dict) -> None:
         gain: float = float(params.get("gain", 10.0))
         cutoff: float = float(params.get("cutoff", 0.5))
-        self.controller.apply_contrast(gain, cutoff)
+        self.controller.apply_operation("SigmoidContrast", gain=gain, cutoff=cutoff)
 
     def _on_apply_debayer(self, algorithm_key: str) -> None:
         if not algorithm_key:
             return
-        self.controller.apply_debayer(algorithm_key)
+        self.controller.apply_operation("Debayer", algorithm_name=algorithm_key)

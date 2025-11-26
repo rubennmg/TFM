@@ -26,7 +26,7 @@ def show_error(title: str, message: str, detailed: str | None = None) -> None:
 
     # show GUI dialog
     try:
-        from gui.helpers.error_dialog import show_error_dialog
+        from gui.widgets.error_dialog import show_error_dialog
 
         try:
             show_error_dialog(title, message, detailed=detailed)

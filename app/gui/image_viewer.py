@@ -3,8 +3,8 @@ from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QImage, QPixmap, QWheelEvent
 from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
-from gui.helpers.image_canvas_widget import ImageCanvas
-from gui.helpers.image_info_widget import ImageInfoWidget
+from gui.widgets.image_canvas_widget import ImageCanvas
+from gui.widgets.image_info_widget import ImageInfoWidget
 from models.image import Image
 
 
