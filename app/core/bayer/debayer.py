@@ -26,6 +26,10 @@ class Debayer(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
+    target: str = "tensor"
+
+    updates_debayer_state: bool = True
+
     def __init__(self, algorithm_name: str, layout: Layout = Layout.RGGB):
         """Class constructor.
 

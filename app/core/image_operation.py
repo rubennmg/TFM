@@ -1,14 +1,20 @@
-import abc
+from abc import ABC, abstractmethod
 
 from torch import Tensor
 
 
-class ImageOperation(abc.ABC):
+class ImageOperation(ABC):
     """
-    Base class for all image operations.
+    Base class for all Image operations.
 
-    Every image transformation in the system must inherit from this class.
+    Every Image transformation in the system must inherit from this class.
     """
+
+    # Which tensor to operate on in the Image dataclass
+    target_tensor: str = "tensor"
+
+    # Whether this operation updates the debayered state of the Image dataclass
+    updates_debayer_state: bool = False
 
     def __call__(self, x: Tensor) -> Tensor:
         """Public entry point.
@@ -50,7 +56,7 @@ class ImageOperation(abc.ABC):
 
         return out
 
-    @abc.abstractmethod
+    @abstractmethod
     def apply(self, x: Tensor) -> Tensor:
         """Apply the image operation.
 
@@ -60,4 +66,3 @@ class ImageOperation(abc.ABC):
         Returns:
             Tensor: The processed image tensor.
         """
-        raise NotImplementedError
