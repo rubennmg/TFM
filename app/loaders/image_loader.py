@@ -1,46 +1,50 @@
-from typing import Callable
-
 from torch import device
 
-from enums.image_formats import ImageFormat
-from loaders.arw_loader import load_arw
-from loaders.dng_loader import load_dng
-from loaders.jpg_loader import load_jpg
-from loaders.raw_loader import load_raw
+from loaders.arw_loader import ArwLoader
+from loaders.base_loader import ImageLoader
+from loaders.dng_loader import DngLoader
+from loaders.jpg_loader import JpgLoader
+from loaders.raw_loader import RawLoader
 from models.image import Image
 
-LOADERS: dict[ImageFormat, Callable[[str, device], Image]] = {
-    ImageFormat.RAW: load_raw,
-    ImageFormat.ARW: load_arw,
-    ImageFormat.DNG: load_dng,
-    ImageFormat.JPG: load_jpg,
-}
 
-FORMATS_MAP: dict[str, ImageFormat] = {
-    "raw": ImageFormat.RAW,
-    "arw": ImageFormat.ARW,
-    "dng": ImageFormat.DNG,
-    "jpg": ImageFormat.JPG,
-}
+def _build_extension_map(loaders: list[ImageLoader]) -> dict[str, ImageLoader]:
+    ext_map: dict[str, ImageLoader] = {}
+    for loader in loaders:
+        for ext in loader.extensions:
+            ext_map[ext.lower()] = loader
+    return ext_map
+
+
+_LOADERS: list[ImageLoader] = [RawLoader(), ArwLoader(), DngLoader(), JpgLoader()]
+_EXTENSION_MAP: dict[str, ImageLoader] = _build_extension_map(_LOADERS)
 
 
 def load_image(path: str, device: device) -> Image:
     """Load an image from the given path and return an Image dataclass.
-    Automatically selects the appropiate loader.
+    Automatically selects the appropriate loader via file extension.
 
     Args:
-        path (str): Path to the iamage file.
-        device (device): Target device to store the loaded image tensor.
+        path (str): Path to the image file.
+        device (TorchDevice): Target device to store the loaded image tensor.
 
     Raises:
-        ValueError: If the image format is not supported.
+        ValueError: If the image format/extension is not supported.
 
     Returns:
         Image: Loaded image dataclass.
     """
     fmt_str: str = path.split(".")[-1].lower()
-    fmt: ImageFormat | None = FORMATS_MAP.get(fmt_str)
-
-    if fmt is None or fmt not in LOADERS:
+    loader: ImageLoader | None = _EXTENSION_MAP.get(fmt_str)
+    if loader is None:
         raise ValueError(f"Unsupported image format: {fmt_str}")
-    return LOADERS[fmt](path, device)
+    return loader.load(path, device)
+
+
+def get_supported_extensions() -> list[str]:
+    """Get a list of all supported file extensions across all loaders.
+
+    Returns:
+        list[str]: List of supported file extensions.
+    """
+    return list(_EXTENSION_MAP.keys())

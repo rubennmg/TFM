@@ -1,9 +1,10 @@
 import numpy as np
 import torch
-from torch import Tensor, device
+from torch import Tensor
 
 from enums.image_formats import ImageFormat
 from enums.layouts import Layout
+from loaders.base_loader import ImageLoader
 from models.image import Image
 from models.metadata import Metadata
 
@@ -19,33 +20,39 @@ METADATA: Metadata = Metadata(
 SCALE: float = 1.0 / (2**METADATA.bit_depth - 1) if METADATA.bit_depth else 1.0
 
 
-def load_raw(path: str, device: device) -> Image:
-    """Load a RAW image from the given path and return an Image dataclass.
+class RawLoader(ImageLoader):
+    """Load RAW images from binary files.
 
     Args:
-        path (str): Path to the RAW image file.
-        device (device): Target device to store the loaded image tensor.
-
-    Returns:
-        Image: Loaded image dataclass.
+        ImageLoader (abc): Base ImageLoader class.
     """
-    raw_data: np.ndarray = np.fromfile(path, dtype=np.uint16).reshape(
-        (METADATA.height, METADATA.width)
-    )
-    tensor: Tensor = (
-        torch.from_numpy(raw_data).to(dtype=torch.float32).unsqueeze(0).mul_(SCALE)
-    )
-    tensor = tensor.unsqueeze(0)  # BxCxHxW
-    tensor = tensor.to(device=device, non_blocking=True)
 
-    if not tensor.is_contiguous():
-        tensor = tensor.contiguous()
+    @property
+    def extensions(self) -> list[str]:
+        return ["raw"]
 
-    return Image(
-        tensor=tensor,
-        original_tensor=tensor.clone(),
-        path=path,
-        name=path.split("/")[-1],
-        image_format=ImageFormat.RAW,
-        metadata=METADATA,
-    )
+    @property
+    def formats(self) -> list[ImageFormat]:
+        return [ImageFormat.RAW]
+
+    def load(self, path: str, device) -> Image:
+        raw_data: np.ndarray = np.fromfile(path, dtype=np.uint16).reshape(
+            (METADATA.height, METADATA.width)
+        )
+        tensor: Tensor = (
+            torch.from_numpy(raw_data).to(dtype=torch.float32).unsqueeze(0).mul_(SCALE)
+        )
+        tensor = tensor.unsqueeze(0)  # BxCxHxW
+        tensor = tensor.to(device=device, non_blocking=True)
+
+        if not tensor.is_contiguous():
+            tensor = tensor.contiguous()
+
+        return Image(
+            tensor=tensor,
+            original_tensor=tensor.clone(),
+            path=path,
+            name=path.split("/")[-1],
+            image_format=ImageFormat.RAW,
+            metadata=METADATA,
+        )

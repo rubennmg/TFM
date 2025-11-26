@@ -1,16 +1,25 @@
+from torch import device
+
 from enums.image_formats import ImageFormat
+from loaders.base_loader import ImageLoader
 from loaders.rawpy_loader import load_rawpy
 from models.image import Image
 
 
-def load_arw(path: str, device) -> Image:
-    """Load an ARW image from the given path and return an Image dataclass.
+class ArwLoader(ImageLoader):
+    """Load ARW Images.
 
     Args:
-        path (str): Path to the ARW image file.
-        device (torch.device): Device on which the tensor should be allocated.
-
-    Returns:
-        Image: Loaded image encapsulated in an Image dataclass.
+        ImageLoader (abc): Base ImageLoader class.
     """
-    return load_rawpy(path, device, ImageFormat.ARW)
+
+    @property
+    def extensions(self) -> list[str]:
+        return ["arw"]
+
+    @property
+    def formats(self) -> list[ImageFormat]:
+        return [ImageFormat.ARW]
+
+    def load(self, path: str, device: device) -> Image:
+        return load_rawpy(path, device, ImageFormat.ARW)

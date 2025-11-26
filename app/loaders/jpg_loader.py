@@ -1,41 +1,48 @@
 import torch
-from torch import Tensor, device
+from torch import Tensor
 from torchvision.io import decode_image
 
 from enums.image_formats import ImageFormat
+from loaders.base_loader import ImageLoader
 from models.image import Image
 from models.metadata import Metadata
 
 SCALE: float = 1.0 / 255.0  # decode_image loads images as uint8 by default
 
 
-def load_jpg(path: str, device: device) -> Image:
-    """Load a JPG image from the given path and return an Image dataclass.
+class JpgLoader(ImageLoader):
+    """Load JPG/JPEG images.
 
     Args:
-        path (str): Path to the JPG image file.
-        device (device): The device on which the image tensor will be loaded.
-
-    Returns:
-        Image: An Image dataclass containing the loaded image tensor and metadata.
+        ImageLoader (abc): Base ImageLoader class.
     """
-    tensor: Tensor = decode_image(path).to(dtype=torch.float32).mul_(SCALE)
-    tensor = tensor.unsqueeze(0)  # BxCxHxW
-    tensor = tensor.to(device=device, non_blocking=True)
 
-    if not tensor.is_contiguous():
-        tensor = tensor.contiguous()
+    @property
+    def extensions(self) -> list[str]:
+        return ["jpg", "jpeg"]
 
-    return Image(
-        tensor=tensor,
-        original_tensor=tensor.clone(),
-        path=path,
-        name=path.split("/")[-1],
-        image_format=ImageFormat.JPG,
-        metadata=Metadata(
-            width=tensor.shape[3],
-            height=tensor.shape[2],
-            bit_depth=8,
-            bayer_pattern=None,
-        ),
-    )
+    @property
+    def formats(self) -> list[ImageFormat]:
+        return [ImageFormat.JPG]
+
+    def load(self, path: str, device) -> Image:
+        tensor: Tensor = decode_image(path).to(dtype=torch.float32).mul_(SCALE)
+        tensor = tensor.unsqueeze(0)
+        tensor = tensor.to(device=device, non_blocking=True)
+
+        if not tensor.is_contiguous():
+            tensor = tensor.contiguous()
+
+        return Image(
+            tensor=tensor,
+            original_tensor=tensor.clone(),
+            path=path,
+            name=path.split("/")[-1],
+            image_format=ImageFormat.JPG,
+            metadata=Metadata(
+                width=tensor.shape[3],
+                height=tensor.shape[2],
+                bit_depth=8,
+                bayer_pattern=None,
+            ),
+        )
