@@ -153,7 +153,7 @@ class OperationControlWidget(QWidget):
         self._form.setContentsMargins(0, 0, 0, 0)
         self._sliders: dict[str, _FloatSlider] = {}
 
-        self._debounce_ms: int = 16
+        self._debounce_ms: int = 75  # miliseconds to debounce slider changes
         self._emit_timer: QTimer = QTimer(self)
         self._emit_timer.setSingleShot(True)
         self._emit_timer.timeout.connect(self._emit_params_now)

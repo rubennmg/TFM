@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QWidget
 
-from gui.image_viewer import ImageViewer
-from gui.left_panel import LeftPanel
-from gui.right_panel import RightPanel
+from gui.image_viewer.image_viewer import ImageViewer
+from gui.left_panel.left_panel import LeftPanel
+from gui.right_panel.right_panel import RightPanel
 from models.image import Image
 
 
@@ -10,7 +10,7 @@ class MainWindow(QMainWindow):
     def __init__(self, controller):
         super().__init__()
         self.controller = controller
-        self.setWindowTitle("Image Viewer")
+        self.setWindowTitle("TFM - Image Processor")
         self.resize(1600, 800)
 
         central_widget: QWidget = QWidget()

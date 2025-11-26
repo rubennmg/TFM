@@ -1,11 +1,9 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 
-from gui.widgets.debayer_control_widget import DebayerControlWidget
-from gui.widgets.operation_control_widget import OperationControlWidget
+from gui.right_panel.widgets.debayer_control_widget import DebayerControlWidget
+from gui.right_panel.widgets.operation_control_widget import OperationControlWidget
 from models.float_param_spec import FloatParamSpec
-
-DEBOUNCE_MS: int = 75  # miliseconds to debounce slider changes
 
 
 class RightPanel(QWidget):
@@ -18,10 +16,10 @@ class RightPanel(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
+        # panel title
         label_title: QLabel = QLabel("TRANSFORMERS")
         label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_title.setObjectName("transformationsTitle")
-        layout.addWidget(label_title)
 
         # sigmoid contrast control
         sig_params: list[FloatParamSpec] = [
@@ -42,24 +40,19 @@ class RightPanel(QWidget):
                 default=0,
             ),
         ]
+
         self.sigmoid_widget: OperationControlWidget = OperationControlWidget(
             "Sigmoid contrast", sig_params, self
         )
-
-        try:
-            self.sigmoid_widget.set_debounce_ms(DEBOUNCE_MS)
-
-        except Exception:
-            pass
-
         self.sigmoid_widget.paramsChanged.connect(self._on_sigmoid_params)
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
-        self.sigmoid_widget.setObjectName("operationControl")
 
         # debayer control
         self.debayer_widget: DebayerControlWidget = DebayerControlWidget(parent=self)
         self.debayer_widget.applyClicked.connect(self._on_apply_debayer)
+        self.debayer_widget.setToolTip("Apply debayering to a RAW image")
 
+        layout.addWidget(label_title)
         layout.addWidget(self.sigmoid_widget)
         layout.addWidget(self.debayer_widget)
 
