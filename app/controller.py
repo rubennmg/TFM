@@ -24,6 +24,9 @@ class Controller:
         except Exception as e:
             show_error("Update Viewer Error", str(e))
 
+    def get_image_extensions(self) -> list[str]:
+        return image_loader.get_supported_extensions()
+
     def load_image(self, path: str) -> None:
         try:
             self.image = image_loader.load_image(path, self._device)

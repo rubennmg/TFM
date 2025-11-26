@@ -49,15 +49,23 @@ class LeftPanel(QWidget):
     ) -> None:
         self.histogram.update_from_bins(bins_r, bins_g, bins_b)
 
+    def build_loader_extensions_filter(self) -> str:
+        extensions: list[str] = self.controller.get_image_extensions()
+        extensions_filter: str = "Images ("
+        for ext in extensions:
+            extensions_filter += f"*.{ext} *.{ext.upper()} "
+        extensions_filter = extensions_filter.strip() + ")"
+        extensions_filter += ";;All Files (*)"
+        return extensions_filter
+
     def _on_load_clicked(self) -> None:
         file_path, _ = QFileDialog.getOpenFileName(
             self,
             "Select RAW or RGB image",
             "",
-            "Images (*.raw *.RAW *.png *.PNG *.jpg *.JPG *.jpeg *.JPEG *.bmp *.BMP *.tiff *.TIFF "
-            "*.nef *.NEF *.cr2 *.CR2 *.arw *.ARW *.dng *.DNG *.rw2 *.RW2 *.orf *.ORF);;"
-            "All files (*)",
+            self.build_loader_extensions_filter(),
         )
+
         if not file_path:
             return
 
