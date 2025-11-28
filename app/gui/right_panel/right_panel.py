@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 
 from gui.right_panel.widgets.debayer_control_widget import DebayerControlWidget
 from gui.right_panel.widgets.filter_control_widget import FilterControlWidget
+from gui.right_panel.widgets.flip_control_widget import FlipControlWidget
 from models.float_param_spec import FloatParamSpec
 
 
@@ -54,9 +55,13 @@ class RightPanel(QWidget):
             parent=self, controller=self.controller
         )
 
+        # FLIP CONTROL
+        self.flip_widget = FlipControlWidget(self.controller, self)
+
         layout.addWidget(label_title)
         layout.addWidget(self.sigmoid_widget)
         layout.addWidget(self.debayer_widget)
+        layout.addWidget(self.flip_widget)
 
         layout.addStretch()
 

@@ -50,7 +50,6 @@ QComboBox QAbstractItemView {
 #transformationsTitle {
     font-weight: bold;
     font-size: 12pt;
-    margin-bottom: 0.5em;
 }
 
 /* ====== Scroll area ====== */
@@ -76,27 +75,14 @@ QComboBox QAbstractItemView {
     color: #eee;
 }
 
-/* ====== Debayer Control ====== */
-#debayerControl {
+/* ====== General operation control widget ====== */
+#operationControl {
     border: 0.05em solid #555;
     border-radius: 0.25em;
+    margin-top: 0.5em;
 }
 
-#debayerControlTitle {
-    font-weight: bold;
-    font-size: 11pt;
-    margin-bottom: 0.3em;
-}
-
-/* ====== Filter control widget ====== */
-#filterControl {
-    border: 0.05em solid #555;
-    border-radius: 0.25em;
-    margin-bottom: 0.8em;
-}
-
-/* ====== Filter control title label ====== */
-#filterControlTitle {
+#operationControlTitle {
     font-weight: bold;
     font-size: 11pt;
     margin-bottom: 0.3em;

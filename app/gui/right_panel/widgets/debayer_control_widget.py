@@ -30,26 +30,26 @@ class DebayerControlWidget(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setToolTip("Apply debayering to a RAW image")
         self._title = QLabel(title)
-        self._title.setObjectName("debayerControlTitle")
+        self._title.setObjectName("operationControlTitle")
         self._selector = QComboBox()
         self._apply_button = QPushButton("Apply")
         self._apply_button.clicked.connect(self._on_apply_clicked)
 
         container = QWidget(self)
-        container.setObjectName("debayerControl")
+        container.setObjectName("operationControl")
 
         container_layout = QVBoxLayout()
-        container_layout.setContentsMargins(10, 8, 10, 8)
+        container_layout.setContentsMargins(10, 18, 10, 8)
         container_layout.setSpacing(6)
         container_layout.addWidget(self._title)
         container_layout.addWidget(self._selector)
+        container_layout.addWidget(self._apply_button)
         container.setLayout(container_layout)
 
         root_layout = QVBoxLayout()
         root_layout.setContentsMargins(0, 0, 0, 0)
         root_layout.setSpacing(8)
         root_layout.addWidget(container)
-        root_layout.addWidget(self._apply_button)
 
         self.setLayout(root_layout)
 

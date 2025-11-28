@@ -144,10 +144,10 @@ class FilterControlWidget(QWidget):
         self.operation_name = operation_name
 
         self._container = QWidget()
-        self._container.setObjectName("filterControl")
+        self._container.setObjectName("operationControl")
 
         self._title_lbl = QLabel(title)
-        self._title_lbl.setObjectName("filterControlTitle")
+        self._title_lbl.setObjectName("operationControlTitle")
 
         self._form = QFormLayout()
         self._form.setFormAlignment(Qt.AlignmentFlag.AlignTop)
@@ -155,14 +155,15 @@ class FilterControlWidget(QWidget):
         self._form.setContentsMargins(0, 0, 0, 0)
         self._sliders: dict[str, _FloatSlider] = {}
 
-        self._debounce_ms: int = 75  # miliseconds to debounce slider changes
+        self._suppress_emit: bool = False
 
         if params:
             for p in params:
                 slider = _FloatSlider(
                     p.label, p.minimum, p.maximum, p.step, p.default, self
                 )
-                slider.valueChanged.connect(self._on_any_param_changed)
+                slider._slider.sliderReleased.connect(self._on_interaction_finished)
+                slider._spin.editingFinished.connect(self._on_interaction_finished)
                 self._sliders[p.key] = slider
                 self._form.addRow(slider)
 
@@ -170,7 +171,7 @@ class FilterControlWidget(QWidget):
         self._extra_container.setContentsMargins(0, 0, 0, 0)
 
         inner_layout = QVBoxLayout()
-        inner_layout.setContentsMargins(14, 10, 15, 25)
+        inner_layout.setContentsMargins(10, 18, 10, 8)
         inner_layout.setSpacing(6)
         inner_layout.addWidget(self._title_lbl)
         inner_layout.addLayout(self._form)
@@ -192,17 +193,15 @@ class FilterControlWidget(QWidget):
 
     def set_param(self, key: str, value: float) -> None:
         if key in self._sliders:
-            # update control programmatically without emitting paramsChanged
             self._suppress_emit = True
             try:
                 self._sliders[key].setValue(value)
             finally:
                 self._suppress_emit = False
 
-    def _on_any_param_changed(self, *_args) -> None:
+    def _on_interaction_finished(self) -> None:
         if self._suppress_emit:
             return
-
         self.controller.apply_operation(self.operation_name, **self.get_params())
 
     def reset_controls_to_default(self) -> None:
