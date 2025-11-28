@@ -40,7 +40,6 @@ class RightPanel(QWidget):
                 default=0,
             ),
         ]
-
         self.sigmoid_widget: FilterControlWidget = FilterControlWidget(
             "Sigmoid contrast",
             self.controller,
@@ -58,10 +57,31 @@ class RightPanel(QWidget):
         # FLIP CONTROL
         self.flip_widget = FlipControlWidget(self.controller, self)
 
+        # ROTATE CONTROL
+        rotation_params: list[FloatParamSpec] = [
+            FloatParamSpec(
+                key="angle",
+                label="Angle",
+                minimum=-360.0,
+                maximum=360.0,
+                step=1.0,
+                default=0.0,
+            ),
+        ]
+        self.rotate_widget: FilterControlWidget = FilterControlWidget(
+            "Image Rotation",
+            self.controller,
+            "Rotate",
+            rotation_params,
+            self,
+        )
+        self.rotate_widget.setToolTip("Rotate image by a specified angle")
+
         layout.addWidget(label_title)
         layout.addWidget(self.sigmoid_widget)
-        layout.addWidget(self.debayer_widget)
         layout.addWidget(self.flip_widget)
+        layout.addWidget(self.rotate_widget)
+        layout.addWidget(self.debayer_widget)
 
         layout.addStretch()
 

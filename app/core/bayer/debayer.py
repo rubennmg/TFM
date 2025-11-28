@@ -27,7 +27,6 @@ class Debayer(ImageOperation):
     """
 
     target_tensor: str = "tensor"
-
     updates_debayer_state: bool = True
 
     def __init__(self, algorithm_name: str, layout: Layout = Layout.RGGB):
