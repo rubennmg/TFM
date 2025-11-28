@@ -1,4 +1,4 @@
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QDoubleSpinBox,
     QFormLayout,
@@ -123,29 +123,31 @@ class _FloatSlider(QWidget):
         self.setValue(self._default)
 
 
-class OperationControlWidget(QWidget):
-    """Reusable operation widget: title + parameters + optional extra widgets.
+class FilterControlWidget(QWidget):
+    """Reusable filter operation widget: title + parameters + optional extra widgets.
 
     - Accepts a list of FloatParamSpec instances to create parameters.
-    - Emits paramsChanged(dict) whenever any parameter changes.
     - add_widget(QWidget) allows adding arbitrary custom controls.
     """
-
-    paramsChanged = pyqtSignal(dict)
 
     def __init__(
         self,
         title: str,
+        controller,
+        operation_name: str,
         params: list[FloatParamSpec] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
 
+        self.controller = controller
+        self.operation_name = operation_name
+
         self._container = QWidget()
-        self._container.setObjectName("operationControl")
+        self._container.setObjectName("filterControl")
 
         self._title_lbl = QLabel(title)
-        self._title_lbl.setObjectName("operationControlTitle")
+        self._title_lbl.setObjectName("filterControlTitle")
 
         self._form = QFormLayout()
         self._form.setFormAlignment(Qt.AlignmentFlag.AlignTop)
@@ -154,10 +156,6 @@ class OperationControlWidget(QWidget):
         self._sliders: dict[str, _FloatSlider] = {}
 
         self._debounce_ms: int = 75  # miliseconds to debounce slider changes
-        self._emit_timer: QTimer = QTimer(self)
-        self._emit_timer.setSingleShot(True)
-        self._emit_timer.timeout.connect(self._emit_params_now)
-        self._suppress_emit: bool = False
 
         if params:
             for p in params:
@@ -205,13 +203,7 @@ class OperationControlWidget(QWidget):
         if self._suppress_emit:
             return
 
-        if self._debounce_ms == 0:
-            self._emit_params_now()
-        else:
-            self._emit_timer.start(self._debounce_ms)
-
-    def _emit_params_now(self) -> None:
-        self.paramsChanged.emit(self.get_params())
+        self.controller.apply_operation(self.operation_name, **self.get_params())
 
     def reset_controls_to_default(self) -> None:
         self._suppress_emit = True
@@ -220,11 +212,3 @@ class OperationControlWidget(QWidget):
                 slider.reset_to_default()
         finally:
             self._suppress_emit = False
-
-    def set_debounce_ms(self, ms: int) -> None:
-        self._debounce_ms = max(0, int(ms))
-        if self._debounce_ms == 0:
-            try:
-                self._emit_timer.stop()
-            except Exception:
-                pass

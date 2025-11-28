@@ -88,15 +88,15 @@ QComboBox QAbstractItemView {
     margin-bottom: 0.3em;
 }
 
-/* ====== Operation control widget ====== */
-#operationControl {
+/* ====== Filter control widget ====== */
+#filterControl {
     border: 0.05em solid #555;
     border-radius: 0.25em;
     margin-bottom: 0.8em;
 }
 
-/* ====== Operation control title label ====== */
-#operationControlTitle {
+/* ====== Filter control title label ====== */
+#filterControlTitle {
     font-weight: bold;
     font-size: 11pt;
     margin-bottom: 0.3em;

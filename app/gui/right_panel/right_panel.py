@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 
 from gui.right_panel.widgets.debayer_control_widget import DebayerControlWidget
-from gui.right_panel.widgets.operation_control_widget import OperationControlWidget
+from gui.right_panel.widgets.filter_control_widget import FilterControlWidget
 from models.float_param_spec import FloatParamSpec
 
 
@@ -16,12 +16,11 @@ class RightPanel(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        # panel title
         label_title: QLabel = QLabel("TRANSFORMERS")
         label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_title.setObjectName("transformationsTitle")
 
-        # sigmoid contrast control
+        # SIGMOID CONTRAST CONTROL
         sig_params: list[FloatParamSpec] = [
             FloatParamSpec(
                 key="gain",
@@ -41,16 +40,19 @@ class RightPanel(QWidget):
             ),
         ]
 
-        self.sigmoid_widget: OperationControlWidget = OperationControlWidget(
-            "Sigmoid contrast", sig_params, self
+        self.sigmoid_widget: FilterControlWidget = FilterControlWidget(
+            "Sigmoid contrast",
+            self.controller,
+            "SigmoidContrast",
+            sig_params,
+            self,
         )
-        self.sigmoid_widget.paramsChanged.connect(self._on_sigmoid_params)
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
 
-        # debayer control
-        self.debayer_widget: DebayerControlWidget = DebayerControlWidget(parent=self)
-        self.debayer_widget.applyClicked.connect(self._on_apply_debayer)
-        self.debayer_widget.setToolTip("Apply debayering to a RAW image")
+        # DEBAYER CONTROL
+        self.debayer_widget: DebayerControlWidget = DebayerControlWidget(
+            parent=self, controller=self.controller
+        )
 
         layout.addWidget(label_title)
         layout.addWidget(self.sigmoid_widget)
@@ -64,8 +66,3 @@ class RightPanel(QWidget):
         gain: float = float(params.get("gain", 10.0))
         cutoff: float = float(params.get("cutoff", 0.5))
         self.controller.apply_operation("SigmoidContrast", gain=gain, cutoff=cutoff)
-
-    def _on_apply_debayer(self, algorithm_key: str) -> None:
-        if not algorithm_key:
-            return
-        self.controller.apply_operation("Debayer", algorithm_name=algorithm_key)

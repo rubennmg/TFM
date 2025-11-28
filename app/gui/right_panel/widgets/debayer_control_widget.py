@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QComboBox, QLabel, QPushButton, QVBoxLayout, QWidget
 
 _ALGORITHMS: Iterable[tuple[str, str]] = (
@@ -18,21 +18,22 @@ class DebayerControlWidget(QWidget):
         QWidget (QWidget): Base Qt widget.
     """
 
-    applyClicked = pyqtSignal(str)
-
     def __init__(
         self,
+        controller,
         title: str = "Debayer Demosaicing",
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
 
+        self.controller = controller
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+        self.setToolTip("Apply debayering to a RAW image")
         self._title = QLabel(title)
         self._title.setObjectName("debayerControlTitle")
         self._selector = QComboBox()
         self._apply_button = QPushButton("Apply")
-        self._apply_button.clicked.connect(self._emit_current_algorithm)
+        self._apply_button.clicked.connect(self._on_apply_clicked)
 
         container = QWidget(self)
         container.setObjectName("debayerControl")
@@ -49,6 +50,7 @@ class DebayerControlWidget(QWidget):
         root_layout.setSpacing(8)
         root_layout.addWidget(container)
         root_layout.addWidget(self._apply_button)
+
         self.setLayout(root_layout)
 
         self.set_algorithms(_ALGORITHMS)
@@ -64,8 +66,8 @@ class DebayerControlWidget(QWidget):
     def current_algorithm(self) -> str | None:
         return self._selector.currentData()
 
-    def _emit_current_algorithm(self) -> None:
+    def _on_apply_clicked(self) -> None:
         key = self.current_algorithm()
         if key is None:
             return
-        self.applyClicked.emit(key)
+        self.controller.apply_operation("Debayer", algorithm_name=key)
