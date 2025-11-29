@@ -1,10 +1,15 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import (
+    QLabel,
+    QVBoxLayout,
+    QWidget,
+)
 
-from gui.right_panel.widgets.debayer_control_widget import DebayerControlWidget
-from gui.right_panel.widgets.filter_control_widget import FilterControlWidget
-from gui.right_panel.widgets.flip_control_widget import FlipControlWidget
-from gui.right_panel.widgets.minmax_control_widget import MinMaxControlWidget
+from gui.right_panel.widgets.debayer_control import DebayerControlWidget
+from gui.right_panel.widgets.filter_control import FilterControlWidget
+from gui.right_panel.widgets.flip_control import FlipControlWidget
+from gui.right_panel.widgets.minmax_control import MinMaxControlWidget
+from gui.right_panel.widgets.collapsible_section import CollapsibleSection
 from models.float_param_spec import FloatParamSpec
 
 
@@ -18,7 +23,7 @@ class RightPanel(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        label_title: QLabel = QLabel("TRANSFORMERS")
+        label_title: QLabel = QLabel("Transformers")
         label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_title.setObjectName("transformationsTitle")
 
@@ -110,12 +115,46 @@ class RightPanel(QWidget):
         )
 
         layout.addWidget(label_title)
-        layout.addWidget(self.sigmoid_widget)
-        layout.addWidget(self.gaussian_widget)
-        layout.addWidget(self.minmax_widget)
-        layout.addWidget(self.flip_widget)
-        layout.addWidget(self.rotate_widget)
-        layout.addWidget(self.debayer_widget)
+
+        # filters
+        filters_container = QWidget()
+        filters_layout = QVBoxLayout()
+        filters_layout.setContentsMargins(0, 0, 0, 0)
+        filters_layout.setSpacing(6)
+        filters_layout.addWidget(self.sigmoid_widget)
+        filters_layout.addWidget(self.gaussian_widget)
+        filters_container.setLayout(filters_layout)
+        layout.addWidget(CollapsibleSection("Filters", filters_container, self))
+
+        # normalization
+        normalization_container = QWidget()
+        normalization_layout = QVBoxLayout()
+        normalization_layout.setContentsMargins(0, 0, 0, 0)
+        normalization_layout.setSpacing(6)
+        normalization_layout.addWidget(self.minmax_widget)
+        normalization_container.setLayout(normalization_layout)
+        layout.addWidget(
+            CollapsibleSection("Normalization", normalization_container, self)
+        )
+
+        # geometry
+        geometry_container = QWidget()
+        geometry_layout = QVBoxLayout()
+        geometry_layout.setContentsMargins(0, 0, 0, 0)
+        geometry_layout.setSpacing(6)
+        geometry_layout.addWidget(self.flip_widget)
+        geometry_layout.addWidget(self.rotate_widget)
+        geometry_container.setLayout(geometry_layout)
+        layout.addWidget(CollapsibleSection("Geometry", geometry_container, self))
+
+        # debayer
+        bayer_container = QWidget()
+        bayer_layout = QVBoxLayout()
+        bayer_layout.setContentsMargins(0, 0, 0, 0)
+        bayer_layout.setSpacing(6)
+        bayer_layout.addWidget(self.debayer_widget)
+        bayer_container.setLayout(bayer_layout)
+        layout.addWidget(CollapsibleSection("Bayer", bayer_container, self))
 
         layout.addStretch()
 

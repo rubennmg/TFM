@@ -49,7 +49,7 @@ QComboBox QAbstractItemView {
 /* ====== Transformation title label ====== */
 #transformationsTitle {
     font-weight: bold;
-    font-size: 12pt;
+    font-size: 17pt;
 }
 
 /* ====== Scroll area ====== */
@@ -86,4 +86,29 @@ QComboBox QAbstractItemView {
     font-weight: bold;
     font-size: 11pt;
     margin-bottom: 0.3em;
+}
+
+/* ====== Collapsible sections ====== */
+#collapsibleHeader {
+    font-size: 12pt;
+    background-color: #3a3f44;
+    border: 0.05em solid #555;
+    border-radius: 0.25em;
+    padding: 0.35em 0.5em;
+    margin-top: 0.5em;
+    color: #ddd;
+    font-weight: 600;
+    text-align: left;
+}
+
+#collapsibleHeader:hover {
+    background-color: #50565c;
+}
+
+#collapsibleHeader:checked {
+    background-color: #4a5056;
+}
+
+QToolButton::menu-indicator {
+    image: none;
 }
