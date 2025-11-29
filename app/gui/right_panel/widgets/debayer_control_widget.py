@@ -21,7 +21,6 @@ class DebayerControlWidget(QWidget):
     def __init__(
         self,
         controller,
-        title: str = "Debayer Demosaicing",
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
@@ -29,7 +28,7 @@ class DebayerControlWidget(QWidget):
         self.controller = controller
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setToolTip("Apply debayering to a RAW image")
-        self._title = QLabel(title)
+        self._title = QLabel("Debayer Demosaicing")
         self._title.setObjectName("operationControlTitle")
         self._selector = QComboBox()
         self._apply_button = QPushButton("Apply")

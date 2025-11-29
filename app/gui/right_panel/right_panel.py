@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
 from gui.right_panel.widgets.debayer_control_widget import DebayerControlWidget
 from gui.right_panel.widgets.filter_control_widget import FilterControlWidget
 from gui.right_panel.widgets.flip_control_widget import FlipControlWidget
+from gui.right_panel.widgets.minmax_control_widget import MinMaxControlWidget
 from models.float_param_spec import FloatParamSpec
 
 
@@ -77,6 +78,9 @@ class RightPanel(QWidget):
         )
         self.gaussian_widget.setToolTip("Apply Gaussian filter to smooth the image")
 
+        # MIN-MAX NORMALIZATION CONTROL
+        self.minmax_widget = MinMaxControlWidget(self.controller, self)
+
         # FLIP CONTROL
         self.flip_widget = FlipControlWidget(self.controller, self)
 
@@ -108,6 +112,7 @@ class RightPanel(QWidget):
         layout.addWidget(label_title)
         layout.addWidget(self.sigmoid_widget)
         layout.addWidget(self.gaussian_widget)
+        layout.addWidget(self.minmax_widget)
         layout.addWidget(self.flip_widget)
         layout.addWidget(self.rotate_widget)
         layout.addWidget(self.debayer_widget)
