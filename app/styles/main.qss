@@ -119,3 +119,9 @@ QDoubleSpinBox {
     padding: 0.15em;
     color: #ddd;
 }
+
+QSpinBox {
+    background-color: #3a3f44;
+    padding: 0.15em;
+    color: #ddd;
+}
