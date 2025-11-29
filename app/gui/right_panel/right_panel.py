@@ -1,15 +1,19 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QLabel,
+    QScrollArea,
     QVBoxLayout,
     QWidget,
 )
 
+from gui.right_panel.widgets.collapsible_section import CollapsibleSection
 from gui.right_panel.widgets.debayer_control import DebayerControlWidget
 from gui.right_panel.widgets.filter_control import FilterControlWidget
 from gui.right_panel.widgets.flip_control import FlipControlWidget
 from gui.right_panel.widgets.minmax_control import MinMaxControlWidget
-from gui.right_panel.widgets.collapsible_section import CollapsibleSection
+from gui.right_panel.widgets.minmax_percentile_control import (
+    MinMaxPercentileControlWidget,
+)
 from models.float_param_spec import FloatParamSpec
 
 
@@ -19,9 +23,22 @@ class RightPanel(QWidget):
         self.controller = controller
         self._setup_ui()
 
+    def _make_section(self, title: str, widgets: list[QWidget]) -> CollapsibleSection:
+        container = QWidget()
+        vlayout = QVBoxLayout()
+        vlayout.setContentsMargins(0, 0, 0, 0)
+        vlayout.setSpacing(6)
+
+        for w in widgets:
+            vlayout.addWidget(w)
+        container.setLayout(vlayout)
+
+        return CollapsibleSection(title, container, self)
+
     def _setup_ui(self) -> None:
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        layout.setContentsMargins(6, 10, 6, 10)
 
         label_title: QLabel = QLabel("Transformers")
         label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -86,6 +103,11 @@ class RightPanel(QWidget):
         # MIN-MAX NORMALIZATION CONTROL
         self.minmax_widget = MinMaxControlWidget(self.controller, self)
 
+        # MIN-MAX PERCENTILE NORMALIZATION CONTROL
+        self.minmax_percentile_widget = MinMaxPercentileControlWidget(
+            self.controller, self
+        )
+
         # FLIP CONTROL
         self.flip_widget = FlipControlWidget(self.controller, self)
 
@@ -114,53 +136,43 @@ class RightPanel(QWidget):
             parent=self, controller=self.controller
         )
 
-        layout.addWidget(label_title)
+        # Container widget for scrollable operations
+        operations_container = QWidget()
+        operations_layout = QVBoxLayout()
+        operations_layout.setContentsMargins(0, 0, 10, 0)
+        operations_layout.setSpacing(8)
 
         # filters
-        filters_container = QWidget()
-        filters_layout = QVBoxLayout()
-        filters_layout.setContentsMargins(0, 0, 0, 0)
-        filters_layout.setSpacing(6)
-        filters_layout.addWidget(self.sigmoid_widget)
-        filters_layout.addWidget(self.gaussian_widget)
-        filters_container.setLayout(filters_layout)
-        layout.addWidget(CollapsibleSection("Filters", filters_container, self))
+        operations_layout.addWidget(
+            self._make_section("Filters", [self.sigmoid_widget, self.gaussian_widget])
+        )
 
         # normalization
-        normalization_container = QWidget()
-        normalization_layout = QVBoxLayout()
-        normalization_layout.setContentsMargins(0, 0, 0, 0)
-        normalization_layout.setSpacing(6)
-        normalization_layout.addWidget(self.minmax_widget)
-        normalization_container.setLayout(normalization_layout)
-        layout.addWidget(
-            CollapsibleSection("Normalization", normalization_container, self)
+        operations_layout.addWidget(
+            self._make_section(
+                "Normalization",
+                [self.minmax_widget, self.minmax_percentile_widget],
+            )
         )
 
         # geometry
-        geometry_container = QWidget()
-        geometry_layout = QVBoxLayout()
-        geometry_layout.setContentsMargins(0, 0, 0, 0)
-        geometry_layout.setSpacing(6)
-        geometry_layout.addWidget(self.flip_widget)
-        geometry_layout.addWidget(self.rotate_widget)
-        geometry_container.setLayout(geometry_layout)
-        layout.addWidget(CollapsibleSection("Geometry", geometry_container, self))
+        operations_layout.addWidget(
+            self._make_section("Geometry", [self.flip_widget, self.rotate_widget])
+        )
 
         # debayer
-        bayer_container = QWidget()
-        bayer_layout = QVBoxLayout()
-        bayer_layout.setContentsMargins(0, 0, 0, 0)
-        bayer_layout.setSpacing(6)
-        bayer_layout.addWidget(self.debayer_widget)
-        bayer_container.setLayout(bayer_layout)
-        layout.addWidget(CollapsibleSection("Bayer", bayer_container, self))
+        operations_layout.addWidget(self._make_section("Bayer", [self.debayer_widget]))
 
-        layout.addStretch()
+        operations_layout.addStretch()
+        operations_container.setLayout(operations_layout)
+
+        scroll_area = QScrollArea()
+        scroll_area.setObjectName("operationsScrollArea")
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setFrameShape(QScrollArea.Shape.NoFrame)
+        scroll_area.setWidget(operations_container)
+
+        layout.addWidget(label_title)
+        layout.addWidget(scroll_area)
 
         self.setLayout(layout)
-
-    def _on_sigmoid_params(self, params: dict) -> None:
-        gain: float = float(params.get("gain", 10.0))
-        cutoff: float = float(params.get("cutoff", 0.5))
-        self.controller.apply_operation("SigmoidContrast", gain=gain, cutoff=cutoff)
