@@ -14,6 +14,9 @@ from gui.right_panel.widgets.minmax_control import MinMaxControlWidget
 from gui.right_panel.widgets.minmax_percentile_control import (
     MinMaxPercentileControlWidget,
 )
+from gui.right_panel.widgets.median_filter_control import (
+    MedianFilterControlWidget,
+)
 from models.float_param_spec import FloatParamSpec
 
 
@@ -100,6 +103,9 @@ class RightPanel(QWidget):
         )
         self.gaussian_widget.setToolTip("Apply Gaussian filter to smooth the image")
 
+        # MEDIAN FILTER CONTROL
+        self.median_widget = MedianFilterControlWidget(self.controller, self)
+
         # MIN-MAX NORMALIZATION CONTROL
         self.minmax_widget = MinMaxControlWidget(self.controller, self)
 
@@ -144,7 +150,10 @@ class RightPanel(QWidget):
 
         # filters
         operations_layout.addWidget(
-            self._make_section("Filters", [self.sigmoid_widget, self.gaussian_widget])
+            self._make_section(
+                "Filters",
+                [self.sigmoid_widget, self.gaussian_widget, self.median_widget],
+            )
         )
 
         # normalization
