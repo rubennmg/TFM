@@ -94,7 +94,7 @@ QComboBox QAbstractItemView {
     background-color: #3a3f44;
     border: 0.05em solid #555;
     border-radius: 0.25em;
-    padding: 0.35em 0.5em;
+    padding: 0.2em 0.25em;
     margin-top: 0.5em;
     color: #ddd;
     font-weight: 600;
@@ -111,4 +111,11 @@ QComboBox QAbstractItemView {
 
 QToolButton::menu-indicator {
     image: none;
+}
+
+/* ====== Numeric spin boxes ====== */
+QDoubleSpinBox {
+    background-color: #3a3f44;
+    padding: 0.15em;
+    color: #ddd;
 }
