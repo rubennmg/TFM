@@ -39,7 +39,7 @@ class FlipControlWidget(QWidget):
         rb_layout.addWidget(self.vertical_rb)
         layout.addLayout(rb_layout)
 
-        self.apply_button = QPushButton("Apply Flip")
+        self.apply_button = QPushButton("Apply")
         self.apply_button.clicked.connect(self._on_apply)
 
         layout.addWidget(self.apply_button)

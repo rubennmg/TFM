@@ -50,7 +50,7 @@ class MinMaxPercentileControlWidget(QWidget):
         controls_row.addWidget(self.upper_spin)
         layout.addLayout(controls_row)
 
-        self.apply_btn = QPushButton("Apply Percentile Normalization")
+        self.apply_btn = QPushButton("Apply")
         self.apply_btn.clicked.connect(self._on_apply)
         layout.addWidget(self.apply_btn)
 

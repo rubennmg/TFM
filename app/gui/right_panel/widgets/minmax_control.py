@@ -18,7 +18,7 @@ class MinMaxControlWidget(QWidget):
         self.title_lbl.setObjectName("operationControlTitle")
         layout.addWidget(self.title_lbl)
 
-        self.apply_button = QPushButton("Apply Normalization")
+        self.apply_button = QPushButton("Apply")
         self.apply_button.clicked.connect(self._on_apply)
 
         layout.addWidget(self.apply_button)
