@@ -49,10 +49,33 @@ class RightPanel(QWidget):
         )
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
 
-        # DEBAYER CONTROL
-        self.debayer_widget: DebayerControlWidget = DebayerControlWidget(
-            parent=self, controller=self.controller
+        # GAUSSIAN FILTER CONTROL
+        gaussian_params: list[FloatParamSpec] = [
+            FloatParamSpec(
+                key="kernel_size",
+                label="Kernel Size",
+                minimum=1,
+                maximum=21,
+                step=2,
+                default=5,
+            ),
+            FloatParamSpec(
+                key="sigma",
+                label="Sigma",
+                minimum=0.1,
+                maximum=10.0,
+                step=0.1,
+                default=1.0,
+            ),
+        ]
+        self.gaussian_widget: FilterControlWidget = FilterControlWidget(
+            "Gaussian Filter",
+            self.controller,
+            "GaussianFilter",
+            gaussian_params,
+            self,
         )
+        self.gaussian_widget.setToolTip("Apply Gaussian filter to smooth the image")
 
         # FLIP CONTROL
         self.flip_widget = FlipControlWidget(self.controller, self)
@@ -77,8 +100,14 @@ class RightPanel(QWidget):
         )
         self.rotate_widget.setToolTip("Rotate image by a specified angle")
 
+        # DEBAYER CONTROL
+        self.debayer_widget: DebayerControlWidget = DebayerControlWidget(
+            parent=self, controller=self.controller
+        )
+
         layout.addWidget(label_title)
         layout.addWidget(self.sigmoid_widget)
+        layout.addWidget(self.gaussian_widget)
         layout.addWidget(self.flip_widget)
         layout.addWidget(self.rotate_widget)
         layout.addWidget(self.debayer_widget)
