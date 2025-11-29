@@ -1,3 +1,4 @@
+import torch
 from torch import Tensor
 
 from core.image_operation import ImageOperation
@@ -12,9 +13,15 @@ class MinMaxNormalization(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
+    target_tensor = "tensor"
+    updates_debayer_state = False
+
     def __init__(self):
-        """Class constructor."""
-        raise NotImplementedError("Min-Max Normalization is not yet implemented.")
+        """Class constructor.
+
+        No additional parameters are required for Min-Max Normalization.
+        """
+        pass
 
     def apply(self, x: Tensor) -> Tensor:
         """Apply Min-Max Normalization to the image tensor.
@@ -25,4 +32,12 @@ class MinMaxNormalization(ImageOperation):
         Returns:
             Tensor: Normalized image tensor of shape (B, C, H, W).
         """
-        raise NotImplementedError("Min-Max Normalization is not implemented yet.")
+        x_min = x.amin(dim=(2, 3), keepdim=True)
+        x_max = x.amax(dim=(2, 3), keepdim=True)
+
+        denom = x_max - x_min
+        denom = torch.where(denom == 0, torch.ones_like(denom), denom)
+
+        x_normalized = (x - x_min) / denom
+
+        return x_normalized
