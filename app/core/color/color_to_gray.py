@@ -12,11 +12,15 @@ class ColorToGray(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
+    target_tensor = "tensor"
+    updates_debayer_state = False
+
     def __init__(self):
-        """Class constructor."""
-        raise NotImplementedError(
-            "Color to Grayscale conversion is not yet implemented."
-        )
+        """Class constructor.
+
+        This operation does not require any parameters.
+        """
+        pass
 
     def apply(self, x: Tensor) -> Tensor:
         """Apply the color to grayscale conversion to the image tensor.
@@ -27,6 +31,12 @@ class ColorToGray(ImageOperation):
         Returns:
             Tensor: Converted image tensor of shape (B, 1, H, W) in grayscale format.
         """
-        raise NotImplementedError(
-            "Color to Grayscale conversion is not implemented yet."
-        )
+        if x.ndim != 4 or x.shape[1] != 3:
+            raise ValueError(
+                "Input tensor must have shape (B, 3, H, W) for color images."
+            )
+
+        weights = x.new_tensor([0.2989, 0.5870, 0.1140]).view(1, 3, 1, 1)
+        gray = (x * weights).sum(dim=1, keepdim=True)
+
+        return gray
