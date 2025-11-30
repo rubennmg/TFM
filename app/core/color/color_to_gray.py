@@ -1,3 +1,4 @@
+import torch
 from torch import Tensor
 
 from core.image_operation import ImageOperation
@@ -37,6 +38,7 @@ class ColorToGray(ImageOperation):
             )
 
         weights = x.new_tensor([0.2989, 0.5870, 0.1140]).view(1, 3, 1, 1)
-        gray = (x * weights).sum(dim=1, keepdim=True)
+
+        gray = torch.mul(x, weights).sum(dim=1, keepdim=True).to(x.dtype)
 
         return gray
