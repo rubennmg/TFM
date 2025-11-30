@@ -107,7 +107,7 @@
 -   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
 -   [ ] Bug: ventana resize tras cargar imagen
 
-# 24/11/2025
+# 25/11/2025
 
 ## Notes
 
@@ -123,6 +123,180 @@
 -   [x] Debuggear lo del reset de image tras aplicar operaciones mediante controles. Creo que me voy a tener que cargar el procesado "en tiempo real"
 -   [x] Creación de registro de operaciones para futuro benchmark
 -   [ ] Implementación de operaciones CORE + GUI
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [ ] Preparar diagrama de Arquitectura COMPLETO:
+    -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
+    -   IMAGE LOADERS - IMAGE FORMATS:
+        -   `raw_loader`
+        -   `rawpy_loader` - `rawpy` :
+            -   `arw_loader`
+            -   `dng_loader`
+        -   `jpg_loader` - `PIL`
+    -   GUI:
+        -   `main_window`
+            -   `left_panel`
+                -   `rgb_histogram`
+                -   `load_control`
+                -   `reset_control`
+            -   `image_viewer`
+                -   `image_canvas` (scrollable)
+                -   `image_info`
+            -   `right_panel`
+                -   `[operation_control]`
+                -   `debayer_control`
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+## 26/11/2025
+
+## Notes
+
+## TODOs
+
+-   [ ] Tests de debayers <-> standby de momento
+-   [x] Loaders - ABC
+-   [ ] Implementación de operaciones CORE + GUI
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [ ] Preparar diagrama de Arquitectura COMPLETO:
+    -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
+    -   IMAGE LOADERS - IMAGE FORMATS:
+        -   `raw_loader`
+        -   `rawpy_loader` - `rawpy` :
+            -   `arw_loader`
+            -   `dng_loader`
+        -   `jpg_loader` - `PIL`
+    -   GUI:
+        -   `main_window`
+            -   `left_panel`
+                -   `rgb_histogram`
+                -   `load_control`
+                -   `reset_control`
+            -   `image_viewer`
+                -   `image_canvas` (scrollable)
+                -   `image_info`
+            -   `right_panel`
+                -   `[operation_control]`
+                -   `debayer_control`
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+## 28/11/2025
+
+## Notes
+
+## TODOs
+
+-   [ ] Tests de debayers <-> standby de momento
+-   [x] Loaders - ABC
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [ ] ...
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [ ] Preparar diagrama de Arquitectura COMPLETO:
+    -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
+    -   IMAGE LOADERS - IMAGE FORMATS:
+        -   `raw_loader`
+        -   `rawpy_loader` - `rawpy` :
+            -   `arw_loader`
+            -   `dng_loader`
+        -   `jpg_loader` - `PIL`
+    -   GUI:
+        -   `main_window`
+            -   `left_panel`
+                -   `rgb_histogram`
+                -   `load_control`
+                -   `reset_control`
+            -   `image_viewer`
+                -   `image_canvas` (scrollable)
+                -   `image_info`
+            -   `right_panel`
+                -   `[operation_control]`
+                -   `debayer_control`
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+## 29/11/2025
+
+## Notes
+
+## TODOs
+
+-   [ ] Tests de debayers <-> standby de momento
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [ ] RealToRGB8
+    -   [ ] RGB8ToReal
+    -   [ ] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Collapsible sections en panel de operaciones
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [ ] Preparar diagrama de Arquitectura COMPLETO:
+    -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
+    -   IMAGE LOADERS - IMAGE FORMATS:
+        -   `raw_loader`
+        -   `rawpy_loader` - `rawpy` :
+            -   `arw_loader`
+            -   `dng_loader`
+        -   `jpg_loader` - `PIL`
+    -   GUI:
+        -   `main_window`
+            -   `left_panel`
+                -   `rgb_histogram`
+                -   `load_control`
+                -   `reset_control`
+            -   `image_viewer`
+                -   `image_canvas` (scrollable)
+                -   `image_info`
+            -   `right_panel`
+                -   `[operation_control]`
+                -   `debayer_control`
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+## 30/11/2025
+
+## Notes
+
+-   Filtro de mediana satura mucho la memoria de la GPU -> revisar
+-   Gestión de espacios de color en la aplicación de filtros
+    -   Filtros sobre `tensor` o sobre `original_tensor`
+
+## TODOs
+
+-   [ ] Tests de debayers <-> standby de momento
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Simplificar código de `right_panel`
+-   [x] Reset de controles
 -   [ ] Estructura de tests
 -   [ ] Tests
 -   [ ] Preparar diagrama de Arquitectura COMPLETO:
