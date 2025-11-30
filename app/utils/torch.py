@@ -35,14 +35,17 @@ def tensor_to_uint8_np(tensor: Tensor) -> np.ndarray:
     elif t.ndim != 3:
         raise ValueError(f"Tensor shape must be (C,H,W) or (H,W,C), got {t.shape}")
 
-    if t.dtype != torch.float32:
-        raise TypeError(f"Expected float32 tensor, got {t.dtype}")
+    if t.dtype not in (torch.uint8, torch.float32, torch.float64):
+        raise TypeError(f"Expected uint8 or float tensor, got {t.dtype}")
 
-    scaled = torch.mul(t, 255.0)
-    scaled = torch.clamp(scaled, 0.0, 255.0)
-    t_u8 = torch.round(scaled).to(torch.uint8)
+    if t.dtype == torch.uint8:
+        t_u8 = t
+    else:
+        t_clamped = t.clamp(0.0, 1.0)
+        t_u8 = torch.mul(t_clamped, 255.0).round().to(torch.uint8)
 
-    cpu_t: Tensor = t_u8.contiguous().to("cpu", non_blocking=True)
+    cpu_t = t_u8.contiguous().to("cpu", non_blocking=True)
+
     return cpu_t.numpy()
 
 
