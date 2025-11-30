@@ -272,9 +272,13 @@
 
 ## Notes
 
--   Filtro de mediana satura mucho la memoria de la GPU -> revisar
--   Gestión de espacios de color en la aplicación de filtros
-    -   Filtros sobre `tensor` o sobre `original_tensor`
+> Filtro de mediana satura mucho la memoria de la GPU -> revisar
+
+> Gestión de espacios de color en la aplicación de filtros
+
+> Filtros sobre `tensor` o sobre `original_tensor`
+
+> Revisar correcta visualización de la imagen durante el proceso de manipulación de la imagen aplicando operaciones
 
 ## TODOs
 
@@ -297,9 +301,13 @@
     -   [ ] Unsharp Masking
 -   [x] Simplificar código de `right_panel`
 -   [x] Reset de controles
+-   [x] Creación de perfil de configuración
+-   [ ] Optimización de memoria GPU
+-   [ ] `show_warning` + `warning_dialog`
+-   [ ] Gestión de copias sobre tensor en modelo `image`
 -   [ ] Estructura de tests
 -   [ ] Tests
--   [ ] Preparar diagrama de Arquitectura COMPLETO:
+-   [x] Preparar diagrama de Arquitectura COMPLETO:
     -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
     -   IMAGE LOADERS - IMAGE FORMATS:
         -   `raw_loader`
