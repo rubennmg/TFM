@@ -1,3 +1,5 @@
+import json
+
 from torch import device
 
 from core.registry import OPERATION_REGISTRY
@@ -13,6 +15,7 @@ class Controller:
         self.image: Image | None = None
         self.window: MainWindow
         self._device: device = get_device()
+        self.operations_profile: list[dict] = []
 
     def __update_viewer(self) -> None:
         if self.image is None:
@@ -45,6 +48,7 @@ class Controller:
 
         try:
             self.image.tensor = self.image.original_tensor.clone()
+            self.operations_profile.clear()
             self.__update_viewer()
             self.window.reset_image_view()
 
@@ -61,6 +65,13 @@ class Controller:
                 raise ValueError(f"{operation_name} operation not found in registry.")
 
             operation = cls(**params)
+
+            self.operations_profile.append(
+                {
+                    "operation": operation_name,
+                    "params": params,
+                }
+            )
 
             if (
                 self.image.debayered
@@ -81,3 +92,14 @@ class Controller:
 
         except Exception as e:
             show_error(f"{operation_name} Error", str(e))
+
+    def export_profile(self, path: str) -> None:
+        if self.image is None:
+            return
+
+        try:
+            with open(path, "w") as f:
+                json.dump(self.operations_profile, f, indent=4)
+
+        except Exception as e:
+            show_error("Export Profile Error", str(e))

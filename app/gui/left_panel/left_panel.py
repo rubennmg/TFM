@@ -31,10 +31,20 @@ class LeftPanel(QWidget):
         )
         self.reset_control.clicked.connect(self._on_reset_clicked)
 
+        # operations profile
+        self.operations_profile_control: LabelledButtonWidget = LabelledButtonWidget(
+            "Operations profile:", "Generate profile"
+        )
+        self.operations_profile_control.clicked.connect(
+            self._on_generate_operations_profile_clicked
+        )
+
         layout.addWidget(self.load_control)
         layout.addWidget(self.reset_control)
 
         layout.addStretch()
+
+        layout.addWidget(self.operations_profile_control)
 
         self.setLayout(layout)
 
@@ -73,3 +83,16 @@ class LeftPanel(QWidget):
 
     def _on_reset_clicked(self) -> None:
         self.controller.reset_image()
+
+    def _on_generate_operations_profile_clicked(self) -> None:
+        save_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Operations Profile",
+            "operations_profile.json",
+            "JSON Files (*.json);;All Files (*)",
+        )
+
+        if not save_path:
+            return
+
+        self.controller.export_profile(save_path)
