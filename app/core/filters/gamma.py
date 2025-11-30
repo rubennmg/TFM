@@ -1,0 +1,47 @@
+import torch
+from torch import Tensor
+
+from core.image_operation import ImageOperation
+from core.registry import register_operation
+
+
+@register_operation
+class GammaAdjustment(ImageOperation):
+    """Class to perform gamma adjustment on images.
+
+    Args:
+        ImageOperation (ImageOperation): Base class for image operations.
+    """
+
+    target_tensor = "original_tensor"
+    updates_debayer_state = False
+
+    def __init__(self, c: float = 1.0, gamma: float = 1.0):
+        """Class constructor.
+
+        Args:
+            gamma (float): Gamma value for adjustment. Default is 1.0 (no change).
+        """
+        if c <= 0:
+            raise ValueError("Parameter 'c' must be greater than 0.")
+        if gamma <= 0:
+            raise ValueError("Parameter 'gamma' must be greater than 0.")
+
+        self.c = c
+        self.gamma = gamma
+
+    def apply(self, x: Tensor) -> Tensor:
+        """Apply gamma adjustment to the input image tensor.
+
+        Args:
+            x (Tensor): Input image tensor of shape (B, C, H, W).
+
+        Returns:
+            Tensor: Gamma-adjusted image tensor of shape (B, C, H, W).
+        """
+        x_clamped = x.clamp(0.0, 1.0)
+
+        s = torch.mul(self.c, torch.pow(x_clamped, self.gamma))
+        s = s.clamp(0.0, 1.0)
+
+        return s
