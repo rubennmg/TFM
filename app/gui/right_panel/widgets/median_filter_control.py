@@ -19,7 +19,7 @@ class MedianFilterControlWidget(QWidget):
 
         layout = QVBoxLayout()
         layout.setContentsMargins(10, 18, 10, 8)
-        layout.setSpacing(6)
+        layout.setSpacing(10)
 
         title = QLabel("Median Filter")
         title.setObjectName("operationControlTitle")

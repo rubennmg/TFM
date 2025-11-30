@@ -2,7 +2,6 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QWidget,
     QToolButton,
-    QScrollArea,
     QSizePolicy,
     QFrame,
     QVBoxLayout,
@@ -24,15 +23,23 @@ class CollapsibleSection(QWidget):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
         )
 
-        self._area = QScrollArea()
-        self._area.setWidgetResizable(True)
+        # Container without scrolling: content will take needed height
+        self._area = QFrame()
         self._area.setFrameShape(QFrame.Shape.NoFrame)
         self._area.setVisible(False)
+        self._area.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
+        )
+        self._area_layout = QVBoxLayout()
+        self._area_layout.setContentsMargins(0, 0, 0, 0)
+        self._area_layout.setSpacing(0)
+        self._area_layout.setSizeConstraint(QLayout.SizeConstraint.SetMinAndMaxSize)
+        self._area.setLayout(self._area_layout)
 
-        content.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self._area.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        self._area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self._area.setWidget(content)
+        content.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
+        )
+        self._area_layout.addWidget(content)
 
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)

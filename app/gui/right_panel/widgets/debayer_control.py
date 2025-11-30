@@ -39,7 +39,7 @@ class DebayerControlWidget(QWidget):
 
         container_layout = QVBoxLayout()
         container_layout.setContentsMargins(10, 18, 10, 8)
-        container_layout.setSpacing(6)
+        container_layout.setSpacing(10)
         container_layout.addWidget(self._title)
         container_layout.addWidget(self._selector)
         container_layout.addWidget(self._apply_button)
@@ -47,7 +47,7 @@ class DebayerControlWidget(QWidget):
 
         root_layout = QVBoxLayout()
         root_layout.setContentsMargins(0, 0, 0, 0)
-        root_layout.setSpacing(8)
+        root_layout.setSpacing(10)
         root_layout.addWidget(container)
 
         self.setLayout(root_layout)

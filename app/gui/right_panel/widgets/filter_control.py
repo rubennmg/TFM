@@ -172,7 +172,7 @@ class FilterControlWidget(QWidget):
 
         inner_layout = QVBoxLayout()
         inner_layout.setContentsMargins(10, 18, 10, 8)
-        inner_layout.setSpacing(6)
+        inner_layout.setSpacing(10)
         inner_layout.addWidget(self._title_lbl)
         inner_layout.addLayout(self._form)
         inner_layout.addLayout(self._extra_container)

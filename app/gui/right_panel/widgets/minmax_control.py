@@ -12,7 +12,7 @@ class MinMaxControlWidget(QWidget):
 
         layout = QVBoxLayout()
         layout.setContentsMargins(10, 18, 10, 8)
-        layout.setSpacing(6)
+        layout.setSpacing(10)
 
         self.title_lbl = QLabel("Min-Max Normalization")
         self.title_lbl.setObjectName("operationControlTitle")

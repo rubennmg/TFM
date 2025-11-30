@@ -17,6 +17,7 @@ from gui.right_panel.widgets.minmax_percentile_control import (
 from gui.right_panel.widgets.median_filter_control import (
     MedianFilterControlWidget,
 )
+from gui.right_panel.widgets.color_control import ColorControlWidget
 from models.float_param_spec import FloatParamSpec
 
 
@@ -106,6 +107,40 @@ class RightPanel(QWidget):
         # MEDIAN FILTER CONTROL
         self.median_widget = MedianFilterControlWidget(self.controller, self)
 
+        # COLOR TO GRAYSCALE CONTROL
+        self.colorToGray_widget: ColorControlWidget = ColorControlWidget(
+            "Color to Grayscale",
+            self.controller,
+            "ColorToGray",
+            self,
+        )
+        self.colorToGray_widget.setToolTip("Convert color image to grayscale")
+
+        # GRAYSCALE TO COLOR CONTROL
+        self.grayToColor_widget: ColorControlWidget = ColorControlWidget(
+            "Grayscale to Color",
+            self.controller,
+            "GrayToColor",
+            self,
+        )
+        self.grayToColor_widget.setToolTip("Convert grayscale image to color")
+
+        # RGB TO HSV CONTROL
+        self.rgbToHsv_widget: ColorControlWidget = ColorControlWidget(
+            "RGB to HSV",
+            self.controller,
+            "RgbToHsv",
+            self,
+        )
+
+        # HSV TO RGB CONTROL
+        self.hsvToRgb_widget: ColorControlWidget = ColorControlWidget(
+            "HSV to RGB",
+            self.controller,
+            "HsvToRgb",
+            self,
+        )
+
         # MIN-MAX NORMALIZATION CONTROL
         self.minmax_widget = MinMaxControlWidget(self.controller, self)
 
@@ -153,6 +188,19 @@ class RightPanel(QWidget):
             self._make_section(
                 "Filters",
                 [self.sigmoid_widget, self.gaussian_widget, self.median_widget],
+            )
+        )
+
+        # color
+        operations_layout.addWidget(
+            self._make_section(
+                "Color",
+                [
+                    self.colorToGray_widget,
+                    self.grayToColor_widget,
+                    self.rgbToHsv_widget,
+                    self.hsvToRgb_widget,
+                ],
             )
         )
 

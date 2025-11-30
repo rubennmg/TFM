@@ -19,14 +19,14 @@ class MinMaxPercentileControlWidget(QWidget):
 
         layout = QVBoxLayout()
         layout.setContentsMargins(10, 18, 10, 8)
-        layout.setSpacing(6)
+        layout.setSpacing(10)
 
         title = QLabel("Min-Max Percentile Normalization")
         title.setObjectName("operationControlTitle")
         layout.addWidget(title)
 
         controls_row = QHBoxLayout()
-        controls_row.setSpacing(8)
+        controls_row.setSpacing(10)
 
         self.lower_spin = QDoubleSpinBox()
         self.lower_spin.setObjectName("percentileSpin")
