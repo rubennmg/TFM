@@ -27,6 +27,17 @@ class RightPanel(QWidget):
         self.controller = controller
         self._setup_ui()
 
+    def _filter_widget(
+        self,
+        title: str,
+        operation_name: str,
+        params: list[FloatParamSpec],
+    ) -> FilterControlWidget:
+        return FilterControlWidget(title, self.controller, operation_name, params, self)
+
+    def _color_widget(self, title: str, operation_name: str) -> ColorControlWidget:
+        return ColorControlWidget(title, self.controller, operation_name, self)
+
     def _make_section(self, title: str, widgets: list[QWidget]) -> CollapsibleSection:
         container = QWidget()
         vlayout = QVBoxLayout()
@@ -67,12 +78,8 @@ class RightPanel(QWidget):
                 default=0,
             ),
         ]
-        self.sigmoid_widget: FilterControlWidget = FilterControlWidget(
-            "Sigmoid contrast",
-            self.controller,
-            "SigmoidContrast",
-            sig_params,
-            self,
+        self.sigmoid_widget: FilterControlWidget = self._filter_widget(
+            "Sigmoid contrast", "SigmoidContrast", sig_params
         )
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
 
@@ -95,50 +102,58 @@ class RightPanel(QWidget):
                 default=1.0,
             ),
         ]
-        self.gaussian_widget: FilterControlWidget = FilterControlWidget(
-            "Gaussian Filter",
-            self.controller,
-            "GaussianFilter",
-            gaussian_params,
-            self,
+        self.gaussian_widget: FilterControlWidget = self._filter_widget(
+            "Gaussian Filter", "GaussianFilter", gaussian_params
         )
         self.gaussian_widget.setToolTip("Apply Gaussian filter to smooth the image")
 
         # MEDIAN FILTER CONTROL
         self.median_widget = MedianFilterControlWidget(self.controller, self)
 
-        # COLOR TO GRAYSCALE CONTROL
-        self.colorToGray_widget: ColorControlWidget = ColorControlWidget(
-            "Color to Grayscale",
-            self.controller,
-            "ColorToGray",
-            self,
+        # GAMMA ADJUSTMENT CONTROL
+        gamma_params: list[FloatParamSpec] = [
+            FloatParamSpec(
+                key="c",
+                label="C",
+                minimum=0.1,
+                maximum=2.0,
+                step=0.1,
+                default=1.0,
+            ),
+            FloatParamSpec(
+                key="gamma",
+                label="Gamma",
+                minimum=0.1,
+                maximum=3.0,
+                step=0.1,
+                default=1.0,
+            ),
+        ]
+        self.gamma_widget: FilterControlWidget = self._filter_widget(
+            "Gamma Adjustment", "GammaAdjustment", gamma_params
         )
-        self.colorToGray_widget.setToolTip("Convert color image to grayscale")
+        self.gamma_widget.setToolTip("Adjust image brightness using gamma correction")
+
+        # COLOR TO GRAYSCALE CONTROL
+        self.color_to_gray_widget: ColorControlWidget = self._color_widget(
+            "Color to Grayscale", "ColorToGray"
+        )
+        self.color_to_gray_widget.setToolTip("Convert color image to grayscale")
 
         # GRAYSCALE TO COLOR CONTROL
-        self.grayToColor_widget: ColorControlWidget = ColorControlWidget(
-            "Grayscale to Color",
-            self.controller,
-            "GrayToColor",
-            self,
+        self.gray_to_color_widget: ColorControlWidget = self._color_widget(
+            "Grayscale to Color", "GrayToColor"
         )
-        self.grayToColor_widget.setToolTip("Convert grayscale image to color")
+        self.gray_to_color_widget.setToolTip("Convert grayscale image to color")
 
         # RGB TO HSV CONTROL
-        self.rgbToHsv_widget: ColorControlWidget = ColorControlWidget(
-            "RGB to HSV",
-            self.controller,
-            "RgbToHsv",
-            self,
+        self.rgb_to_hsv_widget: ColorControlWidget = self._color_widget(
+            "RGB to HSV", "RgbToHsv"
         )
 
         # HSV TO RGB CONTROL
-        self.hsvToRgb_widget: ColorControlWidget = ColorControlWidget(
-            "HSV to RGB",
-            self.controller,
-            "HsvToRgb",
-            self,
+        self.hsv_to_rgb_widget: ColorControlWidget = self._color_widget(
+            "HSV to RGB", "HsvToRgb"
         )
 
         # MIN-MAX NORMALIZATION CONTROL
@@ -163,14 +178,20 @@ class RightPanel(QWidget):
                 default=0.0,
             ),
         ]
-        self.rotate_widget: FilterControlWidget = FilterControlWidget(
-            "Image Rotation",
-            self.controller,
-            "Rotate",
-            rotation_params,
-            self,
+        self.rotate_widget: FilterControlWidget = self._filter_widget(
+            "Image Rotation", "Rotate", rotation_params
         )
         self.rotate_widget.setToolTip("Rotate image by a specified angle")
+
+        # REAL TO RGB8 CONTROL
+        self.real_to_rgb8_widget: ColorControlWidget = self._color_widget(
+            "Real to RGB8", "RealToRGB8"
+        )
+
+        # RGB8 TO REAL CONTROL
+        self.rgb8_to_real_widget: ColorControlWidget = self._color_widget(
+            "RGB8 to Real", "RGB8ToReal"
+        )
 
         # DEBAYER CONTROL
         self.debayer_widget: DebayerControlWidget = DebayerControlWidget(
@@ -187,7 +208,12 @@ class RightPanel(QWidget):
         operations_layout.addWidget(
             self._make_section(
                 "Filters",
-                [self.sigmoid_widget, self.gaussian_widget, self.median_widget],
+                [
+                    self.sigmoid_widget,
+                    self.gamma_widget,
+                    self.gaussian_widget,
+                    self.median_widget,
+                ],
             )
         )
 
@@ -196,10 +222,10 @@ class RightPanel(QWidget):
             self._make_section(
                 "Color",
                 [
-                    self.colorToGray_widget,
-                    self.grayToColor_widget,
-                    self.rgbToHsv_widget,
-                    self.hsvToRgb_widget,
+                    self.color_to_gray_widget,
+                    self.gray_to_color_widget,
+                    self.rgb_to_hsv_widget,
+                    self.hsv_to_rgb_widget,
                 ],
             )
         )
@@ -215,6 +241,13 @@ class RightPanel(QWidget):
         # geometry
         operations_layout.addWidget(
             self._make_section("Geometry", [self.flip_widget, self.rotate_widget])
+        )
+
+        # format
+        operations_layout.addWidget(
+            self._make_section(
+                "Format", [self.real_to_rgb8_widget, self.rgb8_to_real_widget]
+            )
         )
 
         # debayer
@@ -233,3 +266,25 @@ class RightPanel(QWidget):
         layout.addWidget(scroll_area)
 
         self.setLayout(layout)
+
+    def reset_controls_to_default(self) -> None:
+        widgets = [
+            self.sigmoid_widget,
+            self.gaussian_widget,
+            self.median_widget,
+            self.gamma_widget,
+            self.color_to_gray_widget,
+            self.gray_to_color_widget,
+            self.rgb_to_hsv_widget,
+            self.hsv_to_rgb_widget,
+            self.minmax_widget,
+            self.minmax_percentile_widget,
+            self.flip_widget,
+            self.rotate_widget,
+            self.real_to_rgb8_widget,
+            self.rgb8_to_real_widget,
+            self.debayer_widget,
+        ]
+        for w in widgets:
+            if hasattr(w, "reset"):
+                w.reset()

@@ -81,3 +81,8 @@ class MinMaxPercentileControlWidget(QWidget):
             lower_percentile=lower,
             upper_percentile=upper,
         )
+
+    def reset(self) -> None:
+        self.lower_spin.setValue(0.02)
+        self.upper_spin.setValue(0.98)
+        self._validate()

@@ -27,3 +27,6 @@ class MinMaxControlWidget(QWidget):
 
     def _on_apply(self):
         self.controller.apply_operation("MinMaxNormalization")
+
+    def reset(self) -> None:
+        pass

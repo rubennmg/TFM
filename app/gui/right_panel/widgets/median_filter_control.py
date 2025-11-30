@@ -54,3 +54,6 @@ class MedianFilterControlWidget(QWidget):
             self.kernel_spin.setValue(k)
 
         self.controller.apply_operation("MedianFilter", kernel_size=k)
+
+    def reset(self) -> None:
+        self.kernel_spin.setValue(3)

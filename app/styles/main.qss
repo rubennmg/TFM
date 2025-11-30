@@ -91,7 +91,7 @@ QComboBox QAbstractItemView {
 /* ====== Collapsible sections ====== */
 #collapsibleHeader {
     font-size: 12pt;
-    background-color: #3a3f44;
+    background-color: #636363;
     border: 0.05em solid #555;
     border-radius: 0.25em;
     padding: 0.2em 0.25em;
@@ -102,11 +102,11 @@ QComboBox QAbstractItemView {
 }
 
 #collapsibleHeader:hover {
-    background-color: #50565c;
+    background-color: #5f6264;
 }
 
 #collapsibleHeader:checked {
-    background-color: #4a5056;
+    background-color: #636363;
 }
 
 QToolButton::menu-indicator {

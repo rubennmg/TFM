@@ -34,4 +34,4 @@ class MainWindow(QMainWindow):
 
     def reset_image_view(self) -> None:
         self.viewer.reset_zoom()
-        self.right_panel.sigmoid_widget.reset_controls_to_default()
+        self.right_panel.reset_controls_to_default()

@@ -51,3 +51,7 @@ class FlipControlWidget(QWidget):
             self.controller.apply_operation("Flip", horizontal=True)
         else:
             self.controller.apply_operation("Flip", horizontal=False)
+
+    def reset(self) -> None:
+        self.horizontal_rb.setChecked(True)
+        self.vertical_rb.setChecked(False)

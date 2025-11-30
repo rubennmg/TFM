@@ -211,3 +211,6 @@ class FilterControlWidget(QWidget):
                 slider.reset_to_default()
         finally:
             self._suppress_emit = False
+
+    def reset(self) -> None:
+        self.reset_controls_to_default()

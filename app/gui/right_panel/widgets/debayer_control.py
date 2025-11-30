@@ -70,3 +70,7 @@ class DebayerControlWidget(QWidget):
         if key is None:
             return
         self.controller.apply_operation("Debayer", algorithm_name=key)
+
+    def reset(self) -> None:
+        if self._selector.count() > 0:
+            self._selector.setCurrentIndex(0)

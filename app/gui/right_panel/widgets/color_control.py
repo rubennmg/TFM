@@ -31,3 +31,8 @@ class ColorControlWidget(QWidget):
 
     def _on_apply_clicked(self) -> None:
         self.controller.apply_operation(self.operation_name)
+
+    def reset(
+        self,
+    ) -> None:
+        pass
