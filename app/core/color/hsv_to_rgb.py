@@ -27,11 +27,16 @@ class HsvToRgb(ImageOperation):
         """Apply the HSV to RGB conversion to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W) in HSV format.
+            x (Tensor): Input image tensor of shape (B, 3, H, W) in HSV format.
 
         Returns:
-            Tensor: Converted image tensor of shape (B, C, H, W) in RGB format.
+            Tensor: Converted image tensor of shape (B, 3, H, W) in RGB format.
         """
+        if x.shape[1] != 3:
+            raise ValueError(
+                "Input tensor must have 3 channels representing HSV image."
+            )
+
         hsv_h, hsv_s, hsv_l = x[:, 0:1], x[:, 1:2], x[:, 2:3]
 
         _c = hsv_l * hsv_s

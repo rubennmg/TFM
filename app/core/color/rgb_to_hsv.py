@@ -27,11 +27,16 @@ class RgbToHsv(ImageOperation):
         """Apply the RGB to HSV conversion to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W) in RGB format.
+            x (Tensor): Input image tensor of shape (B, 3, H, W) in RGB format.
 
         Returns:
-            Tensor: Converted image tensor of shape (B, C, H, W) in HSV format.
+            Tensor: Converted image tensor of shape (B, 3, H, W) in HSV format.
         """
+        if x.shape[1] != 3:
+            raise ValueError(
+                "Input tensor must have 3 channels representing RGB image."
+            )
+
         cmax, cmax_idx = torch.max(x, dim=1, keepdim=True)
         cmin = torch.min(x, dim=1, keepdim=True)[0]
 
