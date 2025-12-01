@@ -40,8 +40,8 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
         image_format=fmt,
         color_space=ColorSpace.RGB,
         metadata=Metadata(
-            width=tensor.shape[2],
-            height=tensor.shape[1],
+            width=tensor.shape[3],
+            height=tensor.shape[2],
             bit_depth=16,
             bayer_pattern=None,
         ),
