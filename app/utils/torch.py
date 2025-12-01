@@ -44,7 +44,7 @@ def tensor_to_uint8_np(tensor: Tensor) -> np.ndarray:
         t_clamped = t.clamp(0.0, 1.0)
         t_u8 = torch.mul(t_clamped, 255.0).round().to(torch.uint8)
 
-    cpu_t = t_u8.contiguous().to("cpu", non_blocking=True)
+    cpu_t = t_u8.contiguous().to("cpu")
 
     return cpu_t.numpy()
 
