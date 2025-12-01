@@ -74,19 +74,6 @@ class Controller:
             operation = cls(**params)
 
             if (
-                len(self.operations_profile) > 0
-                and self.operations_profile[-1].get("operation") == operation_name
-            ):
-                self.operations_profile[-1]["params"] = params
-            else:
-                self.operations_profile.append(
-                    {
-                        "operation": operation_name,
-                        "params": params,
-                    }
-                )
-
-            if (
                 self.image.debayered
                 and self.image.debayered_tensor is not None
                 and operation.target_tensor == "original_tensor"
@@ -110,6 +97,19 @@ class Controller:
                 self.image.color_space = ColorSpace.GRAYSCALE
             elif operation_name == "GrayToColor":
                 self.image.color_space = ColorSpace.RGB
+
+            if (
+                len(self.operations_profile) > 0
+                and self.operations_profile[-1].get("operation") == operation_name
+            ):
+                self.operations_profile[-1]["params"] = params
+            else:
+                self.operations_profile.append(
+                    {
+                        "operation": operation_name,
+                        "params": params,
+                    }
+                )
 
             self.__update_viewer()
 
