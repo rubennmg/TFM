@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QFileDialog, QVBoxLayout, QWidget
 
 from gui.left_panel.widgets.labelled_button_widget import LabelledButtonWidget
 from gui.left_panel.widgets.rgb_histogram_widget import RgbHistogramWidget
+from gui.left_panel.widgets.operation_history_widget import OperationHistoryWidget
 
 
 class LeftPanel(QWidget):
@@ -19,6 +20,9 @@ class LeftPanel(QWidget):
         # rgb histogram
         self.histogram: RgbHistogramWidget = RgbHistogramWidget(self, height=180)
         layout.addWidget(self.histogram)
+
+        # operations history (expand to fill available space)
+        self.history: OperationHistoryWidget = OperationHistoryWidget(self)
 
         # load / reset controls
         self.load_control: LabelledButtonWidget = LabelledButtonWidget(
@@ -41,6 +45,7 @@ class LeftPanel(QWidget):
 
         layout.addWidget(self.load_control)
         layout.addWidget(self.reset_control)
+        layout.addWidget(self.history, stretch=1)
 
         layout.addStretch()
 
@@ -67,6 +72,25 @@ class LeftPanel(QWidget):
         extensions_filter = extensions_filter.strip() + ")"
         extensions_filter += ";;All Files (*)"
         return extensions_filter
+
+    def clear_history(self) -> None:
+        self.history.clear()
+
+    def update_history_full(self, operations_profile: list[dict]) -> None:
+        lines: list[str] = []
+
+        for idx, op in enumerate(operations_profile, start=1):
+            name = op.get("operation", "unknown")
+            params = op.get("params", {})
+            params_str = ", ".join(f"{k}={v}" for k, v in params.items())
+            line = f"{idx}. {name}({params_str})"
+            lines.append(line)
+
+        self.history.set_lines(lines)
+
+    def append_history(self, operation_name: str, params: dict) -> None:
+        params_str = ", ".join(f"{k}={v}" for k, v in params.items())
+        self.history.append_line(f"{operation_name}({params_str})")
 
     def _on_load_clicked(self) -> None:
         file_path, _ = QFileDialog.getOpenFileName(

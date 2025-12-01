@@ -125,3 +125,21 @@ QSpinBox {
     padding: 0.15em;
     color: #ddd;
 }
+
+/* ====== Operation history ====== */
+#operationHistoryPanel {
+    border: 0.05em solid #555;
+    border-radius: 0.25em;
+    margin-top: 0.5em;
+}
+
+#operationHistoryTitle {
+    font-weight: bold;
+    color: #ddd;
+}
+
+#operationHistoryText {
+    background-color: #000;
+    color: #E0E0E0;
+    border: 0.05em solid #333;
+}
