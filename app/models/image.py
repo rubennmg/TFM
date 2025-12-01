@@ -4,6 +4,7 @@ import numpy as np
 from torch import Tensor
 
 from enums.image_formats import ImageFormat
+from enums.color_space import ColorSpace
 from models.metadata import Metadata
 from utils.torch import tensor_to_uint8_np
 
@@ -16,6 +17,7 @@ class Image:
     name: str
     image_format: ImageFormat
     metadata: Metadata
+    color_space: ColorSpace = ColorSpace.RGB
     debayered: bool = False
     debayered_tensor: Tensor | None = None
 

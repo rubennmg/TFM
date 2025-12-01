@@ -56,7 +56,7 @@ class ImageViewer(QWidget):
             QImage.Format.Format_Grayscale8 if c == 1 else QImage.Format.Format_RGB888
         )
 
-        qimg = QImage(buf, w, h, bytes_per_line, img_format)
+        qimg = QImage(buf, w, h, bytes_per_line, img_format).copy()
         self._qimg = qimg
         self._pixmap = QPixmap.fromImage(self._qimg)
         self._image = image

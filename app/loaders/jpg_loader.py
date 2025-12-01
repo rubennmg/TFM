@@ -6,6 +6,7 @@ from enums.image_formats import ImageFormat
 from loaders.base_loader import ImageLoader
 from models.image import Image
 from models.metadata import Metadata
+from enums.color_space import ColorSpace
 
 SCALE: float = 1.0 / 255.0  # decode_image loads images as uint8 by default
 
@@ -28,7 +29,7 @@ class JpgLoader(ImageLoader):
     def load(self, path: str, device) -> Image:
         tensor: Tensor = decode_image(path).to(dtype=torch.float32).mul_(SCALE)
         tensor = tensor.unsqueeze(0)
-        tensor = tensor.to(device=device, non_blocking=True)
+        tensor = tensor.to(device=device)
 
         if not tensor.is_contiguous():
             tensor = tensor.contiguous()
@@ -39,6 +40,7 @@ class JpgLoader(ImageLoader):
             path=path,
             name=path.split("/")[-1],
             image_format=ImageFormat.JPG,
+            color_space=ColorSpace.RGB,
             metadata=Metadata(
                 width=tensor.shape[3],
                 height=tensor.shape[2],

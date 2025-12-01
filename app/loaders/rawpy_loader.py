@@ -6,6 +6,7 @@ from torch import Tensor, device
 from enums.image_formats import ImageFormat
 from models.image import Image
 from models.metadata import Metadata
+from enums.color_space import ColorSpace
 
 SCALE: float = 1.0 / 65535.0
 
@@ -26,7 +27,7 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
 
     tensor: Tensor = torch.from_numpy(raw_data).to(dtype=torch.float32).mul_(SCALE)
     tensor = tensor.permute(2, 0, 1).unsqueeze(0).contiguous()  # B,C,H,W
-    tensor = tensor.to(device=device, non_blocking=True)
+    tensor = tensor.to(device=device)
 
     if not tensor.is_contiguous():
         tensor = tensor.contiguous()
@@ -37,6 +38,7 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
         path=path,
         name=path.split("/")[-1],
         image_format=fmt,
+        color_space=ColorSpace.RGB,
         metadata=Metadata(
             width=tensor.shape[2],
             height=tensor.shape[1],

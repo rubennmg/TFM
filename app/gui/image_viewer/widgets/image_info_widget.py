@@ -23,6 +23,7 @@ class ImageInfoWidget(QWidget):
         fields = [
             ("Name", "name"),
             ("Format", "format"),
+            ("Color space", "color_space"),
             ("Resolution", "resolution"),
             ("Channels", "channels"),
             ("Bit depth", "bit_depth"),
@@ -58,6 +59,7 @@ class ImageInfoWidget(QWidget):
                 {
                     "name": "—",
                     "format": "—",
+                    "color_space": "—",
                     "resolution": "—",
                     "channels": "—",
                     "bit_depth": "—",
@@ -75,11 +77,13 @@ class ImageInfoWidget(QWidget):
         )
         resolution = f"{metadata.width} x {metadata.height}"
         image_format = image.image_format.name
+        color_space = image.color_space.value if image.color_space else "—"
 
         self.__set_info_values(
             {
                 "name": image.name,
                 "format": image_format,
+                "color_space": color_space,
                 "resolution": resolution,
                 "channels": str(image.tensor.shape[1]),
                 "bit_depth": str(bit_depth),

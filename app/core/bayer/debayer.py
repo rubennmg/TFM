@@ -64,8 +64,6 @@ class Debayer(ImageOperation):
             )
 
         with torch.no_grad():
-            out: Tensor = self.module(x).to(
-                device=x.device, dtype=x.dtype, non_blocking=True
-            )
+            out: Tensor = self.module(x).to(device=x.device, dtype=x.dtype)
 
         return out
