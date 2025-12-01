@@ -35,3 +35,9 @@ class MainWindow(QMainWindow):
     def reset_image_view(self) -> None:
         self.viewer.reset_zoom()
         self.right_panel.reset_controls_to_default()
+
+    def update_operation_history(self, operations_profile: list[dict]) -> None:
+        self.left_panel.update_history_full(operations_profile)
+
+    def clear_operation_history(self) -> None:
+        self.left_panel.clear_history()

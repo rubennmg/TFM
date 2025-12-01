@@ -8,6 +8,7 @@ from loaders import image_loader
 from models.image import Image
 from utils.error import show_error
 from utils.torch import get_device
+from enums.color_space import ColorSpace
 
 
 class Controller:
@@ -23,6 +24,7 @@ class Controller:
 
         try:
             self.window.update_image_view(self.image)
+            self.window.update_operation_history(self.operations_profile)
 
         except Exception as e:
             show_error("Update Viewer Error", str(e))
@@ -34,6 +36,8 @@ class Controller:
         try:
             self.image = image_loader.load_image(path, self._device)
             self.window.reset_image_view()
+            self.operations_profile.clear()
+            self.window.clear_operation_history()
             self.__update_viewer()
 
         except Exception as e:
@@ -48,9 +52,12 @@ class Controller:
 
         try:
             self.image.tensor = self.image.original_tensor.clone()
+            ch = self.image.original_tensor.shape[1]
+            self.image.color_space = ColorSpace.GRAYSCALE if ch == 1 else ColorSpace.RGB
             self.operations_profile.clear()
             self.__update_viewer()
             self.window.reset_image_view()
+            self.window.clear_operation_history()
 
         except Exception as e:
             show_error("Reset Error", str(e))
@@ -66,12 +73,18 @@ class Controller:
 
             operation = cls(**params)
 
-            self.operations_profile.append(
-                {
-                    "operation": operation_name,
-                    "params": params,
-                }
-            )
+            if (
+                len(self.operations_profile) > 0
+                and self.operations_profile[-1].get("operation") == operation_name
+            ):
+                self.operations_profile[-1]["params"] = params
+            else:
+                self.operations_profile.append(
+                    {
+                        "operation": operation_name,
+                        "params": params,
+                    }
+                )
 
             if (
                 self.image.debayered
@@ -87,6 +100,16 @@ class Controller:
             if operation.updates_debayer_state:
                 self.image.debayered = True
                 self.image.debayered_tensor = result.clone()
+                self.image.color_space = ColorSpace.RGB
+
+            if operation_name == "RgbToHsv":
+                self.image.color_space = ColorSpace.HSV
+            elif operation_name == "HsvToRgb":
+                self.image.color_space = ColorSpace.RGB
+            elif operation_name == "ColorToGray":
+                self.image.color_space = ColorSpace.GRAYSCALE
+            elif operation_name == "GrayToColor":
+                self.image.color_space = ColorSpace.RGB
 
             self.__update_viewer()
 
