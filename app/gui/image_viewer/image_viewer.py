@@ -13,7 +13,6 @@ class ImageViewer(QWidget):
         super().__init__()
         self._pixmap: QPixmap | None = None
         self._qimg: QImage | None = None
-        self._image: Image | None = None
         self._zoom: float = 0.25
         self._zoom_step: float = 1.15
         self._min_zoom: float = 0.05
@@ -59,8 +58,6 @@ class ImageViewer(QWidget):
         qimg = QImage(buf, w, h, bytes_per_line, img_format).copy()
         self._qimg = qimg
         self._pixmap = QPixmap.fromImage(self._qimg)
-        self._image = image
-        self.info_widget.update_from_image(self._image)
         self.__update_display()
 
     def __update_display(self) -> None:
