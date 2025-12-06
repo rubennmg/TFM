@@ -1,10 +1,11 @@
 import numpy as np
 from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QImage, QPixmap, QWheelEvent
-from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QScrollArea, QTabWidget, QVBoxLayout, QWidget
 
 from gui.image_viewer.widgets.image_canvas_widget import ImageCanvas
 from gui.image_viewer.widgets.image_info_widget import ImageInfoWidget
+from gui.image_viewer.widgets.operation_logger import OperationLogger
 from models.image import Image
 
 
@@ -24,6 +25,7 @@ class ImageViewer(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
 
         self.info_widget: ImageInfoWidget = ImageInfoWidget()
+        self.logger_widget: OperationLogger = OperationLogger()
 
         self.image_canvas: ImageCanvas = ImageCanvas()
 
@@ -37,8 +39,14 @@ class ImageViewer(QWidget):
         if viewport is not None:
             viewport.installEventFilter(self)
 
+        self.tabs: QTabWidget = QTabWidget()
+        self.tabs.setFixedHeight(150)
+        self.tabs.setObjectName("infoLoggerTabs")
+        self.tabs.addTab(self.info_widget, "Image Info")
+        self.tabs.addTab(self.logger_widget, "Logger")
+
         layout.addWidget(self.scroll_area)
-        layout.addWidget(self.info_widget)
+        layout.addWidget(self.tabs)
 
         self.setLayout(layout)
 
@@ -79,6 +87,12 @@ class ImageViewer(QWidget):
             pix = QPixmap.fromImage(scaled_img)
 
         self.image_canvas.set_pixmap(pix)
+
+    def append_log_entry(self, entry: str) -> None:
+        self.logger_widget.append_entry(entry)
+
+    def clear_log(self) -> None:
+        self.logger_widget.clear_entries()
 
     def set_zoom(self, factor: float) -> None:
         factor = max(self._min_zoom, min(self._max_zoom, factor))

@@ -41,3 +41,9 @@ class MainWindow(QMainWindow):
 
     def clear_operation_history(self) -> None:
         self.left_panel.clear_history()
+
+    def append_operation_log(self, entry: str) -> None:
+        self.viewer.append_log_entry(entry)
+
+    def clear_operation_log(self) -> None:
+        self.viewer.clear_log()

@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from torch import device
 
@@ -17,6 +18,19 @@ class Controller:
         self.window: MainWindow
         self._device: device = get_device()
         self.operations_profile: list[dict] = []
+        self.operation_logs: list[str] = []
+
+    def __log_event(self, message: str) -> None:
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        entry = f"[{timestamp}] {message}"
+        self.operation_logs.append(entry)
+        if self.window is not None:
+            self.window.append_operation_log(entry)
+
+    def __reset_operation_log(self) -> None:
+        self.operation_logs.clear()
+        if self.window is not None:
+            self.window.clear_operation_log()
 
     def __update_viewer(self) -> None:
         if self.image is None:
@@ -38,7 +52,10 @@ class Controller:
             self.window.reset_image_view()
             self.operations_profile.clear()
             self.window.clear_operation_history()
+            self.__reset_operation_log()
             self.__update_viewer()
+            if self.image is not None:
+                self.__log_event(f"Loaded image '{self.image.name}' from {path}")
 
         except Exception as e:
             show_error("Load Image Error", str(e))
@@ -58,6 +75,7 @@ class Controller:
             self.__update_viewer()
             self.window.reset_image_view()
             self.window.clear_operation_history()
+            self.__log_event("Image reset to original state")
 
         except Exception as e:
             show_error("Reset Error", str(e))
@@ -113,6 +131,11 @@ class Controller:
 
             self.__update_viewer()
 
+            params_repr = (
+                ", ".join(f"{k}={v}" for k, v in params.items()) or "no params"
+            )
+            self.__log_event(f"Applied {operation_name} ({params_repr})")
+
         except Exception as e:
             show_error(f"{operation_name} Error", str(e))
 
@@ -123,6 +146,7 @@ class Controller:
         try:
             with open(path, "w") as f:
                 json.dump(self.operations_profile, f, indent=4)
+            self.__log_event(f"Exported profile to {path}")
 
         except Exception as e:
             show_error("Export Profile Error", str(e))
