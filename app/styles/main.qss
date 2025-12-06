@@ -139,7 +139,7 @@ QSpinBox {
 }
 
 #operationHistoryText {
-    background-color: #000;
+    background-color: #151515;
     color: #E0E0E0;
     border: 0.05em solid #333;
 }

@@ -24,7 +24,6 @@ class ImageViewer(QWidget):
         layout: QVBoxLayout = QVBoxLayout()
 
         self.info_widget: ImageInfoWidget = ImageInfoWidget()
-        layout.addWidget(self.info_widget)
 
         self.image_canvas: ImageCanvas = ImageCanvas()
 
@@ -32,16 +31,15 @@ class ImageViewer(QWidget):
         self.scroll_area.setObjectName("imageScrollArea")
         self.scroll_area.setWidget(self.image_canvas)
         self.scroll_area.setWidgetResizable(False)
-
-        try:
-            self.scroll_area.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        except Exception:
-            pass
+        self.scroll_area.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         viewport: QWidget | None = self.scroll_area.viewport()
         if viewport is not None:
             viewport.installEventFilter(self)
+
         layout.addWidget(self.scroll_area)
+        layout.addWidget(self.info_widget)
+
         self.setLayout(layout)
 
     def update_image(self, np_array: np.ndarray, image: Image) -> None:

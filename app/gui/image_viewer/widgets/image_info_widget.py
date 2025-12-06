@@ -28,8 +28,7 @@ class ImageInfoWidget(QWidget):
             ("Channels", "channels"),
             ("Bit depth", "bit_depth"),
             ("Bayer pattern", "bayer_pattern"),
-            ("Tensor shape", "shape"),
-            ("Tensor dtype", "dtype"),
+            ("Tensor data", "tensor"),
         ]
 
         columns = 2
@@ -64,8 +63,7 @@ class ImageInfoWidget(QWidget):
                     "channels": "—",
                     "bit_depth": "—",
                     "bayer_pattern": "—",
-                    "shape": "—",
-                    "dtype": "—",
+                    "tensor": "—",
                 }
             )
             return
@@ -88,8 +86,11 @@ class ImageInfoWidget(QWidget):
                 "channels": str(image.tensor.shape[1]),
                 "bit_depth": str(bit_depth),
                 "bayer_pattern": bayer_pattern,
-                "shape": str(image.tensor.shape),
-                "dtype": str(image.tensor.dtype),
+                "tensor": str(image.tensor.shape)
+                .removeprefix("torch.Size(")
+                .removesuffix(")")
+                + " | "
+                + str(image.tensor.dtype).removeprefix("torch."),
             }
         )
 
