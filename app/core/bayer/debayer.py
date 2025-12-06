@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
+from core import _tensor_utils as T_u
 from core.bayer.modules.debayer2x2 import Debayer2x2
 from core.bayer.modules.debayer3x3 import Debayer3x3
 from core.bayer.modules.debayer5x5 import Debayer5x5
@@ -58,12 +59,11 @@ class Debayer(ImageOperation):
         Returns:
             Tensor: Debayered tensor of shape (B, 3, H, W).
         """
-        if x.ndim != 4 or x.shape[1] != 1:
-            raise ValueError(
-                f"Expected input tensor of shape (B, 1, H, W), got {x.shape}"
-            )
+        T_u.assert_grayscale_image_tensor(x)
 
         with torch.no_grad():
             out: Tensor = self.module(x).to(device=x.device, dtype=x.dtype)
+
+        T_u.assert_color_image_tensor(out)
 
         return out

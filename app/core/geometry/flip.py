@@ -2,6 +2,7 @@ from torch import Tensor
 
 from core.image_operation import ImageOperation
 from core.registry import register_operation
+from core._tensor_utils import HEIGHT_DIM, WIDTH_DIM
 
 
 @register_operation
@@ -11,6 +12,9 @@ class Flip(ImageOperation):
     Args:
         ImageOperation (ImageOperation): Base class for image operations.
     """
+
+    target_tensor = "tensor"
+    updates_debayer_state = False
 
     def __init__(self, horizontal: bool = True):
         """Class constructor.
@@ -30,6 +34,6 @@ class Flip(ImageOperation):
             Tensor: Flipped image tensor of shape (B, C, H, W).
         """
         if self.horizontal:
-            return x.flip(dims=[3])
+            return x.flip(dims=[WIDTH_DIM])
         else:
-            return x.flip(dims=[2])
+            return x.flip(dims=[HEIGHT_DIM])

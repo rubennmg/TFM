@@ -1,6 +1,7 @@
 import torch
 from torch import Tensor
 
+from core._tensor_utils import HEIGHT_DIM
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -8,6 +9,8 @@ from core.registry import register_operation
 @register_operation
 class MinMaxPercentileNormalization(ImageOperation):
     """Class to apply Min-Max Percentile Normalization to image tensors.
+
+    Normalization is applied **by channel** using specified lower and upper percentiles.
 
     Args:
         ImageOperation (ImageOperation): Base class for image operations.
@@ -22,6 +25,8 @@ class MinMaxPercentileNormalization(ImageOperation):
             raise ValueError(
                 "Percentiles must satisfy 0.0 <= lower_percentile < upper_percentile <= 1.0"
             )
+
+        self.eps = 1e-6  # Small constant to prevent division by zero
 
         self.lower_percentile = lower_percentile
         self.upper_percentile = upper_percentile
@@ -38,11 +43,14 @@ class MinMaxPercentileNormalization(ImageOperation):
         b, c, h, w = x.shape
         x_flat = x.view(b, c, -1)
 
-        p_lower = torch.quantile(x_flat, self.lower_percentile, dim=2, keepdim=True)
-        p_upper = torch.quantile(x_flat, self.upper_percentile, dim=2, keepdim=True)
+        p_lower = torch.quantile(
+            x_flat, self.lower_percentile, dim=HEIGHT_DIM, keepdim=True
+        )
+        p_upper = torch.quantile(
+            x_flat, self.upper_percentile, dim=HEIGHT_DIM, keepdim=True
+        )
 
-        denom = p_upper - p_lower
-        denom = torch.where(denom == 0, torch.ones_like(denom), denom)
+        denom = (p_upper - p_lower).clamp_min(self.eps)
 
         x_normalized = (x_flat - p_lower) / denom
         x_normalized = torch.clamp(x_normalized, 0.0, 1.0)

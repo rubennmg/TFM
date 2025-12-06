@@ -1,6 +1,8 @@
 import torch
 from torch import Tensor
 
+from core import _tensor_utils as T_u
+from core._tensor_utils import CHANNEL_DIM
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -32,10 +34,7 @@ class HsvToRgb(ImageOperation):
         Returns:
             Tensor: Converted image tensor of shape (B, 3, H, W) in RGB format.
         """
-        if x.shape[1] != 3:
-            raise ValueError(
-                "Input tensor must have 3 channels representing HSV image."
-            )
+        T_u.assert_color_image_tensor(x)
 
         hsv_h, hsv_s, hsv_l = x[:, 0:1], x[:, 1:2], x[:, 2:3]
 
@@ -49,13 +48,15 @@ class HsvToRgb(ImageOperation):
 
         rgb = torch.empty_like(x)
 
-        rgb[idx == 0] = torch.cat([_c, _x, _o], dim=1)[idx == 0]
-        rgb[idx == 1] = torch.cat([_x, _c, _o], dim=1)[idx == 1]
-        rgb[idx == 2] = torch.cat([_o, _c, _x], dim=1)[idx == 2]
-        rgb[idx == 3] = torch.cat([_o, _x, _c], dim=1)[idx == 3]
-        rgb[idx == 4] = torch.cat([_x, _o, _c], dim=1)[idx == 4]
-        rgb[idx == 5] = torch.cat([_c, _o, _x], dim=1)[idx == 5]
+        rgb[idx == 0] = torch.cat([_c, _x, _o], dim=CHANNEL_DIM)[idx == 0]
+        rgb[idx == 1] = torch.cat([_x, _c, _o], dim=CHANNEL_DIM)[idx == 1]
+        rgb[idx == 2] = torch.cat([_o, _c, _x], dim=CHANNEL_DIM)[idx == 2]
+        rgb[idx == 3] = torch.cat([_o, _x, _c], dim=CHANNEL_DIM)[idx == 3]
+        rgb[idx == 4] = torch.cat([_x, _o, _c], dim=CHANNEL_DIM)[idx == 4]
+        rgb[idx == 5] = torch.cat([_c, _o, _x], dim=CHANNEL_DIM)[idx == 5]
 
         rgb += _m
+
+        T_u.assert_color_image_tensor(rgb)
 
         return rgb

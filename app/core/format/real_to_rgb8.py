@@ -1,6 +1,8 @@
 import torch
 from torch import Tensor
+from torchvision.transforms import functional as F
 
+from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -32,12 +34,10 @@ class RealToRGB8(ImageOperation):
         Returns:
             Tensor: Image tensor in RGB8 format of shape (B, C, H, W).
         """
-        if x.dtype != torch.float32 and x.dtype != torch.float64:
-            raise ValueError(
-                "Input tensor must be of real-valued type (float32 or float64)."
-            )
+        T_u.assert_real_valued_tensor(x)
 
-        x_clamped = x.clamp(0.0, 1.0)
-        x_rgb8 = torch.mul(x_clamped, 255.0).round().to(torch.uint8)
+        x_rgb8 = F.convert_image_dtype(x, dtype=torch.uint8)
+
+        T_u.assert_integer_valued_tensor(x_rgb8)
 
         return x_rgb8

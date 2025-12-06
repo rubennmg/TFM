@@ -1,5 +1,5 @@
-import torch.nn.functional as F
 from torch import Tensor
+from torchvision.transforms import functional as F
 
 from core.image_operation import ImageOperation
 from core.registry import register_operation
@@ -43,7 +43,7 @@ class MedianFilter(ImageOperation):
         k = self.kernel_size
 
         pad = k // 2
-        x_padded = F.pad(x, (pad, pad, pad, pad), mode="reflect")
+        x_padded = F.pad(x, [pad, pad, pad, pad])
 
         patches = x_padded.unfold(2, k, 1).unfold(3, k, 1)
         patches = patches.contiguous().view(b, c, h, w, k * k)

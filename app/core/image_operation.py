@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 
 from torch import Tensor
 
+from core import _tensor_utils as T_u
+
 
 class ImageOperation(ABC):
     """
@@ -31,25 +33,11 @@ class ImageOperation(ABC):
         Returns:
             Tensor: The processed image tensor.
         """
-        if not isinstance(x, Tensor):
-            raise TypeError(f"ImageOp expected Tensor, got {type(x)}")
-
-        if x.ndim != 4:
-            raise ValueError(
-                f"Expected input tensor of shape (B, C, H, W), got {x.shape}"
-            )
+        T_u.assert_image_tensor(x)
 
         out = self.apply(x)
 
-        if not isinstance(out, Tensor):
-            raise TypeError(
-                f"{self.__class__.__name__}.apply() must return Tensor, got {type(out)}"
-            )
-
-        if out.ndim != 4:
-            raise ValueError(
-                f"Expected output tensor of shape (B, C, H, W), got {out.shape}"
-            )
+        T_u.assert_image_tensor(out)
 
         if not out.is_contiguous():
             out = out.contiguous()

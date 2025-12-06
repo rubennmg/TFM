@@ -1,6 +1,7 @@
 import torch
 from torch import Tensor
 
+from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -32,13 +33,12 @@ class ColorToGray(ImageOperation):
         Returns:
             Tensor: Converted image tensor of shape (B, 1, H, W) in grayscale format.
         """
-        if x.ndim != 4 or x.shape[1] != 3:
-            raise ValueError(
-                "Input tensor must have shape (B, 3, H, W) for color images."
-            )
+        T_u.assert_color_image_tensor(x)
 
         weights = x.new_tensor([0.2989, 0.5870, 0.1140]).view(1, 3, 1, 1)
 
         gray = torch.mul(x, weights).sum(dim=1, keepdim=True).to(x.dtype)
+
+        T_u.assert_grayscale_image_tensor(gray)
 
         return gray

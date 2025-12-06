@@ -1,6 +1,6 @@
-import torch
 from torch import Tensor
 
+from core._tensor_utils import HEIGHT_DIM, WIDTH_DIM
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -8,6 +8,8 @@ from core.registry import register_operation
 @register_operation
 class MinMaxNormalization(ImageOperation):
     """Class to apply Min-Max Normalization to image tensors.
+
+    Normalization is applied **by channel** using the minimum and maximum values.
 
     Args:
         ImageOperation (ImageOperation): Base class for image operations.
@@ -21,7 +23,7 @@ class MinMaxNormalization(ImageOperation):
 
         No additional parameters are required for Min-Max Normalization.
         """
-        pass
+        self.eps = 1e-6  # Small constant to prevent division by zero
 
     def apply(self, x: Tensor) -> Tensor:
         """Apply Min-Max Normalization to the image tensor.
@@ -32,11 +34,10 @@ class MinMaxNormalization(ImageOperation):
         Returns:
             Tensor: Normalized image tensor of shape (B, C, H, W).
         """
-        x_min = x.amin(dim=(2, 3), keepdim=True)
-        x_max = x.amax(dim=(2, 3), keepdim=True)
+        x_min = x.amin(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
+        x_max = x.amax(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
 
-        denom = x_max - x_min
-        denom = torch.where(denom == 0, torch.ones_like(denom), denom)
+        denom = (x_max - x_min).clamp_min(self.eps)
 
         x_normalized = (x - x_min) / denom
 
