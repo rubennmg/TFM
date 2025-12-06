@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
 
 
-class LabelledButtonWidget(QWidget):
+class LabelledButton(QWidget):
     def __init__(self, label_text: str, button_text: str, parent=None):
         super().__init__(parent)
         self.label: QLabel = QLabel(label_text)

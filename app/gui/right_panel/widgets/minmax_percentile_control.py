@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
 )
 
 
-class MinMaxPercentileControlWidget(QWidget):
+class MinMaxPercentileControl(QWidget):
     def __init__(self, controller, parent: QWidget | None = None):
         super().__init__(parent)
         self.controller = controller

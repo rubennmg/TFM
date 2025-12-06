@@ -3,8 +3,8 @@ from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QImage, QPixmap, QWheelEvent
 from PyQt6.QtWidgets import QScrollArea, QTabWidget, QVBoxLayout, QWidget
 
-from gui.image_viewer.widgets.image_canvas_widget import ImageCanvas
-from gui.image_viewer.widgets.image_info_widget import ImageInfoWidget
+from gui.image_viewer.widgets.image_canvas import ImageCanvas
+from gui.image_viewer.widgets.image_info import ImageInfo
 from gui.image_viewer.widgets.operation_logger import OperationLogger
 from models.image import Image
 
@@ -24,7 +24,7 @@ class ImageViewer(QWidget):
     def __setup_ui(self) -> None:
         layout: QVBoxLayout = QVBoxLayout()
 
-        self.info_widget: ImageInfoWidget = ImageInfoWidget()
+        self.info_widget: ImageInfo = ImageInfo()
         self.logger_widget: OperationLogger = OperationLogger()
 
         self.image_canvas: ImageCanvas = ImageCanvas()

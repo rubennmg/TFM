@@ -2,15 +2,15 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QButtonGroup,
     QHBoxLayout,
+    QLabel,
     QPushButton,
     QRadioButton,
     QVBoxLayout,
     QWidget,
-    QLabel,
 )
 
 
-class FlipControlWidget(QWidget):
+class FlipControl(QWidget):
     def __init__(self, controller, parent: QWidget | None = None):
         super().__init__(parent)
         self.controller = controller

@@ -7,17 +7,17 @@ from PyQt6.QtWidgets import (
 )
 
 from gui.right_panel.widgets.collapsible_section import CollapsibleSection
-from gui.right_panel.widgets.debayer_control import DebayerControlWidget
-from gui.right_panel.widgets.filter_control import FilterControlWidget
-from gui.right_panel.widgets.flip_control import FlipControlWidget
-from gui.right_panel.widgets.minmax_control import MinMaxControlWidget
-from gui.right_panel.widgets.minmax_percentile_control import (
-    MinMaxPercentileControlWidget,
-)
+from gui.right_panel.widgets.color_control import ColorControl
+from gui.right_panel.widgets.debayer_control import DebayerControl
+from gui.right_panel.widgets.filter_control import FilterControl
+from gui.right_panel.widgets.flip_control import FlipControl
 from gui.right_panel.widgets.median_filter_control import (
-    MedianFilterControlWidget,
+    MedianFilterControl,
 )
-from gui.right_panel.widgets.color_control import ColorControlWidget
+from gui.right_panel.widgets.minmax_control import MinMaxControl
+from gui.right_panel.widgets.minmax_percentile_control import (
+    MinMaxPercentileControl,
+)
 from models.float_param_spec import FloatParamSpec
 
 
@@ -32,11 +32,11 @@ class RightPanel(QWidget):
         title: str,
         operation_name: str,
         params: list[FloatParamSpec],
-    ) -> FilterControlWidget:
-        return FilterControlWidget(title, self.controller, operation_name, params, self)
+    ) -> FilterControl:
+        return FilterControl(title, self.controller, operation_name, params, self)
 
-    def _color_widget(self, title: str, operation_name: str) -> ColorControlWidget:
-        return ColorControlWidget(title, self.controller, operation_name, self)
+    def _color_widget(self, title: str, operation_name: str) -> ColorControl:
+        return ColorControl(title, self.controller, operation_name, self)
 
     def _make_section(self, title: str, widgets: list[QWidget]) -> CollapsibleSection:
         container = QWidget()
@@ -78,7 +78,7 @@ class RightPanel(QWidget):
                 default=0,
             ),
         ]
-        self.sigmoid_widget: FilterControlWidget = self._filter_widget(
+        self.sigmoid_widget: FilterControl = self._filter_widget(
             "Sigmoid contrast", "SigmoidContrast", sig_params
         )
         self.sigmoid_widget.setToolTip("Adjust image contrast using a sigmoid function")
@@ -102,13 +102,13 @@ class RightPanel(QWidget):
                 default=1.0,
             ),
         ]
-        self.gaussian_widget: FilterControlWidget = self._filter_widget(
+        self.gaussian_widget: FilterControl = self._filter_widget(
             "Gaussian Filter", "GaussianFilter", gaussian_params
         )
         self.gaussian_widget.setToolTip("Apply Gaussian filter to smooth the image")
 
         # MEDIAN FILTER CONTROL
-        self.median_widget = MedianFilterControlWidget(self.controller, self)
+        self.median_widget = MedianFilterControl(self.controller, self)
 
         # GAMMA ADJUSTMENT CONTROL
         gamma_params: list[FloatParamSpec] = [
@@ -129,43 +129,41 @@ class RightPanel(QWidget):
                 default=1.0,
             ),
         ]
-        self.gamma_widget: FilterControlWidget = self._filter_widget(
+        self.gamma_widget: FilterControl = self._filter_widget(
             "Gamma Adjustment", "GammaAdjustment", gamma_params
         )
         self.gamma_widget.setToolTip("Adjust image brightness using gamma correction")
 
         # COLOR TO GRAYSCALE CONTROL
-        self.color_to_gray_widget: ColorControlWidget = self._color_widget(
+        self.color_to_gray_widget: ColorControl = self._color_widget(
             "Color to Grayscale", "ColorToGray"
         )
         self.color_to_gray_widget.setToolTip("Convert color image to grayscale")
 
         # GRAYSCALE TO COLOR CONTROL
-        self.gray_to_color_widget: ColorControlWidget = self._color_widget(
+        self.gray_to_color_widget: ColorControl = self._color_widget(
             "Grayscale to Color", "GrayToColor"
         )
         self.gray_to_color_widget.setToolTip("Convert grayscale image to color")
 
         # RGB TO HSV CONTROL
-        self.rgb_to_hsv_widget: ColorControlWidget = self._color_widget(
+        self.rgb_to_hsv_widget: ColorControl = self._color_widget(
             "RGB to HSV", "RgbToHsv"
         )
 
         # HSV TO RGB CONTROL
-        self.hsv_to_rgb_widget: ColorControlWidget = self._color_widget(
+        self.hsv_to_rgb_widget: ColorControl = self._color_widget(
             "HSV to RGB", "HsvToRgb"
         )
 
         # MIN-MAX NORMALIZATION CONTROL
-        self.minmax_widget = MinMaxControlWidget(self.controller, self)
+        self.minmax_widget = MinMaxControl(self.controller, self)
 
         # MIN-MAX PERCENTILE NORMALIZATION CONTROL
-        self.minmax_percentile_widget = MinMaxPercentileControlWidget(
-            self.controller, self
-        )
+        self.minmax_percentile_widget = MinMaxPercentileControl(self.controller, self)
 
         # FLIP CONTROL
-        self.flip_widget = FlipControlWidget(self.controller, self)
+        self.flip_widget = FlipControl(self.controller, self)
 
         # ROTATE CONTROL
         rotation_params: list[FloatParamSpec] = [
@@ -178,23 +176,23 @@ class RightPanel(QWidget):
                 default=0.0,
             ),
         ]
-        self.rotate_widget: FilterControlWidget = self._filter_widget(
+        self.rotate_widget: FilterControl = self._filter_widget(
             "Image Rotation", "Rotate", rotation_params
         )
         self.rotate_widget.setToolTip("Rotate image by a specified angle")
 
         # REAL TO RGB8 CONTROL
-        self.real_to_rgb8_widget: ColorControlWidget = self._color_widget(
+        self.real_to_rgb8_widget: ColorControl = self._color_widget(
             "Real to RGB8", "RealToRGB8"
         )
 
         # RGB8 TO REAL CONTROL
-        self.rgb8_to_real_widget: ColorControlWidget = self._color_widget(
+        self.rgb8_to_real_widget: ColorControl = self._color_widget(
             "RGB8 to Real", "RGB8ToReal"
         )
 
         # DEBAYER CONTROL
-        self.debayer_widget: DebayerControlWidget = DebayerControlWidget(
+        self.debayer_widget: DebayerControl = DebayerControl(
             parent=self, controller=self.controller
         )
 

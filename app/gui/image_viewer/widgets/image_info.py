@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QGridLayout, QLabel, QWidget
 from models.image import Image
 
 
-class ImageInfoWidget(QWidget):
+class ImageInfo(QWidget):
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self.setObjectName("imageInfoPanel")

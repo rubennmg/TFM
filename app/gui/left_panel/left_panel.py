@@ -2,9 +2,9 @@ import numpy as np
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QFileDialog, QVBoxLayout, QWidget
 
-from gui.left_panel.widgets.labelled_button_widget import LabelledButtonWidget
-from gui.left_panel.widgets.rgb_histogram_widget import RgbHistogramWidget
-from gui.left_panel.widgets.operation_history_widget import OperationHistoryWidget
+from gui.left_panel.widgets.labelled_button import LabelledButton
+from gui.left_panel.widgets.operation_history import OperationHistory
+from gui.left_panel.widgets.rgb_histogram import RgbHistogram
 
 
 class LeftPanel(QWidget):
@@ -18,25 +18,23 @@ class LeftPanel(QWidget):
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # rgb histogram
-        self.histogram: RgbHistogramWidget = RgbHistogramWidget(self, height=180)
+        self.histogram: RgbHistogram = RgbHistogram(self, height=180)
         layout.addWidget(self.histogram)
 
         # operations history (expand to fill available space)
-        self.history: OperationHistoryWidget = OperationHistoryWidget(self)
+        self.history: OperationHistory = OperationHistory(self)
 
         # load / reset controls
-        self.load_control: LabelledButtonWidget = LabelledButtonWidget(
+        self.load_control: LabelledButton = LabelledButton(
             "Load image:", "Open file..."
         )
         self.load_control.clicked.connect(self._on_load_clicked)
 
-        self.reset_control: LabelledButtonWidget = LabelledButtonWidget(
-            "Reset:", "Reset image"
-        )
+        self.reset_control: LabelledButton = LabelledButton("Reset:", "Reset image")
         self.reset_control.clicked.connect(self._on_reset_clicked)
 
         # operations profile
-        self.operations_profile_control: LabelledButtonWidget = LabelledButtonWidget(
+        self.operations_profile_control: LabelledButton = LabelledButton(
             "Operations profile:", "Generate profile"
         )
         self.operations_profile_control.clicked.connect(

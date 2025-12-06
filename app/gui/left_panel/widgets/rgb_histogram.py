@@ -4,7 +4,7 @@ from PyQt6.QtGui import QColor, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import QSizePolicy, QWidget
 
 
-class RgbHistogramWidget(QWidget):
+class RgbHistogram(QWidget):
     """Small widget to display an RGB histogram.
 
     Usage:
@@ -26,7 +26,6 @@ class RgbHistogramWidget(QWidget):
         self._pen_b: QPen = QPen(QColor(80, 160, 255, 220), 1)
         self._border_pen: QPen = QPen(QColor(220, 220, 220, 120), 1)
 
-        # expand horizontally, fixed height for side-panel placement
         self.setMinimumWidth(100)
         self.setFixedHeight(height)
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)

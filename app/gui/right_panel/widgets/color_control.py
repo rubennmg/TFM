@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
 
 
-class ColorControlWidget(QWidget):
+class ColorControl(QWidget):
     def __init__(
         self, title: str, controller, operation_name: str, parent: QWidget | None = None
     ):

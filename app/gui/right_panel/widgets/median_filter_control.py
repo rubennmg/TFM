@@ -1,15 +1,15 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QLabel,
-    QSpinBox,
-    QPushButton,
     QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
 
 
-class MedianFilterControlWidget(QWidget):
+class MedianFilterControl(QWidget):
     def __init__(self, controller, parent: QWidget | None = None):
         super().__init__(parent)
         self.controller = controller
