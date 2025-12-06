@@ -329,3 +329,231 @@
                 -   `debayer_control`
 -   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
 -   [ ] Bug: ventana resize tras cargar imagen
+
+## 01/12/2025
+
+## Notes
+
+## TODOs
+
+-   [ ] Tests de debayers <-> standby de momento
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Simplificar código de `right_panel`
+-   [x] Reset de controles
+-   [x] Creación de perfil de configuración
+-   [x] Historial de operaciones
+-   [x] Bug `image_viewer`
+-   [x] Añadir espacios de colores. Gestión de espacios de colores
+-   [ ] Optimización de memoria GPU
+-   [ ] `show_warning` + `warning_dialog`
+-   [ ] Gestión de copias sobre tensor en modelo `image`
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [x] Preparar diagrama de Arquitectura COMPLETO:
+    -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
+    -   IMAGE LOADERS - IMAGE FORMATS:
+        -   `raw_loader`
+        -   `rawpy_loader` - `rawpy` :
+            -   `arw_loader`
+            -   `dng_loader`
+        -   `jpg_loader` - `PIL`
+    -   GUI:
+        -   `main_window`
+            -   `left_panel`
+                -   `rgb_histogram`
+                -   `load_control`
+                -   `reset_control`
+            -   `image_viewer`
+                -   `image_canvas` (scrollable)
+                -   `image_info`
+            -   `right_panel`
+                -   `[operation_control]`
+                -   `debayer_control`
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+## 02/12/2025
+
+## Notes
+
+-   Investigar sobre Pipelines
+-   Adición de operaciones dinámica sobre historial de operaciones
+-   Tests "sencillos"
+-   `image_info` en zona inferior
+-   Añadir pestaña de log
+-   Benchmark pytest/pytorch
+-   Comenzar a redactar
+
+## TODOs
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Simplificar código de `right_panel`
+-   [x] Reset de controles
+-   [x] Creación de perfil de configuración
+-   [x] Historial de operaciones
+-   [x] Bug `image_viewer`
+-   [x] Añadir espacios de colores. Gestión de espacios de colores
+-   [ ] Optimización de memoria GPU
+-   [ ] `show_warning` + `warning_dialog`
+-   [ ] Gestión de copias sobre tensor en modelo `image`
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [x] Preparar diagrama de Arquitectura COMPLETO:
+    -   `Image` -> `image_loader` -> `image_operation` -> `Controller` -> `GUI`
+    -   IMAGE LOADERS - IMAGE FORMATS:
+        -   `raw_loader`
+        -   `rawpy_loader` - `rawpy` :
+            -   `arw_loader`
+            -   `dng_loader`
+        -   `jpg_loader` - `PIL`
+    -   GUI:
+        -   `main_window`
+            -   `left_panel`
+                -   `rgb_histogram`
+                -   `load_control`
+                -   `reset_control`
+            -   `image_viewer`
+                -   `image_canvas` (scrollable)
+                -   `image_info`
+            -   `right_panel`
+                -   `[operation_control]`
+                -   `debayer_control`
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+# 03/12/2025
+
+## Notes
+
+## TODOs
+
+## TODOs
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Readme sencillo
+-   [ ] Optimización de memoria GPU
+-   [ ] `show_warning` + `warning_dialog`
+-   [ ] Gestión de copias sobre tensor en modelo `image`
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+# 04/12/2025
+
+## Notes
+
+## TODOs
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Módulo `core._tensor_utils` inspirado en `_functional_tensor` de torchvision
+-   [ ] Adaptar operaciones para que usen `_tensor_utils`
+-   [ ] Optimización de memoria GPU
+-   [ ] `show_warning` + `warning_dialog`
+-   [ ] Gestión de copias sobre tensor en modelo `image`
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+# 06/12/2025
+
+## Notes
+
+-   Investigar sobre Pipelines
+-   Adición de operaciones dinámica sobre historial de operaciones
+-   Tests "sencillos"
+-   `image_info` en zona inferior
+-   Añadir pestaña de log
+-   Benchmark pytest/pytorch
+-   Comenzar a redactar
+
+## TODOs
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Adaptar operaciones para que usen `_tensor_utils`
+-   [ ] Modificar posición de `image_info` en `image_viewer`
+-   [ ] Añadir pestaña de log de operaciones
+-   [ ] Nueva forma de gestionar la adición de operaciones dinámicamente
+-   [ ] Optimización de memoria GPU
+-   [ ] `show_warning` + `warning_dialog`
+-   [ ] Gestión de copias sobre tensor en modelo `image`
+-   [ ] Estructura de tests
+-   [ ] Tests
+-   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
