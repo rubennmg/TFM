@@ -15,7 +15,6 @@
 #imageInfoPanel {
     border: 0.05em solid #555;
     border-radius: 0.1em;
-    margin-bottom: 0.6em;
 }
 
 #imageInfoTitle {

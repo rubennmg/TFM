@@ -8,7 +8,7 @@ class ImageInfo(QWidget):
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self.setObjectName("imageInfoPanel")
-        self.setContentsMargins(10, 8, 10, 16)
+        self.setContentsMargins(10, 8, 10, 8)
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self._info_fields: dict[str, QLabel] = {}
         self.__setup_ui()
