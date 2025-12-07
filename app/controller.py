@@ -86,6 +86,13 @@ class Controller:
 
         return chosen
 
+    def _free_cuda_cache(self) -> None:
+        if torch.cuda.is_available():
+            try:
+                torch.cuda.empty_cache()
+            except Exception:
+                pass
+
     def _clear_snapshots(self) -> None:
         for _, t, _ in self._snapshots:
             try:
@@ -94,12 +101,7 @@ class Controller:
                 pass
 
         self._snapshots.clear()
-
-        if torch.cuda.is_available():
-            try:
-                torch.cuda.empty_cache()
-            except Exception:
-                pass
+        self._free_cuda_cache()
 
     def _recompute_from(self, start_op_index: int) -> None:
         if self.image is None:
@@ -167,11 +169,7 @@ class Controller:
         self.image.operation_result_tensor = current.detach()
         self.image.tensor = self.image.operation_result_tensor.clone().to(self._device)
 
-        if torch.cuda.is_available():
-            try:
-                torch.cuda.empty_cache()
-            except Exception:
-                pass
+        self._free_cuda_cache()
 
     def get_image_extensions(self) -> list[str]:
         return image_loader.get_supported_extensions()
@@ -318,6 +316,7 @@ class Controller:
         if self.window:
             self.window.right_panel.pop_operation_control()
 
+        self._free_cuda_cache()
         self.__update_viewer()
 
     def export_profile(self, path: str) -> None:

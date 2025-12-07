@@ -1,4 +1,4 @@
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import QPoint, Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QAbstractItemView,
     QHBoxLayout,
@@ -127,8 +127,13 @@ class OperationPipeline(QWidget):
         if not has_entries:
             return
 
-        pos = self._add_button.mapToGlobal(self._add_button.rect().bottomLeft())
+        size_hint = menu.sizeHint()
+        button_top_left = self._add_button.mapToGlobal(
+            self._add_button.rect().topLeft()
+        )
+        pos = button_top_left - QPoint(0, size_hint.height() + 4)
         action = menu.exec(pos)
+
         if action is None:
             return
 
