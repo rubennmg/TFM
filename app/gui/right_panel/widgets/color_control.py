@@ -4,13 +4,19 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
 
 class ColorControl(QWidget):
     def __init__(
-        self, title: str, controller, operation_name: str, parent: QWidget | None = None
+        self,
+        title: str,
+        controller,
+        operation_name: str,
+        operation_index: int,
+        parent: QWidget | None = None,
     ):
         super().__init__(parent)
 
         self.title = title
         self.controller = controller
         self.operation_name = operation_name
+        self.operation_index = operation_index
 
         self.setObjectName("operationControl")
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
@@ -30,7 +36,9 @@ class ColorControl(QWidget):
         self.setLayout(layout)
 
     def _on_apply_clicked(self) -> None:
-        self.controller.apply_operation(self.operation_name)
+        self.controller.apply_operation(
+            self.operation_name, operation_idx=self.operation_index
+        )
 
     def reset(
         self,

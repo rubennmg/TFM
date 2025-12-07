@@ -135,6 +135,7 @@ class FilterControl(QWidget):
         title: str,
         controller,
         operation_name: str,
+        operation_index: int,
         params: list[FloatParamSpec] | None = None,
         parent: QWidget | None = None,
     ) -> None:
@@ -142,6 +143,7 @@ class FilterControl(QWidget):
 
         self.controller = controller
         self.operation_name = operation_name
+        self.operation_index = operation_index
 
         self._container = QWidget()
         self._container.setObjectName("operationControl")
@@ -202,7 +204,11 @@ class FilterControl(QWidget):
     def _on_interaction_finished(self) -> None:
         if self._suppress_emit:
             return
-        self.controller.apply_operation(self.operation_name, **self.get_params())
+        self.controller.apply_operation(
+            self.operation_name,
+            operation_idx=self.operation_index,
+            **self.get_params(),
+        )
 
     def reset_controls_to_default(self) -> None:
         self._suppress_emit = True

@@ -10,9 +10,10 @@ from PyQt6.QtWidgets import (
 
 
 class MinMaxPercentileControl(QWidget):
-    def __init__(self, controller, parent: QWidget | None = None):
+    def __init__(self, controller, operation_index: int, parent: QWidget | None = None):
         super().__init__(parent)
         self.controller = controller
+        self.operation_index = operation_index
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setObjectName("operationControl")
         self.setToolTip("Apply Min-Max Percentile Normalization to the image")
@@ -78,6 +79,7 @@ class MinMaxPercentileControl(QWidget):
 
         self.controller.apply_operation(
             "MinMaxPercentileNormalization",
+            operation_idx=self.operation_index,
             lower_percentile=lower,
             upper_percentile=upper,
         )

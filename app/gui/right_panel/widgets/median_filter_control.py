@@ -10,9 +10,10 @@ from PyQt6.QtWidgets import (
 
 
 class MedianFilterControl(QWidget):
-    def __init__(self, controller, parent: QWidget | None = None):
+    def __init__(self, controller, operation_index: int, parent: QWidget | None = None):
         super().__init__(parent)
         self.controller = controller
+        self.operation_index = operation_index
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setObjectName("operationControl")
         self.setToolTip("Apply Median Filter to reduce impulse noise")
@@ -53,7 +54,9 @@ class MedianFilterControl(QWidget):
             k = max(1, k - 1)
             self.kernel_spin.setValue(k)
 
-        self.controller.apply_operation("MedianFilter", kernel_size=k)
+        self.controller.apply_operation(
+            "MedianFilter", operation_idx=self.operation_index, kernel_size=k
+        )
 
     def reset(self) -> None:
         self.kernel_spin.setValue(3)

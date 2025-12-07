@@ -11,9 +11,10 @@ from PyQt6.QtWidgets import (
 
 
 class FlipControl(QWidget):
-    def __init__(self, controller, parent: QWidget | None = None):
+    def __init__(self, controller, operation_index: int, parent: QWidget | None = None):
         super().__init__(parent)
         self.controller = controller
+        self.operation_index = operation_index
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setToolTip("Flip the image horizontally or vertically")
         self.setObjectName("operationControl")
@@ -48,9 +49,13 @@ class FlipControl(QWidget):
 
     def _on_apply(self):
         if self.horizontal_rb.isChecked():
-            self.controller.apply_operation("Flip", horizontal=True)
+            self.controller.apply_operation(
+                "Flip", operation_idx=self.operation_index, horizontal=True
+            )
         else:
-            self.controller.apply_operation("Flip", horizontal=False)
+            self.controller.apply_operation(
+                "Flip", operation_idx=self.operation_index, horizontal=False
+            )
 
     def reset(self) -> None:
         self.horizontal_rb.setChecked(True)

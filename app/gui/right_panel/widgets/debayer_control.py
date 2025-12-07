@@ -21,11 +21,13 @@ class DebayerControl(QWidget):
     def __init__(
         self,
         controller,
+        operation_index: int,
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
 
         self.controller = controller
+        self.operation_index = operation_index
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setToolTip("Apply debayering to a RAW image")
         self._title = QLabel("Debayer Demosaicing")
@@ -69,7 +71,9 @@ class DebayerControl(QWidget):
         key = self.current_algorithm()
         if key is None:
             return
-        self.controller.apply_operation("Debayer", algorithm_name=key)
+        self.controller.apply_operation(
+            "Debayer", operation_idx=self.operation_index, algorithm_name=key
+        )
 
     def reset(self) -> None:
         if self._selector.count() > 0:

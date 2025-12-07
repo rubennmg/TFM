@@ -3,9 +3,10 @@ from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout, QWidget
 
 
 class MinMaxControl(QWidget):
-    def __init__(self, controller, parent: QWidget | None = None):
+    def __init__(self, controller, operation_index: int, parent: QWidget | None = None):
         super().__init__(parent)
         self.controller = controller
+        self.operation_index = operation_index
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setToolTip("Apply Min-Max Normalization to the image")
         self.setObjectName("operationControl")
@@ -26,7 +27,9 @@ class MinMaxControl(QWidget):
         self.setLayout(layout)
 
     def _on_apply(self):
-        self.controller.apply_operation("MinMaxNormalization")
+        self.controller.apply_operation(
+            "MinMaxNormalization", operation_idx=self.operation_index
+        )
 
     def reset(self) -> None:
         pass
