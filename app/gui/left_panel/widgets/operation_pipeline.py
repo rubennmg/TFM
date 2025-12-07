@@ -53,13 +53,13 @@ class OperationPipeline(QWidget):
         controls_row.setSpacing(2)
 
         self._add_button = QPushButton("+")
-        self._add_button.setStyleSheet("width: 30px; height: 18px;")
+        self._add_button.setObjectName("addOperationButton")
         self._add_button.setToolTip("Add operation to pipeline")
         self._add_button.clicked.connect(self._on_add_clicked)
         self._add_button.setEnabled(False)
 
         self._remove_button = QPushButton("-")
-        self._remove_button.setStyleSheet("width: 30px; height: 18px;")
+        self._remove_button.setObjectName("removeOperationButton")
         self._remove_button.setToolTip("Remove last operation")
         self._remove_button.clicked.connect(self.remove_operation_requested.emit)
         self._remove_button.setEnabled(False)
