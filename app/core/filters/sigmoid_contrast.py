@@ -13,9 +13,6 @@ class SigmoidContrast(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target_tensor: str = "original_tensor"
-    updates_debayer_state: bool = False
-
     def __init__(self, gain: float = 1.0, cutoff: float = 0.5):
         """Class constructor.
 

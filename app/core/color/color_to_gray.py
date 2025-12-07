@@ -14,9 +14,6 @@ class ColorToGray(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target_tensor = "tensor"
-    updates_debayer_state = False
-
     def __init__(self):
         """Class constructor.
 

@@ -35,6 +35,7 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
     return Image(
         tensor=tensor,
         original_tensor=tensor.clone(),
+        operation_result_tensor=tensor.clone(),
         path=path,
         name=path.split("/")[-1],
         image_format=fmt,

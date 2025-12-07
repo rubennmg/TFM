@@ -11,9 +11,6 @@ from core.registry import register_operation
 class GrayToColor(ImageOperation):
     """Convert grayscale images to color images."""
 
-    target_tensor = "tensor"
-    updates_debayer_state = False
-
     def __init__(self, mode: str = "heat"):
         if mode not in {"repeat", "heat"}:
             raise ValueError("Mode should be 'repeat' or 'heat'.")

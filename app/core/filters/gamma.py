@@ -13,9 +13,6 @@ class GammaAdjustment(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target_tensor = "original_tensor"
-    updates_debayer_state = False
-
     def __init__(self, c: float = 1.0, gamma: float = 1.0):
         """Class constructor.
 

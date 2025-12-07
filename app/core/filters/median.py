@@ -13,9 +13,6 @@ class MedianFilter(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target_tensor: str = "tensor"
-    updates_debayer_state: bool = False
-
     def __init__(self, kernel_size: int = 3):
         """Class constructor.
 

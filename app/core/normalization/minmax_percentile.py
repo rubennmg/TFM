@@ -16,9 +16,6 @@ class MinMaxPercentileNormalization(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target_tensor = "tensor"
-    updates_debayer_state = False
-
     def __init__(self, lower_percentile: float = 0.02, upper_percentile: float = 0.98):
         """Class constructor."""
         if not (0.0 <= lower_percentile < upper_percentile <= 1.0):

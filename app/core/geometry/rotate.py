@@ -17,9 +17,6 @@ class Rotate(ImageOperation):
         ValueError: If angle is not between -360 and 360 degrees.
     """
 
-    target_tensor: str = "tensor"
-    updates_debayer_state: bool = False
-
     def __init__(self, angle: float):
         """Class constructor.
 

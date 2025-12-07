@@ -13,9 +13,6 @@ class Flip(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target_tensor = "tensor"
-    updates_debayer_state = False
-
     def __init__(self, horizontal: bool = True):
         """Class constructor.
 

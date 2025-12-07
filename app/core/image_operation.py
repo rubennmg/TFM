@@ -12,12 +12,6 @@ class ImageOperation(ABC):
     Every Image transformation in the system must inherit from this class.
     """
 
-    # Which tensor to operate on in the Image dataclass
-    target_tensor: str = "tensor"
-
-    # Whether this operation updates the debayered state of the Image dataclass
-    updates_debayer_state: bool = False
-
     def __call__(self, x: Tensor) -> Tensor:
         """Public entry point.
 

@@ -14,9 +14,6 @@ class GaussianFilter(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    target_tensor = "original_tensor"
-    updates_debayer_state = False
-
     def __init__(self, kernel_size: int = 5, sigma: float = 1.0):
         """Class constructor.
 

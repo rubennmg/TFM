@@ -23,7 +23,6 @@ class CollapsibleSection(QWidget):
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
         )
 
-        # Container without scrolling: content will take needed height
         self._area = QFrame()
         self._area.setFrameShape(QFrame.Shape.NoFrame)
         self._area.setVisible(False)
