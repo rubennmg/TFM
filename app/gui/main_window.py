@@ -34,13 +34,16 @@ class MainWindow(QMainWindow):
 
     def reset_image_view(self) -> None:
         self.viewer.reset_zoom()
-        self.right_panel.reset_controls_to_default()
+        self.right_panel.clear_pipeline_controls()
 
-    def update_operation_history(self, operations_profile: list[dict]) -> None:
-        self.left_panel.update_history_full(operations_profile)
+    def update_operation_pipeline(self, operations_profile: list[dict]) -> None:
+        self.left_panel.update_pipeline_full(operations_profile)
 
-    def clear_operation_history(self) -> None:
-        self.left_panel.clear_history()
+    def clear_operation_pipeline(self) -> None:
+        self.left_panel.clear_pipeline()
+
+    def set_pipeline_enabled(self, enabled: bool) -> None:
+        self.left_panel.set_pipeline_enabled(enabled)
 
     def append_operation_log(self, entry: str) -> None:
         self.viewer.append_log_entry(entry)

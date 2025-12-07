@@ -40,13 +40,12 @@ class ImageViewer(QWidget):
             viewport.installEventFilter(self)
 
         self.tabs: QTabWidget = QTabWidget()
-        self.tabs.setFixedHeight(150)
         self.tabs.setObjectName("infoLoggerTabs")
         self.tabs.addTab(self.info_widget, "Image Info")
         self.tabs.addTab(self.logger_widget, "Logger")
 
-        layout.addWidget(self.scroll_area)
-        layout.addWidget(self.tabs)
+        layout.addWidget(self.scroll_area, stretch=5)
+        layout.addWidget(self.tabs, stretch=1)
 
         self.setLayout(layout)
 
