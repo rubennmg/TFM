@@ -547,13 +547,69 @@
     -   [ ] Histogram Equalization
     -   [ ] Unsharp Masking
 -   [x] Adaptar operaciones para que usen `_tensor_utils`
--   [ ] Modificar posición de `image_info` en `image_viewer`
--   [ ] Añadir pestaña de log de operaciones
--   [ ] Nueva forma de gestionar la adición de operaciones dinámicamente
+-   [x] Modificar posición de `image_info` en `image_viewer`
+-   [x] Añadir pestaña de log de operaciones
+-   [ ] Controles de filtros -> aplicar filtros al modificar valores de los spins
+-   [ ] Estructurar memoria
+-   [ ] Empezar a redactar
 -   [ ] Optimización de memoria GPU
+-   [ ] Estudio de nuevas operaciones directamente sobre `torchvision`
 -   [ ] `show_warning` + `warning_dialog`
 -   [ ] Gestión de copias sobre tensor en modelo `image`
 -   [ ] Estructura de tests
 -   [ ] Tests
--   [ ] Modelo para perfil de configuración - json. Interesante usar `pydantic`
+-   [ ] Bug: ventana resize tras cargar imagen
+
+# 07/12/2025
+
+## Notes
+
+-   Investigar sobre Pipelines
+-   Adición de operaciones dinámica sobre historial de operaciones
+-   Tests "sencillos"
+-   `image_info` en zona inferior
+-   Añadir pestaña de log
+-   Benchmark pytest/pytorch
+-   Comenzar a redactar
+
+## TODOs
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Nueva forma de gestionar la adición de operaciones dinámicamente
+    -   [x] Historial de operaciones -> Pipeline de operaciones
+    -   [x] Menú de operaciones -> añadir/quitar operaciones del pipeline
+    -   [x] Adición dinámica de controles en el `right_panel` según operación seleccionada
+    -   [x] Modificación en Controller para gestionar el pipeline de operaciones
+        -   [x] Gestión de tensores en modelo Image
+        -   [x] Añadir índices de operaciones aplicadas
+        -   [x] Controller gestionando caché de tensores y recomputación según operaciones aplicadas
+-   [ ] Depurar espacios de color
+-   [ ] Hacer más pruebas con imágenes RAW
+-   [ ] Debayer -> `algorithm_name` directamente en menú
+-   [ ] Modificar controles GUI
+-   [ ] Pipelines predefinidos para imágenes RAW en menú
+-   [ ] Controles de filtros -> aplicar filtros al modificar valores de los spins
+-   [ ] Estructurar memoria
+-   [ ] Empezar a redactar
+-   [ ] Optimización de memoria GPU
+-   [ ] Estudio de nuevas operaciones directamente sobre `torchvision`
+-   [ ] `show_warning` + `warning_dialog`
+-   [ ] Gestión de copias sobre tensor en modelo `image`
+-   [ ] Estructura de tests
+-   [ ] Tests
 -   [ ] Bug: ventana resize tras cargar imagen

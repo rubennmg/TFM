@@ -9,29 +9,29 @@ El resultado es una imagen donde cada canal es tipo real con rango 0-1
 
 > [!NOTE] Todas las operaciones de transformación deben asumir el formato de imagen en ese rango y tipo. Puede ser en color de tres canales o en escala de grises con un solo canal
 
-## Real -> RGB de 8 bits
+## Real -> RGB de 8 bits ✅
 
 Conversión desde real.
 
 [0, 1] -> A formato RGB con 1 byte por canal.
 
-## RGB -> HSV
+## RGB -> HSV ✅
 
-## HSV -> RGB
+## HSV -> RGB ✅
 
-## Color -> Gris
+## Color -> Gris ✅
 
-## Gris -> Color
+## Gris -> Color✅
 
 ## Transformadores
 
-## Normalización min-max
+## Normalización min-max ✅
 
-## Normalización min-max con percentiles
+## Normalización min-max con percentiles ✅
 
 Cálculo de min/max usando percentiles (p.ej. 1 y 99) para robustez frente a outliers.
 
-## Ajuste gamma
+## Ajuste gamma ✅
 
 ```math
 s = c * r^{gamma}
@@ -39,9 +39,9 @@ s = c * r^{gamma}
 
 ## Ajuste por función sigmoide ✅
 
-## Rotaciones
+## Rotaciones ✅
 
-## Flipping
+## Flipping ✅
 
 Horizontal y/o vertical.
 
@@ -49,11 +49,11 @@ Horizontal y/o vertical.
 
 ## CLAHE (Contrast Limited Adaptive Histogram Equalization)
 
-## Filtro gaussiano
+## Filtro gaussiano ✅
 
 Suavizado mediante convolución con un núcleo gaussiano con parámetro sigma.
 
-## Filtro de mediana
+## Filtro de mediana ✅ (_revisar_)
 
 ## Filtro de paso alto / Realce de bordes (Unsharp Masking)
 
