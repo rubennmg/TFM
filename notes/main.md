@@ -590,6 +590,7 @@
     -   [ ] CLAHE
     -   [ ] Histogram Equalization
     -   [ ] Unsharp Masking
+-   [x] Gestión de copias sobre tensor en modelo `image`
 -   [x] Nueva forma de gestionar la adición de operaciones dinámicamente
     -   [x] Historial de operaciones -> Pipeline de operaciones
     -   [x] Menú de operaciones -> añadir/quitar operaciones del pipeline
@@ -609,7 +610,77 @@
 -   [ ] Optimización de memoria GPU
 -   [ ] Estudio de nuevas operaciones directamente sobre `torchvision`
 -   [ ] `show_warning` + `warning_dialog`
--   [ ] Gestión de copias sobre tensor en modelo `image`
 -   [ ] Estructura de tests
 -   [ ] Tests
 -   [ ] Bug: ventana resize tras cargar imagen
+
+# 08/12/2025
+
+## Notes
+
+## TODOs
+
+### App
+
+#### Code...
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Optimización de memoria GPU
+    -   Incluir `_free_cuda_cache()` en `utils`
+-   [ ] Modificar controles GUI <-- **A ello**
+    -   [ ] `debayer_control` -> No hacen falta cambios
+    -   [ ] `color_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
+    -   [ ] `filter_control` -> No hacen falta cambios
+    -   [ ] `format_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
+    -   [ ] `geometry_control` -> No hacen falta cambios
+    -   [ ] `minmax_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
+    -   [ ] `minmax_percentile_control` -> No hacen falta cambios
+    -   [ ] TODO:
+        -   [ ] Control genérico para operaciones sin parámetros
+            -   Las operaciones de ajuste de color, formato y la operación minmax utilizan este nuevo control
+-   [ ] Depurar gestión de espacios de color
+    -   Hay algún fallo en algún caso
+-   [ ] Hacer más pruebas con imágenes RAW
+    -   De momento parece que todo funciona correctamente
+-   [ ] Debayer -> `algorithm_name` directamente en menú
+    -   Creo que se va a quedar como está ahora mismo, no me disgusta
+-   [ ] Pipelines predefinidos para imágenes RAW en menú
+-   [ ] Estudio de nuevas operaciones directamente sobre módulos de `torchvision`
+    -   `_functional_tensor` de `torchvision` tiene varias operaciones interesantes
+    -   `functional.py` <- **Interesante**
+    -   `transforms.py` <- **Interesante**
+-   [ ] Controles de filtros -> aplicar filtros al modificar valores de los spins
+-   [ ] `show_warning` + `warning_dialog`
+
+#### Tests
+
+-   [ ] Definir estructura de tests
+-   Tests unitarios sencillos para cada operación (quizá también para los `loaders`):
+    -   Comprobar parámetros de entrada
+    -   Comprobar salida comparando un tensor de referencia
+    -   _Tensor (x)_ -> _Operación_ -> _Tensor (y)_ esperado
+
+#### Bugs
+
+-   [ ] Bug: ventana resize tras cargar imagen
+
+### Memoria
+
+-   [ ] Definir plantilla de Latex, mezcla entre mi plantilla y la de la universidad
+-   [ ] Estructurar memoria
+-   [ ] Empezar a redactar
