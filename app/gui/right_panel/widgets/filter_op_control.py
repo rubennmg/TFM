@@ -123,7 +123,7 @@ class _FloatSlider(QWidget):
         self.setValue(self._default)
 
 
-class FilterControl(QWidget):
+class FilterOperationControl(QWidget):
     """Reusable filter operation widget: title + parameters + optional extra widgets.
 
     - Accepts a list of FloatParamSpec instances to create parameters.

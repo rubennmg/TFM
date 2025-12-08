@@ -9,11 +9,11 @@ from PyQt6.QtWidgets import (
 )
 
 from gui.right_panel.widgets.debayer_op_control import DebayerOperationControl
-from gui.right_panel.widgets.filter_control import FilterControl
-from gui.right_panel.widgets.flip_control import FlipControl
-from gui.right_panel.widgets.median_filter_control import MedianFilterControl
-from gui.right_panel.widgets.minmax_percentile_control import (
-    MinMaxPercentileControl,
+from gui.right_panel.widgets.filter_op_control import FilterOperationControl
+from gui.right_panel.widgets.flip_op_control import FlipOperationControl
+from gui.right_panel.widgets.median_op_control import MedianOperationControl
+from gui.right_panel.widgets.minmax_percentile_op_control import (
+    MinMaxPercentileOperationControl,
 )
 from gui.right_panel.widgets.no_param_op_control import NoParamOperationControl
 from models.operation_definition import OperationDefinition, get_operation_definitions
@@ -93,7 +93,7 @@ class RightPanel(QWidget):
         control_type = definition.control_type
 
         factory_map = {
-            "filter": lambda: FilterControl(
+            "filter": lambda: FilterOperationControl(
                 title=definition.label,
                 controller=self.controller,
                 operation_name=definition.name,
@@ -101,17 +101,17 @@ class RightPanel(QWidget):
                 params=definition.params or [],
                 parent=self,
             ),
-            "median": lambda: MedianFilterControl(
+            "median": lambda: MedianOperationControl(
                 controller=self.controller,
                 operation_index=operation_index,
                 parent=self,
             ),
-            "minmax_percentile": lambda: MinMaxPercentileControl(
+            "minmax_percentile": lambda: MinMaxPercentileOperationControl(
                 controller=self.controller,
                 operation_index=operation_index,
                 parent=self,
             ),
-            "flip": lambda: FlipControl(
+            "flip": lambda: FlipOperationControl(
                 controller=self.controller,
                 operation_index=operation_index,
                 parent=self,

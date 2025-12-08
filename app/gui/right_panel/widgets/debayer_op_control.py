@@ -11,7 +11,7 @@ _ALGORITHMS: Iterable[tuple[str, str]] = (
 )
 
 
-class DebayerControl(QWidget):
+class DebayerOperationControl(QWidget):
     """Compound widget with label, selector and apply button for debayering.
 
     Args:

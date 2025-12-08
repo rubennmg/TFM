@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 )
 
 
-class FlipControl(QWidget):
+class FlipOperationControl(QWidget):
     def __init__(self, controller, operation_index: int, parent: QWidget | None = None):
         super().__init__(parent)
         self.controller = controller
