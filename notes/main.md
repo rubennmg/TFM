@@ -642,34 +642,37 @@
     -   [ ] Unsharp Masking
 -   [x] Optimización de memoria GPU
     -   Incluir `_free_cuda_cache()` en `utils`
--   [ ] Modificar controles GUI <-- **A ello**
-    -   [ ] `debayer_control` -> No hacen falta cambios
-    -   [ ] `color_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
-    -   [ ] `filter_control` -> No hacen falta cambios
-    -   [ ] `format_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
-    -   [ ] `geometry_control` -> No hacen falta cambios
-    -   [ ] `minmax_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
-    -   [ ] `minmax_percentile_control` -> No hacen falta cambios
-    -   [ ] TODO:
-        -   [ ] Control genérico para operaciones sin parámetros
+-   [x] Modificar controles GUI
+    -   [x] `debayer_control` -> No hacen falta cambios
+    -   [x] `color_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
+    -   [x] `filter_control` -> No hacen falta cambios
+    -   [x] `format_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
+    -   [x] `geometry_control` -> No hacen falta cambios
+    -   [x] `minmax_control` -> Eliminar botón de aplicar, mostrar texcto informativo de que no necesita parámetros
+    -   [x] `minmax_percentile_control` -> No hacen falta cambios
+    -   [x] TODO:
+        -   [x] Control genérico para operaciones sin parámetros
             -   Las operaciones de ajuste de color, formato y la operación minmax utilizan este nuevo control
--   [ ] Depurar gestión de espacios de color
-    -   Hay algún fallo en algún caso
--   [ ] Hacer más pruebas con imágenes RAW
-    -   De momento parece que todo funciona correctamente
--   [ ] Debayer -> `algorithm_name` directamente en menú
+-   [x] Debayer -> `algorithm_name` directamente en menú
     -   Creo que se va a quedar como está ahora mismo, no me disgusta
+-   [x] Controles de filtros -> aplicar filtros al modificar valores de los spins
 -   [ ] Pipelines predefinidos para imágenes RAW en menú
 -   [ ] Estudio de nuevas operaciones directamente sobre módulos de `torchvision`
     -   `_functional_tensor` de `torchvision` tiene varias operaciones interesantes
     -   `functional.py` <- **Interesante**
     -   `transforms.py` <- **Interesante**
--   [ ] Controles de filtros -> aplicar filtros al modificar valores de los spins
+-   [ ] Depurar gestión de espacios de color
+    -   Hay algún fallo en algún caso
+-   [ ] Hacer más pruebas con imágenes RAW
+    -   De momento parece que todo funciona correctamente
 -   [ ] `show_warning` + `warning_dialog`
 
 #### Tests
 
 -   [ ] Definir estructura de tests
+    -   [x] `conftest.py` -> fixtures comunes
+    -   [x] Tests para `sigmoid_contrast`
+    -   Quizá darle una vuelta aun
 -   Tests unitarios sencillos para cada operación (quizá también para los `loaders`):
     -   Comprobar parámetros de entrada
     -   Comprobar salida comparando un tensor de referencia
