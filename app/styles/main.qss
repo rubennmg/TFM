@@ -36,7 +36,14 @@
 #operationControlTitle {
     font-weight: bold;
     font-size: 10.5pt;
+    text-decoration: underline;
     margin-bottom: 0.3em;
+}
+
+#operationControlInfo {
+    font-size: 9pt;
+    color: #bbb;
+    font-style: italic;
 }
 
 /* ====== Collapsible sections ====== */

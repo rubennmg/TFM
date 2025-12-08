@@ -1,23 +1,21 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
-    QLabel,
     QFrame,
+    QLabel,
     QScrollArea,
     QSizePolicy,
     QVBoxLayout,
     QWidget,
 )
 
-from gui.right_panel.widgets.color_control import ColorControl
-from gui.right_panel.widgets.debayer_control import DebayerControl
+from gui.right_panel.widgets.debayer_op_control import DebayerOperationControl
 from gui.right_panel.widgets.filter_control import FilterControl
 from gui.right_panel.widgets.flip_control import FlipControl
 from gui.right_panel.widgets.median_filter_control import MedianFilterControl
-from gui.right_panel.widgets.minmax_control import MinMaxControl
 from gui.right_panel.widgets.minmax_percentile_control import (
     MinMaxPercentileControl,
 )
-from models.float_param_spec import FloatParamSpec
+from gui.right_panel.widgets.no_param_op_control import NoParamOperationControl
 from models.operation_definition import OperationDefinition, get_operation_definitions
 
 
@@ -93,40 +91,49 @@ class RightPanel(QWidget):
         self, definition: OperationDefinition, operation_index: int
     ) -> QWidget:
         control_type = definition.control_type
-        if control_type == "filter":
-            params: list[FloatParamSpec] | None = definition.params
-            return FilterControl(
-                definition.label,
-                self.controller,
-                definition.name,
-                operation_index,
-                params or [],
-                self,
-            )
-        if control_type == "color":
-            return ColorControl(
-                definition.label,
-                self.controller,
-                definition.name,
-                operation_index,
-                self,
-            )
-        if control_type == "median":
-            return MedianFilterControl(self.controller, operation_index, self)
-        if control_type == "minmax":
-            return MinMaxControl(self.controller, operation_index, self)
-        if control_type == "minmax_percentile":
-            return MinMaxPercentileControl(self.controller, operation_index, self)
-        if control_type == "flip":
-            return FlipControl(self.controller, operation_index, self)
-        if control_type == "debayer":
-            return DebayerControl(
+
+        factory_map = {
+            "filter": lambda: FilterControl(
+                title=definition.label,
+                controller=self.controller,
+                operation_name=definition.name,
+                operation_index=operation_index,
+                params=definition.params or [],
+                parent=self,
+            ),
+            "median": lambda: MedianFilterControl(
                 controller=self.controller,
                 operation_index=operation_index,
                 parent=self,
-            )
+            ),
+            "minmax_percentile": lambda: MinMaxPercentileControl(
+                controller=self.controller,
+                operation_index=operation_index,
+                parent=self,
+            ),
+            "flip": lambda: FlipControl(
+                controller=self.controller,
+                operation_index=operation_index,
+                parent=self,
+            ),
+            "debayer": lambda: DebayerOperationControl(
+                controller=self.controller,
+                operation_index=operation_index,
+                parent=self,
+            ),
+            "no_param": lambda: NoParamOperationControl(
+                controller=self.controller,
+                title=definition.label,
+                operation_name=definition.name,
+                operation_index=operation_index,
+                parent=self,
+            ),
+        }
 
-        raise ValueError(f"Unsupported control type '{control_type}'")
+        if control_type not in factory_map:
+            raise ValueError(f"Unknown control type: {control_type}")
+
+        return factory_map[control_type]()
 
     def push_operation_control(self, operation_name: str, operation_index: int) -> None:
         if self._controls_layout is None:
