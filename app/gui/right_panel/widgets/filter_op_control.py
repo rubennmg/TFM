@@ -36,6 +36,7 @@ class _FloatSlider(QWidget):
         self._max: float = maximum
         self._step: float = max(step, 1e-9)
         self._default: float = default
+        self._decimals: int = min(6, self._infer_decimals(self._step))
 
         # compute integer range mapping for QSlider
         self._int_min: int = 0
@@ -54,7 +55,7 @@ class _FloatSlider(QWidget):
 
         self._spin.setRange(self._min, self._max)
         self._spin.setSingleStep(self._step)
-        self._spin.setDecimals(min(6, self._infer_decimals(self._step)))
+        self._spin.setDecimals(self._decimals)
         self._spin.setKeyboardTracking(False)
 
         hl: QHBoxLayout = QHBoxLayout()
@@ -92,7 +93,7 @@ class _FloatSlider(QWidget):
         return max(self._min, min(self._max, self._min + steps_from_min * self._step))
 
     def _on_slider_changed(self, ival: int) -> None:
-        fval: float = self._int_to_float(ival)
+        fval: float = self._round_to_decimals(self._int_to_float(ival))
         # block signal loops when syncing widgets
         try:
             self._spin.blockSignals(True)
@@ -102,25 +103,29 @@ class _FloatSlider(QWidget):
         self.valueChanged.emit(fval)
 
     def _on_spin_changed(self, fval: float) -> None:
-        ival: int = self._float_to_int(float(fval))
+        rounded: float = self._round_to_decimals(float(fval))
+        ival: int = self._float_to_int(rounded)
         try:
             self._slider.blockSignals(True)
             self._slider.setValue(ival)
         finally:
             self._slider.blockSignals(False)
-        self.valueChanged.emit(float(fval))
+        self.valueChanged.emit(rounded)
 
     def value(self) -> float:
-        return float(self._spin.value())
+        return self._round_to_decimals(float(self._spin.value()))
 
     def setValue(self, v: float) -> None:  # noqa: N802 (Qt style)
         v = max(self._min, min(self._max, v))
         ival: int = self._float_to_int(v)
         self._slider.setValue(ival)
-        self._spin.setValue(v)
+        self._spin.setValue(self._round_to_decimals(v))
 
     def reset_to_default(self) -> None:
         self.setValue(self._default)
+
+    def _round_to_decimals(self, value: float) -> float:
+        return round(value, self._decimals)
 
 
 class FilterOperationControl(QWidget):
@@ -166,6 +171,7 @@ class FilterOperationControl(QWidget):
                 )
                 slider._slider.sliderReleased.connect(self._on_interaction_finished)
                 slider._spin.editingFinished.connect(self._on_interaction_finished)
+                slider._spin.valueChanged.connect(self._on_spin_value_changed)
                 self._sliders[p.key] = slider
                 self._form.addRow(slider)
 
@@ -201,14 +207,22 @@ class FilterOperationControl(QWidget):
             finally:
                 self._suppress_emit = False
 
-    def _on_interaction_finished(self) -> None:
-        if self._suppress_emit:
-            return
+    def _apply_current_params(self) -> None:
         self.controller.apply_operation(
             self.operation_name,
             operation_idx=self.operation_index,
             **self.get_params(),
         )
+
+    def _on_spin_value_changed(self, _: float) -> None:
+        if self._suppress_emit:
+            return
+        self._apply_current_params()
+
+    def _on_interaction_finished(self) -> None:
+        if self._suppress_emit:
+            return
+        self._apply_current_params()
 
     def reset_controls_to_default(self) -> None:
         self._suppress_emit = True
