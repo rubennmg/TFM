@@ -1,0 +1,242 @@
+\ProvidesPackage{config}
+
+% ----------------------------------------
+% Packages
+% ----------------------------------------
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[hidelinks, hyperfootnotes=false]{hyperref}
+\usepackage{cite}
+\usepackage{fancyhdr}
+\usepackage{colortbl}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{tocloft}
+\usepackage{newfloat}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{tcolorbox}
+\usepackage{adjustbox}
+\usepackage{multirow}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{lastpage}
+\usepackage{stackengine}
+\usepackage{parskip}
+
+% ----------------------------------------
+% Fonts
+% ----------------------------------------
+\usepackage{baskervillef}
+\usepackage[varqu,varl,var0]{inconsolata}
+\usepackage[scale=.90,type1]{cabin}
+\usepackage[cal=boondoxo]{mathalfa}
+
+% ----------------------------------------
+% General Document Settings
+% ----------------------------------------
+\renewcommand{\baselinestretch}{1.25}
+\geometry{left=2.3cm, right=2.3cm, top=2.5cm, bottom=3.5cm}
+\setlength{\headheight}{50pt}
+\setlist{itemsep=0.5ex, topsep=0.5ex}
+\setlength{\parskip}{1em}
+\setlength{\parindent}{2em}
+\bibliographystyle{ieeetr}
+
+% ----------------------------------------
+% Section Title Formatting
+% ----------------------------------------
+\titleformat{\section}
+  {\fontsize{18pt}{18pt}\bfseries}
+  {\thesection}{1em}{}
+
+\titleformat{\subsection}
+  {\fontsize{14pt}{14pt}\bfseries}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\fontsize{12pt}{12pt}\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ----------------------------------------
+% Custom Colors
+% ----------------------------------------
+\definecolor{darkred}{RGB}{139,0,0}
+\definecolor{darkgreen}{RGB}{0,100,0}
+\definecolor{darkblue}{RGB}{0,0,139}
+
+% ----------------------------------------
+% Document Constants
+% ----------------------------------------
+% Front Page Information
+% ----------------------------------------
+\newcommand{\epi}{ESCUELA POLITÉNCICA DE INGENIERÍA DE GIJÓN}
+\newcommand{\qualification}{MÁSTER UNIVERSITARIO EN INGENIERÍA INFORMÁTICA}
+\newcommand{\area}{ÁREA DE ARQUITECTURA Y TECNOLOGÍA DE COMPUTADORES}
+\newcommand{\tfm}{TRABAJO FIN DE MÁSTER}
+\newcommand{\mytitle}{Optimización interactiva del contraste de imagen en flujos de captura cruda para procesamiento en tiempo real}
+\newcommand{\me}{D. Rubén Martínez Ginzo}
+\newcommand{\meNoD}{Rubén Martínez Ginzo}
+\newcommand{\tutor}{D. Rubén Usamentiaga Fernández}
+\newcommand{\authorUO}{Rubén Martínez Ginzo, UO282651}
+\newcommand{\email}{UO282651@uniovi.es}
+\newcommand{\mydate}{FECHA: enero 2025}
+\newcommand{\imagen}{img/UniOvi_bn.jpg}
+% ----------------------------------------
+% Document References
+% ----------------------------------------
+\newcommand{\pytorch}{\textit{PyTorch}}
+\newcommand{\python}{\textit{Python}}
+\newcommand{\pyenv}{\textit{pyenv}}
+
+% ----------------------------------------
+% Title Page Command
+% ----------------------------------------
+\newcommand{\frontpage}{
+\begin{titlepage}
+    \begin{center}
+        \begin{table}[h]
+            \centering
+            \begin{tabular}{m{10cm} m{1cm} m{3cm}}
+                \includegraphics[width=86mm]{img/logo_uniovi.jpg} & & \vspace{1.52mm} \includegraphics[width=23mm]{img/logo_epi.png}  \\
+            \end{tabular}
+        \end{table}
+
+        \vspace{3\baselineskip}    
+        {\fontsize{18pt}{18pt}\selectfont \textbf{\epi}} \\
+        \vspace{4\baselineskip}
+        {\fontsize{16pt}{16pt}\selectfont \textbf{\qualification}} \\
+        \vspace{4\baselineskip}
+        {\fontsize{15pt}{15pt}\selectfont \textbf{\area}} \\
+        \vspace{3\baselineskip}
+        {\fontsize{14pt}{14pt}\selectfont \textbf{\tfm}} \\
+        \vspace{3\baselineskip}
+        {\fontsize{15pt}{15pt}\selectfont \textbf{\textit{\mytitle}}} \\
+        \vspace{3\baselineskip}
+        {\Large \textbf{\textit{\me}}} \\
+        \vspace{1.5\baselineskip}
+        {\Large \textbf{TUTOR: \textit{\tutor}}} \\
+        \vspace{1.5\baselineskip}
+        {\Large {\textbf{\mydate}}}
+    \end{center}
+\end{titlepage}}
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\renewcommand{\subsectionmark}[1]{}
+% ----------------------------------------
+% Header and Footer Configuration
+% ----------------------------------------
+\fancyhf{}
+\fancyhead[L]{\includegraphics[height=16mm]{img/logo_epi.png}
+  \hspace{1em} \Longstack[l]{
+    \textbf{UNIVERSIDAD DE OVIEDO} \newline
+    \textbf{Escuela Politécnica de Ingeniería de Gijón}}}
+\fancyhead[R]{\textit{\rightmark}}
+\fancyfoot[L]{\meNoD}
+\fancyfoot[R]{\bfseries{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+\setlength{\headsep}{15pt}
+
+\fancypagestyle{plain}{
+  \fancyhf{}
+  \fancyhead[L]{\includegraphics[height=16mm]{img/logo_epi.png}
+    \hspace{1em} \Longstack[l]{
+      \textbf{UNIVERSIDAD DE OVIEDO} \newline
+      \textbf{Escuela Politécnica de Ingeniería de Gijón}}}
+  \fancyhead[R]{\textit{\rightmark}}
+  \fancyfoot[L]{\meNoD}
+  \fancyfoot[R]{\bfseries{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
+  \renewcommand{\headrulewidth}{0.3pt}
+  \renewcommand{\footrulewidth}{0.3pt}
+  \setlength{\headsep}{15pt}
+}
+
+\pagestyle{fancy}
+
+% ----------------------------------------
+% Custom Equation List
+% ----------------------------------------
+\newcommand{\listequationsname}{\textbf{Índice de ecuaciones}}
+\newlistof{myequations}{equ}{\listequationsname}
+\cftsetindents{myequations}{1.5em}{2.25em}
+\makeatletter
+\renewcommand{\listofmyequations}{%
+  {\section*{\Large \listequationsname}%
+   \@starttoc{equ}}%
+}
+\makeatother
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+
+\DeclareFloatingEnvironment[
+    fileext=loe,
+    listname=\listequationsname,
+    name=Ecuación,
+    placement=tbhp
+]{myequation}
+\captionsetup[myequation]{skip=0pt}
+
+% ----------------------------------------
+% TikZ Styles
+% ----------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+
+\tikzstyle{startstop} = [circle, rounded corners, minimum width=1cm, minimum height=1cm, text centered, draw=black, fill=black]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=blue!20]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=green!30]
+\tikzstyle{stack} = [rectangle, minimum width=3cm, minimum height=6cm, text width=3cm, text centered, draw=black]
+\tikzstyle{dot} = [circle, minimum width=1px, minimum height=1px, text width=20px, text centered, draw=black, fill=white]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+\tikzstyle{dorrow} = [thick, dotted, ->, >=stealth]
+\tikzstyle{darrow} = [thick, <->, >=stealth]
+
+% ----------------------------------------
+% Listings Configuration
+% ----------------------------------------
+\AtBeginDocument{
+  \renewcommand{\lstlistingname}{Fragmento}
+  \renewcommand{\lstlistlistingname}{Índice de fragmentos}
+}
+
+\lstdefinelanguage{Dockerfile}{
+  morekeywords={[1]FROM, RUN, CMD, LABEL, MAINTAINER, EXPOSE, ENV, ADD, COPY, ENTRYPOINT, VOLUME, USER, WORKDIR, ARG, ONBUILD, STOPSIGNAL, HEALTHCHECK, SHELL},
+  keywordstyle=[1]\color{blue}\bfseries,
+  morecomment=[l]{\#},
+  commentstyle=\color{gray}\itshape,
+  morestring=[b]",
+  stringstyle=\color{red}
+}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{black}\bfseries,
+    commentstyle=\itshape\color{gray},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    frame=single,
+    captionpos=b,
+    rulecolor=\color{black},
+    breaklines=true,
+    tabsize=2,
+    keepspaces=true,
+    showstringspaces=false,
+    columns=fullflexible,
+    aboveskip=1em,
+    belowskip=1em,
+    framexleftmargin=1.5em,
+    xleftmargin=0.075\textwidth,
+    xrightmargin=0.05\textwidth
+}
+
+\endinput
