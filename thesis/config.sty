@@ -30,6 +30,7 @@
 \usepackage{lastpage}
 \usepackage{stackengine}
 \usepackage{parskip}
+\usepackage{tocloft}
 
 % ----------------------------------------
 % Fonts
@@ -54,16 +55,50 @@
 % Section Title Formatting
 % ----------------------------------------
 \titleformat{\section}
-  {\fontsize{18pt}{18pt}\bfseries}
+  {\fontsize{20pt}{20pt}\bfseries}
   {\thesection}{1em}{}
 
 \titleformat{\subsection}
-  {\fontsize{14pt}{14pt}\bfseries}
+  {\fontsize{15pt}{15pt}\bfseries}
   {\thesubsection}{1em}{}
 
 \titleformat{\subsubsection}
-  {\fontsize{12pt}{12pt}\bfseries}
+  {\fontsize{13pt}{13pt}\bfseries}
   {\thesubsubsection}{1em}{}
+
+% ----------------------------------------
+% Custom Equation List
+% ----------------------------------------
+\newcommand{\listequationsname}{\fontsize{20pt}{20pt}\textbf{Índice de ecuaciones}}
+\newlistof{myequations}{equ}{\listequationsname}
+\cftsetindents{myequations}{1.5em}{2.25em}
+\makeatletter
+\renewcommand{\listofmyequations}{%
+  {\section*{\Large \listequationsname}%
+   \@starttoc{equ}}%
+}
+\makeatother
+\newcommand{\myequations}[1]{%
+\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
+
+\DeclareFloatingEnvironment[
+    fileext=loe,
+    listname=\listequationsname,
+    name=Ecuación,
+    placement=tbhp
+]{myequation}
+\captionsetup[myequation]{skip=0pt}
+
+% ----------------------------------------
+% Table of Contents and Lists Formatting
+% ----------------------------------------
+\renewcommand{\cfttoctitlefont}{\fontsize{20pt}{20pt}\bfseries}
+\renewcommand{\cftloftitlefont}{\fontsize{20pt}{20pt}\bfseries}
+\renewcommand{\cftlottitlefont}{\fontsize{20pt}{20pt}\bfseries}
+
+\cftsetindents{section}{0em}{2em}
+\cftsetindents{subsection}{2.5em}{2.5em}
+\cftsetindents{subsubsection}{5em}{3em}
 
 % ----------------------------------------
 % Custom Colors
@@ -101,31 +136,36 @@
 % ----------------------------------------
 \newcommand{\frontpage}{
 \begin{titlepage}
-    \begin{center}
-        \begin{table}[h]
-            \centering
-            \begin{tabular}{m{10cm} m{1cm} m{3cm}}
-                \includegraphics[width=86mm]{img/logo_uniovi.jpg} & & \vspace{1.52mm} \includegraphics[width=23mm]{img/logo_epi.png}  \\
-            \end{tabular}
-        \end{table}
+    \centering
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{m{10cm} m{1cm} m{3cm}}
+			\includegraphics[width=86mm]{img/logo_uniovi.jpg} & & \vspace{1.52mm} \includegraphics[width=23mm]{img/logo_epi.png}  \\
+		\end{tabular}
+	\end{table}
 
-        \vspace{3\baselineskip}    
-        {\fontsize{18pt}{18pt}\selectfont \textbf{\epi}} \\
-        \vspace{4\baselineskip}
-        {\fontsize{16pt}{16pt}\selectfont \textbf{\qualification}} \\
-        \vspace{4\baselineskip}
-        {\fontsize{15pt}{15pt}\selectfont \textbf{\area}} \\
-        \vspace{3\baselineskip}
-        {\fontsize{14pt}{14pt}\selectfont \textbf{\tfm}} \\
-        \vspace{3\baselineskip}
-        {\fontsize{15pt}{15pt}\selectfont \textbf{\textit{\mytitle}}} \\
-        \vspace{3\baselineskip}
-        {\Large \textbf{\textit{\me}}} \\
-        \vspace{1.5\baselineskip}
-        {\Large \textbf{TUTOR: \textit{\tutor}}} \\
-        \vspace{1.5\baselineskip}
-        {\Large {\textbf{\mydate}}}
-    \end{center}
+	\vspace{2\baselineskip}    
+	{\fontsize{18pt}{18pt}\selectfont \textbf{\epi}} \\
+	\vspace{3\baselineskip}
+	{\fontsize{16pt}{16pt}\selectfont \textbf{\qualification}} \\
+	\vspace{3\baselineskip}
+	\begin{minipage}{0.6\textwidth}
+		\centering
+		{\fontsize{15pt}{18pt}\selectfont \textbf{\area}}
+	\end{minipage} \\
+	\vspace{3\baselineskip}
+	{\fontsize{15pt}{14pt}\selectfont \textbf{\tfm}} \\
+	\vspace{3\baselineskip}
+	\begin{minipage}{0.82\textwidth}
+		\centering
+		{\fontsize{18pt}{22pt}\selectfont \textbf{\textit{\mytitle}}} 
+	\end{minipage} \\
+	\vspace{3\baselineskip}
+	{\fontsize{16pt}{16pt} \textbf{\textit{\me}}} \\
+	\vspace{0.75\baselineskip}
+	{\fontsize{14pt}{14pt} \textbf{TUTOR: \fontsize{16pt}{16pt} \textit{\tutor}}} \\
+	\vspace{3\baselineskip}
+	{\fontsize{14pt}{14pt} {\textbf{\mydate}}}
 \end{titlepage}}
 
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
@@ -143,7 +183,7 @@
 \fancyfoot[R]{\bfseries{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
-\setlength{\headsep}{15pt}
+\setlength{\headsep}{20pt}
 
 \fancypagestyle{plain}{
   \fancyhf{}
@@ -156,33 +196,10 @@
   \fancyfoot[R]{\bfseries{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\footrulewidth}{0.4pt}
-  \setlength{\headsep}{15pt}
+  \setlength{\headsep}{20pt}
 }
 
 \pagestyle{fancy}
-
-% ----------------------------------------
-% Custom Equation List
-% ----------------------------------------
-\newcommand{\listequationsname}{\textbf{Índice de ecuaciones}}
-\newlistof{myequations}{equ}{\listequationsname}
-\cftsetindents{myequations}{1.5em}{2.25em}
-\makeatletter
-\renewcommand{\listofmyequations}{%
-  {\section*{\Large \listequationsname}%
-   \@starttoc{equ}}%
-}
-\makeatother
-\newcommand{\myequations}[1]{%
-\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
-
-\DeclareFloatingEnvironment[
-    fileext=loe,
-    listname=\listequationsname,
-    name=Ecuación,
-    placement=tbhp
-]{myequation}
-\captionsetup[myequation]{skip=0pt}
 
 % ----------------------------------------
 % TikZ Styles
