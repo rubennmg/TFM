@@ -98,3 +98,12 @@ def compute_histogram_bins_torch(
     stacked = torch.stack(counts_per_channel, dim=0).to("cpu")
     stacked = stacked.to(torch.int64)
     return stacked[0].numpy(), stacked[1].numpy(), stacked[2].numpy()
+
+
+def free_cuda_cache() -> None:
+    """Free the CUDA cache if a GPU is available."""
+    if torch.cuda.is_available():
+        try:
+            torch.cuda.empty_cache()
+        except Exception:
+            pass
