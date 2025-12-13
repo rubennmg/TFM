@@ -1,4 +1,4 @@
-# TFM — _Pending Name_
+# TFM [App] — _Pending Name_
 
 Small desktop application for image processing tasks and transformations. Graphical interface built with PyQt6.
 
@@ -40,11 +40,11 @@ python run.py
 
 **Basic project structure**
 
--   `core/`: core processing package (debayering, filters, format conversion, image I/O).
+-   `benchmark/`: operation pipelines benchmarking with pytest.
+-   `core/`: core image processing package (debayering, filters, format conversion, image I/O).
 -   `gui/`: PyQt6 GUI components, windows, custom widgets and custom components.
 -   `loaders/`: image file loaders supporting different formats.
--   `models/`: data models for image representation and processing parameters.
--   `enums/`: enumerations for various options.
+-   `models/`: data models and enumerations for image representation and processing parameters.
 -   `utils/`: general utility functions and helpers.
 -   `tests/`: unit test suite for image operations.
 -   `app.py`: PyQt6 GUI application entry point.
