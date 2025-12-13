@@ -19,6 +19,9 @@ class Flip(ImageOperation):
         Args:
             horizontal (bool): If True, flip horizontally; if False, flip vertically. Defaults to True.
         """
+        if not isinstance(horizontal, bool):
+            raise TypeError("horizontal must be a boolean value.")
+
         self.horizontal = horizontal
 
     def apply(self, x: Tensor) -> Tensor:
