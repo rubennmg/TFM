@@ -1,3 +1,88 @@
 \section{Objetivo y alcance} \label{sec:2_objetivo_y_alcance}
+Este TFM consiste en el planteamiento y desarrollo de una aplicación
+interactiva para la optimización del contraste de imágenes en formato crudo, orientada 
+a su aplicación en flujos de procesamiento en tiempo real acelerado por GPU.
+
+La aplicación permitirá al usuario ajustar de manera visual e interactiva los parámetros 
+de revelado y realce de contraste sobre imágenes crudas, visualizando en tiempo real el
+efecto de cada operación sobre la imagen. A partir de dicha interacción, el sistema permitirá
+generar un perfil de procesamiento reproducible, que describa de forma declarativa una 
+secuencia de operaciones de imagen y sus parámetros asociados. Este perfil podrá ser 
+exportado y aplicado en entornos de procesamiento en tiempo real, garantizando:
+
+\begin{itemize}[noitemsep]
+    \item Coherencia visual entre la etapa de diseño interactivo y la ejecución 
+    en producción.
+    \item Eficiencia computacional mediante el uso de procesamiento vectorizado y
+    aeceleración por GPU.
+    \item Separación entre la definición del perfil de procesamiento y su ejecución.
+\end{itemize}
+
+Además, se desarrollará un programa de \textit{benchmarking} para evaluar el rendimiento
+de diferentes perfiles de procesamiento y operaciones realizadas sobre imágenes crudas
+en términos de velocidad de ejecución.
+Este programa permitirá comparar ejecuciones de perfiles en diferentes sistemas y entornos, 
+dispositivos de procesamiento (CPU vs GPU) y formatos de tratamiento de imágenes.
+Para lograr todos estos objetivos, este TFM se divide en varias etapas, las cuales se 
+describen a continuación.
+
 
 \subsection{Estudio del estado del arte} \label{subsec:2_1_estudio_estado_arte}
+
+En esta etapa se realizará una revisión exhaustiva de la literatura y tecnologías
+existentes relacionadas con el procesamiento de imágenes en formato crudo,
+técnicas de optimización de contraste y herramientas de desarrollo que se enmarquen 
+en este contexto. Debe prestarse especial atención a las siguiente áreas:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Procesamiento de imágenes en formato crudo.} Se explorarán 
+    las características y particularidades de los formatos de imagen cruda más comunes,
+    así como los algoritmos y técnicas empleadas para su revelado y posprocesamiento.
+    \item \textbf{Optimización de contraste.} Se investigarán los métodos y algoritmos
+    utilizados para mejorar el contraste de imágenes, incluyendo técnicas clásicas y
+    enfoques más recientes.
+    \item \textbf{Herramientas y bibliotecas de desarrollo.} Se analizarán las
+    herramientas, bibliotecas y frameworks disponibles, evaluando su idoneidad para los objetivos del TFM.
+    \item \textbf{Aplicaciones prácticas y estudios de caso.} Se revisarán y explorarán 
+    aplicaciones prácticas ya existentes que aborden problemas similares, analizando 
+    su enfoque, implementación y tecnologías.
+\end{itemize}
+
+\newpage
+
+\subsection{Aplicación interactiva} \label{subsec:2_2_aplicacion_interactiva}
+En esta fase se abordará el diseño de la arquitectura de software de la aplicación, definiendo los 
+componentes necesarios para la carga de imágenes, la aplicación de operaciones de procesamiento y 
+la visualización interactiva de resultados. Deberá de diferenciarse claramente entre los siguientes módulos:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Módulo de carga y gestión de imágenes crudas.} Responsable de la lectura
+    y almacenamiento eficiente de imágenes en formato crudo, así como de su conversión a 
+    formatos adecuados para el procesamiento.
+    \item \textbf{Módulo de procesamiento de imágenes.} Implementará las operaciones
+    de revelado y optimización de contraste. Deberán de definirse de forma que sean
+    completamente independientes, parametrizables y combinables en secuencias de 
+    procesamiento. Además, se implementarán pruebas unitarias para garantizar su 
+    correcto funcionamiento.
+    \item \textbf{Módulo de interfaz gráfica.} Proporcionará un entorno interactivo 
+    e intuitivo para el flujo de trabajo de procesamiento. Permitirá a los usuarios 
+    aplicar operaciones, ajustar parámetros y visualizar resultados en tiempo real 
+    sobre la imagen cargada. Además, incluirá la funcionalidad de exportación del 
+    perfil de procesamiento generado.
+\end{itemize}
+
+\subsection{Programa de \textit{benchmarking}} \label{subsec:2_3_programa_benchmarking}
+
+En esta etapa se desarrollará un programa específico para la evaluación del rendimiento de los
+\textit{pipelines} de procesamiento definidos. Dicho programa permitirá ejecutar perfiles sobre
+diferentes tamaños de imagen, dispositivos de cómputo y configuraciones, registrando métricas
+de tiempo de ejecución y escalabilidad. Será de gran importancia que el programa 
+facilite la toma y recogida de datos de rendimiento de manera estructurada para su 
+posterior visualización y análisis.
+
+\subsection{Análisis de resultados} \label{subsec:2_4_analisis_resultados}
+
+En esta última fase se llevará a cabo el análisis e interpretación de los resultados obtenidos a
+partir del programa de \textit{benchmarking}. Se estudiará el comportamiento temporal de
+los diferentes perfiles de procesamiento, evaluando cómo influyen factores como el tamaño
+de la imagen, el número de operaciones encadenadas y el dispositivo de ejecución utilizado.
