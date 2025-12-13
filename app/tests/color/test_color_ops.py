@@ -2,6 +2,7 @@ import pytest
 import torch
 from torch import Tensor
 
+from core._tensor_utils import CHANNEL_DIM, HEIGHT_DIM, WIDTH_DIM
 from core.color.color_to_gray import ColorToGray
 from core.color.gray_to_color import GrayToColor
 from core.color.hsv_to_rgb import HsvToRgb
@@ -35,7 +36,7 @@ class TestColorToGray:
         result = op(rgb)
 
         weights = rgb.new_tensor([0.2989, 0.5870, 0.1140]).view(1, 3, 1, 1)
-        expected = (rgb * weights).sum(dim=1, keepdim=True)
+        expected = (rgb * weights).sum(dim=CHANNEL_DIM, keepdim=True)
 
         assert_channels(result, expected_channels=1)
         assert_tensors(result, expected)
@@ -81,12 +82,11 @@ class TestGrayToColor:
 
         result = op(grayscale)
 
-        xmin = grayscale.amin(dim=(2, 3), keepdim=True)
-        xmax = grayscale.amax(dim=(2, 3), keepdim=True)
+        xmin = grayscale.amin(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
+        xmax = grayscale.amax(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
         v = (grayscale - xmin) / (xmax - xmin + 1e-8)
 
-        expected = torch.cat([v, v.sqrt(), torch.zeros_like(v)], dim=1)
-
+        expected = torch.cat([v, v.sqrt(), torch.zeros_like(v)], dim=CHANNEL_DIM)
         assert_tensors(result, expected)
         assert_channels(result, expected_channels=3)
 

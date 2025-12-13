@@ -1,6 +1,7 @@
 import pytest
 import torch
 
+from core._tensor_utils import HEIGHT_DIM, WIDTH_DIM
 from core.normalization.minmax import MinMaxNormalization
 from core.normalization.minmax_percentile import MinMaxPercentileNormalization
 
@@ -27,8 +28,8 @@ class TestMinMaxNormalization:
 
         result = op(entry)
 
-        x_min = entry.amin(dim=(2, 3), keepdim=True)
-        x_max = entry.amax(dim=(2, 3), keepdim=True)
+        x_min = entry.amin(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
+        x_max = entry.amax(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
 
         expected = (entry - x_min) / (x_max - x_min + eps)
 
@@ -73,8 +74,8 @@ class TestMinMaxPercentileNormalization:
 
         flat = entry.view(1, 1, -1)
 
-        lower = torch.quantile(flat, 0.25, dim=2, keepdim=True)
-        upper = torch.quantile(flat, 0.75, dim=2, keepdim=True)
+        lower = torch.quantile(flat, 0.25, dim=HEIGHT_DIM, keepdim=True)
+        upper = torch.quantile(flat, 0.75, dim=HEIGHT_DIM, keepdim=True)
 
         expected = torch.clamp((flat - lower) / (upper - lower + eps), 0.0, 1.0)
         expected = expected.view_as(entry)

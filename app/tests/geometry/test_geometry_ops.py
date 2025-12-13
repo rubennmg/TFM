@@ -2,6 +2,7 @@ import pytest
 from torch import Tensor
 from torchvision.transforms.functional import rotate as tv_rotate
 
+from core._tensor_utils import HEIGHT_DIM, WIDTH_DIM
 from core.geometry.flip import Flip
 from core.geometry.rotate import Rotate
 
@@ -28,7 +29,7 @@ class TestFlip:
         op = Flip(horizontal=True)
 
         result = op(entry)
-        expected = entry.flip(dims=[3])
+        expected = entry.flip(dims=[WIDTH_DIM])
 
         assert_tensors(result, expected)
 
@@ -37,7 +38,7 @@ class TestFlip:
         op = Flip(horizontal=False)
 
         result = op(entry)
-        expected = entry.flip(dims=[2])
+        expected = entry.flip(dims=[HEIGHT_DIM])
         assert_tensors(result, expected)
 
     def test_no_flip(self, base_tensor, assert_tensors):
