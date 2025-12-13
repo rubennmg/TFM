@@ -687,3 +687,328 @@
 -   [ ] Definir plantilla de Latex, mezcla entre mi plantilla y la de la universidad
 -   [ ] Estructurar memoria
 -   [ ] Empezar a redactar
+
+# 09/12/2025
+
+## Notes
+
+## TODOs
+
+### App
+
+#### Code...
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Optimización de memoria GPU
+    -   Incluir `_free_cuda_cache()` en `utils`
+-   [ ] Pipelines predefinidos para imágenes RAW en menú
+-   [ ] Estudio de nuevas operaciones directamente sobre módulos de `torchvision`
+    -   `_functional_tensor` de `torchvision` tiene varias operaciones interesantes
+    -   `functional.py` <- **Interesante**
+    -   `transforms.py` <- **Interesante**
+-   [ ] Depurar gestión de espacios de color
+    -   Hay algún fallo en algún caso
+-   [ ] Hacer más pruebas con imágenes RAW
+    -   De momento parece que todo funciona correctamente
+-   [ ] `show_warning` + `warning_dialog`
+
+#### Tests
+
+-   [ ] Definir estructura de tests
+    -   [x] `conftest.py` -> fixtures comunes
+    -   [x] Tests para `sigmoid_contrast`
+    -   Quizá darle una vuelta aun
+-   Tests unitarios sencillos para cada operación (quizá también para los `loaders`):
+    -   Comprobar parámetros de entrada
+    -   Comprobar salida comparando un tensor de referencia
+    -   _Tensor (x)_ -> _Operación_ -> _Tensor (y)_ esperado
+
+#### Bugs
+
+-   [ ] Bug: ventana resize tras cargar imagen
+
+### Memoria
+
+-   [x] Definir plantilla de Latex, mezcla entre mi plantilla y la de la universidad
+-   [x] Estructurar memoria
+-   [ ] Definir apartados y secciones
+-   [ ] Empezar a redactar
+
+# 10/12/2025
+
+## Notes
+
+## TODOs
+
+### App
+
+#### Code...
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Optimización de memoria GPU
+    -   Incluir `_free_cuda_cache()` en `utils`
+-   [ ] Pipelines predefinidos para imágenes RAW en menú
+-   [ ] Estudio de nuevas operaciones directamente sobre módulos de `torchvision`
+    -   `_functional_tensor` de `torchvision` tiene varias operaciones interesantes
+    -   `functional.py` <- **Interesante**
+    -   `transforms.py` <- **Interesante**
+-   [ ] Depurar gestión de espacios de color
+    -   Hay algún fallo en algún caso
+-   [ ] Hacer más pruebas con imágenes RAW
+    -   De momento parece que todo funciona correctamente
+-   [ ] `show_warning` + `warning_dialog`
+
+#### Tests
+
+-   [ ] Definir estructura de tests
+    -   [x] `conftest.py` -> fixtures comunes
+    -   [x] Tests para `sigmoid_contrast`
+    -   Quizá darle una vuelta aun
+-   Tests unitarios sencillos para cada operación (quizá también para los `loaders`):
+    -   Comprobar parámetros de entrada
+    -   Comprobar salida comparando un tensor de referencia
+    -   _Tensor (x)_ -> _Operación_ -> _Tensor (y)_ esperado
+
+#### Bugs
+
+-   [ ] Bug: ventana resize tras cargar imagen
+
+### Memoria
+
+-   [x] Definir apartados y secciones
+-   [ ] Empezar a redactar
+    -   [ ] 1. Aspectos teóricos
+    -   [ ] 2. PyTorch
+    -   [ ] 3. Tensores de imágenes en PyTorch
+    -   [ ] 4. PyQt
+
+# 11/12/2025
+
+## Notes
+
+## TODOs
+
+### App
+
+#### Code...
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Optimización de memoria GPU
+    -   Incluir `_free_cuda_cache()` en `utils`
+-   [ ] Pipelines predefinidos para imágenes RAW en menú
+-   [ ] Estudio de nuevas operaciones directamente sobre módulos de `torchvision`
+    -   `_functional_tensor` de `torchvision` tiene varias operaciones interesantes
+    -   `functional.py` <- **Interesante**
+    -   `transforms.py` <- **Interesante**
+-   [ ] Depurar gestión de espacios de color
+    -   Hay algún fallo en algún caso
+-   [ ] Hacer más pruebas con imágenes RAW
+    -   De momento parece que todo funciona correctamente
+-   [ ] `show_warning` + `warning_dialog`
+
+#### Tests
+
+-   [x] Definir estructura de tests
+    -   [x] `conftest.py` -> fixtures comunes
+    -   [x] Tests para `sigmoid_contrast`
+-   [x] Implementar más tests
+-   [ ] Revisar tests implementados
+-   Tests unitarios sencillos para cada operación (quizá también para los `loaders`):
+    -   Comprobar parámetros de entrada
+    -   Comprobar salida comparando un tensor de referencia
+    -   _Tensor (x)_ -> _Operación_ -> _Tensor (y)_ esperado
+
+#### Bugs
+
+-   [ ] Bug: ventana resize tras cargar imagen
+
+### Memoria
+
+-   [x] Definir apartados y secciones
+-   [ ] Empezar a redactar
+    -   [ ] 1. Aspectos teóricos
+    -   [ ] 2. PyTorch
+    -   [ ] 3. Tensores de imágenes en PyTorch
+    -   [ ] 4. PyQt
+
+# 12/12/2025
+
+## Notes
+
+## TODOs
+
+### App
+
+#### Code...
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Optimización de memoria GPU
+    -   Incluir `_free_cuda_cache()` en `utils`
+-   [ ] Pipelines predefinidos para imágenes RAW en menú
+-   [ ] Estudio de nuevas operaciones directamente sobre módulos de `torchvision`
+    -   `_functional_tensor` de `torchvision` tiene varias operaciones interesantes
+    -   `functional.py` <- **Interesante**
+    -   `transforms.py` <- **Interesante**
+-   [ ] Depurar gestión de espacios de color
+    -   Hay algún fallo en algún caso
+-   [ ] Hacer más pruebas con imágenes RAW
+    -   De momento parece que todo funciona correctamente
+-   [ ] `show_warning` + `warning_dialog`
+
+#### Tests
+
+-   [ ] Tipado y refactorizado de tests
+-   Tests unitarios sencillos para cada operación (quizá también para los `loaders`):
+    -   Comprobar parámetros de entrada
+    -   Comprobar salida comparando un tensor de referencia
+    -   _Tensor (x)_ -> _Operación_ -> _Tensor (y)_ esperado
+
+#### Benchmark
+
+-   [x] Benchmark pytest, estructura básica
+-   Ejecutar en CPU/CPU, distintos `shapes` de imágenes sintéticas, distintos
+    `torch.dtypes`
+-   [ ] Tipar, refactorizar y mejorar código
+-   [ ] Posprocesado json/csv. Usar `pandas`
+-   [ ] Interpretar resultados
+
+#### Bugs
+
+-   [ ] Bug: ventana resize tras cargar imagen
+
+### Memoria
+
+-   [x] Definir apartados y secciones
+-   [ ] Empezar a redactar
+
+    -   [ ] 1. Aspectos teóricos
+    -   [ ] 2. PyTorch
+    -   [ ] 3. Tensores de imágenes en PyTorch
+    -   [ ] 4. PyQt
+
+# 13/12/2025
+
+## Notes
+
+## TODOs
+
+### App
+
+#### Code...
+
+-   [ ] Implementación de operaciones CORE + GUI
+    -   [x] Rotate
+    -   [x] Flip
+    -   [x] Gaussian
+    -   [x] MinMax
+    -   [x] MinMax Percentile
+    -   [x] ColorToGray
+    -   [x] GrayToColor
+    -   [x] RGBtoHSV
+    -   [x] HSVtoRGB
+    -   [x] RealToRGB8
+    -   [x] RGB8ToReal
+    -   [x] Gamma
+    -   [ ] CLAHE
+    -   [ ] Histogram Equalization
+    -   [ ] Unsharp Masking
+-   [x] Optimización de memoria GPU
+    -   Incluir `_free_cuda_cache()` en `utils`
+-   [ ] Pipelines predefinidos para imágenes RAW en menú
+-   [ ] Estudio de nuevas operaciones directamente sobre módulos de `torchvision`
+    -   `_functional_tensor` de `torchvision` tiene varias operaciones interesantes
+    -   `functional.py` <- **Interesante**
+    -   `transforms.py` <- **Interesante**
+-   [ ] Depurar gestión de espacios de color
+    -   Hay algún fallo en algún caso
+-   [ ] Hacer más pruebas con imágenes RAW
+    -   De momento parece que todo funciona correctamente
+-   [ ] `show_warning` + `warning_dialog`
+
+#### Tests
+
+-   [x] Tipado y refactorizado de tests
+-   [ ] Implementar tests de operaciones restantes
+
+#### Benchmark
+
+-   [x] Benchmark pytest, estructura básica
+-   Ejecutar en CPU/CPU, distintos `shapes` de imágenes sintéticas, distintos
+    `torch.dtypes`
+-   [x] Tipar, refactorizar y mejorar código
+-   [x] Interpretar resultados
+-   [x] Configuración de salida de resultados
+-   [ ] Posprocesado json/csv. Usar `pandas`
+
+#### Bugs
+
+-   [ ] Bug: ventana resize tras cargar imagen
+
+### Memoria
+
+-   [ ] Empezar a redactar
+
+    -   [ ] 1. Aspectos teóricos
+    -   [ ] 2. PyTorch
+    -   [ ] 3. Tensores de imágenes en PyTorch
+    -   [ ] 4. PyQt
