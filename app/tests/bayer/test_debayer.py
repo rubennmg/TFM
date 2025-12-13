@@ -3,7 +3,7 @@ import torch
 from torch import Tensor
 
 from core.bayer.debayer import Debayer
-from enums.layouts import Layout
+from models.enums.layouts import Layout
 
 
 class TestDebayer:

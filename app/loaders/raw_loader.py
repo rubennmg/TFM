@@ -2,12 +2,12 @@ import numpy as np
 import torch
 from torch import Tensor
 
-from enums.image_formats import ImageFormat
-from enums.layouts import Layout
+from models.enums.image_formats import ImageFormat
+from models.enums.layouts import Layout
 from loaders.base_loader import ImageLoader
 from models.image import Image
 from models.metadata import Metadata
-from enums.color_space import ColorSpace
+from models.enums.color_space import ColorSpace
 
 # TODO: Implement reading actual metadata from a sidecar file associated with the RAW image.
 # Currently using default placeholder values for width, height, bit depth, and Bayer pattern.

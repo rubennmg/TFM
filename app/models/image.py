@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import numpy as np
 from torch import Tensor
 
-from enums.image_formats import ImageFormat
-from enums.color_space import ColorSpace
+from models.enums.image_formats import ImageFormat
+from models.enums.color_space import ColorSpace
 from models.metadata import Metadata
 from utils.torch import tensor_to_uint8_np
 

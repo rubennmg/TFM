@@ -2,7 +2,7 @@ import torch
 import torch.nn
 import torch.nn.functional
 
-from enums.layouts import Layout
+from models.enums.layouts import Layout
 
 
 class DebayerSplit(torch.nn.Module):

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Sequence
 from torch import device
 
-from enums.image_formats import ImageFormat
+from models.enums.image_formats import ImageFormat
 from models.image import Image
 
 

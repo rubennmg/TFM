@@ -9,7 +9,7 @@ from core.bayer.modules.debayer5x5 import Debayer5x5
 from core.bayer.modules.debayerSplit import DebayerSplit
 from core.image_operation import ImageOperation
 from core.registry import register_operation
-from enums.layouts import Layout
+from models.enums.layouts import Layout
 
 _DEBAYER_REGISTRY = {
     "debayer2x2": Debayer2x2,

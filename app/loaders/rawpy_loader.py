@@ -3,10 +3,10 @@ import rawpy
 import torch
 from torch import Tensor, device
 
-from enums.image_formats import ImageFormat
+from models.enums.image_formats import ImageFormat
 from models.image import Image
 from models.metadata import Metadata
-from enums.color_space import ColorSpace
+from models.enums.color_space import ColorSpace
 
 SCALE: float = 1.0 / 65535.0
 

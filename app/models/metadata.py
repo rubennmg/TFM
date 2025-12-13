@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from enums.layouts import Layout
+from models.enums.layouts import Layout
 
 
 @dataclass

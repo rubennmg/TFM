@@ -2,11 +2,11 @@ import torch
 from torch import Tensor
 from torchvision.io import decode_image
 
-from enums.image_formats import ImageFormat
+from models.enums.image_formats import ImageFormat
 from loaders.base_loader import ImageLoader
 from models.image import Image
 from models.metadata import Metadata
-from enums.color_space import ColorSpace
+from models.enums.color_space import ColorSpace
 
 SCALE: float = 1.0 / 255.0  # decode_image loads images as uint8 by default
 

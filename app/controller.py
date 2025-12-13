@@ -5,7 +5,7 @@ import torch
 from torch import Tensor, device
 
 from core.registry import OPERATION_REGISTRY
-from enums.color_space import ColorSpace
+from models.enums.color_space import ColorSpace
 from gui.main_window import MainWindow
 from loaders import image_loader
 from models.image import Image

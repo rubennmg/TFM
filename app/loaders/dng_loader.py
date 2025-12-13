@@ -1,6 +1,6 @@
 from torch import device
 
-from enums.image_formats import ImageFormat
+from models.enums.image_formats import ImageFormat
 from loaders.base_loader import ImageLoader
 from loaders.rawpy_loader import load_rawpy
 from models.image import Image
