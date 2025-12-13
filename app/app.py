@@ -11,7 +11,7 @@ def main():
     app: QApplication = QApplication(sys.argv)
     app.setStyle("Fusion")
 
-    qss: str = load_stylesheet("styles/main.qss")
+    qss: str = load_stylesheet("gui/styles/main.qss")
     app.setStyleSheet(qss)
 
     controller: Controller = Controller()

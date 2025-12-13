@@ -131,7 +131,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 def collect_watch_paths(extra: list[str], ignore: list[str]) -> list[Path]:
     base = Path(__file__).parent
-    default_dirs = ["core", "gui", "models", "styles", "utils"]
+    default_dirs = ["core", "gui", "models", "utils"]
     paths = []
     paths.append(base)
     for d in default_dirs + extra:
