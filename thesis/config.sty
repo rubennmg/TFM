@@ -24,6 +24,7 @@
 \usepackage{tcolorbox}
 \usepackage{adjustbox}
 \usepackage{multirow}
+\usepackage{booktabs}
 \usepackage{titlesec}
 \usepackage{listings}
 \usepackage{xcolor}
@@ -46,7 +47,6 @@
 \renewcommand{\baselinestretch}{1.25}
 \geometry{left=2.3cm, right=2.3cm, top=2.5cm, bottom=3.5cm}
 \setlength{\headheight}{50pt}
-\setlist{itemsep=0.5ex, topsep=0.5ex}
 \setlength{\parskip}{1em}
 \setlength{\parindent}{2em}
 \bibliographystyle{ieeetr}
@@ -57,14 +57,17 @@
 \titleformat{\section}
   {\fontsize{20pt}{20pt}\bfseries}
   {\thesection}{1em}{}
+\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{0.5ex}
 
 \titleformat{\subsection}
   {\fontsize{15pt}{15pt}\bfseries}
   {\thesubsection}{1em}{}
+\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{0.5ex}
 
 \titleformat{\subsubsection}
   {\fontsize{13pt}{13pt}\bfseries}
   {\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{0.5ex}
 
 % ----------------------------------------
 % Custom Equation List
@@ -122,7 +125,7 @@
 \newcommand{\tutor}{D. Rubén Usamentiaga Fernández}
 \newcommand{\authorUO}{Rubén Martínez Ginzo, UO282651}
 \newcommand{\email}{UO282651@uniovi.es}
-\newcommand{\mydate}{FECHA: enero 2025}
+\newcommand{\mydate}{FECHA: enero 2026}
 \newcommand{\imagen}{img/UniOvi_bn.jpg}
 % ----------------------------------------
 % Document References
@@ -155,7 +158,7 @@
 	\end{minipage} \\
 	\vspace{3\baselineskip}
 	{\fontsize{15pt}{14pt}\selectfont \textbf{\tfm}} \\
-	\vspace{3\baselineskip}
+	\vspace{2.5\baselineskip}
 	\begin{minipage}{0.82\textwidth}
 		\centering
 		{\fontsize{18pt}{22pt}\selectfont \textbf{\textit{\mytitle}}} 
@@ -164,12 +167,13 @@
 	{\fontsize{16pt}{16pt} \textbf{\textit{\me}}} \\
 	\vspace{0.75\baselineskip}
 	{\fontsize{14pt}{14pt} \textbf{TUTOR: \fontsize{16pt}{16pt} \textit{\tutor}}} \\
-	\vspace{3\baselineskip}
+	\vspace{1.5\baselineskip}
 	{\fontsize{14pt}{14pt} {\textbf{\mydate}}}
 \end{titlepage}}
 
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
 \renewcommand{\subsectionmark}[1]{}
+
 % ----------------------------------------
 % Header and Footer Configuration
 % ----------------------------------------
@@ -180,7 +184,7 @@
     \textbf{Escuela Politécnica de Ingeniería de Gijón}}}
 \fancyhead[R]{\textit{\rightmark}}
 \fancyfoot[L]{\meNoD}
-\fancyfoot[R]{\bfseries{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
+\fancyfoot[R]{{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 \setlength{\headsep}{20pt}
@@ -193,7 +197,7 @@
       \textbf{Escuela Politécnica de Ingeniería de Gijón}}}
   \fancyhead[R]{\textit{\rightmark}}
   \fancyfoot[L]{\meNoD}
-  \fancyfoot[R]{\bfseries{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
+  \fancyfoot[R]{{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\footrulewidth}{0.4pt}
   \setlength{\headsep}{20pt}
