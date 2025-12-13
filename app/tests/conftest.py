@@ -7,8 +7,8 @@ from torch import Size, Tensor
 def base_tensor():
     """Returns an image tensor with shape [B, C, H, W] and given dtype."""
 
-    def _factory(shape: Size = Size([1, 3, 4, 4]), dtype: str = "float"):
-        numel = 1
+    def _factory(shape: Size = Size([1, 3, 4, 4]), dtype: str = "float") -> Tensor:
+        numel: int = 1
         for dim in shape:
             numel *= dim
 
@@ -28,7 +28,7 @@ def base_tensor():
 def assert_tensors():
     """Checks given tensors for shape, dtype and value equality within a tolerance."""
 
-    def _compare(a: Tensor, b: Tensor, atol=1e-4):
+    def _compare(a: Tensor, b: Tensor, atol=1e-4) -> None:
         assert isinstance(a, Tensor)
         assert isinstance(b, Tensor)
         assert a.shape == b.shape, f"Shape mismatch: {a.shape} vs {b.shape}"
@@ -42,7 +42,7 @@ def assert_tensors():
 def assert_channels():
     """Checks that an image tensor with shape [B, C, H, W] has the expected number of channels."""
 
-    def _assert_channels(tensor: Tensor, expected_channels: int):
+    def _assert_channels(tensor: Tensor, expected_channels: int) -> None:
         assert tensor.dim() == 4, f"Expected a 4D tensor, got {tensor.dim()}D tensor."
         actual_channels = tensor.size(1)
         assert actual_channels == expected_channels, (
