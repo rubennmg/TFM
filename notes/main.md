@@ -957,23 +957,9 @@
 #### Code...
 
 -   [ ] Implementación de operaciones CORE + GUI
-    -   [x] Rotate
-    -   [x] Flip
-    -   [x] Gaussian
-    -   [x] MinMax
-    -   [x] MinMax Percentile
-    -   [x] ColorToGray
-    -   [x] GrayToColor
-    -   [x] RGBtoHSV
-    -   [x] HSVtoRGB
-    -   [x] RealToRGB8
-    -   [x] RGB8ToReal
-    -   [x] Gamma
     -   [ ] CLAHE
     -   [ ] Histogram Equalization
     -   [ ] Unsharp Masking
--   [x] Optimización de memoria GPU
-    -   Incluir `_free_cuda_cache()` en `utils`
 -   [ ] Pipelines predefinidos para imágenes RAW en menú
 -   [ ] Estudio de nuevas operaciones directamente sobre módulos de `torchvision`
     -   `_functional_tensor` de `torchvision` tiene varias operaciones interesantes
@@ -1006,9 +992,12 @@
 
 ### Memoria
 
--   [ ] Empezar a redactar
+-   [x] Empezar a redactar:
 
-    -   [ ] 1. Aspectos teóricos
-    -   [ ] 2. PyTorch
-    -   [ ] 3. Tensores de imágenes en PyTorch
-    -   [ ] 4. PyQt
+    -   Objetivo y alcance
+    -   Definida estructura de "Aspectos teóricos"
+
+-   [ ] 1. Aspectos teóricos
+-   [ ] 2. PyTorch
+-   [ ] 3. Tensores de imágenes en PyTorch
+-   [ ] 4. PyQt
