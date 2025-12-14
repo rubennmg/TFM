@@ -1,0 +1,188 @@
+\section{Aspectos teóricos} \label{sec:3_aspectos_teoricos}
+Se plantean y describen en este apartado los aspectos teóricos y tecnológicos que sustentan 
+el desarrollo del presente TFM. Estos conceptos derivan directamente del estudio del estado del 
+arte y son necesarios para comprender las decisiones de diseño, los enfoques de implementación
+y los criterios de evaluación que se exponen en los capítulos posteriores.
+
+\subsection{Imágenes e Informática} \label{subsec:3_1_imagenes_informatica}
+La intersección entre la Imagen y la Informática ha generado uno de los campos de estudio 
+y desarrollo tencológico más dinámicos y de mayor impacto en la era digital: el 
+\textit{Procesamiento Digital de Imágenes (PDI)} \cite{pdi}. Esta disciplina se basa en la adquisición,
+manipulación y análisis de información visual a través de medios computacionales, transformando
+el concepto de imagen de una mera representación pasiva a un flujo de datos activo y 
+susceptible de tratamiento algorítmico.
+
+Históricamente, la imagen ha sido el medio primario para el registro y la comunicación de la 
+realidad. Su valor radica en la capacidad de codificar información espacial y tonal de una 
+escena o un objeto, sirviendo como puente entre la percepción humana y la interpretación 
+cognitiva. La imagen, en su concepción tradicional (ya sea fotográfica, pictórica u óptica),
+es una función bidimensional continua que asocia un valor (intensidad o color) 
+a cada punto (x, y) del plano. Dicha función se representa mátemáticamente como:
+
+\begin{myequation}
+    \begin{equation}
+        I = f(x,y) \quad \text{donde } (x,y) \in \mathbb{R}^2 \text{ e } I \in \mathbb{R}
+        \label{eq:3_1_imagen_funcion}
+    \end{equation}
+    \myequations{Representación básica de una imagen en términos matemáticos}
+    \caption{Representación básica de una imagen en términos matemáticos}
+\end{myequation}
+
+En este contexto pre-digital, la calidad de la imagen dependía exclusivamente de las 
+propiedades del medio de captura (emulsión química, lentes ópticas) y de la correcta 
+modulación de la luz. La luminosidad y el contraste siempre han sido factores críticos, 
+ya que determinan la capacidad del observador para discernir detalles y diferenciar
+elementos dentro de la imagen. Un bajo contraste o una iluminación deficiente resultan en 
+una pérdida irreversible de información perceptiva y analítica.
+
+Con la adopción de tecnologías de captura electrónica y digital (cámaras
+CCD, CMOS \cite{camaras_ccd_cmos}), la imagen se somete a un proceso de digitalización
+que la transforma en una matriz discreta de valores numéricos, marcando el inicio de su 
+tratamiento informático. Este cambio de paradigma no solo digitaliza la imagen, sino que 
+también le confiere nuevas propiedades y posibilidades de manipulación en contextos 
+científicos, industriales y artísticos.
+
+\newpage
+
+\subsection{Representación numérica de imágenes digitales} \label{subsec:3_2_representacion_numerica_imagenes_digitales}
+Una vez que la imagen es capturada por un dispositivo electrónico, el proceso de digitalización
+convierte la señal óptica continua en una representación numérica discreta susceptible de 
+ser almacenada, transmitida y procesada por sistemas informáticos. Este proceso consta 
+fundamentalmente de dos etapas: el \textit{muestreo} y la \textit{cuantificación}.
+
+El muestreo consiste en discretizar el dominio continuo de la imagen, dividiendo 
+el plano $(x, y)$ en una rejilla regular de posiciones finitas denominadas \textit{píxeles} (del inglés 
+\textit{picture elements}). Cada píxel representa una pequeña región de la escena original
+y constituye la unidad mínima de información espacial en una imagen digital. 
+El resultado de este proceso es una imagen discreta definida sobre un conjunto finito de 
+corrdenadas enteras:
+
+\begin{myequation}
+    \begin{equation}
+        I[i,j] = f(i \Delta x, j \Delta y)
+        \label{eq:3_2_imagen_discreta}
+    \end{equation}
+    \myequations{Imagen digital como función discreta muestreada}
+    \caption{Imagen digital como función discreta muestreada}
+\end{myequation}
+
+donde $(i,j)$ representan las coordenadas del píxel y $\Delta x$, $\Delta y$ las resoluciones
+espaciales en cada dimensión. El número total de muestras determina la resolución espacial
+de la imagen y condiciona tanto su nivel de detalle como el coste computacional asociado
+a su procesamiento.
+
+La cuantificación, por su parte, transforma los valores continuos de intensidad o color capturados 
+en cada píxel en un valor discreto perteneciente a un conjunto finito de niveles. Este proceso
+introduce una aproximación numérica controlada por la \textit{profundidad de bits} (\textit{bit depth})
+del sistema de representación. Por ejemplo, una cuantificación de 8 bits permite representar $2^8=256$ 
+niveles distintos, mientras que profundidades mayores (12, 14 o 16 bits) son habituales en imágenes
+crudas procedentes de sensores modernos, proporcionando una mayor fidelidad tonal y rango dinámico.
+
+El resultado final del proceso de digitalización la Imagen Digital, que se representa como una matriz 
+bidimensional ($M \times N$) de valores discretos. Cada elemento de esta matriz corresponde a un píxel
+con un valor cuantificado que refleja la intensidad luminosa o el color en esa posición específica:
+
+\begin{myequation}
+    \begin{equation}
+        I[m,n] \quad \text{donde } m = 0, 1, \ldots, M-1 \text{ y } n = 0, 1, \ldots, N-1
+        \label{eq:3_2_imagen_matriz}
+    \end{equation}
+    \myequations{Imagen digital representada como matriz de píxeles}
+    \caption{Imagen digital representada como matriz de píxeles}
+\end{myequation}
+
+\newpage
+La \autoref{fig:3_1_muestreo_cuantificacion} ilustra el proceso de digitalización de una imagen,
+mostrando la transición desde una imagen continua $f(x,y)$, pasando por la imagen muestreada $f[m,n]$,
+hasta la imagen digital final $I[m,n]$.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        box/.style={draw=black!70, thick, minimum size=3cm},
+        title/.style={font=\small, align=center}
+    ]
+        % BOX: Imagen continua
+        \node[box, label={[title]above:Imagen continua}] (cont) at (-3,0) {};
+        
+        \node (image_cont) at (-3,0) {
+            \includegraphics[width=3cm,height=3cm]{sections/3/img/dog.png}
+        }; 
+        
+        \node[font=\small] at (-3, -2) {$f(x,y)$};
+
+        % ARROW: Muestreo
+        \draw[arrow, thick] (-1,0) -- node[above, font=\small] {Muestreo} (1,0);
+
+        % BOX: Imagen muestreada
+        \node[box, fill=white, label={[title]above:Imagen muestreada}] (sampled) at (3,0) {};
+
+        \begin{scope}[shift={(3,0)}]
+            \def\step{0.5}
+
+            \foreach \x/\y/\g in {
+                -1.25/ 1.25/160, -0.75/ 1.25/150, -0.25/ 1.25/140,  0.25/ 1.25/130,  0.75/ 1.25/150, 1.25/ 1.25/160,
+                -1.25/ 0.75/150, -0.75/ 0.75/110,  -0.25/ 0.75/90,   0.25/ 0.75/90,   0.75/ 0.75/110, 1.25/ 0.75/150,
+                -1.25/ 0.25/140, -0.75/ 0.25/90,   -0.25/ 0.25/60,   0.25/ 0.25/60,   0.75/ 0.25/90,  1.25/ 0.25/140,
+                -1.25/-0.25/140, -0.75/-0.25/90,   -0.25/-0.25/50,   0.25/-0.25/50,   0.75/-0.25/90,  1.25/-0.25/140,
+                -1.25/-0.75/150, -0.75/-0.75/110,  -0.25/-0.75/90,   0.25/-0.75/90,   0.75/-0.75/110, 1.25/-0.75/150,
+                -1.25/-1.25/160, -0.75/-1.25/150, -0.25/-1.25/140,  0.25/-1.25/130,  0.75/-1.25/150, 1.25/-1.25/160
+            }{
+                \fill[gray!\g]
+                    (\x-\step/2, \y-\step/2) rectangle (\x+\step/2, \y+\step/2);
+            }
+
+            \draw[black!80, thin] (-1.5, -1.5) grid[step=0.5] (1.5, 1.5);
+
+        \end{scope}
+
+        \node[font=\small] at (3, -2) {$f[m,n]$};
+        
+        % ARROW: Cuantificación
+        \draw[arrow, thick] (5,0) -- node[above, font=\small] {Cuantificación} (7,0);
+
+        % BOX: Imagen digital
+        \node[box, fill=white, label={[title]above:Imagen digital}] (digital) at (9,0) {};
+
+        \begin{scope}[shift={(9,0)}]
+            \def\step{0.5}
+
+            \foreach \x/\y/\g in {
+                -1.25/ 1.25/160, -0.75/ 1.25/150, -0.25/ 1.25/140,  0.25/ 1.25/130,  0.75/ 1.25/150, 1.25/ 1.25/160,
+                -1.25/ 0.75/150, -0.75/ 0.75/110,  -0.25/ 0.75/90,   0.25/ 0.75/90,   0.75/ 0.75/110, 1.25/ 0.75/150,
+                -1.25/ 0.25/140, -0.75/ 0.25/90,   -0.25/ 0.25/60,   0.25/ 0.25/60,   0.75/ 0.25/90,  1.25/ 0.25/140,
+                -1.25/-0.25/140, -0.75/-0.25/90,   -0.25/-0.25/50,   0.25/-0.25/50,   0.75/-0.25/90,  1.25/-0.25/140,
+                -1.25/-0.75/150, -0.75/-0.75/110,  -0.25/-0.75/90,   0.25/-0.75/90,   0.75/-0.75/110, 1.25/-0.75/150,
+                -1.25/-1.25/160, -0.75/-1.25/150, -0.25/-1.25/140,  0.25/-1.25/130,  0.75/-1.25/150, 1.25/-1.25/160
+            }{
+                \node[font=\tiny] at (\x, \y) {\g};
+            }
+            
+            \draw[black!70, thin] (-1.5, -1.5) grid[step=0.5] (1.5, 1.5);
+
+        \end{scope}
+
+        \node[font=\small] at (9, -2) {$I[m,n]$};
+
+    \end{tikzpicture}
+    \caption{Proceso de digitalización de una imagen}
+    \label{fig:3_1_muestreo_cuantificacion}
+\end{figure}
+
+\subsubsection{Escala de grises y color} \label{subsubsec:3_2_escala_grises_color}
+
+\subsubsection{Espacios de color} \label{subsubsec:3_2_espacios_color}
+
+\subsubsection{Representación de imágenes con tensores} \label{subsubsec:3_2_representacion_tensores}
+
+\subsection{Procesamiento de imágenes en formato crudo} \label{subsec:3_3_procesamiento_imagenes_crudo}
+
+\subsection{Fundamentos de contraste en imágenes} \label{subsec:3_4_fundamentos_contraste_imagenes} 
+
+\subsection{Técnicas de optimización de contraste} \label{subsec:3_5_tecnicas_optimizacion_contraste}
+
+\subsection{Procesamiento por etapas y \textit{pipelines}} \label{subsec:3_6_procesamiento_por_etapas_pipelines}
+
+\subsection{Procesamiento vectorizado y paralelismo de datos} \label{subsec:3_7_procesamiento_vectorizado_paralelismo_datos}    
+
+\subsection{Computación acelerada por GPU} \label{subsec:3_8_computacion_acelerada_gpu}
