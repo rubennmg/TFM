@@ -70,6 +70,20 @@
 \titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{0.5ex}
 
 % ----------------------------------------
+% Level-4 Headings (Subsubsubsection)
+% ----------------------------------------
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}}
+\renewcommand{\theparagraph}{\thesubsubsection.\arabic{paragraph}}
+
+\titleformat{\paragraph}
+  {\fontsize{12pt}{12pt}\bfseries}
+  {\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{2.5ex plus 1ex minus .2ex}{0.5ex}
+
+% ----------------------------------------
 % Custom Equation List
 % ----------------------------------------
 \newcommand{\listequationsname}{\fontsize{20pt}{20pt}\textbf{Índice de ecuaciones}}
