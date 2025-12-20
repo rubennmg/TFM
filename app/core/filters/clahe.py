@@ -1,4 +1,4 @@
-from kornia import enhance as E
+from kornia import enhance as K_e
 from torch import Tensor
 
 from core import _tensor_utils as T_u
@@ -18,7 +18,12 @@ class CLAHE(ImageOperation):
     """
 
     def __init__(self, clip_limit: float = 40.0, grid_size: float = 8):
-        """Class constructor."""
+        """Class constructor.
+
+        Args:
+            clip_limit (float): Threshold for contrast limiting. Default is 40.0.
+            grid_size (float): Size of grid for histogram equalization. Default is 8.
+        """
         self.clip_limit = clip_limit
         self.grid_size = (int(grid_size), int(grid_size))
 
@@ -33,4 +38,6 @@ class CLAHE(ImageOperation):
         """
         T_u.assert_real_valued_tensor(x)
 
-        return E.equalize_clahe(x, clip_limit=self.clip_limit, grid_size=self.grid_size)
+        return K_e.equalize_clahe(
+            x, clip_limit=self.clip_limit, grid_size=self.grid_size
+        )

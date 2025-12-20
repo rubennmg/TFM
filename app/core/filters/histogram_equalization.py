@@ -1,4 +1,4 @@
-from kornia import enhance as E
+from kornia import enhance as K_e
 from torch import Tensor
 
 from core import _tensor_utils as T_u
@@ -44,4 +44,4 @@ class HistogramEqualization(ImageOperation):
 
         T_u.assert_real_valued_tensor(x)
 
-        return E.equalize(x)
+        return K_e.equalize(x)
