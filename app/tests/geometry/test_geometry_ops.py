@@ -1,6 +1,6 @@
 import pytest
 from torch import Tensor
-from torchvision.transforms import functional as F
+from torchvision.transforms.v2 import functional as F
 
 from core._tensor_utils import HEIGHT_DIM, WIDTH_DIM
 from core.geometry.flip import Flip

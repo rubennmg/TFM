@@ -2,7 +2,7 @@ from torch import Tensor
 
 from core.image_operation import ImageOperation
 from core.registry import register_operation
-from torchvision.transforms import functional as F
+from torchvision.transforms.v2 import functional as F
 
 
 @register_operation

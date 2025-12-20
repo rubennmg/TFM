@@ -1,6 +1,6 @@
 import torch
 from torch import Tensor
-from torchvision.transforms import functional as F
+from torchvision.transforms.v2 import functional as F
 
 from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation

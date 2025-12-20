@@ -1,6 +1,6 @@
 import pytest
 from torch import Tensor
-from torchvision.transforms import functional as F
+from torchvision.transforms.v2 import functional as F
 
 from core.format.real_to_rgb8 import RealToRGB8
 from core.format.rgb8_to_real import RGB8ToReal
