@@ -190,6 +190,12 @@ _OPERATIONS: List[OperationDefinition] = [
         control_type="debayer",
         default_params={"algorithm_name": "debayer2x2"},
     ),
+    OperationDefinition(
+        name="HistogramEqualization",
+        label="Histogram Equalization",
+        category="Filters",
+        control_type="no_param",
+    ),
 ]
 
 
