@@ -1,5 +1,5 @@
 from torch import Tensor
-from torchvision.transforms.v2 import functional as F
+from kornia import filters as K_e
 
 from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
@@ -9,6 +9,9 @@ from core.registry import register_operation
 @register_operation
 class MedianFilter(ImageOperation):
     """Class to apply Median Filter to image tensors.
+    Uses Kornia's median_blur implementation.
+
+    See: https://kornia.readthedocs.io/en/latest/filters.html#kornia.filters.median_blur
 
     Args:
         ImageOperation (ImageOperation): Base class for image operations.
@@ -26,7 +29,7 @@ class MedianFilter(ImageOperation):
         if kernel_size % 2 == 0 or kernel_size < 1:
             raise ValueError("Kernel size must be a positive odd integer.")
 
-        self.kernel_size = kernel_size
+        self.kernel_size = (kernel_size, kernel_size)
 
     def apply(self, x: Tensor) -> Tensor:
         """Apply the Median Filter to the image tensor.
@@ -39,15 +42,4 @@ class MedianFilter(ImageOperation):
         """
         T_u.assert_real_valued_tensor(x)
 
-        b, c, h, w = x.shape
-        k = self.kernel_size
-
-        pad = k // 2
-        x_padded = F.pad(x, [pad, pad, pad, pad])
-
-        patches = x_padded.unfold(2, k, 1).unfold(3, k, 1)
-        patches = patches.contiguous().view(b, c, h, w, k * k)
-
-        median = patches.median(dim=-1).values
-
-        return median
+        return K_e.median_blur(x, self.kernel_size)

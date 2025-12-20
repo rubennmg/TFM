@@ -124,6 +124,16 @@ _FILTER_UNSHARP_MASKING_PARAMS = [
     ),
 ]
 
+_FILTER_MEDIAN_PARAMS = [
+    FloatParamSpec(
+        key="kernel_size",
+        label="Kernel Size",
+        minimum=1,
+        maximum=19,
+        step=2,
+        default=3,
+    ),
+]
 
 _OPERATIONS: List[OperationDefinition] = [
     OperationDefinition(
@@ -146,8 +156,9 @@ _OPERATIONS: List[OperationDefinition] = [
         name="MedianFilter",
         label="Median Filter",
         category="Filters",
-        control_type="median",
-        default_params={"kernel_size": 3},
+        control_type="filter",
+        params=_FILTER_MEDIAN_PARAMS,
+        default_params=_build_filter_params(_FILTER_MEDIAN_PARAMS),
     ),
     OperationDefinition(
         name="GammaAdjustment",
