@@ -58,11 +58,11 @@ class Debayer(ImageOperation):
         """
         T_u.assert_grayscale_image_tensor(x)
 
-        x.unsqueeze_(0)  # Add channel dimension for the module
+        x = x.unsqueeze(0)  # Add channel dimension for the module
 
         with torch.no_grad():
             out: Tensor = self.module(x).to(device=x.device, dtype=x.dtype)
-            out.squeeze_(0)  # Remove channel dimension after the module
+            out = out.squeeze(0)  # Remove channel dimension after the module
 
         T_u.assert_color_image_tensor(out)
 
