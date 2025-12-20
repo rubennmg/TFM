@@ -5,9 +5,10 @@ import torch
 from torch import Tensor, dtype
 
 _SHAPES = [
-    (1, 3, 256, 256),
-    (1, 3, 512, 512),
-    (1, 3, 1024, 1024),
+    (1, 1, 256, 256),
+    (1, 1, 512, 512),
+    (1, 1, 1024, 1024),
+    (1, 1, 2048, 2048),
 ]
 
 _DEVICES = ["cpu", "cuda"] if torch.cuda.is_available() else ["cpu"]
@@ -31,7 +32,7 @@ def _dtype_id(dtype: dtype) -> str:
     ids=_shape_id,
 )
 @pytest.mark.parametrize("device", _DEVICES, ids=_DEVICES)
-def test_benchmark_run(
+def test_bench_run(
     benchmark: Callable,
     synthetic_tensor: Callable,
     pipeline_factory: Callable[[str], Callable[[Tensor], Tensor]],
