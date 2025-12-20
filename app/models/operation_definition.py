@@ -105,6 +105,25 @@ _FILTER_CLAHE_PARAMS = [
     ),
 ]
 
+_FILTER_UNSHARP_MASKING_PARAMS = [
+    FloatParamSpec(
+        key="kernel_size",
+        label="Kernel Size",
+        minimum=1,
+        maximum=27,
+        step=2,
+        default=3,
+    ),
+    FloatParamSpec(
+        key="sigma",
+        label="Sigma",
+        minimum=0.1,
+        maximum=10.0,
+        step=0.1,
+        default=1.5,
+    ),
+]
+
 
 _OPERATIONS: List[OperationDefinition] = [
     OperationDefinition(
@@ -221,7 +240,15 @@ _OPERATIONS: List[OperationDefinition] = [
         category="Filters",
         control_type="filter",
         params=_FILTER_CLAHE_PARAMS,
-        default_params={"clip_limit": 40.0, "grid_size": 8},
+        default_params=_build_filter_params(_FILTER_CLAHE_PARAMS),
+    ),
+    OperationDefinition(
+        name="UnsharpMasking",
+        label="Unsharp Masking",
+        category="Filters",
+        control_type="filter",
+        params=_FILTER_UNSHARP_MASKING_PARAMS,
+        default_params=_build_filter_params(_FILTER_UNSHARP_MASKING_PARAMS),
     ),
 ]
 
