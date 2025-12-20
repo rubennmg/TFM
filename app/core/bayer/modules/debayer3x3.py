@@ -71,7 +71,9 @@ class Debayer3x3(torch.nn.Module):
         B, C, H, W = x.shape
 
         xpad = torch.nn.functional.pad(x, (1, 1, 1, 1), mode="reflect")
-        c = torch.nn.functional.conv2d(xpad, self.kernels.to(device=x.device), stride=1)
+        c = torch.nn.functional.conv2d(
+            xpad, self.kernels.to(device=x.device, dtype=x.dtype), stride=1
+        )
         c = torch.cat((c, x), 1)  # Concat with input to give identity kernel Bx5xHxW
 
         rgb = torch.gather(

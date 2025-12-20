@@ -92,7 +92,7 @@ class Debayer5x5(torch.nn.Module):
 
         xpad = torch.nn.functional.pad(x, (2, 2, 2, 2), mode="reflect")
         planes = torch.nn.functional.conv2d(
-            xpad, self.kernels.to(device=x.device), stride=1
+            xpad, self.kernels.to(device=x.device, dtype=x.dtype), stride=1
         )
         planes = torch.cat(
             (planes, x), 1

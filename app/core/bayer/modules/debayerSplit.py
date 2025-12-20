@@ -38,7 +38,9 @@ class DebayerSplit(torch.nn.Module):
         red = x[:, :, ::2, ::2]
         blue = x[:, :, 1::2, 1::2]
 
-        green = torch.nn.functional.conv2d(self.pad(x), self.kernel.to(device=x.device))
+        green = torch.nn.functional.conv2d(
+            self.pad(x), self.kernel.to(device=x.device, dtype=x.dtype)
+        )
         green[:, :, ::2, 1::2] = x[:, :, ::2, 1::2]
         green[:, :, 1::2, ::2] = x[:, :, 1::2, ::2]
 
