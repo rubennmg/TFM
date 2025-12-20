@@ -45,18 +45,22 @@ s = c * r^{gamma}
 
 Horizontal y/o vertical.
 
-## Ecualización del histograma
+## Ecualización del histograma ✅
 
-## CLAHE (Contrast Limited Adaptive Histogram Equalization)
+## CLAHE (Contrast Limited Adaptive Histogram Equalization) ✅
 
 ## Filtro gaussiano ✅
 
 Suavizado mediante convolución con un núcleo gaussiano con parámetro sigma.
 
-## Filtro de mediana ✅ (_revisar_)
+## Filtro de mediana ✅
 
-## Filtro de paso alto / Realce de bordes (Unsharp Masking)
+## Filtro de paso alto / Realce de bordes (Unsharp Masking) ✅
 
 ```math
 I_{afilada} = I_{orignal} + peso * (I_{original} - I_{suavizada})
+```
+
+```math
+I_{\text{out}} = 255 \times \text{gain} \times \left(\frac{I_{\text{in}}}{255}\right)^{\gamma}
 ```
