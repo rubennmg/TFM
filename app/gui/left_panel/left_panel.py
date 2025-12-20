@@ -63,11 +63,6 @@ class LeftPanel(QWidget):
             return
         self.histogram.update_from_array(img_np)
 
-    def update_histogram_bins(
-        self, bins_r: np.ndarray, bins_g: np.ndarray, bins_b: np.ndarray
-    ) -> None:
-        self.histogram.update_from_bins(bins_r, bins_g, bins_b)
-
     def build_loader_extensions_filter(self) -> str:
         extensions: list[str] = self.controller.get_image_extensions()
         extensions_filter: str = "Images ("

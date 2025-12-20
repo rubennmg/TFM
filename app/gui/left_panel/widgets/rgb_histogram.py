@@ -72,24 +72,6 @@ class RgbHistogram(QWidget):
         )
         self.update()
 
-    def update_from_bins(
-        self, bins_r: np.ndarray, bins_g: np.ndarray, bins_b: np.ndarray
-    ) -> None:
-        """Update histogram directly from bin counts (length 256 per channel)."""
-        try:
-            br = np.asarray(bins_r).astype(np.int64, copy=False)
-            bg = np.asarray(bins_g).astype(np.int64, copy=False)
-            bb = np.asarray(bins_b).astype(np.int64, copy=False)
-            if br.shape[0] != 256 or bg.shape[0] != 256 or bb.shape[0] != 256:
-                raise ValueError("Bins must have length 256")
-            self._bins_r, self._bins_g, self._bins_b = br, bg, bb
-            self._max_count = float(
-                max(1, br.max(initial=1), bg.max(initial=1), bb.max(initial=1))
-            )
-            self.update()
-        except Exception:
-            self.clear()
-
     def paintEvent(self, event) -> None:  # type: ignore[override]
         p: QPainter = QPainter(self)
         p.setRenderHint(QPainter.RenderHint.Antialiasing, True)
