@@ -11,7 +11,6 @@ from PyQt6.QtWidgets import (
 from gui.right_panel.widgets.debayer_op_control import DebayerOperationControl
 from gui.right_panel.widgets.filter_op_control import FilterOperationControl
 from gui.right_panel.widgets.flip_op_control import FlipOperationControl
-from gui.right_panel.widgets.median_op_control import MedianOperationControl
 from gui.right_panel.widgets.minmax_percentile_op_control import (
     MinMaxPercentileOperationControl,
 )
@@ -99,11 +98,6 @@ class RightPanel(QWidget):
                 operation_name=definition.name,
                 operation_index=operation_index,
                 params=definition.params or [],
-                parent=self,
-            ),
-            "median": lambda: MedianOperationControl(
-                controller=self.controller,
-                operation_index=operation_index,
                 parent=self,
             ),
             "minmax_percentile": lambda: MinMaxPercentileOperationControl(
