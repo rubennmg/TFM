@@ -1,13 +1,14 @@
 import pytest
 import torch
 from torch import Size, Tensor
+from core._tensor_utils import CHANNEL_DIM
 
 
 @pytest.fixture
 def base_tensor():
-    """Returns an image tensor with shape [B, C, H, W] and given dtype."""
+    """Returns an image tensor with shape [C, H, W] and given dtype."""
 
-    def _factory(shape: Size = Size([1, 3, 4, 4]), dtype: str = "float") -> Tensor:
+    def _factory(shape: Size = Size([3, 4, 4]), dtype: str = "float") -> Tensor:
         numel: int = 1
         for dim in shape:
             numel *= dim
@@ -43,8 +44,8 @@ def assert_channels():
     """Checks that an image tensor with shape [B, C, H, W] has the expected number of channels."""
 
     def _assert_channels(tensor: Tensor, expected_channels: int) -> None:
-        assert tensor.dim() == 4, f"Expected a 4D tensor, got {tensor.dim()}D tensor."
-        actual_channels = tensor.size(1)
+        assert tensor.dim() == 3, f"Expected a 3D tensor, got {tensor.dim()}D tensor."
+        actual_channels = tensor.size(CHANNEL_DIM)
         assert actual_channels == expected_channels, (
             f"Expected {expected_channels} channels, got {actual_channels} channels."
         )

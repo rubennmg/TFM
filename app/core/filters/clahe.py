@@ -24,6 +24,11 @@ class CLAHE(ImageOperation):
             clip_limit (float): Threshold for contrast limiting. Default is 40.0.
             grid_size (float): Size of grid for histogram equalization. Default is 8.
         """
+        if clip_limit <= 0.0:
+            raise ValueError("clip_limit must be a positive float.")
+        if grid_size <= 0:
+            raise ValueError("grid_size must be a positive integer.")
+
         self.clip_limit = clip_limit
         self.grid_size = (int(grid_size), int(grid_size))
 

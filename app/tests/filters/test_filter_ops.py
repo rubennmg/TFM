@@ -2,6 +2,9 @@ import pytest
 import torch
 from torch import Tensor
 from torchvision import transforms as T
+from torchvision.transforms import functional as F
+from kornia import enhance as K_e
+from kornia import filters as K_f
 
 from core.filters.clahe import CLAHE
 from core.filters.gamma import GammaAdjustment
@@ -31,7 +34,7 @@ class TestSigmoidContrast:
             SigmoidContrast(cutoff=1.5)
 
     def test_apply_operation(self, base_tensor, assert_tensors) -> None:
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4])
+        entry: Tensor = base_tensor(shape=[3, 4, 4])
         op = SigmoidContrast(cutoff=1.0, gain=10.0)
 
         result = op(entry)
@@ -80,7 +83,7 @@ class TestGammaAdjustment:
             GammaAdjustment(gamma=0.0)
 
     def test_apply_operation(self, base_tensor, assert_tensors) -> None:
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4])
+        entry: Tensor = base_tensor(shape=[3, 4, 4])
         op = GammaAdjustment(c=2.0, gamma=0.5)
 
         result = op(entry)
@@ -110,7 +113,7 @@ class TestGaussianFilter:
             GaussianFilter(kernel_size=3, sigma=0.0)
 
     def test_apply_operation(self, base_tensor, assert_tensors) -> None:
-        entry: Tensor = base_tensor(shape=[1, 3, 5, 5])
+        entry: Tensor = base_tensor(shape=[3, 5, 5])
         op = GaussianFilter(kernel_size=3, sigma=1.0)
 
         result = op(entry)
@@ -140,8 +143,8 @@ class TestMedianFilter:
             MedianFilter(kernel_size=2)
 
     def test_apply_operation(self, assert_tensors) -> None:
-        entry = torch.zeros(1, 1, 5, 5)
-        entry[0, 0, 2, 2] = 1.0
+        entry = torch.zeros(1, 5, 5)
+        entry[0, 2, 2] = 1.0
         op = MedianFilter(kernel_size=3)
 
         result = op(entry)
@@ -151,15 +154,82 @@ class TestMedianFilter:
         assert_tensors(result, expected)
 
 
-class TestNotImplementedFilters:
-    def test_clahe_not_implemented(self) -> None:
-        with pytest.raises(NotImplementedError):
-            CLAHE()
+class TestHistogramEqualization:
+    """Unit tests for the HistogramEqualization operation class.
 
-    def test_histogram_equalization_not_implemented(self) -> None:
-        with pytest.raises(NotImplementedError):
-            HistogramEqualization()
+    Tests cover:
+    - Correct application of the histogram equalization operation
 
-    def test_unsharp_masking_not_implemented(self) -> None:
-        with pytest.raises(NotImplementedError):
-            UnsharpMasking()
+    See Also:
+        core.filters.histogram_equalization.HistogramEqualization: The HistogramEqualization operation class being tested
+    """
+
+    def test_apply_operation(self, base_tensor, assert_tensors) -> None:
+        entry: Tensor = base_tensor(shape=[3, 4, 4])
+        op = HistogramEqualization()
+
+        result = op(entry)
+
+        entry_rgb8 = F.convert_image_dtype(entry, dtype=torch.uint8)
+        expected = F.equalize(entry_rgb8)
+        expected = F.convert_image_dtype(expected, dtype=entry.dtype)
+
+        assert_tensors(result, expected, atol=1e-2)
+
+
+class TestCLAHE:
+    """Unit tests for the CLAHE operation class.
+
+    Tests cover:
+    - Parameter validation (value constraints)
+    - Correct application of the CLAHE operation
+
+    See Also:
+        core.filters.clahe.CLAHE: The CLAHE operation class being tested
+    """
+
+    def test_parameter_validation(self) -> None:
+        with pytest.raises(ValueError):
+            CLAHE(clip_limit=0.0)
+
+        with pytest.raises(ValueError):
+            CLAHE(grid_size=0)
+
+    def test_apply_operation(self, base_tensor, assert_tensors) -> None:
+        entry: Tensor = base_tensor(shape=[3, 16, 16])
+        op = CLAHE(clip_limit=2.0, grid_size=8)
+
+        result = op(entry)
+        expected = K_e.equalize_clahe(entry, clip_limit=2.0, grid_size=(8, 8))
+
+        assert_tensors(result, expected)
+
+
+class TestUnsharpMasking:
+    """Unit tests for the UnsharpMasking operation class.
+
+    Tests cover:
+    - Parameter validation (value constraints)
+    - Correct application of the unsharp masking operation
+
+    See Also:
+        core.filters.unsharp_masking.UnsharpMasking: The UnsharpMasking operation class being tested
+    """
+
+    def test_parameter_validation(self) -> None:
+        with pytest.raises(ValueError):
+            UnsharpMasking(kernel_size=4)
+
+        with pytest.raises(ValueError):
+            UnsharpMasking(kernel_size=3, sigma=0.0)
+
+    def test_apply_operation(self, base_tensor, assert_tensors) -> None:
+        entry: Tensor = base_tensor(shape=[3, 5, 5])
+        op = UnsharpMasking(kernel_size=3, sigma=1.0)
+
+        result = op(entry)
+        expected = K_f.unsharp_mask(
+            entry.unsqueeze(0), kernel_size=3, sigma=(1.0, 1.0)
+        ).squeeze(0)
+
+        assert_tensors(result, expected)

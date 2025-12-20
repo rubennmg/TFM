@@ -21,7 +21,7 @@ class TestColorToGray:
     """
 
     def test_requires_three_channels(self, base_tensor) -> None:
-        grayscale: Tensor = base_tensor(shape=[1, 1, 4, 4])
+        grayscale: Tensor = base_tensor(shape=[1, 4, 4])
         op = ColorToGray()
 
         with pytest.raises(ValueError):
@@ -30,12 +30,12 @@ class TestColorToGray:
     def test_apply_operation(
         self, base_tensor, assert_tensors, assert_channels
     ) -> None:
-        rgb: Tensor = base_tensor(shape=[1, 3, 4, 4])
+        rgb: Tensor = base_tensor(shape=[3, 4, 4])
         op = ColorToGray()
 
         result = op(rgb)
 
-        weights = rgb.new_tensor([0.2989, 0.5870, 0.1140]).view(1, 3, 1, 1)
+        weights = rgb.new_tensor([0.2989, 0.5870, 0.1140]).view(3, 1, 1)
         expected = (rgb * weights).sum(dim=CHANNEL_DIM, keepdim=True)
 
         assert_channels(result, expected_channels=1)
@@ -47,48 +47,31 @@ class TestGrayToColor:
 
     Tests cover:
     - Input validation (requires single-channel input)
-    - Invalid mode handling
-    - Correct application of the grayscale to color conversion operation for 'repeat' and 'heat'
+    - Correct application of the grayscale to color conversion operation
 
     See Also:
         core.color.gray_to_color.GrayToColor: The GrayToColor operation class being tested
     """
 
     def test_requires_single_channel(self, base_tensor) -> None:
-        rgb: Tensor = base_tensor(shape=[1, 3, 4, 4])
-        op = GrayToColor(mode="repeat")
+        rgb: Tensor = base_tensor(shape=[3, 4, 4])
+        op = GrayToColor()
 
         with pytest.raises(ValueError):
             op(rgb)
 
-    def test_invalid_mode(self) -> None:
-        with pytest.raises(ValueError):
-            GrayToColor(mode="invalid")
+    def test_apply_operation_repeat(
+        self, base_tensor, assert_tensors, assert_channels
+    ) -> None:
+        gray: Tensor = base_tensor(shape=[1, 4, 4])
+        op = GrayToColor()
 
-    def test_repeat_mode(self, base_tensor, assert_tensors, assert_channels) -> None:
-        grayscale: Tensor = base_tensor(shape=[1, 1, 4, 4])
-        op = GrayToColor(mode="repeat")
+        result = op(gray)
 
-        result = op(grayscale)
+        expected = gray.repeat(3, 1, 1)
 
-        expected = grayscale.repeat(1, 3, 1, 1)
-
-        assert_tensors(result, expected)
         assert_channels(result, expected_channels=3)
-
-    def test_heat_mode(self, base_tensor, assert_tensors, assert_channels) -> None:
-        grayscale: Tensor = base_tensor(shape=[1, 1, 4, 4])
-        op = GrayToColor(mode="heat")
-
-        result = op(grayscale)
-
-        xmin = grayscale.amin(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
-        xmax = grayscale.amax(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
-        v = (grayscale - xmin) / (xmax - xmin + 1e-8)
-
-        expected = torch.cat([v, v.sqrt(), torch.zeros_like(v)], dim=CHANNEL_DIM)
         assert_tensors(result, expected)
-        assert_channels(result, expected_channels=3)
 
 
 class TestColorSpaceConversions:
@@ -105,27 +88,27 @@ class TestColorSpaceConversions:
     """
 
     def test_rgb_to_hsv(self, assert_tensors) -> None:
-        rgb = torch.tensor([[[[1.0]], [[0.0]], [[0.0]]]])
+        rgb = torch.tensor([[[1.0]], [[0.0]], [[0.0]]])
         op = RgbToHsv()
 
         hsv = op(rgb)
 
-        expected = torch.tensor([[[[0.0]], [[1.0]], [[1.0]]]], dtype=rgb.dtype)
+        expected = torch.tensor([[[0.0]], [[1.0]], [[1.0]]], dtype=rgb.dtype)
 
         assert_tensors(hsv, expected)
 
     def test_hsv_to_rgb(self, assert_tensors) -> None:
-        hsv = torch.tensor([[[[1.0 / 3.0]], [[1.0]], [[1.0]]]])
+        hsv = torch.tensor([[[0.0]], [[1.0]], [[1.0]]])
         op = HsvToRgb()
 
         rgb = op(hsv)
 
-        expected = torch.tensor([[[[0.0]], [[1.0]], [[0.0]]]], dtype=hsv.dtype)
+        expected = torch.tensor([[[1.0]], [[0.0]], [[0.0]]], dtype=hsv.dtype)
 
         assert_tensors(rgb, expected)
 
     def test_roundtrip_rgb_hsv(self, base_tensor, assert_tensors) -> None:
-        rgb: Tensor = base_tensor(shape=[1, 3, 4, 4])
+        rgb: Tensor = base_tensor(shape=[3, 4, 4])
         to_hsv = RgbToHsv()
         to_rgb = HsvToRgb()
 
@@ -135,7 +118,7 @@ class TestColorSpaceConversions:
         assert_tensors(rgb, recon, atol=1e-3)
 
     def test_roundtrip_hsv_rgb(self, base_tensor, assert_tensors) -> None:
-        hsv: Tensor = base_tensor(shape=[1, 3, 4, 4])
+        hsv: Tensor = base_tensor(shape=[3, 4, 4])
         to_rgb = HsvToRgb()
         to_hsv = RgbToHsv()
 

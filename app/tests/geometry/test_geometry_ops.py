@@ -25,7 +25,7 @@ class TestFlip:
             Flip(horizontal="yes")  # type: ignore
 
     def test_horizontal_flip(self, base_tensor, assert_tensors):
-        entry: Tensor = base_tensor(shape=[1, 1, 4, 4])
+        entry: Tensor = base_tensor(shape=[1, 4, 4])
         op = Flip(horizontal=True)
 
         result = op(entry)
@@ -34,7 +34,7 @@ class TestFlip:
         assert_tensors(result, expected)
 
     def test_vertical_flip(self, base_tensor, assert_tensors):
-        entry: Tensor = base_tensor(shape=[1, 1, 4, 4])
+        entry: Tensor = base_tensor(shape=[1, 4, 4])
         op = Flip(horizontal=False)
 
         result = op(entry)
@@ -42,7 +42,7 @@ class TestFlip:
         assert_tensors(result, expected)
 
     def test_no_flip(self, base_tensor, assert_tensors):
-        entry: Tensor = base_tensor(shape=[1, 1, 4, 4])
+        entry: Tensor = base_tensor(shape=[1, 4, 4])
         op = Flip(horizontal=True)
 
         result = op(op(entry))
@@ -72,7 +72,7 @@ class TestRotate:
             Rotate(angle=720)
 
     def test_apply_operation(self, base_tensor, assert_tensors):
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4])
+        entry: Tensor = base_tensor(shape=[3, 4, 4])
         angle = 30.0
         op = Rotate(angle=angle)
 
@@ -82,7 +82,7 @@ class TestRotate:
         assert_tensors(result, expected, atol=1e-5)
 
     def test_no_rotation(self, base_tensor, assert_tensors):
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4])
+        entry: Tensor = base_tensor(shape=[3, 4, 4])
         op = Rotate(angle=0)
 
         result = op(entry)
@@ -91,7 +91,7 @@ class TestRotate:
         assert_tensors(result, expected)
 
     def test_full_rotation(self, base_tensor, assert_tensors):
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4])
+        entry: Tensor = base_tensor(shape=[3, 4, 4])
         op = Rotate(angle=360)
 
         result = op(entry)

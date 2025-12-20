@@ -21,7 +21,7 @@ class TestMinMaxNormalization:
         channel_0 = torch.tensor([[0.0, 1.0], [2.0, 3.0]])
         channel_1 = torch.tensor([[5.0, 5.0], [5.0, 10.0]])
 
-        entry = torch.stack([channel_0, channel_1]).unsqueeze(0)
+        entry = torch.stack([channel_0, channel_1])
 
         op = MinMaxNormalization()
         eps = op.eps
@@ -36,7 +36,7 @@ class TestMinMaxNormalization:
         assert_tensors(result, expected)
 
     def test_constant_tensor_returns_zero(self, assert_tensors):
-        entry = torch.ones(1, 1, 4, 4)
+        entry = torch.ones(1, 4, 4)
         op = MinMaxNormalization()
 
         result = op(entry)
@@ -65,14 +65,14 @@ class TestMinMaxPercentileNormalization:
             MinMaxPercentileNormalization(lower_percentile=-0.1, upper_percentile=0.9)
 
     def test_percentile_values(self, assert_tensors):
-        entry = torch.tensor([[[[0.0, 1.0], [2.0, 100.0]]]])
+        entry = torch.tensor([[[0.0, 1.0], [2.0, 100.0]]])
 
         op = MinMaxPercentileNormalization(lower_percentile=0.25, upper_percentile=0.75)
         eps = op.eps
 
         result = op(entry)
 
-        flat = entry.view(1, 1, -1)
+        flat = entry.view(1, -1)
 
         lower = torch.quantile(flat, 0.25, dim=HEIGHT_DIM, keepdim=True)
         upper = torch.quantile(flat, 0.75, dim=HEIGHT_DIM, keepdim=True)

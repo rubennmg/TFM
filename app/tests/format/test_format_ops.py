@@ -18,14 +18,14 @@ class TestRealToRGB8:
     """
 
     def test_requires_real_input(self, base_tensor):
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4], dtype="int")
+        entry: Tensor = base_tensor(shape=[3, 4, 4], dtype="int")
         op = RealToRGB8()
 
         with pytest.raises(ValueError):
             op(entry)
 
     def test_apply_operation(self, base_tensor, assert_tensors):
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4], dtype="float")
+        entry: Tensor = base_tensor(shape=[3, 4, 4], dtype="float")
         op = RealToRGB8()
 
         result = op(entry)
@@ -48,14 +48,14 @@ class TestRGB8ToReal:
     """
 
     def test_requires_integer_input(self, base_tensor):
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4], dtype="float")
+        entry: Tensor = base_tensor(shape=[3, 4, 4], dtype="float")
         op = RGB8ToReal()
 
         with pytest.raises(ValueError):
             op(entry)
 
     def test_apply_operation(self, base_tensor, assert_tensors):
-        entry: Tensor = base_tensor(shape=[1, 3, 4, 4], dtype="int")
+        entry: Tensor = base_tensor(shape=[3, 4, 4], dtype="int")
         op = RGB8ToReal()
 
         result = op(entry)

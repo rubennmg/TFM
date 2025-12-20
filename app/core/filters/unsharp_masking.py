@@ -24,6 +24,11 @@ class UnsharpMasking(ImageOperation):
             kernel_size (float): Size of the kernel. Default is 3.
             sigma (float): Standard deviation of the kernel. Default is 1.5.
         """
+        if kernel_size % 2 == 0 or kernel_size < 1:
+            raise ValueError("kernel_size must be a positive odd integer.")
+        if sigma <= 0.0:
+            raise ValueError("sigma must be a positive float.")
+
         self.kernel_size = (int(kernel_size), int(kernel_size))
         self.sigma = (sigma, sigma)
 
