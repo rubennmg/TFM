@@ -1,5 +1,7 @@
+from kornia import enhance as E
 from torch import Tensor
 
+from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -7,14 +9,18 @@ from core.registry import register_operation
 @register_operation
 class CLAHE(ImageOperation):
     """Class to apply Contrast Limited Adaptive Histogram Equalization (CLAHE) to image tensors.
+    Uses Kornia's CLAHE implementation.
+
+    See: https://kornia.readthedocs.io/en/latest/enhance.html#kornia.enhance.equalize_clahe
 
     Args:
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    def __init__(self):
+    def __init__(self, clip_limit: float = 40.0, grid_size: float = 8):
         """Class constructor."""
-        raise NotImplementedError("CLAHE operation is not yet implemented.")
+        self.clip_limit = clip_limit
+        self.grid_size = (int(grid_size), int(grid_size))
 
     def apply(self, x: Tensor) -> Tensor:
         """Apply CLAHE to the image tensor.
@@ -25,5 +31,6 @@ class CLAHE(ImageOperation):
         Returns:
             Tensor: Image tensor after applying CLAHE of shape (B, C, H, W).
         """
+        T_u.assert_real_valued_tensor(x)
 
-        raise NotImplementedError("CLAHE operation is not yet implemented.")
+        return E.equalize_clahe(x, clip_limit=self.clip_limit, grid_size=self.grid_size)

@@ -86,6 +86,25 @@ _FILTER_ROTATE_PARAMS = [
     )
 ]
 
+_FILTER_CLAHE_PARAMS = [
+    FloatParamSpec(
+        key="clip_limit",
+        label="Clip Limit",
+        minimum=1.0,
+        maximum=100.0,
+        step=1.0,
+        default=40.0,
+    ),
+    FloatParamSpec(
+        key="grid_size",
+        label="Grid Size",
+        minimum=2,
+        maximum=32,
+        step=2,
+        default=8,
+    ),
+]
+
 
 _OPERATIONS: List[OperationDefinition] = [
     OperationDefinition(
@@ -195,6 +214,14 @@ _OPERATIONS: List[OperationDefinition] = [
         label="Histogram Equalization",
         category="Filters",
         control_type="no_param",
+    ),
+    OperationDefinition(
+        name="CLAHE",
+        label="CLAHE",
+        category="Filters",
+        control_type="filter",
+        params=_FILTER_CLAHE_PARAMS,
+        default_params={"clip_limit": 40.0, "grid_size": 8},
     ),
 ]
 
