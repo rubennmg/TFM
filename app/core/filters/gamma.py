@@ -32,10 +32,10 @@ class GammaAdjustment(ImageOperation):
         """Apply gamma adjustment to the input image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Gamma-adjusted image tensor of shape (B, C, H, W).
+            Tensor: Gamma-adjusted image tensor of shape (C, H, W).
         """
         T_u.assert_real_valued_tensor(x)
 

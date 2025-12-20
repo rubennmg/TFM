@@ -6,6 +6,7 @@ import rawpy
 import torch
 from torch import Tensor, device
 
+from core._tensor_utils import CHANNEL_DIM, HEIGHT_DIM, WIDTH_DIM
 from models.enums.color_space import ColorSpace
 from models.enums.image_formats import ImageFormat
 from models.enums.layouts import Layout
@@ -37,19 +38,21 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
     tensor: Tensor = torch.from_numpy(normalized_data)
 
     if tensor.ndim == 2:
-        tensor = tensor.unsqueeze(0).unsqueeze(0)  # B,C,H,W
+        tensor = tensor.unsqueeze(0)  # C,H,W
     else:
         if tensor.shape[2] == 4:
             tensor = tensor[:, :, :3]  # discard alpha channel
 
-        tensor = tensor.permute(2, 0, 1).unsqueeze(0).contiguous()  # B,C,H,W
+        tensor = tensor.permute(2, 0, 1).contiguous()  # C,H,W
 
     tensor = tensor.to(device=device)
 
     if not tensor.is_contiguous():
         tensor = tensor.contiguous()
 
-    color_space = ColorSpace.GRAYSCALE if tensor.shape[1] == 1 else ColorSpace.RGB
+    color_space = (
+        ColorSpace.GRAYSCALE if tensor.shape[CHANNEL_DIM] == 1 else ColorSpace.RGB
+    )
 
     return Image(
         tensor=tensor,
@@ -60,8 +63,8 @@ def load_rawpy(path: str, device: device, fmt: ImageFormat) -> Image:
         image_format=fmt,
         color_space=color_space,
         metadata=Metadata(
-            width=tensor.shape[3],
-            height=tensor.shape[2],
+            width=tensor.shape[WIDTH_DIM],
+            height=tensor.shape[HEIGHT_DIM],
             bit_depth=bit_depth,
             bayer_pattern=bayer_pattern,
         ),

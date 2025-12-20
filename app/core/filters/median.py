@@ -1,5 +1,5 @@
-from torch import Tensor
 from kornia import filters as K_e
+from torch import Tensor
 
 from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
@@ -35,11 +35,13 @@ class MedianFilter(ImageOperation):
         """Apply the Median Filter to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Filtered image tensor of shape (B, C, H, W).
+            Tensor: Filtered image tensor of shape (C, H, W).
         """
         T_u.assert_real_valued_tensor(x)
 
-        return K_e.median_blur(x, self.kernel_size)
+        out = K_e.median_blur(x.unsqueeze(0), self.kernel_size)
+
+        return out.squeeze(0)

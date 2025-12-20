@@ -28,10 +28,10 @@ class Flip(ImageOperation):
         """Apply the flip to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Flipped image tensor of shape (B, C, H, W).
+            Tensor: Flipped image tensor of shape (C, H, W).
         """
         if self.horizontal:
             return x.flip(dims=[WIDTH_DIM])

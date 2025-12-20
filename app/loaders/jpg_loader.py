@@ -2,6 +2,7 @@ import torch
 from torch import Tensor
 from torchvision.io import decode_image
 
+from core._tensor_utils import HEIGHT_DIM, WIDTH_DIM
 from models.enums.image_formats import ImageFormat
 from loaders.base_loader import ImageLoader
 from models.image import Image
@@ -27,8 +28,7 @@ class JpgLoader(ImageLoader):
         return [ImageFormat.JPG]
 
     def load(self, path: str, device) -> Image:
-        tensor: Tensor = decode_image(path).to(dtype=torch.float32).mul_(SCALE)
-        tensor = tensor.unsqueeze(0)
+        tensor: Tensor = decode_image(path).to(dtype=torch.float32).mul_(SCALE)  # C,H,W
         tensor = tensor.to(device=device)
 
         if not tensor.is_contiguous():
@@ -43,8 +43,8 @@ class JpgLoader(ImageLoader):
             image_format=ImageFormat.JPG,
             color_space=ColorSpace.RGB,
             metadata=Metadata(
-                width=tensor.shape[3],
-                height=tensor.shape[2],
+                width=tensor.shape[WIDTH_DIM],
+                height=tensor.shape[HEIGHT_DIM],
                 bit_depth=8,
                 bayer_pattern=None,
             ),

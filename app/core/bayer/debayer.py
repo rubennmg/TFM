@@ -51,15 +51,18 @@ class Debayer(ImageOperation):
         """Apply the debayering operation.
 
         Args:
-            x (Tensor): Input RAW tensor of shape (B, 1, H, W).
+            x (Tensor): Input RAW tensor of shape (1, H, W).
 
         Returns:
-            Tensor: Debayered tensor of shape (B, 3, H, W).
+            Tensor: Debayered tensor of shape (3, H, W).
         """
         T_u.assert_grayscale_image_tensor(x)
 
+        x.unsqueeze_(0)  # Add channel dimension for the module
+
         with torch.no_grad():
             out: Tensor = self.module(x).to(device=x.device, dtype=x.dtype)
+            out.squeeze_(0)  # Remove channel dimension after the module
 
         T_u.assert_color_image_tensor(out)
 

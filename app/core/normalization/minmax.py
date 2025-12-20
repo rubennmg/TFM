@@ -26,10 +26,10 @@ class MinMaxNormalization(ImageOperation):
         """Apply Min-Max Normalization to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Normalized image tensor of shape (B, C, H, W).
+            Tensor: Normalized image tensor of shape (C, H, W).
         """
         x_min = x.amin(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)
         x_max = x.amax(dim=(HEIGHT_DIM, WIDTH_DIM), keepdim=True)

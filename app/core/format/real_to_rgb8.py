@@ -26,10 +26,10 @@ class RealToRGB8(ImageOperation):
         """Convert real-valued image tensor to RGB8 format.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Image tensor in RGB8 format of shape (B, C, H, W).
+            Tensor: Image tensor in RGB8 format of shape (C, H, W).
         """
         T_u.assert_real_valued_tensor(x)
 

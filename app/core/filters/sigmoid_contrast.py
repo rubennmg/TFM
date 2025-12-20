@@ -44,10 +44,10 @@ class SigmoidContrast(ImageOperation):
         """Apply the sigmoid contrast enhancement.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Contrast-enhanced image tensor of shape (B, C, H, W).
+            Tensor: Contrast-enhanced image tensor of shape (C, H, W).
         """
         T_u.assert_real_valued_tensor(x)
 

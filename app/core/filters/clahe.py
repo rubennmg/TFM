@@ -31,10 +31,10 @@ class CLAHE(ImageOperation):
         """Apply CLAHE to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Image tensor after applying CLAHE of shape (B, C, H, W).
+            Tensor: Image tensor after applying CLAHE of shape (C, H, W).
         """
         T_u.assert_real_valued_tensor(x)
 

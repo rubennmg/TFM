@@ -31,11 +31,15 @@ class UnsharpMasking(ImageOperation):
         """Apply Unsharp Masking to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Filtered image tensor of shape (B, C, H, W).
+            Tensor: Filtered image tensor of shape (C, H, W).
         """
         T_u.assert_real_valued_tensor(x)
 
-        return K_f.unsharp_mask(x, kernel_size=self.kernel_size, sigma=self.sigma)
+        out = K_f.unsharp_mask(
+            x.unsqueeze(0), kernel_size=self.kernel_size, sigma=self.sigma
+        )
+
+        return out.squeeze(0)

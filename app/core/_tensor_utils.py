@@ -1,10 +1,9 @@
 from torch import Tensor
 
-# [B, C, H, W]
-BATCH_DIM = 0
-CHANNEL_DIM = 1
-HEIGHT_DIM = 2
-WIDTH_DIM = 3
+# [C, H, W]
+CHANNEL_DIM = 0
+HEIGHT_DIM = 1
+WIDTH_DIM = 2
 
 
 def _is_tensor_a_torch_image(x: Tensor) -> bool:
@@ -13,15 +12,13 @@ def _is_tensor_a_torch_image(x: Tensor) -> bool:
     A torch image is defined as a 3D tensor with shape (C, H, W) where C is
     the number of channels (1, 3, or 4), and H and W are the height and width
     of the image respectively.
-    In this context, we consider a batch of images too, so a 4D tensor with shape
-    (B, C, H, W) is how we define a torch image.
 
     Args:
         x (Tensor): Input tensor to check.
     Returns:
         bool: True if the tensor is a torch image, False otherwise.
     """
-    return x.ndim == 4
+    return x.ndim == 3
 
 
 def assert_image_tensor(x: Tensor) -> None:
@@ -31,7 +28,7 @@ def assert_image_tensor(x: Tensor) -> None:
         x (Tensor): Input tensor to check.
     Raises:
         TypeError: If the input is not a tensor.
-        ValueError: If the tensor does not have at least 2 dimensions.
+        TypeError: If the tensor is not a torch image.
     """
     if not isinstance(x, Tensor):
         raise TypeError(f"Expected input of type Tensor, got {type(x)}")

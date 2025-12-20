@@ -36,8 +36,10 @@ def load_image(path: str, device: device) -> Image:
     """
     fmt_str: str = path.split(".")[-1].lower()
     loader: ImageLoader | None = _EXTENSION_MAP.get(fmt_str)
+
     if loader is None:
         raise ValueError(f"Unsupported image format: {fmt_str}")
+
     return loader.load(path, device)
 
 

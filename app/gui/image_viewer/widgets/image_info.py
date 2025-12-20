@@ -2,6 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGridLayout, QLabel, QWidget
 
 from models.image import Image
+from core._tensor_utils import CHANNEL_DIM
 
 
 class ImageInfo(QWidget):
@@ -83,7 +84,7 @@ class ImageInfo(QWidget):
                 "format": image_format,
                 "color_space": color_space,
                 "resolution": resolution,
-                "channels": str(image.tensor.shape[1]),
+                "channels": str(image.tensor.shape[CHANNEL_DIM]),
                 "bit_depth": str(bit_depth),
                 "bayer_pattern": bayer_pattern,
                 "tensor": str(image.tensor.shape)

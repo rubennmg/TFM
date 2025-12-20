@@ -34,9 +34,9 @@ class Rotate(ImageOperation):
         """Apply the rotation to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Rotated image tensor of shape (B, C, H, W).
+            Tensor: Rotated image tensor of shape (C, H, W).
         """
         return F.rotate(x, angle=self.angle, expand=False)

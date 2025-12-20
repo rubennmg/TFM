@@ -21,10 +21,10 @@ class GrayToColor(ImageOperation):
         """Apply the grayscale to color conversion to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, 1, H, W) in grayscale format.
+            x (Tensor): Input image tensor of shape (1, H, W) in grayscale format.
 
         Returns:
-            Tensor: Converted image tensor of shape (B, 3, H, W) in color format.
+            Tensor: Converted image tensor of shape (3, H, W) in color format.
         """
         T_u.assert_grayscale_image_tensor(x)
 

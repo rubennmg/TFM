@@ -32,10 +32,10 @@ class GaussianFilter(ImageOperation):
         """Apply the Gaussian filter to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Filtered image tensor of shape (B, C, H, W).
+            Tensor: Filtered image tensor of shape (C, H, W).
         """
         T_u.assert_real_valued_tensor(x)
 

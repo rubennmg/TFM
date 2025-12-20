@@ -2,6 +2,8 @@ import numpy as np
 import torch
 from torch import Tensor, device
 
+from core._tensor_utils import CHANNEL_DIM
+
 
 def get_device() -> device:
     """Get the available device (GPU if available, else CPU).
@@ -26,10 +28,7 @@ def tensor_to_uint8_np(tensor: Tensor) -> np.ndarray:
     """
     t: Tensor = tensor.detach()
 
-    if t.ndim == 4:
-        t = t.squeeze(0)
-
-    if t.ndim == 3 and t.shape[0] in (1, 3):
+    if t.ndim == 3 and t.shape[CHANNEL_DIM] in (1, 3):
         # CHW -> HWC
         t = t.permute(1, 2, 0)
     elif t.ndim != 3:
@@ -65,9 +64,8 @@ def compute_histogram_bins_torch(
         tuple[np.ndarray, np.ndarray, np.ndarray]: Histograms for R, G, B channels.
     """
     t: Tensor = tensor
-    if t.ndim == 4:
-        t = t.squeeze(0)
-    if t.ndim == 3 and t.shape[0] in (1, 3):
+
+    if t.ndim == 3 and t.shape[CHANNEL_DIM] in (1, 3):
         # CHW -> HWC
         t = t.permute(1, 2, 0)
     elif t.ndim != 3:

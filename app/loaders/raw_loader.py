@@ -2,12 +2,12 @@ import numpy as np
 import torch
 from torch import Tensor
 
+from loaders.base_loader import ImageLoader
+from models.enums.color_space import ColorSpace
 from models.enums.image_formats import ImageFormat
 from models.enums.layouts import Layout
-from loaders.base_loader import ImageLoader
 from models.image import Image
 from models.metadata import Metadata
-from models.enums.color_space import ColorSpace
 
 # TODO: Implement reading actual metadata from a sidecar file associated with the RAW image.
 # Currently using default placeholder values for width, height, bit depth, and Bayer pattern.
@@ -41,9 +41,11 @@ class RawLoader(ImageLoader):
             (METADATA.height, METADATA.width)
         )
         tensor: Tensor = (
-            torch.from_numpy(raw_data).to(dtype=torch.float32).unsqueeze(0).mul_(SCALE)
+            torch.from_numpy(raw_data)
+            .to(dtype=torch.float32)
+            .unsqueeze(0)  # C,H,W
+            .mul_(SCALE)
         )
-        tensor = tensor.unsqueeze(0)  # BxCxHxW
         tensor = tensor.to(device=device)
 
         if not tensor.is_contiguous():

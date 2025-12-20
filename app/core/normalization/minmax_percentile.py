@@ -32,13 +32,13 @@ class MinMaxPercentileNormalization(ImageOperation):
         """Apply Min-Max Percentile Normalization to the image tensor.
 
         Args:
-            x (Tensor): Input image tensor of shape (B, C, H, W).
+            x (Tensor): Input image tensor of shape (C, H, W).
 
         Returns:
-            Tensor: Normalized image tensor of shape (B, C, H, W).
+            Tensor: Normalized image tensor of shape (C, H, W).
         """
-        b, c, h, w = x.shape
-        x_flat = x.view(b, c, -1)
+        c, h, w = x.shape
+        x_flat = x.view(c, -1)
 
         p_lower = torch.quantile(
             x_flat, self.lower_percentile, dim=HEIGHT_DIM, keepdim=True
@@ -51,6 +51,6 @@ class MinMaxPercentileNormalization(ImageOperation):
 
         x_normalized = (x_flat - p_lower) / denom
         x_normalized = torch.clamp(x_normalized, 0.0, 1.0)
-        x_normalized = x_normalized.view(b, c, h, w)
+        x_normalized = x_normalized.view(c, h, w)
 
         return x_normalized

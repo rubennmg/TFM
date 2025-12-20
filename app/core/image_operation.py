@@ -20,9 +20,9 @@ class ImageOperation(ABC):
 
         Raises:
             TypeError: If the input is not a Tensor.
-            ValueError: If the input tensor does not have 4 dimensions.
+            ValueError: If the input tensor does not have 3 dimensions.
             TypeError: If the output of apply() is not a Tensor.
-            ValueError: If the output tensor does not have 4 dimensions.
+            ValueError: If the output tensor does not have 3 dimensions.
 
         Returns:
             Tensor: The processed image tensor.
