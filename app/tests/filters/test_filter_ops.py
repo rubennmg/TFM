@@ -1,7 +1,7 @@
 import pytest
 import torch
 from torch import Tensor
-from torchvision.transforms import GaussianBlur
+from torchvision import transforms as T
 
 from core.filters.clahe import CLAHE
 from core.filters.gamma import GammaAdjustment
@@ -115,7 +115,7 @@ class TestGaussianFilter:
 
         result = op(entry)
 
-        ref = GaussianBlur(kernel_size=3, sigma=1.0)
+        ref = T.GaussianBlur(kernel_size=3, sigma=1.0)
         expected = ref(entry)
 
         assert_tensors(result, expected)

@@ -1,6 +1,6 @@
 import pytest
 from torch import Tensor
-from torchvision.transforms.functional import rotate as tv_rotate
+from torchvision.transforms import functional as F
 
 from core._tensor_utils import HEIGHT_DIM, WIDTH_DIM
 from core.geometry.flip import Flip
@@ -77,7 +77,7 @@ class TestRotate:
         op = Rotate(angle=angle)
 
         result = op(entry)
-        expected = tv_rotate(entry, angle=angle, expand=False)
+        expected = F.rotate(entry, angle=angle, expand=False)
 
         assert_tensors(result, expected, atol=1e-5)
 

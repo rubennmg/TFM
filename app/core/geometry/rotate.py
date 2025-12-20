@@ -2,7 +2,7 @@ from torch import Tensor
 
 from core.image_operation import ImageOperation
 from core.registry import register_operation
-from torchvision.transforms.functional import rotate
+from torchvision.transforms import functional as F
 
 
 @register_operation
@@ -39,4 +39,4 @@ class Rotate(ImageOperation):
         Returns:
             Tensor: Rotated image tensor of shape (B, C, H, W).
         """
-        return rotate(x, angle=self.angle, expand=False)
+        return F.rotate(x, angle=self.angle, expand=False)

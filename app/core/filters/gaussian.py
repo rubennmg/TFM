@@ -1,6 +1,6 @@
 from torch import Tensor
 
-from torchvision.transforms import GaussianBlur
+from torchvision import transforms as T
 
 from core.image_operation import ImageOperation
 from core.registry import register_operation
@@ -26,7 +26,7 @@ class GaussianFilter(ImageOperation):
         if sigma <= 0:
             raise ValueError("sigma must be a positive float.")
 
-        self.blur = GaussianBlur(kernel_size=kernel_size, sigma=sigma)
+        self.blur = T.GaussianBlur(kernel_size=kernel_size, sigma=sigma)
 
     def apply(self, x: Tensor) -> Tensor:
         """Apply the Gaussian filter to the image tensor.
