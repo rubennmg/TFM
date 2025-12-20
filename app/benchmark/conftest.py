@@ -43,13 +43,10 @@ def bench_profile(pytestconfig) -> list[dict[str, Any]]:
 @pytest.fixture
 def synthetic_tensor():
     def _factory(
-        shape: tuple[int, int, int, int] = (1, 3, 256, 256),
+        shape: tuple[int, int, int] = (3, 256, 256),
         dtype: dtype = torch.float32,
     ) -> Tensor:
-        if dtype.is_floating_point:
-            return torch.rand(shape, dtype=dtype)
-        else:
-            return torch.randint(0, 255, shape, dtype=dtype)
+        return torch.rand(shape, dtype=dtype)
 
     return _factory
 

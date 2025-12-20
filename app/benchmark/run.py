@@ -5,19 +5,19 @@ import torch
 from torch import Tensor, dtype
 
 _SHAPES = [
-    (1, 1, 256, 256),
-    (1, 1, 512, 512),
-    (1, 1, 1024, 1024),
-    (1, 1, 2048, 2048),
+    (1, 256, 256),
+    (1, 512, 512),
+    (1, 1024, 1024),
+    (1, 2048, 2048),
 ]
 
 _DEVICES = ["cpu", "cuda"] if torch.cuda.is_available() else ["cpu"]
 
-_DTYPES = [torch.float16, torch.float32]
+_DTYPES = [torch.float16, torch.float32, torch.float64]
 
 
-def _shape_id(shape: tuple[int, int, int, int]) -> str:
-    return f"{shape[0]}x{shape[1]}x{shape[2]}x{shape[3]}"
+def _shape_id(shape: tuple[int, int, int]) -> str:
+    return f"{shape[0]}x{shape[1]}x{shape[2]}"
 
 
 def _dtype_id(dtype: dtype) -> str:
@@ -37,7 +37,7 @@ def test_bench_run(
     synthetic_tensor: Callable,
     pipeline_factory: Callable[[str], Callable[[Tensor], Tensor]],
     device: str,
-    shape: tuple[int, int, int, int],
+    shape: tuple[int, int, int],
     dtype: dtype,
 ) -> None:
     if device == "cuda" and not torch.cuda.is_available():
