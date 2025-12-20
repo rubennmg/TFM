@@ -1,5 +1,5 @@
-import torch
 from torch import Tensor
+from torchvision.transforms.v2 import functional as F
 
 from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
@@ -32,9 +32,7 @@ class ColorToGray(ImageOperation):
         """
         T_u.assert_color_image_tensor(x)
 
-        weights = x.new_tensor([0.2989, 0.5870, 0.1140]).view(1, 3, 1, 1)
-
-        gray = torch.mul(x, weights).sum(dim=1, keepdim=True).to(x.dtype)
+        gray = F.rgb_to_grayscale(x)
 
         T_u.assert_grayscale_image_tensor(gray)
 

@@ -1,6 +1,7 @@
 import torch
 from torch import Tensor
 
+from torchvision.transforms.v2 import functional as F
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -36,9 +37,4 @@ class GammaAdjustment(ImageOperation):
         Returns:
             Tensor: Gamma-adjusted image tensor of shape (B, C, H, W).
         """
-        x_clamped = x.clamp(0.0, 1.0)
-
-        s = torch.mul(self.c, torch.pow(x_clamped, self.gamma))
-        s = s.clamp(0.0, 1.0)
-
-        return s
+        return F.adjust_gamma(x, self.gamma, self.c)

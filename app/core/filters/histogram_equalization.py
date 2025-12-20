@@ -16,7 +16,10 @@ class HistogramEqualization(ImageOperation):
     """
 
     def __init__(self):
-        """Class constructor."""
+        """Class constructor.
+
+        This operation does not require any parameters.
+        """
         pass
 
     def apply(self, x: Tensor) -> Tensor:
