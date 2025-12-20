@@ -1,7 +1,7 @@
 from torch import Tensor
-
 from torchvision import transforms as T
 
+from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -37,4 +37,6 @@ class GaussianFilter(ImageOperation):
         Returns:
             Tensor: Filtered image tensor of shape (B, C, H, W).
         """
+        T_u.assert_real_valued_tensor(x)
+
         return self.blur(x)

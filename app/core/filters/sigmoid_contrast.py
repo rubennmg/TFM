@@ -1,6 +1,7 @@
 import torch
 from torch import Tensor
 
+from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
 from core.registry import register_operation
 
@@ -48,6 +49,8 @@ class SigmoidContrast(ImageOperation):
         Returns:
             Tensor: Contrast-enhanced image tensor of shape (B, C, H, W).
         """
+        T_u.assert_real_valued_tensor(x)
+
         if self.gain == 0:
             return x
 

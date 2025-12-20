@@ -1,6 +1,5 @@
-import torch
+from kornia import enhance as E
 from torch import Tensor
-from torchvision.transforms.v2 import functional as F
 
 from core import _tensor_utils as T_u
 from core.image_operation import ImageOperation
@@ -10,6 +9,9 @@ from core.registry import register_operation
 @register_operation
 class HistogramEqualization(ImageOperation):
     """Class to apply Histogram Equalization to image tensors.
+    Uses Kornia's equalize implementation.
+
+    See: https://kornia.readthedocs.io/en/latest/enhance.html#kornia.enhance.equalize
 
     Args:
         ImageOperation (ImageOperation): Base class for image operations.
@@ -40,11 +42,6 @@ class HistogramEqualization(ImageOperation):
                 f"Expected image with 1 or 3 channels, got {x.shape[1]} channels."
             )
 
-        T_u.assert_integer_valued_tensor(x)
+        T_u.assert_real_valued_tensor(x)
 
-        if x.dtype != torch.uint8:
-            raise ValueError(
-                f"Histogram Equalization requires uint8 images, got {x.dtype}."
-            )
-
-        return F.equalize(x)
+        return E.equalize(x)
