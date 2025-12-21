@@ -257,7 +257,7 @@ información visual en tres componentes independientes:
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.25\textwidth]{sections/3/img/hsv_cone.png}
+    \includegraphics[width=0.24\textwidth]{sections/3/img/hsv_cone.png}
     \caption{Cono de color HSV} \cite{rgb_hsv_images}
     \label{fig:3_3_hsv_cone}
 \end{figure}
@@ -369,27 +369,84 @@ capturados por los píxeles vecinos. El resultado es una imagen RGB completa.
 \newpage
 
 \subsection{Fundamentos de contraste en imágenes} \label{subsec:3_3_fundamentos_contraste_imagenes} 
+Analizados los aspectos relacionados con la representación numérica de las imágenes digitales,
+es necesario comprender los conceptos asociados al contraste.
+El contraste en una imagen digital se refiere a la diferencia en la intensidad luminosa entre un punto de una imagen
+y sus alrededores \cite{contrast}. 
 
-\subsection{Técnicas de optimización de contraste} \label{subsec:3_4_tecnicas_optimizacion_contraste}
+Un alto contraste implica una diferencia significativa en la luminosidad, lo que facilita la distinción
+de detalles y características dentro de la imagen. Por el contrario, un bajo contraste resulta en una
+imagen apagada o deslavada, donde los detalles pueden perderse debido a la falta de variación tonal. Esta 
+diferencia puede observarse en la \autoref{fig:3_3_contrast_examples}, donde se presentan ejemplos de imágenes 
+con diferentes niveles de contraste, tanto en escala de grises como en color.
 
-\subsection{Representación computacional de imágenes digitales} \label{subsec:3_5_representacion_computacional_imagenes_digitales}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/dog_low_contrast_gray.png}
+        \caption{Bajo contraste (gris)}
+        \label{fig:3_4_low_contrast_gray}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/dog_high_contrast_gray.png}
+        \caption{Alto contraste (gris)}
+        \label{fig:3_5_high_contrast_gray}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/dog_low_contrast.png}
+        \caption{Bajo contraste (color)}
+        \label{fig:3_4_low_contrast}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/dog_high_contrast.png}
+        \caption{Alto contraste (color)}
+        \label{fig:3_5_high_contrast}
+    \end{subfigure}
+    \caption{Ejemplos de imágenes con diferentes niveles de contraste}
+    \label{fig:3_3_contrast_examples}
+\end{figure}
+
+El ajuste y optimización del contraste es una de las principales tareas dentro del procesamiento digital de imágenes,
+ya que influye directamente en la calidad visual y en la capacidad de análisis. Existen diversas técnicas y algoritmos 
+diseñados para mejorar el contraste, adaptándose a las características específicas de cada imagen y a los
+objetivos del procesamiento. 
+
+\newpage
+
+\subsubsection{Técnicas de optimización de contraste} \label{subsec:3_3_1_tecnicas_optimizacion_contraste}
+
+\newpage
+
+\subsection{Representación computacional de imágenes digitales} \label{subsec:3_4_representacion_computacional_imagenes_digitales}
 Desde el punto de vista de los sistemas informáticos, una imagen digital no es más que una estructura
 de datos numérica organizada de forma regular. La eleccion de dicha estructura resulta fundamental,
 ya que condiciona tanto la eficiencia del alamacenamiento como la facilidad con la que pueden aplicarse 
 algoritmos de procesamiento.
 
-\subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_5_1_pytorch_framework_procesamiento_imagenes}
+\subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_4_1_pytorch_framework_procesamiento_imagenes}
 
-\subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_5_2_tensores_representacion_imagenes}
+\subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_4_2_tensores_representacion_imagenes}
 
-\subsubsection{Organización de datos: canales, \textit{batch} y dimensiones} \label{subsubsec:3_5_3_organizacion_datos_canales_batch_dimensiones}
+\subsubsection{Organización de datos: canales, \textit{batch} y dimensiones} \label{subsubsec:3_4_3_organizacion_datos_canales_batch_dimensiones}
 
-\subsubsection{Tipos de datos y precisión numérica} \label{subsubsec:3_5_4_tipos_datos_precision_numerica}
+\subsubsection{Tipos de datos y precisión numérica} \label{subsubsec:3_4_4_tipos_datos_precision_numerica}
 
-\subsection{Procesamiento por etapas y \textit{pipelines}} \label{subsec:3_6_procesamiento_por_etapas_pipelines}
+\newpage
 
-\subsection{Procesamiento vectorizado y paralelismo de datos} \label{subsec:3_7_procesamiento_vectorizado_paralelismo_datos}    
+\subsection{Procesamiento en tiempo real} \label{subsec:3_5_procesamiento_tiempo_real}
 
-\subsection{Computación acelerada por GPU} \label{subsec:3_8_computacion_acelerada_gpu}
+\newpage
 
-\subsection{Procesamiento en tiempo real} \label{subsec:3_9_procesamiento_tiempo_real}
+\subsection{Procesamiento vectorizado y paralelismo de datos} \label{subsec:3_6_procesamiento_vectorizado_paralelismo_datos}    
+
+\newpage
+
+\subsection{Computación acelerada por GPU} \label{subsec:3_7_computacion_acelerada_gpu}
+
