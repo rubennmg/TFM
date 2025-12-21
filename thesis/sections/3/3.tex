@@ -22,7 +22,7 @@ a cada punto (x, y) del plano. Dicha función se representa mátemáticamente co
 \begin{myequation}
     \begin{equation}
         I = f(x,y) \quad \text{donde } (x,y) \in \mathbb{R}^2 \text{ e } I \in \mathbb{R}
-        \label{eq:3_1_imagen_funcion}
+        \label{eq:1_imagen_funcion}
     \end{equation}
     \myequations{Representación básica de una imagen en términos matemáticos}
     \caption{Representación básica de una imagen en términos matemáticos}
@@ -60,7 +60,7 @@ corrdenadas enteras:
 \begin{myequation}
     \begin{equation}
         I[i,j] = f(i \Delta x, j \Delta y)
-        \label{eq:3_2_imagen_discreta}
+        \label{eq:2_imagen_discreta}
     \end{equation}
     \myequations{Imagen digital como función discreta muestreada}
     \caption{Imagen digital como función discreta muestreada}
@@ -78,14 +78,14 @@ del sistema de representación. Por ejemplo, una cuantificación de 8 bits permi
 niveles distintos, mientras que profundidades mayores (12, 14 o 16 bits) son habituales en imágenes
 crudas procedentes de sensores modernos, proporcionando una mayor fidelidad tonal y rango dinámico.
 
-El resultado final del proceso de digitalización la Imagen Digital, que se representa como una matriz 
+El resultado final del proceso de digitalización es la Imagen Digital, que se representa como una matriz 
 bidimensional ($M \times N$) de valores discretos. Cada elemento de esta matriz corresponde a un píxel
 con un valor cuantificado que refleja la intensidad luminosa o el color en esa posición específica:
 
 \begin{myequation}
     \begin{equation}
         I[m,n] \quad \text{donde } m = 0, 1, \ldots, M-1 \text{ y } n = 0, 1, \ldots, N-1
-        \label{eq:3_2_imagen_matriz}
+        \label{eq:3_imagen_matriz}
     \end{equation}
     \myequations{Imagen digital representada como matriz de píxeles}
     \caption{Imagen digital representada como matriz de píxeles}
@@ -170,38 +170,40 @@ hasta la imagen digital final $I[m,n]$.
 \end{figure}
 
 \subsubsection{Escala de grises y color} \label{subsubsec:3_2_1_escala_grises_color}
-La representación matricial de la imagen digital puede adoptar diversas formas según el tipo 
-de información visual que se desee capturar y procesar. Las dos categorías principales
-son las imágenes en escala de grises y las imágenes en color.
+La representación matricial de la imagen digital adopta diversas formas según el tipo 
+de información visual que se desee capturar y procesar. Esta representación varía 
+en función de la naturaleza de la información cromática de la imagen, distinguiéndose
+entre imágenes en escala de grises e imágenes a color.
 
 \subsubsubsection{Imágenes en escala de grises} \label{subsubsubsec:3_2_1_1_imagenes_escala_grises}
 En una imagen en escala de grises, cada píxel es representado por un único valor de intensidad 
 $i \in [0, I]$, donde $I$ es el valor máximo determinado por la profundidad de bits. Este valor refleja
 la luminosidad del píxel, con 0 representando el negro absoluto y $I - 1$ el blanco puro. Estas 
 imágenes se definen como una única matriz bidimensional, donde las dimensiones corresponden a la 
-resolución espacial ($M \times N$). La escala de grises es conceptualmente la forma más simple
-de imagen digital y es la base de muchos algoritmos de procesamiento inicial.
+resolución espacial ($M \times N$).
 
 \begin{myequation}
     \begin{equation}
         \textit{Imagen Gris} \rightarrow I \in R^{M \times N}
-        \label{eq:imagen_gris}
+        \label{eq:4_imagen_gris}
     \end{equation}
     \myequations{Representación de una imagen en escala de grises}
     \caption{Representación de una imagen en escala de grises}
 \end{myequation}
 
+\newpage
+
 \subsubsubsection{Imágenes a color} \label{subsubsubsec:3_2_1_2_imagenes_color}
 La percepción del color en el sistema visual humano se modela típicamente mediante tres componentes 
 primarias. Por ello, las imágenes a color se representan mediante múltiples matrices de intensidad 
 apiladas, una para cada componente de color. El modelo más común en la visualización y en la 
-informática es el RGB (\textit{Red, Green, Blue}). En este modelo, una imagen se define 
+informática es el modelo RGB (\textit{Red, Green, Blue}). En este caso, una imagen se define 
 por tres canales (o capas) de intensidad: ($R$) rojo, ($G$) verde y ($B$) azul.
 
 \begin{myequation}
     \begin{equation}
         \textit{Imagen Color} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
-        \label{eq:imagen_color}
+        \label{eq:5_imagen_color}
     \end{equation}
     \myequations{Representación de una imagen a color en formato RGB}
     \caption{Representación de una imagen a color en formato RGB}
@@ -210,13 +212,14 @@ por tres canales (o capas) de intensidad: ($R$) rojo, ($G$) verde y ($B$) azul.
 El valor de color final de cada píxel específico ($i, j$) es un vector que combina los valores 
 de los tres canales en esa posición: $I[i, j] = (I_R[i, j], I_G[i, j], I_B[i, j])$.
 
+\newpage
+
 \subsubsection{Espacios de color} \label{subsubsec:3_2_2_espacios_color}
-Aunque el modelo RGB es fundamental para la adquisición y visualización directa de imágenes 
-a color, no siempre es el espacio de representación más adecuado para las tareas de 
-procesamiento y análisis. Un espacio de color es una representación matemática tridimensional
+Un espacio de color es una representación matemática tridimensional
 que asigna un conjunto de coordenadas a cada color, permitiendo la comunicación consistente 
 del color entre dispositivos. La elección de un espacio de color determina cómo se separan los 
 componentes de luminosidad (brillo o intensidad) y los componentes cromáticos (tono y saturación).
+En el contexto de este TFM, se consideran de interés varios espacios de color.
 
 \subsubsubsection{RGB} \label{subsubsubsec:3_2_2_1_rgb}
 Ya mencionado anteriormente, el espacio RGB es un modelo aditivo, directamente relacionado con 
@@ -227,9 +230,15 @@ En contrapartida, presenta limitaciones en el contexto del procesamiento de imá
 información de luminosidad (brillo) está intrínsecamente ligada a la información de color en los 
 tres canales. Esto significa que un cambio en el contraste (luminosidad) requiere manipular los 
 tres canales simultáneamente, lo cual complica la aplicación de algoritmos y técnicas de realce 
-de contraste que buscan preservar el tono.
+de contraste que buscan preservar el tono. En la \autoref{fig:3_2_rgb_cube} se muestra la representación del
+cubo de color RGB, que ilustra la distribución de colores en este espacio tridimensional.
 
-[Imagen cubo RGB]
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.3\textwidth]{sections/3/img/rgb_cube.png}
+    \caption{Cubo de color RGB} \cite{rgb_hsv_images}
+    \label{fig:3_2_rgb_cube}
+\end{figure}
 
 \newpage
 
@@ -246,7 +255,12 @@ información visual en tres componentes independientes:
     \item \textbf{\textit{Value} (Valor).} Representa la luminosidad u brillo del color, independientemente de su tono y saturación.
 \end{itemize}
 
-[Imagen cilindro HSV]
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.25\textwidth]{sections/3/img/hsv_cone.png}
+    \caption{Cono de color HSV} \cite{rgb_hsv_images}
+    \label{fig:3_3_hsv_cone}
+\end{figure}
 
 \subsubsubsection{Otros} \label{subsubsubsec:3_2_2_3_otros}
 Además de los ya mencionados, existen otros espacios de color ampliamente utilizados en el contexto del procesamiento
@@ -265,28 +279,117 @@ merecen ser destacados:
 
 \newpage
 
-\subsection{Imágenes en formato crudo} \label{subsec:3_3_imagenes_crudo}
+\subsubsection{Formatos de imagen} \label{subsec:3_2_3_formatos_imagen}
+Los \textit{formatos de imagen} definen la forma en que los datos de una imagen digital son almacenados, 
+representados e intercambiados entre sistemas \cite{image_formats}. Un formato de imagen no sólo especifica la organización de 
+los datos de píxeles, sino también la codificación del color, la profundidad de bits, los mecanismos de 
+compresión y, en muchos casos, la inclusión de metadatos adicionales.
 
-\subsection{Fundamentos de contraste en imágenes} \label{subsec:3_4_fundamentos_contraste_imagenes} 
+Desde el puntos de vista de su representación geométrica, los formatos de imagen pueden clasificarse 
+en dos categorías principales: \textit{raster} y \textit{vectorial}. Los formatos raster almacenan
+la imagen como un mapa de bits, esto es, una matriz de píxeles discretos, tal y como se ha descrito 
+previamente. En contraste, los formatos vectoriales representan la imagen mediante primitivas geométricas
+(líneas, curvas, polígonos) y atributos asociados (color, grosor).
 
-\subsection{Técnicas de optimización de contraste} \label{subsec:3_5_tecnicas_optimizacion_contraste}
+En el contexto de este TFM, el enfoque se centra en los formatos raster. Dentro de esta categoría, 
+existen numerosos formatos, cada uno con sus propias características, ventajas y aplicaciones específicas.
+Entre ellos se incluyen los famosos JPEG, PNG, BMP, TIFF, entre otros. Cada uno de estos formatos
+ofrece diferentes niveles de compresión, calidad de imagen y soporte para características avanzadas.
+Sin embargo, para los propósitos de este TFM, debe de hacerse especial énfasis en el \textit{formato crudo}.
 
-\subsection{Representación computacional de imágenes digitales} \label{subsec:3_6_representacion_computacional_imagenes_digitales}
+\subsubsubsection{Formato crudo} \label{subsec:3_2_3_1_formato_crudo}
+Las imágenes en formato crudo (\textit{RAW}), representan la forma más directa y fiel de los datos capturados
+por un sensor de imagen digital \cite{raw_image_formats}. A diferencia de los formatos convencionales procesados
+y comprimidos, los formatos crudos almacenan los valores de intensidad registrados por el sensor con un procesamiento 
+mínimo o nulo, preservando la información original de la escena capturada.
+
+En una imagen RAW, cada valor almacenado corresponde (de forma aproximada) a la respuesta del sensor a 
+la radiación luminosa incidente, normalmente con profundidades de entre 12 y 16 bits por píxel. Esto 
+permite representar un rango dinámico considerablemente mayor que el de los formatos estándar de 8 bits, 
+conservando detalles tanto en las zonas más oscuras como en las más iluminadas de la imagen. En la mayoría 
+de los sensores de imagen empleados en cámaras digitales, cada elemento fotosensible es capaz de medir 
+únicamente la intensidad luminosa, pero no el color de forma directa.
+
+\newpage
+
+Para resolver esta limitación, se emplea habitualmente un filtro de color dispuesto sobre el sensor, siendo 
+el patrón \textit{Bayer} \cite{bayer_filters} el más común. Este patrón organiza los filtros de color 
+rojo (R), verde (G) y azul (B) en una disposición periódica, asignando a cada píxel la captura 
+de un solo componente de color. Dado que el ojo humano es más sensible a la luz verde, el patrón Bayer
+incluye el doble de filtros verdes en comparación con los rojos y azules.
+La \autoref{fig:2_patrones_bayer} muestra los cuatro patrones Bayer más comunes utilizados en sensores
+de imagen digitales.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        cell/.style={draw=black!80, ultra thin, minimum size=1cm, align=center, font=\small\bfseries},
+                    title/.style={font=\small}
+    ]
+    \usetikzlibrary{matrix}
+
+        % ---------- RGGB ----------
+        \node[title] at (-4,-1.5) {RGGB};
+        \matrix (rggb) at (-4,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
+            |[fill=red!60]| R & |[fill=green!60]| G \\
+            |[fill=green!60]| G & |[fill=blue!60]| B \\
+        };
+
+        % ---------- BGGR ----------
+        \node[title] at (-1.3,-1.5) {BGGR};
+        \matrix (bggr) at (-1.3,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
+            |[fill=blue!60]| B & |[fill=green!60]| G \\
+            |[fill=green!60]| G & |[fill=red!60]| R \\
+        };
+
+        % ---------- GBRG ----------
+        \node[title] at (1.3,-1.5) {GBRG};
+        \matrix (gbrg) at (1.3,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
+            |[fill=green!60]| G & |[fill=blue!60]| B \\
+            |[fill=red!60]| R & |[fill=green!60]| G \\
+        };
+
+        % ---------- GRBG ----------
+        \node[title] at (4,-1.5) {GRBG};
+        \matrix (grbg) at (4,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
+            |[fill=green!60]| G & |[fill=red!60]| R \\
+            |[fill=blue!60]| B & |[fill=green!60]| G \\
+        };
+
+    \end{tikzpicture}
+    \caption{Patrones Bayer más comunes utilizados en sensores de imagen digitales}
+    \label{fig:2_patrones_bayer}
+\end{figure}
+
+A partir de esta estructura, la reconstrucción de una imagen a color completa requiere un proceso 
+denominado \textit{demosaicing} o \textit{interpolación de color}. Este proceso utiliza algoritmos específicos para estimar
+los valores de los componentes de color faltantes en cada píxel, basándose en los valores
+capturados por los píxeles vecinos. El resultado es una imagen RGB completa. 
+
+\newpage
+
+\subsection{Fundamentos de contraste en imágenes} \label{subsec:3_3_fundamentos_contraste_imagenes} 
+
+\subsection{Técnicas de optimización de contraste} \label{subsec:3_4_tecnicas_optimizacion_contraste}
+
+\subsection{Representación computacional de imágenes digitales} \label{subsec:3_5_representacion_computacional_imagenes_digitales}
 Desde el punto de vista de los sistemas informáticos, una imagen digital no es más que una estructura
 de datos numérica organizada de forma regular. La eleccion de dicha estructura resulta fundamental,
 ya que condiciona tanto la eficiencia del alamacenamiento como la facilidad con la que pueden aplicarse 
 algoritmos de procesamiento.
 
-\subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_6_1_pytorch_framework_procesamiento_imagenes}
+\subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_5_1_pytorch_framework_procesamiento_imagenes}
 
-\subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_6_2_tensores_representacion_imagenes}
+\subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_5_2_tensores_representacion_imagenes}
 
-\subsubsection{Organización de datos: canales, \textit{batch} y dimensiones} \label{subsubsec:3_6_3_organizacion_datos_canales_batch_dimensiones}
+\subsubsection{Organización de datos: canales, \textit{batch} y dimensiones} \label{subsubsec:3_5_3_organizacion_datos_canales_batch_dimensiones}
 
-\subsubsection{Tipos de datos y precisión numérica} \label{subsubsec:3_6_4_tipos_datos_precision_numerica}
+\subsubsection{Tipos de datos y precisión numérica} \label{subsubsec:3_5_4_tipos_datos_precision_numerica}
 
-\subsection{Procesamiento por etapas y \textit{pipelines}} \label{subsec:3_7_procesamiento_por_etapas_pipelines}
+\subsection{Procesamiento por etapas y \textit{pipelines}} \label{subsec:3_6_procesamiento_por_etapas_pipelines}
 
-\subsection{Procesamiento vectorizado y paralelismo de datos} \label{subsec:3_8_procesamiento_vectorizado_paralelismo_datos}    
+\subsection{Procesamiento vectorizado y paralelismo de datos} \label{subsec:3_7_procesamiento_vectorizado_paralelismo_datos}    
 
-\subsection{Computación acelerada por GPU} \label{subsec:3_9_computacion_acelerada_gpu}
+\subsection{Computación acelerada por GPU} \label{subsec:3_8_computacion_acelerada_gpu}
+
+\subsection{Procesamiento en tiempo real} \label{subsec:3_9_procesamiento_tiempo_real}
