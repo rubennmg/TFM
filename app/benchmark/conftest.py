@@ -17,12 +17,20 @@ def pytest_configure(config):
     config.option.benchmark_timer_unit = "ms"
     config.option.benchmark_name = "short"
     config.option.benchmark_sort = "fullname"
+    config.option.benchmark_warmup = True
+    config.option.benchmark_max_time = 3.0
 
     path = config.getoption("--bench-profile")
+
     if path:
+        config.option.benchmark_save = (
+            path.removesuffix(".json").split("/")[-1] + "_run"
+        )
         profile = _load_bench_profile(path)
         config._bench_profile_cache = profile
         _print_pipeline(config, profile, path)
+    else:
+        config.option.benchmark_save = "default_run"
 
 
 @pytest.fixture(scope="session")
