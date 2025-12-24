@@ -297,7 +297,7 @@ Entre ellos se incluyen los famosos JPEG, PNG, BMP, TIFF, entre otros. Cada uno 
 ofrece diferentes niveles de compresión, calidad de imagen y soporte para características avanzadas.
 Sin embargo, para los propósitos de este TFM, debe de hacerse especial énfasis en el \textit{formato crudo}.
 
-\subsubsubsection{Formato crudo} \label{subsec:3_2_3_1_formato_crudo}
+\subsubsection{Imágenes en formato crudo} \label{subsec:3_2_4_formato_crudo}
 Las imágenes en formato crudo (\textit{RAW}), representan la forma más directa y fiel de los datos capturados
 por un sensor de imagen digital \cite{raw_image_formats}. A diferencia de los formatos convencionales procesados
 y comprimidos, los formatos crudos almacenan los valores de intensidad registrados por el sensor con un procesamiento 
@@ -368,9 +368,81 @@ capturados por los píxeles vecinos. El resultado es una imagen RGB completa.
 
 \newpage
 
-\subsection{Fundamentos de contraste en imágenes} \label{subsec:3_3_fundamentos_contraste_imagenes} 
-Analizados los aspectos relacionados con la representación numérica de las imágenes digitales,
-es necesario comprender los conceptos asociados al contraste.
+\subsection{Fundamentos del Procesamiento Digital de Imágenes} \label{subsec:3_3_fundamentos_procesamiento_digital_imagenes}
+Establecidas las bases en la representación y codificación de imágenes digitales, es necesario introducir los principios 
+básicos del Procesamiento de Imágenes Digitales. Este campo incluye el conjunto de técnicas y operaciones destinadas a 
+modificar o analizar una imagen con el fin de mejorar su calidad visual, resaltar información relevante 
+o facilitar etapas posteriores de procesado \cite{fundamentals_digital_image_processing}.
+
+\subsubsection{Operaciones puntuales y operaciones espaciales} \label{subsubsec:3_3_1_operaciones_puntuales_espaciales}
+Una de las clasificaciones fundamentales en este ámbito distingue entre operaciones puntuales 
+y operaciones espaciales, en función de la información utilizada para calcular el valor de cada 
+píxel en la imagen resultante.
+
+\subsubsubsection{Operaciones puntuales} \label{subsubsubsec:3_3_1_1_operaciones_puntuales}
+Las operaciones puntuales (o pixel a pixel) son aquellas en las que el valor de cada píxel 
+de salida depende únicamente del valor del píxel correspondiente en la imagen de entrada.
+Este tipo de transformaciones se expresan como:
+
+\begin{myequation}
+    \begin{equation}
+        I_{salida}(x,y) = T(I_{entrada}(x,y))
+        \label{eq:6_operacion_puntual}
+    \end{equation}
+    \myequations{Operación puntual en procesamiento de imágenes}
+    \caption{Operación puntual en procesamiento de imágenes}
+\end{myequation}
+
+\noindent{donde \(T\) es una función de transformación aplicada a cada píxel.}
+
+Este tipo de transformaciones no modifica la estructura espacial de la imagen, pero sí su 
+distribución de intensidades, lo que las hace especialmente adecuadas para tareas de ajuste de 
+contraste, corrección de iluminación o normalización de niveles de gris. En el marco de este 
+TFM, las operaciones puntuales más relevantes incluyen:
+
+\begin{itemize}
+    \item Corrección gamma
+    \item Transformaciones sigmoides
+    \item Ecualización del histograma
+\end{itemize}
+
+Estas técnicas presentan un bajo coste computacional y son fácilmente paralelizables, 
+por lo que son muy adecuadas para su implementación eficiente en arquitecturas modernas.
+
+\subsubsubsection{Operaciones espaciales} \label{subsubsubsec:3_3_1_2_operaciones_espaciales}
+Las operaciones espaciales, en contraposición, son aquellas en las que el valor de cada píxel de 
+salida depende no sólo del píxel correspondiente, sino también de un conjunto de píxeles vecinos 
+de la imagen de entrada. De forma general, pueden expresarse como:
+
+\begin{myequation}
+    \begin{equation}
+        I_{salida}(x,y) = T(I_{entrada}(S_{x,y}))
+        \label{eq:7_operacion_espacial}
+    \end{equation}
+    \myequations{Operación espacial en procesamiento de imágenes}
+    \caption{Operación espacial en procesamiento de imágenes}
+\end{myequation}
+
+\noindent{donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \((x,y)\) 
+y \(T\) es una función que combina estos valores.}
+
+Este tipo de operaciones permite explotar la correlación espacial existente entre píxeles adyacentes. 
+Son las empleadas en tareas de reducción de ruido, el realce de bordes y la detección de características.
+En el contexto de este TFM, se consideran principalmente:
+
+\begin{itemize}
+    \item Filtros lineales
+    \item Filtros no lineales
+    \item \textit{Unsharp Masking}
+\end{itemize}
+
+\subsubsection{El histograma como herramienta de diagnóstico} \label{subsubsec:3_3_2_histograma_herramienta_diagnostico}
+
+\newpage
+
+\subsection{Mejora del contraste en imágenes digitales} \label{subsec:3_4_mejora_contraste_imagenes_digitales}
+
+\subsubsection{Concepto de contraste y rango dinámico} \label{subsubsec:3_4_1_concepto_contraste_rango_dinamico}
 El contraste en una imagen digital se refiere a la diferencia en la intensidad luminosa entre un punto de una imagen
 y sus alrededores \cite{contrast}. 
 
@@ -413,40 +485,51 @@ con diferentes niveles de contraste, tanto en escala de grises como en color.
     \label{fig:3_3_contrast_examples}
 \end{figure}
 
-El ajuste y optimización del contraste es una de las principales tareas dentro del procesamiento digital de imágenes,
-ya que influye directamente en la calidad visual y en la capacidad de análisis. Existen diversas técnicas y algoritmos 
-diseñados para mejorar el contraste, adaptándose a las características específicas de cada imagen y a los
-objetivos del procesamiento. 
+Desde una perspectiva matemática, el contraste está intrínsecamente ligado al rango dinámico de la imagen, esto es,
+el intervalo entre los valores de intensidad máximo y máximo presentes en la matriz de píxeles. 
 
 \newpage
 
-\subsubsection{Técnicas de optimización de contraste} \label{subsec:3_3_1_tecnicas_optimizacion_contraste}
+\subsubsection{Ecualización global del histograma} \label{subsubsec:3_4_2_ecualizacion_global_histograma}
+
+\subsubsection{Ecualización adaptativa y CLAHE} \label{subsubsec:3_4_3_ecualizacion_adaptativa_clahe}
+
+\subsubsection{Transformaciones no lineales de intensidad} \label{subsubsec:3_4_4_transformaciones_no_lineales_intensidad}
 
 \newpage
 
-\subsection{Representación computacional de imágenes digitales} \label{subsec:3_4_representacion_computacional_imagenes_digitales}
-Desde el punto de vista de los sistemas informáticos, una imagen digital no es más que una estructura
-de datos numérica organizada de forma regular. La eleccion de dicha estructura resulta fundamental,
-ya que condiciona tanto la eficiencia del alamacenamiento como la facilidad con la que pueden aplicarse 
-algoritmos de procesamiento.
+\subsection{Filtrado espacial y reducción de ruido} \label{subsec:3_5_filtrado_espacial_reduccion_ruido}
 
-\subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_4_1_pytorch_framework_procesamiento_imagenes}
+\subsubsection{Filtrado lineal: filtro gaussiano} \label{subsubsec:3_5_1_filtrado_lineal_filtro_gaussiano}
 
-\subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_4_2_tensores_representacion_imagenes}
-
-\subsubsection{Organización de datos: canales, \textit{batch} y dimensiones} \label{subsubsec:3_4_3_organizacion_datos_canales_batch_dimensiones}
-
-\subsubsection{Tipos de datos y precisión numérica} \label{subsubsec:3_4_4_tipos_datos_precision_numerica}
+\subsubsection{Filtrado no lineal: filtro de mediana} \label{subsubsec:3_5_2_filtrado_no_lineal_filtro_mediana}
 
 \newpage
 
-\subsection{Procesamiento en tiempo real} \label{subsec:3_5_procesamiento_tiempo_real}
+\subsection{Realce de detalle y nitidez} \label{subsec:3_6_realce_detalle_nitidez}
+
+\subsubsection{Realce de bordes: \textit{Unsharp Masking}} \label{subsubsec:3_6_1_realce_bordes_unsharp_masking}
 
 \newpage
 
-\subsection{Procesamiento vectorizado y paralelismo de datos} \label{subsec:3_6_procesamiento_vectorizado_paralelismo_datos}    
+\subsection{Representación computacional de imágenes digitales} \label{subsec:3_7_representacion_computacional_imagenes_digitales}
+
+\subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_7_1_pytorch_framework_procesamiento_imagenes}
+
+\subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_7_2_tensores_representacion_imagenes}
+
+\subsubsection{Organización de datos: canales, \textit{batch} y dimensiones} \label{subsubsec:3_7_3_organizacion_datos_canales_batch_dimensiones}
+
+\subsubsection{Tipos de datos y precisión numérica} \label{subsubsec:3_7_4_tipos_datos_precision_numerica}
 
 \newpage
 
-\subsection{Computación acelerada por GPU} \label{subsec:3_7_computacion_acelerada_gpu}
+\subsection{Procesamiento en tiempo real} \label{subsec:3_8_procesamiento_tiempo_real}
 
+\newpage
+
+\subsection{Procesamiento vectorizado y paralelismo de datos} \label{subsec:3_9_procesamiento_vectorizado_paralelismo_datos}    
+
+\newpage
+
+\subsection{Computación acelerada por GPU} \label{subsec:3_10_computacion_acelerada_gpu}
