@@ -81,7 +81,7 @@ class ImageViewer(QWidget):
                 w,
                 h,
                 Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation,
+                Qt.TransformationMode.FastTransformation,
             )
             pix = QPixmap.fromImage(scaled_img)
 
