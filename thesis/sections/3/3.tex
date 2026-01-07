@@ -8,12 +8,12 @@ y los criterios de evaluación que se exponen en los capítulos posteriores.
 La Imagen ha sido, históricamente, uno de los principales medios para la representación, 
 el registro y la comunicación de la realidad. Su valor informativo reside en la capacidad de 
 codificar la información espacial y tonal de una escena u objeto, actuando como nexo entre 
-la percepción visual humana y la interpretación cognitiva.
+la percepción visual humana y los procesos de interpretación cognitiva.
 
-Antes de su tratamiento computacional, la imagen debe entenderse como una función bidimensional
-continua de intensidad o color. En este estado analógico, la imagen codifica una escena 
-asociando a cada punto del plano espacial $(x, y)$ un valor de intensidad luminosa. Esta relación
-se expresa matemáticamente como:
+Desde un punto de vista teórico, y con anterioridad a su tratamiento computacional, una imagen
+puede modelarse como una función bidimensional continua de intensidad o color. En este dominio 
+analógico, la imagen representa una escena asociando a cada punto del plano $(x, y)$ un valor de 
+intensidad luminosa. Esta relación puede expresarse matemáticamente como:
 
 \begin{myequation}
     \begin{equation}
@@ -24,31 +24,33 @@ se expresa matemáticamente como:
     \caption{Representación de una imagen analógica en términos matemáticos}
 \end{myequation}
 
-En este contexto pre-digital, la calidad de la imagen depende fundamentalmente de las propiedades 
-físicas del sistema de captura (óptica, condiciones de iluminación, emulsión química) y de la correcta 
-modulación de la luz incidente. Además, existe una gran limitación: una vez capturada, 
-la capacidad de que una imagen analógica sea procesada, almacenada o transmitida es muy limitada.
+En este contexto pre-digital, la calidad de la imagen depende fundamentalmente de 
+las características físicas del sistema de captura, tales como la óptica empleada, las condiciones de iluminación 
+o la naturaleza de la emulsión química. Tradicionalmente, la captura de imágenes se realizaba mediante procesos 
+fotoquímicos, en los que la luz incidente impresionaba una emulsión fotosensible sobre soportes físicos como 
+placas o películas fotográficas. Este tipo de representación tiene una gran limitación: una vez capturada, la capacidad 
+de procesar, almacenar o transmitir una imagen analógica resulta muy limitada.
+
 La incorporación de tecnologías de captura electrónica y digital, tales como los sensores 
 CCD (\textit{Charge-Coupled Device}) y CMOS (\textit{Complementary Metal-Oxide-Semiconductor})
-\cite{camaras_ccd_cmos}, marca un cambio de paradigma. La imagen deja de ser 
+\cite{ccd_cmos}, marca un cambio de paradigma. La imagen deja de ser 
 una representación puramente analógica para convertirse en una entidad digital, 
 susceptible de ser manipulada, almacenada y transmitida mediante sistemas informáticos. Es en 
-este punto donde se produce la intersección directa entre la Imagen y la Informática. Esta convergencia
+este punto donde se produce la intersección directa entre la Imagen y la Informática. Intersección que
 da lugar al Procesamiento Digital de Imágenes (PDI), uno de los campos más dinámicos y de mayor 
 impacto en la era digital actual \cite{pdi}.
 
-No obstante, para que una imagen pueda ser procesada y tratada por un sistema informático, debe
+Para que una imagen pueda ser procesada y tratada por un sistema informático, debe
 abandonar su naturaleza continua y transformarse en el único lenguaje que la 
 máquina es capaz de intepretar: el dato numérico.
 
 \subsection{Representación numérica de imágenes digitales} \label{subsec:3_2_representacion_numerica_imagenes_digitales}
-La transición del dominio físico al computacional requiere de una abstracción matemática 
-de la señal luminosa capturada. Para que la función continua $f(x,y)$ mostrada 
-en la \autoref{eq:1_imagen_funcion} pueda ser procesada debe someterse a un proceso
-de digitalización, que consta de dos etapas fundamentales: el muestreo y la cuantificación.
+La captura de una imagen digital implica un proceso de digitalización que convierte la función continua
+mostrada en la \autoref{eq:1_imagen_funcion} en una representación discreta y cuantificada. 
+Dicho proceso consta de dos etapas principales: el muestreo y la cuantificación.
 
 \subsubsection{Muestreo} \label{subsubsec:3_2_1_muestreo}
-El muestreo consiste en discretizar el dominio continuo de la imagen, dividiendo 
+El muestreo consiste en la discretización del dominio continuo de la imagen, dividiendo 
 el plano $(x, y)$ en una rejilla regular de posiciones finitas: los \textit{píxeles}. Cada píxel representa una pequeña región de la escena original
 y constituye la unidad mínima de información espacial en una imagen digital. 
 El resultado de este proceso es una imagen discreta definida sobre un conjunto finito de 
@@ -64,23 +66,38 @@ corrdenadas enteras:
 \end{myequation}
 
 donde $(i,j)$ representan las coordenadas del píxel y $\Delta x$, $\Delta y$ las resoluciones
-espaciales en cada dimensión. El número total de muestras determina la resolución espacial
-de la imagen y condiciona tanto su nivel de detalle como el coste computacional asociado
-a su procesamiento.
+espaciales en cada dimensión. El número total de muestras en cada dimensión determina la 
+resoluación espacial de la imagen y establece un compromiso entre el nivel de detalle representable 
+y los recursos necesarios para su almacenamiento y procesamiento.
+
+\subsubsection{Cuantificación} \label{subsubsec:3_2_2_cuantificacion}
+La cuantificación, por su parte, es el proceso mediante el cual los valores continuos de intensidad
+asociados a cada píxel se aproximan a un conjunto finito de niveles discretos. Mientras que el muestreo 
+actúa sobre el dominio espacial de la imagen, la cuantificación opera sobre su dominio de amplitud, esto 
+es, los valores numéricos que representan la intensidad luminosa o el color en cada píxel.
+
+La cuantificación puede modelarse como una función no lineal $Q(\cdot)$ que asigna a cada valor 
+continuo uno de los valores discretos disponibles:
+
+\begin{myequation}
+    \begin{equation}
+        I[i,j] = Q(f(i, j))
+        \label{eq:3_imagen_cuantificada}
+    \end{equation}
+    \myequations{Cuantificación de la intensidad de píxeles en una imagen digital}
+    \caption{Cuantificación de la intensidad de píxeles en una imagen digital}
+\end{myequation}
+
+El conjunto de valores posibles tras la cuantificación está determinado por la profundidad de bits 
+(\textit{bit depth}) $b$ del sistema de representación, que define un total de $L = 2^b$ niveles distintos. 
+Este valor determina la precisión con la que se puede representar la intensidad de cada píxel,
+afectando directamente a la calidad visual de la imagen resultante.
 
 \newpage
 
-\subsubsection{Cuantificación} \label{subsubsec:3_2_2_cuantificacion}
-La cuantificación, por su parte, transforma los valores continuos de intensidad o color capturados 
-en cada píxel en un valor discreto perteneciente a un conjunto finito de niveles. Este proceso
-introduce una aproximación numérica controlada por la \textit{profundidad de bits} (\textit{bit depth})
-del sistema de representación. Por ejemplo, una cuantificación de 8 bits permite representar $2^8=256$ 
-niveles distintos, mientras que profundidades mayores (12, 14 o 16 bits) son habituales en imágenes
-crudas procedentes de sensores modernos, proporcionando una mayor fidelidad tonal y rango dinámico.
-
-El resultado final del proceso de digitalización es la Imagen Digital, que se representa como una matriz 
+El resultado final del proceso de digitalización es la imagen digital, que se representa como una matriz 
 bidimensional ($M \times N$) de valores discretos. Cada elemento de esta matriz corresponde a un píxel
-con un valor cuantificado que refleja la intensidad luminosa o el color en esa posición específica:
+con un valor cuantificado que refleja la intensidad luminosa o color en esa posición específica:
 
 \begin{myequation}
     \begin{equation}
@@ -91,21 +108,22 @@ con un valor cuantificado que refleja la intensidad luminosa o el color en esa p
     \caption{Imagen digital representada como matriz de píxeles}
 \end{myequation}
 
-La \autoref{fig:3_1_muestreo_cuantificacion} ilustra el proceso de digitalización de una imagen,
-mostrando la transición desde una imagen continua $f(x,y)$, pasando por la imagen muestreada $f[m,n]$,
+Todo este proceso se ilustra de forma esquemática en la \autoref{fig:3_1_muestreo_cuantificacion},
+donde se muestra la transición desde una imagen continua $f(x,y)$, pasando por la imagen muestreada $f[m,n]$
 hasta la imagen digital final $I[m,n]$.
 
 \begin{figure}[h]
     \centering
     \begin{tikzpicture}[
-        box/.style={draw=black!70, thick, minimum size=3cm},
+        box/.style={draw=black!70, thick, minimum width=3.25cm, minimum height=3cm},
+        matrix_box/.style={draw=black!70, thick, minimum width=3cm, minimum height=3cm},
         title/.style={font=\small, align=center}
     ]
         % BOX: Imagen continua
         \node[box, label={[title]above:Imagen continua}] (cont) at (-3,0) {};
         
         \node (image_cont) at (-3,0) {
-            \includegraphics[width=3cm,height=3cm]{sections/3/img/dog.png}
+            \includegraphics[width=3.25cm,height=3cm]{sections/3/img/dog.png}
         }; 
         
         \node[font=\small] at (-3, -2) {$f(x,y)$};
@@ -116,24 +134,9 @@ hasta la imagen digital final $I[m,n]$.
         % BOX: Imagen muestreada
         \node[box, fill=white, label={[title]above:Imagen muestreada}] (sampled) at (3,0) {};
 
-        \begin{scope}[shift={(3,0)}]
-            \def\step{0.5}
-
-            \foreach \x/\y/\g in {
-                -1.25/ 1.25/160, -0.75/ 1.25/150, -0.25/ 1.25/140,  0.25/ 1.25/130,  0.75/ 1.25/150, 1.25/ 1.25/160,
-                -1.25/ 0.75/150, -0.75/ 0.75/110,  -0.25/ 0.75/90,   0.25/ 0.75/90,   0.75/ 0.75/110, 1.25/ 0.75/150,
-                -1.25/ 0.25/140, -0.75/ 0.25/90,   -0.25/ 0.25/60,   0.25/ 0.25/60,   0.75/ 0.25/90,  1.25/ 0.25/140,
-                -1.25/-0.25/140, -0.75/-0.25/90,   -0.25/-0.25/50,   0.25/-0.25/50,   0.75/-0.25/90,  1.25/-0.25/140,
-                -1.25/-0.75/150, -0.75/-0.75/110,  -0.25/-0.75/90,   0.25/-0.75/90,   0.75/-0.75/110, 1.25/-0.75/150,
-                -1.25/-1.25/160, -0.75/-1.25/150, -0.25/-1.25/140,  0.25/-1.25/130,  0.75/-1.25/150, 1.25/-1.25/160
-            }{
-                \fill[gray!\g]
-                    (\x-\step/2, \y-\step/2) rectangle (\x+\step/2, \y+\step/2);
-            }
-
-            \draw[black!80, thin] (-1.5, -1.5) grid[step=0.5] (1.5, 1.5);
-
-        \end{scope}
+        \node (image_cont) at (3,0) {
+            \includegraphics[width=3.25cm,height=3cm]{sections/3/img/dog_pixelated.png}
+        }; 
 
         \node[font=\small] at (3, -2) {$f[m,n]$};
         
@@ -141,7 +144,7 @@ hasta la imagen digital final $I[m,n]$.
         \draw[arrow, thick] (5,0) -- node[above, font=\small] {Cuantificación} (7,0);
 
         % BOX: Imagen digital
-        \node[box, fill=white, label={[title]above:Imagen digital}] (digital) at (9,0) {};
+        \node[matrix_box, fill=white, label={[title]above:Imagen digital}] (digital) at (9,0) {};
 
         \begin{scope}[shift={(9,0)}]
             \def\step{0.5}
