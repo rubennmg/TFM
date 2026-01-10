@@ -67,7 +67,7 @@ corrdenadas enteras:
 
 donde $(i,j)$ representan las coordenadas del píxel y $\Delta x$, $\Delta y$ las resoluciones
 espaciales en cada dimensión. El número total de muestras en cada dimensión determina la 
-resoluación espacial de la imagen y establece un compromiso entre el nivel de detalle representable 
+resolución espacial de la imagen y establece un compromiso entre el nivel de detalle representable 
 y los recursos necesarios para su almacenamiento y procesamiento.
 
 \subsubsection{Cuantificación} \label{subsubsec:3_2_2_cuantificacion}
@@ -95,35 +95,22 @@ afectando directamente a la calidad visual de la imagen resultante.
 
 \newpage
 
-El resultado final del proceso de digitalización es la imagen digital, que se representa como una matriz 
-bidimensional ($M \times N$) de valores discretos. Cada elemento de esta matriz corresponde a un píxel
-con un valor cuantificado que refleja la intensidad luminosa o color en esa posición específica:
-
-\begin{myequation}
-    \begin{equation}
-        I[m,n] \quad \text{donde } m = 0, 1, \ldots, M-1 \text{ y } n = 0, 1, \ldots, N-1
-        \label{eq:3_imagen_matriz}
-    \end{equation}
-    \myequations{Imagen digital representada como matriz de píxeles}
-    \caption{Imagen digital representada como matriz de píxeles}
-\end{myequation}
-
-Todo este proceso se ilustra de forma esquemática en la \autoref{fig:3_1_muestreo_cuantificacion},
+El proceso de digitalización se ilustra de forma esquemática en la \autoref{fig:3_1_muestreo_cuantificacion},
 donde se muestra la transición desde una imagen continua $f(x,y)$, pasando por la imagen muestreada $f[m,n]$
 hasta la imagen digital final $I[m,n]$.
 
 \begin{figure}[h]
     \centering
     \begin{tikzpicture}[
-        box/.style={draw=black!70, thick, minimum width=3.25cm, minimum height=3cm},
-        matrix_box/.style={draw=black!70, thick, minimum width=3cm, minimum height=3cm},
+        box/.style={draw=black!70, thick, minimum width=3.70cm, minimum height=3.25cm},
+        matrix_box/.style={draw=black!70, thick, minimum width=3.50cm, minimum height=3.50cm},
         title/.style={font=\small, align=center}
     ]
         % BOX: Imagen continua
         \node[box, label={[title]above:Imagen continua}] (cont) at (-3,0) {};
         
         \node (image_cont) at (-3,0) {
-            \includegraphics[width=3.25cm,height=3cm]{sections/3/img/dog.png}
+            \includegraphics[width=3.70cm,height=3.25cm]{sections/3/img/dog.png}
         }; 
         
         \node[font=\small] at (-3, -2) {$f(x,y)$};
@@ -135,7 +122,7 @@ hasta la imagen digital final $I[m,n]$.
         \node[box, fill=white, label={[title]above:Imagen muestreada}] (sampled) at (3,0) {};
 
         \node (image_cont) at (3,0) {
-            \includegraphics[width=3.25cm,height=3cm]{sections/3/img/dog_pixelated.png}
+            \includegraphics[width=3.70cm,height=3.25cm]{sections/3/img/dog_pixelated.png}
         }; 
 
         \node[font=\small] at (3, -2) {$f[m,n]$};
@@ -146,23 +133,25 @@ hasta la imagen digital final $I[m,n]$.
         % BOX: Imagen digital
         \node[matrix_box, fill=white, label={[title]above:Imagen digital}] (digital) at (9,0) {};
 
-        \begin{scope}[shift={(9,0)}]
-            \def\step{0.5}
+            \begin{scope}[shift={(9,0)}]
+                \def\step{0.4375}
 
-            \foreach \x/\y/\g in {
-                -1.25/ 1.25/5, -0.75/ 1.25/20, -0.25/ 1.25/40,  0.25/ 1.25/60,  0.75/ 1.25/20, 1.25/ 1.25/5,
-                -1.25/ 0.75/20, -0.75/ 0.75/60,  -0.25/ 0.75/80,   0.25/ 0.75/80,   0.75/ 0.75/60, 1.25/ 0.75/20,
-                -1.25/ 0.25/40, -0.75/ 0.25/80,   -0.25/ 0.25/105,   0.25/ 0.25/105,   0.75/ 0.25/80,  1.25/ 0.25/40,
-                -1.25/-0.25/60, -0.75/-0.25/80,   -0.25/-0.25/125,   0.25/-0.25/125,   0.75/-0.25/80,  1.25/-0.25/60,
-                -1.25/-0.75/20, -0.75/-0.75/60,  -0.25/-0.75/80,   0.25/-0.75/80,   0.75/-0.75/60, 1.25/-0.75/20,
-                -1.25/-1.25/5, -0.75/-1.25/20, -0.25/-1.25/30,  0.25/-1.25/40,  0.75/-1.25/20, 1.25/-1.25/5
-            }{
-                \node[font=\tiny] at (\x, \y) {\g};
-            }
-            
-            \draw[black!70, thin] (-1.5, -1.5) grid[step=0.5] (1.5, 1.5);
+                \foreach \x/\y/\g in {
+                    -1.75/ 1.75/5,     -1.3125/ 1.75/12,    -0.875/ 1.75/20,     -0.4375/ 1.75/28,     0/ 1.75/32,     0.4375/ 1.75/28,     0.875/ 1.75/20,     1.3125/ 1.75/12,
+                    -1.75/ 1.3125/12,  -1.3125/ 1.3125/35,  -0.875/ 1.3125/55,   -0.4375/ 1.3125/70,   0/ 1.3125/75,   0.4375/ 1.3125/70,   0.875/ 1.3125/55,   1.3125/ 1.3125/35,
+                    -1.75/ 0.875/20,   -1.3125/ 0.875/60,   -0.875/ 0.875/90,    -0.4375/ 0.875/110,   0/ 0.875/120,   0.4375/ 0.875/110,   0.875/ 0.875/90,    1.3125/ 0.875/60,
+                    -1.75/ 0.4375/28,  -1.3125/ 0.4375/80,  -0.875/ 0.4375/120,  -0.4375/ 0.4375/145,  0/ 0.4375/155,  0.4375/ 0.4375/145,  0.875/ 0.4375/120,  1.3125/ 0.4375/80,
+                    -1.75/ 0/32,       -1.3125/ 0/90,       -0.875/ 0/135,       -0.4375/ 0/165,       0/ 0/180,       0.4375/ 0/165,       0.875/ 0/135,       1.3125/ 0/90,
+                    -1.75/ -0.4375/28, -1.3125/ -0.4375/80, -0.875/ -0.4375/120, -0.4375/ -0.4375/145, 0/ -0.4375/155, 0.4375/ -0.4375/145, 0.875/ -0.4375/120, 1.3125/ -0.4375/80,
+                    -1.75/ -0.875/20,  -1.3125/ -0.875/60,  -0.875/ -0.875/90,   -0.4375/ -0.875/110,  0/ -0.875/120,  0.4375/ -0.875/110,  0.875/ -0.875/90,   1.3125/ -0.875/60,
+                    -1.75/ -1.3125/12, -1.3125/ -1.3125/35, -0.875/ -1.3125/55,  -0.4375/ -1.3125/70,  0/ -1.3125/75,  0.4375/ -1.3125/70,  0.875/ -1.3125/55,  1.3125/ -1.3125/35
+                }{
+                \node[font=\tiny, anchor=center, align=center] at (\x + 0.21875, \y - 0.21875) {\g};
+                }
+                
+                \draw[black!70, thin] (-1.75, -1.75) grid[step=0.4375] (1.75, 1.75);
 
-        \end{scope}
+            \end{scope}
 
         \node[font=\small] at (9, -2) {$I[m,n]$};
 
@@ -170,6 +159,19 @@ hasta la imagen digital final $I[m,n]$.
     \caption{Proceso de digitalización de una imagen}
     \label{fig:3_1_muestreo_cuantificacion}
 \end{figure}
+
+El resultado final de este proceso es la imagen digital, que se representa como una matriz 
+bidimensional ($M \times N$) de valores discretos. Cada elemento de esta matriz corresponde a un píxel
+con un valor cuantificado que refleja la intensidad luminosa o color en esa posición específica:
+
+\begin{myequation}
+    \begin{equation}
+        I[m,n] \quad \text{donde } m = 0, 1, \ldots, M-1 \text{ y } n = 0, 1, \ldots, N-1
+        \label{eq:3_imagen_matriz}
+    \end{equation}
+    \myequations{Imagen digital representada como matriz de píxeles}
+    \caption{Imagen digital representada como matriz de píxeles}
+\end{myequation}
 
 \newpage
 
@@ -204,7 +206,7 @@ por tres canales (o capas) de intensidad: ($R$) rojo, ($G$) verde y ($B$) azul.
 
 \begin{myequation}
     \begin{equation}
-        \textit{Imagen Color} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
+        \textit{Imagen Color RGB} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
         \label{eq:5_imagen_color}
     \end{equation}
     \myequations{Representación de una imagen a color en formato RGB}
@@ -460,7 +462,7 @@ y qué ajustes pueden llegar a ser necesarios para mejorar su apariencia visual 
         \caption{Histograma}
         \label{fig:3_5_image_histogram}
     \end{subfigure}
-    \caption{Ejemplo de imagen y su histograma correspondiente}
+    \caption{Ejemplo de imagen y su correspondiente histograma}
     \label{fig:3_4_image_and_histogram}
 \end{figure}
    
