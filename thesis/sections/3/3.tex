@@ -157,7 +157,7 @@ hasta la imagen digital final $I[m,n]$.
 
     \end{tikzpicture}
     \caption{Proceso de digitalización de una imagen}
-    \label{fig:3_1_muestreo_cuantificacion}
+    \label{fig:1_muestreo_cuantificacion}
 \end{figure}
 
 El resultado final de este proceso es la imagen digital, que se representa como una matriz 
@@ -173,20 +173,10 @@ con un valor cuantificado que refleja la intensidad luminosa o color en esa posi
     \caption{Imagen digital representada como matriz de píxeles}
 \end{myequation}
 
-\newpage
-
-\subsection{Naturaleza cromática de la imagen digital} \label{subsubsec:3_3_naturaleza_cromatica}
-La representación matricial de la imagen digital adopta diversas formas según el tipo 
-de información visual que se desee capturar y procesar. Esta representación varía 
-en función de la naturaleza de la información cromática de la imagen, distinguiéndose
-entre imágenes en escala de grises e imágenes a color.
-
-\subsubsection{Imágenes en escala de grises} \label{subsubsubsec:3_3_1_imagenes_escala_grises}
-En una imagen en escala de grises, cada píxel es representado por un único valor de intensidad 
-$i \in [0, I]$, donde $I$ es el valor máximo determinado por la profundidad de bits. Este valor refleja
-la luminosidad del píxel, con 0 representando el negro absoluto y $I - 1$ el blanco puro. Estas 
-imágenes se definen como una única matriz bidimensional, donde las dimensiones corresponden a la 
-resolución espacial ($M \times N$).
+No obstante, la forma concreta que adopta esta representación matricial depende de la naturaleza 
+cromática de la imagen. En el caso de imágenes en escala de grises, tal y como mostró en la 
+\autoref{fig:1_muestreo_cuantificacion}, cada píxel queda descrito por un único valor 
+de intensidad $i \in [0, I]$, donde $I$ es el valor máximo determinado por la profundidad de bits. 
 
 \begin{myequation}
     \begin{equation}
@@ -197,16 +187,14 @@ resolución espacial ($M \times N$).
     \caption{Representación de una imagen en escala de grises}
 \end{myequation}
 
-\subsubsection{Imágenes a color} \label{subsubsubsec:3_3_2_imagenes_color}
-La percepción del color en el sistema visual humano se modela típicamente mediante tres componentes 
-primarias. Por ello, las imágenes a color se representan mediante múltiples matrices de intensidad 
-apiladas, una para cada componente de color. El modelo más común en la visualización y en la 
-informática es el modelo RGB (\textit{Red, Green, Blue}). En este caso, una imagen se define 
-por tres canales (o capas) de intensidad: ($R$) rojo, ($G$) verde y ($B$) azul.
+Por el contrario, en las imágenes a color, cada píxel se 
+representa mediante múltiples componentes, generalmente organizadas en distintos canales que 
+codifican la información cromática según un modelo de color determinado. En el modelo más común,
+el modelo RGB (\textit{Red, Green, Blue}), cada píxel se define por tres valores de intensidad:
 
-\begin{myequation}
+\begin{myequation}[h!]
     \begin{equation}
-        \textit{Imagen Color RGB} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
+        \textit{Imagen Color (RGB)} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
         \label{eq:5_imagen_color}
     \end{equation}
     \myequations{Representación de una imagen a color en formato RGB}
@@ -219,66 +207,157 @@ de los tres canales en esa posición: $I[i, j] = (I_R[i, j], I_G[i, j], I_B[i, j
 \newpage
 
 \subsection{Espacios de color} \label{subsubsec:3_4_espacios_color}
-Un espacio de color es una representación matemática tridimensional
-que asigna un conjunto de coordenadas a cada color, permitiendo la comunicación consistente 
-del color entre dispositivos. La elección de un espacio de color determina cómo se separan los 
-componentes de luminosidad (brillo o intensidad) y los componentes cromáticos (tono y saturación).
-En el contexto de este TFM, se consideran de interés varios espacios de color.
+Un espacio de color es un sistema específico que permite la representación matemática de 
+los colores. Se basa en un modelo de color al que se le asigna una escala y rango definidos,
+permitiendo que cada color sea identificado de forma única mediante coordenadas numéricas \cite{color_spaces}.
+Los colores se pueden representar en diferentes espacios de color y se pueden transformar 
+de uno a otro sin que se pierda información cromática. En el contexto de este TFM, 
+existen varios espacios de color que resultan relevantes.
 
 \subsubsection{RGB} \label{subsubsubsec:3_4_1_rgb}
-Ya mencionado anteriormente, el espacio RGB es un modelo aditivo, directamente relacionado con 
-la forma en que los monitores y pantallas generan color mediante la emisión de luz. Se basa 
-en el sistema cartesiano, donde los valores (R, G, B) definen un cubo de color. 
-Es el modelo por excelencia para la captura y visualización y es simple de implementar. 
-En contrapartida, presenta limitaciones en el contexto del procesamiento de imágenes, ya que la 
-información de luminosidad (brillo) está intrínsecamente ligada a la información de color en los 
-tres canales. Esto significa que un cambio en el contraste (luminosidad) requiere manipular los 
-tres canales simultáneamente, lo cual complica la aplicación de algoritmos y técnicas de realce 
-de contraste que buscan preservar el tono. En la \autoref{fig:3_2_rgb_cube} se muestra la representación del
-cubo de color RGB, que ilustra la distribución de colores en este espacio tridimensional.
+El espacio de color RGB es el modelo aditivo más comúnmente utilizado en los sitemas de captura,
+representación y visualización de imágenes digitales. En este modelo, los colores se generan 
+mediante la combinación de tres componentes primarias: Rojo (Red), Verde (Green) y Azul (Blue),
+cuyas intensidades determinan el color final percibido.
+
+Desde el punto de vista de la representación numérica, cada píxel de una imagen en el espacio
+RGB queda definido por un triplete ordenado $(R, G, B)$, donde cada componente corresponde a la
+intensidad cuantificada de uno de los canales de color, tal como se mostró en la \autoref{eq:5_imagen_color}. Estos valores suelen representarse en
+un rango discreto determinado por la profundidad de bits del sistema, siendo habitual el uso
+de 8 bits por canal, lo que permite representar hasta $256$ niveles por componente y un total
+de más de $16$ millones de combinaciones cromáticas posibles.
+
+Geométricamente, el espacio RGB puede interpretarse como un cubo tridimensional en un sistema
+de coordenadas cartesianas, donde cada eje corresponde a uno de los canales de color. En esta
+representación, el origen $(0,0,0)$ corresponde al color negro, mientras que el vértice opuesto
+$(R_{\max}, G_{\max}, B_{\max})$ representa el color blanco. La \autoref{fig:2_rgb_cube} ilustra
+esta distribución de los colores dentro del cubo RGB.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.3\textwidth]{sections/3/img/rgb_cube.png}
     \caption{Cubo de color RGB} \cite{rgb_hsv_images}
-    \label{fig:3_2_rgb_cube}
+    \label{fig:2_rgb_cube}
+\end{figure}
+
+\newpage
+
+Con el objetivo de ilustrar de forma visual la representación de una imagen en el espacio de color RGB,
+la \autoref{fig:3_RGB_channels} muestra un ejemplo de descomposición de una imagen a color en sus tres canales
+constituyentes. Cada canal almacena la información de intensidad correspondiente a una de las componentes
+primarias, dando lugar a tres imágenes monocromas independientes. La combinación de estos tres canales
+permite reconstruir la imagen original en color, ejemplificando la naturaleza de la representación RGB
+y su relación directa con la estructura matricial descrita anteriormente.
+
+\vspace{0.5cm}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+    \end{subfigure}
+
+    \vspace{0.3cm}
+
+    \begin{subfigure}{0.2625\textwidth}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_R.png}
+        \caption{Canal R}
+    \end{subfigure}
+    \begin{subfigure}{0.2625\textwidth}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_G.png}
+        \caption{Canal G}
+    \end{subfigure}
+    \begin{subfigure}{0.2625\textwidth}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_B.png}
+        \caption{Canal B}
+    \end{subfigure}
+
+    \caption{Descomposición de canales RGB}
+    \label{fig:3_RGB_channels}
 \end{figure}
 
 \newpage
 
 \subsubsection{HSV} \label{subsubsubsec:3_4_2_hsv}
-El espacio de color HSV (\textit{Hue, Saturation, Value}) es un modelo que representa los colores
-de una manera más alineada con la percepción humana. Su estructura es cilíndrica y separa la 
+El espacio de color HSV (\textit{Hue, Saturation, Value}) es un modelo de representación cromática
+derivado del espacio RGB. Su objetivo es desacoplar la información de brillo de la información 
+de color \cite{hsv_rgb}. 
+
+Al igual que en el modelo RGB, cada píxel de una imagen en el espacio HSV se representa mediante
+un vector tridimensional. No obstante, en este caso, las componentes se organizan de acuerdo con
+una interpretación más cercana a la percepción humana del color. La estructura geométrica del
+espacio HSV es cilíndrica, tal y como se muestra en la \autoref{fig:3_3_hsv_cone}, y separa la
 información visual en tres componentes independientes:
 
 \begin{itemize}
-    \item \textbf{\textit{Hue} (Tono).} Representa el color puro y se mide en grados (0° a 360°) alrededor del
+    \item \textbf{\textit{Hue} (Tono, Matiz).} Representa el color puro y se mide en grados (0° a 360°) alrededor del
     cilindro. Cada valor de tono corresponde a un color específico (rojo, verde, azul, etc.).
     \item \textbf{\textit{Saturation} (Saturación).} Define la pureza del color, es decir, qué tan 
-    diluido está con el blanco.
-    \item \textbf{\textit{Value} (Valor).} Representa el brillo del color, independientemente de su tono y saturación.
+    diluido está con el blanco. Varía desde un tono gris (0\%) hasta el color más intenso (100\%).
+    \item \textbf{\textit{Value} (Valor, Brillo).} Representa el brillo del color, independientemente de su tono y saturación.
+    Un 0\% representa la ausencia total de luz (negro).
 \end{itemize}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.24\textwidth]{sections/3/img/hsv_cone.png}
+    \includegraphics[width=0.3\textwidth]{sections/3/img/hsv_cone.png}
     \caption{Cono de color HSV} \cite{rgb_hsv_images}
     \label{fig:3_3_hsv_cone}
 \end{figure}
 
+Este espacio de color facilita la aplicación de técnicas de procesamiento que actúan selectivamente
+sobre el brillo o el color, permitiendo, por ejemplo, realizar ajustes de iluminación sin alterar 
+la esencia cromática de la imagen. Esta es la principal diferencia respecto a lo que ocure en el 
+espacio RGB, donde la información de color y brillo se encuentra intrínsecamente entrelazada en 
+sus tres canales.
+
+\newpage
+
+De nuevo, con el objetivo de ilustrar de forma visual la representación de una imagen en el 
+espacio de color HSV, la \autoref{fig:4_HSV_components} muestra un ejemplo de descomposición de 
+una imagen a color en sus tres componentes constituyentes.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+    \end{subfigure}
+
+    \vspace{0.3cm}
+
+    \begin{subfigure}{0.2625\textwidth}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_H.png}
+        \caption{Componente H}
+    \end{subfigure}
+    \begin{subfigure}{0.2625\textwidth}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_S.png}
+        \caption{Componente S}
+    \end{subfigure}
+    \begin{subfigure}{0.2625\textwidth}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_V.png}
+        \caption{Componente V}
+    \end{subfigure}
+
+    \caption{Descomposición de componentes HSV}
+    \label{fig:4_HSV_components}
+\end{figure}
+
 \subsubsection{Otros} \label{subsubsubsec:3_4_3_otros}
 Además de los ya mencionados, existen otros espacios de color ampliamente utilizados en el contexto del procesamiento
-digital de imágenes y la codificación visual que, si bien no son empleados de forma directa en este TFM,
-merecen ser destacados:
+digital de imágenes y la codificación visual que, aunque no se emplean en este TFM, resultan relevantes
+por sus propiedades particulares y su impacto em técnicas de análisis y compresión de imágenes
 
 \begin{itemize}
-    \item \textbf{L*a*b*.} Diseñado para ser perceptualmente uniforme, es decir, los cambios en los valores 
-    corresponden a cambios similares en la percepción humana del color. Este espacio separa explícitamente 
-    la información de luminosidad (\(L^*\)) de las componentes cromáticas (\(a^*\), que representa 
-    el eje verde--rojo, y \(b^*\), que representa el eje azul--amarillo).
-    \item \textbf{YCbCr.} Utilizado principalmente en compresión de video e imágenes (JPEG, MPEG). 
-    Su principal característica es la separación de la información de luminancia (\(Y\)) de 
-    las componentes de crominancia (\(Cb\) y \(Cr\)), que codifican las diferencias de color respecto al brillo.
+    \item \textbf{L*a*b*.} Este espacio de color fue diseñado para aproximar la percepción
+    visual humana, de modo que variaciones iguales en los valores de los canales se correspondan
+    con cambios perceptibles similares en el color. L*a*b* separa de forma explícita la información
+    de luminosidad (\(L^*\)) de las componentes cromáticas (\(a^*\) y \(b^*\)), donde \(a^*\)
+    representa la variación entre verde y rojo, y \(b^*\) la variación entre azul y amarillo \cite{lab_color_space}.
+    \item \textbf{YCbCr.} Utilizado principalmente en compresión de imágenes y vídeo, como
+    JPEG o MPEG, este espacio separa la luminancia (\(Y\)) de las componentes de crominancia
+    (\(Cb\) y \(Cr\)), que codifican la diferencia de color respecto al brillo \cite{ycbcr_color_space}. 
 \end{itemize}
 
 \newpage
