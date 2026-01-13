@@ -1,0 +1,30 @@
+[
+    {
+        "operation": "Debayer",
+        "params": {
+            "algorithm_name": "debayer5x5"
+        }
+    },
+    {
+        "operation": "HistogramEqualization",
+        "params": {}
+    },
+    {
+        "operation": "UnsharpMasking",
+        "params": {
+            "kernel_size": 3,
+            "sigma": 1.5
+        }
+    },
+    {
+        "operation": "GammaAdjustment",
+        "params": {
+            "c": 1.3,
+            "gamma": 1.7
+        }
+    },
+    {
+        "operation": "RealToRGB8",
+        "params": {}
+    }
+]

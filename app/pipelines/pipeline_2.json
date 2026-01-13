@@ -1,0 +1,33 @@
+[
+    {
+        "operation": "Debayer",
+        "params": {
+            "algorithm_name": "debayer2x2"
+        }
+    },
+    {
+        "operation": "CLAHE",
+        "params": {
+            "clip_limit": 24.0,
+            "grid_size": 14.0
+        }
+    },
+    {
+        "operation": "SigmoidContrast",
+        "params": {
+            "gain": 2.6,
+            "cutoff": 0.0
+        }
+    },
+    {
+        "operation": "GaussianFilter",
+        "params": {
+            "kernel_size": 9.0,
+            "sigma": 2.4
+        }
+    },
+    {
+        "operation": "RealToRGB8",
+        "params": {}
+    }
+]
