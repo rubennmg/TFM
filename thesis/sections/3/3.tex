@@ -95,7 +95,7 @@ afectando directamente a la calidad visual de la imagen resultante.
 
 \newpage
 
-El proceso de digitalización se ilustra de forma esquemática en la \autoref{fig:3_1_muestreo_cuantificacion},
+El proceso de digitalización se ilustra de forma esquemática en la \autoref{fig:1_muestreo_cuantificacion},
 donde se muestra la transición desde una imagen continua $f(x,y)$, pasando por la imagen muestreada $f[m,n]$
 hasta la imagen digital final $I[m,n]$.
 
@@ -363,22 +363,31 @@ por sus propiedades particulares y su impacto em técnicas de análisis y compre
 \newpage
 
 \subsection{Formatos} \label{subsec:3_5_formatos}
-Los \textit{formatos de imagen} definen la forma en que los datos de una imagen digital son almacenados, 
+Establecida la representación numérica de la imagen y su codificación cromática, es necesario determinar
+cómo se estructura y almacena dicha información.
+Los formatos de imagen definen la forma en que los datos de una imagen digital son almacenados, 
 representados e intercambiados entre sistemas \cite{image_formats}. Un formato de imagen no sólo especifica la organización de 
 los datos de píxeles, sino también la codificación del color, la profundidad de bits, los mecanismos de 
 compresión y, en muchos casos, la inclusión de metadatos adicionales.
 
-Desde el puntos de vista de su representación geométrica, los formatos de imagen pueden clasificarse 
-en dos categorías principales: \textit{raster} y \textit{vectorial}. Los formatos raster almacenan
-la imagen como un mapa de bits, esto es, una matriz de píxeles discretos, tal y como se ha descrito 
-previamente. En contraste, los formatos vectoriales representan la imagen mediante primitivas geométricas
-(líneas, curvas, polígonos) y atributos asociados (color, grosor).
+Desde el punto de vista de su representación geométrica, los formatos de imagen pueden clasificarse en
+dos grandes categorías: formatos \textit{raster} y formatos \textit{vectoriales}. Los formatos raster
+almacenan la imagen como un mapa de bits, es decir, como una matriz bidimensional de píxeles discretos,
+tal y como se ha descrito en los apartados anteriores. Por el contrario, los formatos vectoriales
+representan la información visual mediante primitivas geométricas, como líneas, curvas o polígonos, junto
+con los atributos asociados que definen su apariencia visual.
 
-En el contexto de este TFM, el enfoque se centra en los formatos raster. Dentro de esta categoría, 
-existen numerosos formatos, cada uno con sus propias características, ventajas y aplicaciones específicas.
-Entre ellos se incluyen los famosos JPEG, PNG, BMP, TIFF, entre otros. Cada uno de estos formatos
-ofrece diferentes niveles de compresión, calidad de imagen y soporte para características avanzadas.
-Sin embargo, para los propósitos de este TFM, debe de hacerse especial énfasis en el \textit{formato crudo}.
+En el contexto del presente TFM, el interés se centra exclusivamente en los formatos raster, dado que
+constituyen la base de la captura y el procesamiento de imágenes digitales procedentes de sensores. Dentro
+de esta categoría existe una amplia variedad de formatos, entre los que se encuentran JPEG, PNG, BMP o
+TIFF, cada uno de ellos diseñado con objetivos específicos relacionados con la compresión, la calidad de
+imagen o la compatibilidad con distintos sistemas.
+
+No obstante, para los fines de este trabajo, se presta especial atención a las imágenes en \textit{formato
+crudo} (\textit{RAW}), ya que representan la información capturada por el sensor con un nivel mínimo de
+procesamiento y sin pérdidas asociadas a técnicas de compresión o postprocesado. Este tipo de formato
+constituye la base sobre la que se desarrollan los métodos de procesamiento propuestos en este TFM,
+permitiendo un mayor control sobre la información radiométrica y cromática de la imagen.
 
 \subsubsection{Imágenes en formato crudo} \label{subsec:3_5_1_formato_crudo}
 Las imágenes en formato crudo (\textit{RAW}), representan la forma más directa y fiel de los datos capturados
@@ -445,20 +454,35 @@ de imagen digitales.
 \end{figure}
 
 A partir de esta estructura, la reconstrucción de una imagen a color completa requiere un proceso 
-denominado \textit{demosaicing} o \textit{interpolación de color}. Este proceso utiliza algoritmos específicos para estimar
-los valores de los componentes de color faltantes en cada píxel, basándose en los valores
-capturados por los píxeles vecinos. El resultado es una imagen RGB completa. 
+denominado \textit{demosaicing} o \textit{interpolación de color} \cite{demosaicing_process}. Este proceso tiene como objetivo estimar,
+para cada píxel, los valores de los componentes cromáticos no capturados directamente por el sensor,
+a partir de la información proporcionada por los píxeles vecinos y del patrón de filtros utilizado.
+Como resultado, se obtiene una imagen RGB completa, en la que cada píxel dispone de información en
+los tres canales de color.
+
+Existen múltiples algoritmos de \textit{demosaicing}, que difieren en complejidad, coste computacional y
+calidad visual del resultado. Métodos sencillos basados en interpolación bilineal o
+enfoques más complejos que tienen en cuenta gradientes, bordes y características locales de la
+imagen. No obstante, todos ellos comparten el mismo objetivo: reconstruir
+una representación cromática coherente a partir de datos incompletos.
+
+El \textit{demosaicing} constituye el primer paso de cualquier \textit{pipeline de procesado de
+imagen} basado en datos RAW. Un \textit{pipeline} de procesado es la secuencia ordenada
+de etapas que transforman progresivamente los datos capturados por el sensor en una imagen final
+lista para su visualización o análisis. Estas etapas suelen incluir, además del demosaicing,
+operaciones relacionadas con la corrección y ajuste de la imagen, así como la conversión 
+a un formato de salida estándar para su almacenamiento o visualización. Dicho \textit{pipeline}
+es la base del Procesamiento Digital de Imágenes.
 
 \newpage
 
 \subsection{Fundamentos del Procesamiento Digital de Imágenes} \label{subsec:3_6_fundamentos_procesamiento_digital_imagenes}
-Establecidas las bases en la representación y codificación de imágenes digitales, es necesario introducir los principios 
-básicos del Procesamiento de Imágenes Digitales. Este campo incluye el conjunto de técnicas y operaciones destinadas a 
+El Procesamiento Digital de Imágenes incluye el conjunto de técnicas y operaciones destinadas a 
 modificar o analizar una imagen con el fin de mejorar su calidad visual, resaltar información relevante 
 o facilitar etapas posteriores de procesado \cite{fundamentals_digital_image_processing}.
 
 \subsubsection{Operaciones puntuales y operaciones espaciales} \label{subsubsec:3_6_1_operaciones_puntuales_espaciales}
-Una de las clasificaciones fundamentales en este ámbito distingue entre operaciones puntuales 
+Una de las clasificaciones fundamentales en este campo distingue entre operaciones puntuales 
 y operaciones espaciales, en función de la información utilizada para calcular el valor de cada 
 píxel en la imagen resultante.
 
@@ -494,8 +518,8 @@ por lo que son muy adecuadas para su implementación eficiente en arquitecturas 
 
 \subsubsubsection{Operaciones espaciales} \label{subsubsubsec:3_6_1_2_operaciones_espaciales}
 Las operaciones espaciales, en contraposición, son aquellas en las que el valor de cada píxel de 
-salida depende no sólo del píxel correspondiente, sino también de un conjunto de píxeles vecinos 
-de la imagen de entrada. De forma general, pueden expresarse como:
+salida depende no sólo del píxel de entrada correspondiente, sino de un conjunto de píxeles vecnios. 
+De forma general, pueden expresarse como:
 
 \begin{myequation}
     \begin{equation}
@@ -608,6 +632,11 @@ el intervalo entre los valores de intensidad máximo y máximo presentes en la m
 \subsubsection{Ecualización adaptativa y CLAHE} \label{subsubsec:3_7_3_ecualizacion_adaptativa_clahe}
 
 \subsubsection{Transformaciones no lineales de intensidad} \label{subsubsec:3_7_4_transformaciones_no_lineales_intensidad}
+
+\subsubsubsection{Corrección gamma} \label{subsubsubsec:3_7_4_1_correccion_gamma}
+
+\subsubsubsection{Función sigmoide} \label{subsubsubsec:3_7_4_2_funcion_sigmoide}
+
 \newpage
 
 \subsection{Filtrado espacial y reducción de ruido} \label{subsec:3_8_filtrado_espacial_reduccion_ruido}
