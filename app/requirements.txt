@@ -70,7 +70,6 @@ setuptools==70.2.0
 six==1.17.0
 stack-data==0.6.3
 sympy==1.14.0
--e git+https://github.com/rubennmg/TFM.git@24bb7a803a580828c897ec4245b877ef31f91fe6#egg=tfm_image_pipeline&subdirectory=app
 torch==2.9.0+cu130
 torchvision==0.24.0+cu130
 tornado==6.5.2
