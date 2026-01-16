@@ -653,13 +653,131 @@ con diferentes niveles de contraste, tanto en escala de grises como en color.
     \label{fig:8_contrast_examples}
 \end{figure}
 
+A continuación, se describen una serie de técnicas de mejora del contraste comúnmente empleadas 
+en el procesamiento digital de imágenes y que son relevantes para el desarrollo de este TFM.
+
 \newpage
 
-\paragraph{Ecualización global del histograma} \label{subsubsubsec:3_7_2_ecualizacion_global_histograma}
+\paragraph{Ecualización global del histograma} \label{subsubsubsec:3_5_3_2_ecualizacion_global_histograma}
+La ecualización global del histograma \cite{histogram_equalization} es una ténica clásica de mejora del contraste que actúa sobre 
+la imagen completa. Su objetivo es redistribuir los valores de intensidad de forma que el histograma 
+resultante sea aproximadamente uniforme a lo largo del rango dinámico disponible.
 
-\paragraph{Ecualización adaptativa y CLAHE} \label{subsubsubsec:3_7_3_ecualizacion_adaptativa_clahe}
+Esta técnica se basa en una transformación no lineal de los valores de intensidad, calculada a partir
+de la función de distribución acumulada del histograma original. Como resultado, regiones con bajo
+contraste inicial pueden volverse más distinguibles. Sin embargo, al tratarse de una operación
+global, la ecualización del histograma puede producir efectos no deseados, como la amplificación del
+ruido o la pérdida de naturalidad en ciertas escenas, especialmente cuando existen grandes variaciones
+locales de iluminación.
 
-\paragraph{Transformaciones no lineales de intensidad} \label{subsubsubsec:3_7_4_transformaciones_no_lineales_intensidad}
+En la \autoref{fig:9_histogram_equalization_example} se muestra un ejemplo de aplicación de la ecualización
+global del histograma sobre una imagen. La imagen original (\autoref{fig:9_a_original_image}) es una imagen 
+en formato crudo en etapas tempranas de revelado. Su histograma correspondiente 
+(\autoref{fig:9_b_original_histogram}) muestra una distribución de intensidades concentrada en la parte 
+inferior del rango dinámico. Tras aplicar la ecualización del histograma, se obtiene la imagen ecualizada 
+(\autoref{fig:9_c_equalized_image}), que presenta un contraste significativamente mejorado. El histograma
+resultante (\autoref{fig:9_d_equalized_histogram}) muestra una distribución más uniforme de los niveles de
+intensidad. En este caso, la imagen resultante exhibe un detalle visual muy mejorado.
+
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{sections/3/img/unequalized.png}
+        \caption{Imagen original}
+        \label{fig:9_a_original_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.95\textwidth]{sections/3/img/unequalized_histogram.png}
+        \caption{Histograma original}
+        \label{fig:9_b_original_histogram}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{sections/3/img/equalized.png}
+        \caption{Imagen resultante}
+        \label{fig:9_c_equalized_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.95\textwidth]{sections/3/img/equalized_histogram.png}
+        \caption{Histograma resultante}
+        \label{fig:9_d_equalized_histogram}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de ecualización global del histograma}
+    \label{fig:9_histogram_equalization_example}
+\end{figure}
+
+\newpage
+
+\paragraph{Ecualización adaptativa y CLAHE} \label{subsubsubsec:3_5_3_3_ecualizacion_adaptativa_clahe}
+La ecualización global del histograma no considera las variaciones locales de contraste dentro de la imagen, 
+sino que aplica una transformación uniforme a toda la imagen. Para superar esta limitación, se emplean 
+técnicas de ecualización adaptativa \cite{adaptative_histogram_equalization}, que actúan sobre regiones 
+locales de la imagen en lugar de hacerlo a nivel global. Siguiendo este enfoque, la imagen se divide en 
+múltiples regiones, y se aplica la ecualización del histograma de forma independiente en cada una de ellas.
+Así se consigue una mejora del contraste a nivel local, sin aplicar generalizaciones que 
+puedan resultar inapropiadas para ciertas áreas de la imagen.
+
+Una variante ampliamente utilizada es la ecualización adaptativa con limitación de contraste
+(\textit{Contrast Limited Adaptive Histogram Equalization}, CLAHE) \cite{clahe}. Este método introduce un
+mecanismo de control que evita la amplificación excesiva del contraste y del ruido, limitando el
+crecimiento de los picos del histograma local.
+
+En la \autoref{fig:10_clahe_example} se muestra un ejemplo de aplicación de CLAHE sobre una imagen.
+De nuevo, la imagen original (\autoref{fig:10_a_original_image}) es una imagen en formato crudo en etapas
+tempranas de revelado. El resultado en este caso, muestra una mejora del contraste más sutil pero efectiva
+(\autoref{fig:10_c_clahed_image}), con un histograma resultante (\autoref{fig:10_d_clahed_histogram})
+que refleja una distribución de intensidades mejorada sin los picos tan pronunciados de la ecualización 
+global (\autoref{fig:9_d_equalized_histogram}).
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{sections/3/img/unequalized.png}
+        \caption{Imagen original}
+        \label{fig:10_a_original_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.95\textwidth]{sections/3/img/unequalized_histogram.png}
+        \caption{Histograma original}
+        \label{fig:10_b_original_histogram}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{sections/3/img/clahed.png}
+        \caption{Imagen resultante}
+        \label{fig:10_c_clahed_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.95\textwidth]{sections/3/img/clahed_histogram.png}
+        \caption{Histograma resultante}
+        \label{fig:10_d_clahed_histogram}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de CLAHE}
+    \label{fig:10_clahe_example}
+\end{figure}
+
+\newpage
+
+\paragraph{Transformaciones no lineales de intensidad} \label{subsubsubsec:3_5_3_4_transformaciones_no_lineales_intensidad}
+Además de las técnicas basadas en la redistribución del histograma, la mejora del contraste puede 
+lograrse mediante la aplicación de transformaciones no lineales sobre los valores de intensidad.
+Estas transformaciones modifican la relación entre los valores de entrada y salida de forma controlada,
+permitiendo ajustar selectivamente determinadas regiones del rango dinámico sin redistribuir
+explícitamente el histograma.
+
 \subparagraph{Corrección gamma} \label{subsubsubsec:3_7_4_1_correccion_gamma}
 
 \subparagraph{Función sigmoidee} \label{subsubsubsec:3_7_4_2_funcion_sigmoide}
