@@ -167,7 +167,7 @@ con un valor cuantificado que refleja la intensidad luminosa o color en esa posi
 \begin{myequation}
     \begin{equation}
         I[m,n] \quad \text{donde } m = 0, 1, \ldots, M-1 \text{ y } n = 0, 1, \ldots, N-1
-        \label{eq:3_imagen_matriz}
+        \label{eq:4_imagen_matriz}
     \end{equation}
     \myequations{Imagen digital representada como matriz de píxeles}
     \caption{Imagen digital representada como matriz de píxeles}
@@ -181,7 +181,7 @@ de intensidad $i \in [0, I]$, donde $I$ es el valor máximo determinado por la p
 \begin{myequation}
     \begin{equation}
         \textit{Imagen Gris} \rightarrow I \in R^{M \times N}
-        \label{eq:4_imagen_gris}
+        \label{eq:5_imagen_gris}
     \end{equation}
     \myequations{Representación de una imagen en escala de grises}
     \caption{Representación de una imagen en escala de grises}
@@ -195,7 +195,7 @@ el modelo RGB (\textit{Red, Green, Blue}), cada píxel se define por tres valore
 \begin{myequation}[h!]
     \begin{equation}
         \textit{Imagen Color (RGB)} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
-        \label{eq:5_imagen_color}
+        \label{eq:6_imagen_color}
     \end{equation}
     \myequations{Representación de una imagen a color en formato RGB}
     \caption{Representación de una imagen a color en formato RGB}
@@ -206,7 +206,7 @@ de los tres canales en esa posición: $I[i, j] = (I_R[i, j], I_G[i, j], I_B[i, j
 
 \newpage
 
-\subsection{Espacios de color} \label{subsubsec:3_4_espacios_color}
+\subsection{Espacios de color} \label{subsubsec:3_3_espacios_color}
 Un espacio de color es un sistema específico que permite la representación matemática de 
 los colores. Se basa en un modelo de color al que se le asigna una escala y rango definidos,
 permitiendo que cada color sea identificado de forma única mediante coordenadas numéricas \cite{color_spaces}.
@@ -214,7 +214,7 @@ Los colores se pueden representar en diferentes espacios de color y se pueden tr
 de uno a otro sin que se pierda información cromática. En el contexto de este TFM, 
 existen varios espacios de color que resultan relevantes.
 
-\subsubsection{RGB} \label{subsubsubsec:3_4_1_rgb}
+\subsubsection{RGB} \label{subsubsubsec:3_3_1_rgb}
 El espacio de color RGB es el modelo aditivo más comúnmente utilizado en los sitemas de captura,
 representación y visualización de imágenes digitales. En este modelo, los colores se generan 
 mediante la combinación de tres componentes primarias: Rojo (Red), Verde (Green) y Azul (Blue),
@@ -222,10 +222,10 @@ cuyas intensidades determinan el color final percibido.
 
 Desde el punto de vista de la representación numérica, cada píxel de una imagen en el espacio
 RGB queda definido por un triplete ordenado $(R, G, B)$, donde cada componente corresponde a la
-intensidad cuantificada de uno de los canales de color, tal como se mostró en la \autoref{eq:5_imagen_color}. Estos valores suelen representarse en
-un rango discreto determinado por la profundidad de bits del sistema, siendo habitual el uso
-de 8 bits por canal, lo que permite representar hasta $256$ niveles por componente y un total
-de más de $16$ millones de combinaciones cromáticas posibles.
+intensidad cuantificada de uno de los canales de color, tal como se mostró en la \autoref{eq:6_imagen_color}. 
+Estos valores suelen representarse en un rango discreto determinado por la profundidad de 
+bits del sistema, siendo habitual el uso de 8 bits por canal, lo que permite representar 
+hasta $256$ niveles por componente y un total de más de $16$ millones de combinaciones cromáticas posibles.
 
 Geométricamente, el espacio RGB puede interpretarse como un cubo tridimensional en un sistema
 de coordenadas cartesianas, donde cada eje corresponde a uno de los canales de color. En esta
@@ -279,7 +279,7 @@ y su relación directa con la estructura matricial descrita anteriormente.
 
 \newpage
 
-\subsubsection{HSV} \label{subsubsubsec:3_4_2_hsv}
+\subsubsection{HSV} \label{subsubsubsec:3_3_2_hsv}
 El espacio de color HSV (\textit{Hue, Saturation, Value}) es un modelo de representación cromática
 derivado del espacio RGB. Su objetivo es desacoplar la información de brillo de la información 
 de color \cite{hsv_rgb}. 
@@ -287,7 +287,7 @@ de color \cite{hsv_rgb}.
 Al igual que en el modelo RGB, cada píxel de una imagen en el espacio HSV se representa mediante
 un vector tridimensional. No obstante, en este caso, las componentes se organizan de acuerdo con
 una interpretación más cercana a la percepción humana del color. La estructura geométrica del
-espacio HSV es cilíndrica, tal y como se muestra en la \autoref{fig:3_3_hsv_cone}, y separa la
+espacio HSV es cilíndrica, tal y como se muestra en la \autoref{fig:4_hsv_cone}, y separa la
 información visual en tres componentes independientes:
 
 \begin{itemize}
@@ -303,7 +303,7 @@ información visual en tres componentes independientes:
     \centering
     \includegraphics[width=0.3\textwidth]{sections/3/img/hsv_cone.png}
     \caption{Cono de color HSV} \cite{rgb_hsv_images}
-    \label{fig:3_3_hsv_cone}
+    \label{fig:4_hsv_cone}
 \end{figure}
 
 Este espacio de color facilita la aplicación de técnicas de procesamiento que actúan selectivamente
@@ -315,7 +315,7 @@ sus tres canales.
 \newpage
 
 De nuevo, con el objetivo de ilustrar de forma visual la representación de una imagen en el 
-espacio de color HSV, la \autoref{fig:4_HSV_components} muestra un ejemplo de descomposición de 
+espacio de color HSV, la \autoref{fig:5_hsv_components} muestra un ejemplo de descomposición de 
 una imagen a color en sus tres componentes constituyentes.
 
 \begin{figure}[h]
@@ -341,10 +341,10 @@ una imagen a color en sus tres componentes constituyentes.
     \end{subfigure}
 
     \caption{Descomposición de componentes HSV}
-    \label{fig:4_HSV_components}
+    \label{fig:5_hsv_components}
 \end{figure}
 
-\subsubsection{Otros} \label{subsubsubsec:3_4_3_otros}
+\subsubsection{Otros} \label{subsubsubsec:3_3_3_otros}
 Además de los ya mencionados, existen otros espacios de color ampliamente utilizados en el contexto del procesamiento
 digital de imágenes y la codificación visual que, aunque no se emplean en este TFM, resultan relevantes
 por sus propiedades particulares y su impacto em técnicas de análisis y compresión de imágenes
@@ -362,7 +362,7 @@ por sus propiedades particulares y su impacto em técnicas de análisis y compre
 
 \newpage
 
-\subsection{Formatos} \label{subsec:3_5_formatos}
+\subsection{Formatos} \label{subsec:3_4_formatos}
 Establecida la representación numérica de la imagen y su codificación cromática, es necesario determinar
 cómo se estructura y almacena dicha información.
 Los formatos de imagen definen la forma en que los datos de una imagen digital son almacenados, 
@@ -389,7 +389,7 @@ procesamiento y sin pérdidas asociadas a técnicas de compresión o postprocesa
 constituye la base sobre la que se desarrollan los métodos de procesamiento propuestos en este TFM,
 permitiendo un mayor control sobre la información radiométrica y cromática de la imagen.
 
-\subsubsection{Imágenes en formato crudo} \label{subsec:3_5_1_formato_crudo}
+\subsubsection{Imágenes en formato crudo} \label{subsec:3_4_1_formato_crudo}
 Las imágenes en formato crudo (\textit{RAW}), representan la forma más directa y fiel de los datos capturados
 por un sensor de imagen digital \cite{raw_image_formats}. A diferencia de los formatos convencionales procesados
 y comprimidos, los formatos crudos almacenan los valores de intensidad registrados por el sensor con un procesamiento 
@@ -409,7 +409,7 @@ el patrón \textit{Bayer} \cite{bayer_filters} el más común. Este patrón orga
 rojo (R), verde (G) y azul (B) en una disposición periódica, asignando a cada píxel la captura 
 de un solo componente de color. Dado que el ojo humano es más sensible a la luz verde, el patrón Bayer
 incluye el doble de filtros verdes en comparación con los rojos y azules.
-La \autoref{fig:2_patrones_bayer} muestra los cuatro patrones Bayer más comunes utilizados en sensores
+La \autoref{fig:6_patrones_bayer} muestra los cuatro patrones Bayer más comunes utilizados en sensores
 de imagen digitales.
 
 \begin{figure}[h]
@@ -450,15 +450,15 @@ de imagen digitales.
 
     \end{tikzpicture}
     \caption{Patrones Bayer más comunes utilizados en sensores de imagen digitales}
-    \label{fig:2_patrones_bayer}
+    \label{fig:6_patrones_bayer}
 \end{figure}
 
 A partir de esta estructura, la reconstrucción de una imagen a color completa requiere un proceso 
-denominado \textit{demosaicing} o \textit{interpolación de color} \cite{demosaicing_process}. Este proceso tiene como objetivo estimar,
-para cada píxel, los valores de los componentes cromáticos no capturados directamente por el sensor,
-a partir de la información proporcionada por los píxeles vecinos y del patrón de filtros utilizado.
-Como resultado, se obtiene una imagen RGB completa, en la que cada píxel dispone de información en
-los tres canales de color.
+denominado \textit{demosaicing} o \textit{interpolación de color} \cite{demosaicing_process}. 
+Este proceso tiene como objetivo estimar, para cada píxel, los valores de los componentes cromáticos 
+no capturados directamente por el sensor, a partir de la información proporcionada por los píxeles 
+vecinos y del patrón de filtros utilizado. Como resultado, se obtiene una imagen RGB completa, 
+en la que cada píxel dispone de información en los tres canales de color.
 
 Existen múltiples algoritmos de \textit{demosaicing}, que difieren en complejidad, coste computacional y
 calidad visual del resultado. Métodos sencillos basados en interpolación bilineal o
@@ -476,25 +476,29 @@ es la base del Procesamiento Digital de Imágenes.
 
 \newpage
 
-\subsection{Fundamentos del Procesamiento Digital de Imágenes} \label{subsec:3_6_fundamentos_procesamiento_digital_imagenes}
-El Procesamiento Digital de Imágenes incluye el conjunto de técnicas y operaciones destinadas a 
-modificar o analizar una imagen con el fin de mejorar su calidad visual, resaltar información relevante 
-o facilitar etapas posteriores de procesado \cite{fundamentals_digital_image_processing}.
+\subsection{Fundamentos del Procesamiento Digital de Imágenes} \label{subsec:3_5_fundamentos_procesamiento_digital_imagenes}
+El Procesamiento Digital de Imágenes (PDI) engloba el conjunto de técnicas y métodos matemáticos
+destinados a la manipulación y el análisis de imágenes digitales mediante sistemas de computación.
+Su objetivo principal es la transformación de una imagen de entrada en otra que resulte más adecuada 
+para una determinada tarea, como la mejora visual, la extracción de información relevante o 
+la preparación para etapas posteriores de procesado \cite{fundamentals_digital_image_processing}.
+En el contexto de este TFM, el procesamiento digital de imágenes constituye la base sobre la que se 
+aplican los distintos algoritmos aplicados a los datos crudos capturados por el sensor.
 
-\subsubsection{Operaciones puntuales y operaciones espaciales} \label{subsubsec:3_6_1_operaciones_puntuales_espaciales}
-Una de las clasificaciones fundamentales en este campo distingue entre operaciones puntuales 
-y operaciones espaciales, en función de la información utilizada para calcular el valor de cada 
-píxel en la imagen resultante.
+\subsubsection{Operaciones puntuales y operaciones espaciales} \label{subsubsec:3_5_1_operaciones_puntuales_espaciales}
+Los métodos matemáticos y algoritmos aplicables sobre imágenes digitales pueden clasificarse como 
+\textit{operaciones puntuales} y \textit{operaciones espaciales}, en función de la información 
+utilizada para calcular el valor de cada píxel en la imagen resultante.
 
-\subsubsubsection{Operaciones puntuales} \label{subsubsubsec:3_6_1_1_operaciones_puntuales}
-Las operaciones puntuales (o pixel a pixel) son aquellas en las que el valor de cada píxel 
+\paragraph{Operaciones puntuales} \label{subsubsubsec:3_5_1_1_operaciones_puntuales}
+Las operaciones puntuales son aquellas en las que el valor de cada píxel 
 de salida depende únicamente del valor del píxel correspondiente en la imagen de entrada.
 Este tipo de transformaciones se expresan como:
 
 \begin{myequation}
     \begin{equation}
         I_{salida}(x,y) = T(I_{entrada}(x,y))
-        \label{eq:6_operacion_puntual}
+        \label{eq:7_operacion_puntual}
     \end{equation}
     \myequations{Operación puntual en procesamiento de imágenes}
     \caption{Operación puntual en procesamiento de imágenes}
@@ -516,7 +520,7 @@ TFM, las operaciones puntuales más relevantes incluyen:
 Estas técnicas presentan un bajo coste computacional y son fácilmente paralelizables, 
 por lo que son muy adecuadas para su implementación eficiente en arquitecturas modernas.
 
-\subsubsubsection{Operaciones espaciales} \label{subsubsubsec:3_6_1_2_operaciones_espaciales}
+\paragraph{Operaciones espaciales} \label{subsubsubsec:3_5_1_2_operaciones_espaciales}
 Las operaciones espaciales, en contraposición, son aquellas en las que el valor de cada píxel de 
 salida depende no sólo del píxel de entrada correspondiente, sino de un conjunto de píxeles vecnios. 
 De forma general, pueden expresarse como:
@@ -524,7 +528,7 @@ De forma general, pueden expresarse como:
 \begin{myequation}
     \begin{equation}
         I_{salida}(x,y) = T(I_{entrada}(S_{x,y}))
-        \label{eq:7_operacion_espacial}
+        \label{eq:8_operacion_espacial}
     \end{equation}
     \myequations{Operación espacial en procesamiento de imágenes}
     \caption{Operación espacial en procesamiento de imágenes}
@@ -543,12 +547,26 @@ En el contexto de este TFM, se consideran principalmente:
     \item \textit{Unsharp Masking}
 \end{itemize}
 
-\subsubsection{El histograma como herramienta de diagnóstico} \label{subsubsec:3_6_2_histograma_herramienta_diagnostico}
+Estas técnicas suelen implicar un mayor coste computacional debido a la necesidad de acceso
+a múltiples píxeles para calcular cada valor de salida.
+
+\vspace{0.75cm}
+
+La aplicación de las operaciones anteriormente mencionadas implica generalmente un ajuste 
+de parámetros específicos, que varían en función de las características de la imagen y los
+objetivos del procesado. Para guiar este ajuste, es necesario utilizar herramientas
+que permitan evaluar la distribución de intensidades y la calidad visual de la imagen.
+
+\newpage
+
+\subsubsection{El histograma como herramienta de diagnóstico} \label{subsubsec:3_5_2_histograma_herramienta_diagnostico}
 La representación gráfica del histograma de una imagen digital es la principal herramienta para 
-analizar la distribución de intensidades y evaluar la calidad visual de la misma. Intepretar 
-correctamente el histograma permite identificar si una imagen ha sido revelada correctamente 
-y qué ajustes pueden llegar a ser necesarios para mejorar su apariencia visual \cite{camera_histogram}. En la 
-\autoref{fig:3_4_image_and_histogram} se muestra un ejemplo de histograma.
+analizar la distribución de intensidades y evaluar la calidad visual de la misma. Desde el punto 
+de vista matemático, el histograma describe la distribución de frecuencias de los 
+valores de intensidad presentes en la imagen, proporcionando una representación global de cómo 
+se reparte la información luminosa a lo largo de su rango dinámico.
+En la \autoref{fig:7_image_and_histogram} se muestra un ejemplo de imagen y su histograma RGB
+correspondiente.
 
 \begin{figure}[h]
     \centering
@@ -556,37 +574,50 @@ y qué ajustes pueden llegar a ser necesarios para mejorar su apariencia visual 
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/dog_color.jpg}
         \caption{Imagen}
-        \label{fig:3_4_histogram_underexposed}
+        \label{fig:7_a_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=0.9\textwidth]{sections/3/img/dog_histogram.png}
+        \includegraphics[width=\textwidth]{sections/3/img/dog_histogram.png}
         \caption{Histograma}
-        \label{fig:3_5_image_histogram}
+        \label{fig:7_b_histogram}
     \end{subfigure}
-    \caption{Ejemplo de imagen y su correspondiente histograma}
-    \label{fig:3_4_image_and_histogram}
+    \caption{Imagen y su correspondiente histograma}
+    \label{fig:7_image_and_histogram}
 \end{figure}
-   
+
+Intepretar correctamente el histograma permite identificar el correcto revelado de la imagen, 
+así como los ajustes que pueden llegar a ser necesarios para mejorar su apariencia visual \cite{camera_histogram}.
+Por ejemplo, un histograma concentrado en la zona izquierda indica una imagen subexpuesta, mientras
+que una acumulación de valores en la zona derecha sugiere sobreexposición. Asimismo, la presencia de
+picos pronunciados en los extremos puede evidenciar la pérdida de detalles en sombras o luces debido a 
+saturación.
+
+En imágenes con una distribución equilibrada, el histograma suele extenderse a lo largo de una proporción
+significativa del rango dinámico, reflejando un buen aprovechamiento de los niveles de intensidad disponibles.
+Sin embargo, una distribución uniforme no implica necesariamente una
+imagen visualmente correcta, ya que la interpretación del histograma debe realizarse siempre en
+conjunto con el contenido de la escena y los objetivos del procesado.
+
 \newpage
 
-Desde el punto de vista matemático, el histograma describe la distribución de frecuencias de los 
-valores de intensidad presentes en la imagen, proporcionando una representación global de cómo 
-se reparte la información luminosa a lo largo de su rango dinámico.
+\subsubsection{Mejora del contraste} \label{subsec:3_5_3_mejora_contraste}
+La mejora del contraste es una de las técnicas más comunes en el procesamiento digital de imágenes.
+Influye directamente en la percepción visual de los detalles y en la calidad global de la imagen.
+Muchas imágenes, especialmente aquellas capturadas en condiciones de iluminación no controladas
+o a partir de datos crudos, presentan una distribución de intensidades limitada que no aprovecha 
+el completamnete el rango dinámico disponible. En estos casos, la mejora del contraste permite 
+redistribuir los niveles de intensidad para resaltar detalles relevantes sin introducir 
+artefactos visuales \cite{visual_artifacts}.
 
-\newpage
-
-\subsection{Mejora del contraste en imágenes digitales} \label{subsec:3_7_mejora_contraste_imagenes_digitales}
-
-\subsubsection{Concepto de contraste y rango dinámico} \label{subsubsec:3_7_1_concepto_contraste_rango_dinamico}
+\paragraph{Concepto de contraste} \label{subsubsec:3_5_3_1_concepto_contraste}
 El contraste en una imagen digital se refiere a la diferencia en la intensidad luminosa entre un punto de una imagen
 y sus alrededores \cite{contrast}. 
-
 Un alto contraste implica una diferencia significativa en la luminosidad, lo que facilita la distinción
 de detalles y características dentro de la imagen. Por el contrario, un bajo contraste resulta en una
 imagen apagada o deslavada, donde los detalles pueden perderse debido a la falta de variación tonal. Esta 
-diferencia puede observarse en la \autoref{fig:3_3_contrast_examples}, donde se presentan ejemplos de imágenes 
+diferencia puede observarse en la \autoref{fig:8_contrast_examples}, donde se presentan ejemplos de imágenes 
 con diferentes niveles de contraste, tanto en escala de grises como en color.
 
 \begin{figure}[h]
@@ -595,61 +626,57 @@ con diferentes niveles de contraste, tanto en escala de grises como en color.
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_low_contrast_gray.png}
         \caption{Bajo contraste (gris)}
-        \label{fig:3_4_low_contrast_gray}
+        \label{fig:8_a_low_contrast_gray}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_high_contrast_gray.png}
         \caption{Alto contraste (gris)}
-        \label{fig:3_5_high_contrast_gray}
+        \label{fig:8_b_high_contrast_gray}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_low_contrast.png}
         \caption{Bajo contraste (color)}
-        \label{fig:3_4_low_contrast}
+        \label{fig:8_c_low_contrast}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_high_contrast.png}
         \caption{Alto contraste (color)}
-        \label{fig:3_5_high_contrast}
+        \label{fig:8_d_high_contrast}
     \end{subfigure}
     \caption{Ejemplos de imágenes con diferentes niveles de contraste}
-    \label{fig:3_3_contrast_examples}
+    \label{fig:8_contrast_examples}
 \end{figure}
 
-Desde una perspectiva matemática, el contraste está intrínsecamente ligado al rango dinámico de la imagen, esto es,
-el intervalo entre los valores de intensidad máximo y máximo presentes en la matriz de píxeles. 
+\newpage
+
+\paragraph{Ecualización global del histograma} \label{subsubsubsec:3_7_2_ecualizacion_global_histograma}
+
+\paragraph{Ecualización adaptativa y CLAHE} \label{subsubsubsec:3_7_3_ecualizacion_adaptativa_clahe}
+
+\paragraph{Transformaciones no lineales de intensidad} \label{subsubsubsec:3_7_4_transformaciones_no_lineales_intensidad}
+\subparagraph{Corrección gamma} \label{subsubsubsec:3_7_4_1_correccion_gamma}
+
+\subparagraph{Función sigmoidee} \label{subsubsubsec:3_7_4_2_funcion_sigmoide}
 
 \newpage
 
-\subsubsection{Ecualización global del histograma} \label{subsubsec:3_7_2_ecualizacion_global_histograma}
+\subsubsection{Filtrado espacial y reducción de ruido} \label{subsec:3_8_filtrado_espacial_reduccion_ruido}
 
-\subsubsection{Ecualización adaptativa y CLAHE} \label{subsubsec:3_7_3_ecualizacion_adaptativa_clahe}
+\paragraph{Filtrado lineal: filtro gaussiano} \label{subsubsec:3_8_1_filtrado_lineal_filtro_gaussiano}
 
-\subsubsection{Transformaciones no lineales de intensidad} \label{subsubsec:3_7_4_transformaciones_no_lineales_intensidad}
-
-\subsubsubsection{Corrección gamma} \label{subsubsubsec:3_7_4_1_correccion_gamma}
-
-\subsubsubsection{Función sigmoide} \label{subsubsubsec:3_7_4_2_funcion_sigmoide}
+\paragraph{Filtrado no lineal: filtro de mediana} \label{subsubsec:3_8_2_filtrado_no_lineal_filtro_mediana}
 
 \newpage
 
-\subsection{Filtrado espacial y reducción de ruido} \label{subsec:3_8_filtrado_espacial_reduccion_ruido}
+\subsubsection{Realce de detalle y nitidez} \label{subsec:3_9_realce_detalle_nitidez}
 
-\subsubsection{Filtrado lineal: filtro gaussiano} \label{subsubsec:3_8_1_filtrado_lineal_filtro_gaussiano}
-
-\subsubsection{Filtrado no lineal: filtro de mediana} \label{subsubsec:3_8_2_filtrado_no_lineal_filtro_mediana}
-
-\newpage
-
-\subsection{Realce de detalle y nitidez} \label{subsec:3_9_realce_detalle_nitidez}
-
-\subsubsection{Realce de bordes: \textit{Unsharp Masking}} \label{subsubsec:3_9_1_realce_bordes_unsharp_masking}
+\paragraph{Realce de bordes: \textit{Unsharp Masking}} \label{subsubsec:3_9_1_realce_bordes_unsharp_masking}
 
 \newpage
 

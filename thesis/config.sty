@@ -71,18 +71,24 @@
 \titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{0.5ex}
 
 % ----------------------------------------
-% Level-4 Headings (Subsubsubsection)
+% Level-4 & Level-5 Headings
 % ----------------------------------------
-\setcounter{secnumdepth}{4}
+\setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{3}
 
 \newcommand{\subsubsubsection}[1]{\paragraph{#1}}
 \renewcommand{\theparagraph}{\thesubsubsection.\arabic{paragraph}}
+\renewcommand{\thesubparagraph}{\theparagraph.\arabic{subparagraph}}
 
 \titleformat{\paragraph}
   {\fontsize{12pt}{12pt}\bfseries}
   {\theparagraph}{1em}{}
 \titlespacing*{\paragraph}{0pt}{2.5ex plus 1ex minus .2ex}{0.5ex}
+
+\titleformat{\subparagraph}
+  {\fontsize{11pt}{11pt}\bfseries}
+  {\thesubparagraph}{1em}{}
+\titlespacing*{\subparagraph}{0pt}{2.0ex plus 1ex minus .2ex}{0.4ex}
 
 % ----------------------------------------
 % Custom Equation List
