@@ -773,14 +773,107 @@ global (\autoref{fig:9_d_equalized_histogram}).
 
 \paragraph{Transformaciones no lineales de intensidad} \label{subsubsubsec:3_5_3_4_transformaciones_no_lineales_intensidad}
 Además de las técnicas basadas en la redistribución del histograma, la mejora del contraste puede 
-lograrse mediante la aplicación de transformaciones no lineales sobre los valores de intensidad.
+aplicarse realizando transformaciones no lineales sobre los valores de intensidad.
 Estas transformaciones modifican la relación entre los valores de entrada y salida de forma controlada,
 permitiendo ajustar selectivamente determinadas regiones del rango dinámico sin redistribuir
 explícitamente el histograma.
 
-\subparagraph{Corrección gamma} \label{subsubsubsec:3_7_4_1_correccion_gamma}
+\subparagraph{Corrección gamma} \label{subsubsubsec:3_5_3_4_1_correccion_gamma}
+La corrección gamma es una transformación no lineal que ajusta la luminosidad de una imagen.
+Consiste en la aplicación de una función exponencial a los valores de intensidad, controlada 
+por un parámetro denominado \textit{gamma} (\(\gamma\)) \cite{gamma_correction}.
+Se define mediante la siguiente ecuación:
+\begin{myequation}
+    \begin{equation}
+        I_{salida} = I_{entrada} \times c ^{\gamma}
+        \label{eq:9_correccion_gamma}
+    \end{equation}
+    \myequations{Corrección gamma en procesamiento de imágenes}
+    \caption{Corrección gamma en procesamiento de imágenes}
+\end{myequation}
 
-\subparagraph{Función sigmoidee} \label{subsubsubsec:3_7_4_2_funcion_sigmoide}
+Valores de $\gamma < 1$ realzan las zonas oscuras de la imagen, mientras que valores de 
+$\gamma > 1$ atenúan las zonas más claras. La constante \(c\) se utiliza para normalizar 
+los valores de intensidad y asegurar que permanezcan dentro del rango válido. La 
+\autoref{fig:11_gamma_correction_example} muestra un ejemplo de aplicación de la corrección gamma
+sobre una imagen a color.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+        \label{fig:11_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/gamma_corrected_1_5.png}
+        \caption{Con \(\gamma = 1.5\) y \(c = 1\)}
+        \label{fig:11_c_gamma_corrected_1_5_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/gamma_corrected_0_5.png}
+        \caption{Con \(\gamma = 0.5\) y \(c = 1\)}
+        \label{fig:11_d_gamma_corrected_0_5_image}
+    \end{subfigure}
+    \caption{Ejemplo de corrección gamma}
+    \label{fig:11_gamma_correction_example}
+\end{figure}
+
+\newpage
+
+\subparagraph{Función sigmoide} \label{subsubsubsec:3_7_4_2_funcion_sigmoide}
+La mejora del contraste también puede realizarse mediante la aplicación de la función sigmoide, 
+que proporciona una transición suave entre las regiones de baja y alta intensidad. A diferencia 
+de la corrección gamma, la función sigmoide permite enfatizar el contraste en torno a un rango 
+de intensidades específico, controlando la pendiente y el punto de inflexión de la curva.
+Matemáticamente, se expresa como:
+
+\begin{myequation}
+    \begin{equation}
+        I_{salida} = \frac{1}{1 + e^{-k (I_{entrada} - I_0)}}
+        \label{eq:10_funcion_sigmoide}
+    \end{equation}
+    \myequations{Función sigmoide en procesamiento de imágenes}
+    \caption{Función sigmoide en procesamiento de imágenes}
+\end{myequation}
+
+\noindent{donde \(k\), también denominada \textit{gain} (ganancia), controla la pendiente de la
+curva y \(I_0\) determina el punto de inflexión (\textit{cutoff}).} Normalmente, suele aplicarse 
+una normalización posterior para ajustar los valores de salida al rango dinámico válido. La 
+\autoref{fig:12_sigmoid_contrast_example} muestra un ejemplo de mejora del contraste mediante 
+la función sigmoide sobre una imagen a color.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+        \label{fig:12_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/sigmoid_5_0.png}
+        \caption{Con \(k = 5\) y \(I_0 = 0\)}
+        \label{fig:12_b_sigmoid_5_0_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/sigmoid_5_0_5.png}
+        \caption{Con \(k = 5\) y \(I_0 = 0.5\)}
+        \label{fig:12_c_sigmoid_5_0_5_image}
+    \end{subfigure}
+    \caption{Ejemplo de mejora del contraste mediante función sigmoide}
+    \label{fig:12_sigmoid_contrast_example}
+\end{figure}
+
 
 \newpage
 
