@@ -878,7 +878,7 @@ la función sigmoide sobre una imagen a color.
 \newpage
 
 \subsubsection{Filtrado espacial y reducción de ruido} \label{subsec:3_5_4_filtrado_espacial_reduccion_ruido}
-Las operaciones de mejora del contrastre suelen ir acompañadas de técnicas de filtrado espacial. Este hecho 
+Las operaciones de mejora del contrastre suelen ir acompañadas de técnicas de filtrado espacial. Esto
 suele ser muy común cuando la imagen presenta ruido o irregularidades introducidas durante la captura 
 o el proceso de digitalización. El ruido se manifiesta habitualmente como variaciones aleatorias de 
 intensidad que pueden degradar la calidad visual y dificultar la interpretación de los detalles presentes
@@ -1004,9 +1004,68 @@ sobre una imagen a color con ruido de tipo sal y pimienta, utilizando diferentes
 
 \newpage
 
-\subsubsection{Realce de detalle y nitidez} \label{subsec:3_9_realce_detalle_nitidez}
+\subsubsection{Realce de detalle y nitidez} \label{subsec:3_5_5_realce_detalle_nitidez}
+Además de la mejora del contraste y la reducción de ruido, es habitual aplicar técnicas destinadas 
+a realzar el detalle y aumentar la percepción de nitidez de la imagen. Estas operaciones no añaden 
+nueva información, sino que actúan sobre la existente para resaltar transiciones de intensidad, bordes 
+y texturas. Esto hace que los contornos y detalles sean más definidos para el observador \cite{image_sharpening}.
 
 \paragraph{Realce de bordes: \textit{Unsharp Masking}} \label{subsubsec:3_9_1_realce_bordes_unsharp_masking}
+La técnica conocida como \textit{Unsharp Masking} (USM) es una de las más extendidas para el 
+realce de bordes y la mejora de la nitidez aparente de una imagen. A pesar de su nombre, su
+funcionamiento se basa en el principio opuesto: enfatizar las diferencias locales de intensidad
+para resaltar los contornos.
+
+De forma conceptual, el proceso consiste en generar una versión suavizada de la imagen original y
+compararla con esta. La diferencia entre ambas resalta las transiciones de intensidad, que se
+corresponden principalmente con los bordes. Esta información se añade posteriormente a la imagen
+original, aumentando el contraste local en dichas zonas y, por tanto, la percepción de nitidez.
+Matemáticamente se puede expresar como:
+
+\begin{myequation}
+    \begin{equation}
+        I_{salida}(x,y) = I_{entrada}(x,y) + \sigma \left( I_{entrada}(x,y) - I_{suavizada}(x,y) \right)
+        \label{eq:13_unsharp_masking}
+    \end{equation}
+    \myequations{Unsharp Masking en procesamiento de imágenes}
+    \caption{Unsharp Masking en procesamiento de imágenes}
+\end{myequation}
+
+\noindent{donde \(I_{suavizada}(x,y)\) es la imagen suavizada obtenida mediante un filtro
+y \(\sigma\) es un factor de escala que controla la intensidad del realce.}
+El realce se aplica sobre una ventana de tamaño \(k \times k\) alrededor de cada píxel.
+
+\newpage
+
+En la \autoref{fig:15_unsharp_masking_example} se muestra un ejemplo de aplicación de
+\textit{Unsharp Masking} sobre una imagen a color, utilizando diferentes valores de \(k\) y \(\sigma\),
+que ilustran el efecto de realce progresivo de los bordes y detalles y nitidez de la imagen.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/lion_original.png}
+        \caption{Imagen original}
+        \label{fig:15_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/lion_unsharped_5_3.png}
+        \caption{Con \(k = 5\) y \(\sigma = 3\)}
+        \label{fig:15_b_unsharp_masking_5_3_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/lion_unsharped_13_5.png}
+        \caption{Con \(k = 13\) y \(\sigma = 5\)}
+        \label{fig:15_c_unsharp_masking_13_5_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de \textit{Unsharp Masking}}
+    \label{fig:15_unsharp_masking_example}
+\end{figure}
 
 \newpage
 
