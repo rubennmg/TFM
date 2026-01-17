@@ -785,7 +785,7 @@ por un parámetro denominado \textit{gamma} (\(\gamma\)) \cite{gamma_correction}
 Se define mediante la siguiente ecuación:
 \begin{myequation}
     \begin{equation}
-        I_{salida} = I_{entrada} \times c ^{\gamma}
+        I_{salida}(x, y) = I_{entrada}(x, y) \times c ^{\gamma}
         \label{eq:9_correccion_gamma}
     \end{equation}
     \myequations{Corrección gamma en procesamiento de imágenes}
@@ -835,7 +835,7 @@ Matemáticamente, se expresa como:
 
 \begin{myequation}
     \begin{equation}
-        I_{salida} = \frac{1}{1 + e^{-k (I_{entrada} - I_0)}}
+        I_{salida}(x, y) = \frac{1}{1 + e^{-k (I_{entrada}(x, y) - I_0)}}
         \label{eq:10_funcion_sigmoide}
     \end{equation}
     \myequations{Función sigmoide en procesamiento de imágenes}
@@ -877,11 +877,130 @@ la función sigmoide sobre una imagen a color.
 
 \newpage
 
-\subsubsection{Filtrado espacial y reducción de ruido} \label{subsec:3_8_filtrado_espacial_reduccion_ruido}
+\subsubsection{Filtrado espacial y reducción de ruido} \label{subsec:3_5_4_filtrado_espacial_reduccion_ruido}
+Las operaciones de mejora del contrastre suelen ir acompañadas de técnicas de filtrado espacial. Este hecho 
+suele ser muy común cuando la imagen presenta ruido o irregularidades introducidas durante la captura 
+o el proceso de digitalización. El ruido se manifiesta habitualmente como variaciones aleatorias de 
+intensidad que pueden degradar la calidad visual y dificultar la interpretación de los detalles presentes
+en la imagen.
 
-\paragraph{Filtrado lineal: filtro gaussiano} \label{subsubsec:3_8_1_filtrado_lineal_filtro_gaussiano}
+El filtrado espacial \cite{spacial_filtering} consiste en la modificación del valor de cada píxel teniendo en cuenta los 
+valores de sus píxeles vecinos, con el objetivo de suavizar la imagen, reducir el ruido o resaltar
+características específicas. En función de la forma en la que se combinan los valores locales, los 
+filtros espaciales pueden clasificarse en lineales y en no lineales. A continuación, se describen 
+dos de los filtros más representativos de cada categoría, que son relevantes para el desarrollo de 
+este TFM.
 
-\paragraph{Filtrado no lineal: filtro de mediana} \label{subsubsec:3_8_2_filtrado_no_lineal_filtro_mediana}
+\paragraph{Filtrado lineal: filtro gaussiano} \label{subsubsec:3_5_4_1_filtrado_lineal_filtro_gaussiano}
+El filtro gaussiano \cite{gaussian_filter} es uno de los métodos más empleados para la reducción de 
+ruido de alta frecuencia. Se trata de un filtro lineal que realiza un suavizado progresivo de la 
+imagen mediante la convolución con una máscara basada en la función gaussiana.
+La función gaussiana en dos dimensiones se define como:
+\begin{myequation}
+    \begin{equation}
+        G(x,y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}}
+        \label{eq:11_filtro_gaussiano}
+    \end{equation}
+    \myequations{Función gaussiana en dos dimensiones}
+    \caption{Función gaussiana en dos dimensiones}
+\end{myequation}
+
+\noindent{donde \(\sigma\) es la desviación estándar que controla el grado de suavizado.}
+Además, la máscara del filtro gaussiano se realiza sobre una ventana de 
+tamaño \(k \times k\), donde \(k\) es un número impar que determina el área de influencia
+del filtro. Computacionalmente, esta ventana suele denominarse \textit{kernel}.
+
+Este tipo de filtrado atenúa variaciones abruptas de intensidad, lo que contribuye a eliminar
+ruido aleatorio y pequeñas irregularidades. Sin embargo, como efecto secundario, el filtro
+gaussiano también puede provocar una ligera pérdida de nitidez y difuminar los bordes de la
+imagen. 
+
+\newpage
+
+En la \autoref{fig:13_gaussian_filter_example} se muestra un ejemplo de aplicación del filtro
+gaussiano sobre una imagen a color, utilizando diferentes valores de \(k\) y \(\sigma\), 
+que ilustran el efecto de suavizado progresivo.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/sharp_chameleon.png}
+        \caption{Imagen original}
+        \label{fig:13_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/gaussian_7_5.png}
+        \caption{Con \(k = 7\) y \(\sigma = 5\)}
+        \label{fig:13_b_gaussian_7_5_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/gaussian_13_9.png}
+        \caption{Con \(k = 13\) y \(\sigma = 9\)}
+        \label{fig:13_c_gaussian_13_9_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de filtro gaussiano}
+    \label{fig:13_gaussian_filter_example}
+\end{figure}
+
+\newpage
+
+\paragraph{Filtrado no lineal: filtro de mediana} \label{subsubsec:3_5_4_2_filtrado_no_lineal_filtro_mediana}
+El filtro de mediana \cite{median_filter} es un método de filtrado no lineal diseñado específicamente para 
+la eliminación del ruido impulsivo, como el conocido ruido de tipo \textit{sal y pimienta} \cite{salt_pepper_noise}.
+A diferencia de los filtros lineales, este filtro sustitye directamente el valor de cada píxel 
+por la mediana de los valores de intensidad presentes en su vecindad definida por una ventana
+de tamaño \(k \times k\).
+Matemáticamente, el proceso se describe como:
+\begin{myequation}
+    \begin{equation}
+        I_{salida}(x,y) = \text{mediana} \{ I_{entrada}(i,j) \mid (i,j) \in S_{x,y} \}
+        \label{eq:12_filtro_mediana}
+    \end{equation}
+    \myequations{Filtro de mediana en procesamiento de imágenes}
+    \caption{Filtro de mediana en procesamiento de imágenes}
+\end{myequation}
+
+\noindent{donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \((x,y)\).}
+
+El filtro de mediana es especialmente eficaz para eliminar píxeles atípicos sin afectar
+significativamente los bordes y detalles de la imagen. Esto se debe a que la mediana es menos sensible
+a valores extremos. Otros filtros, como el filtro de media \cite{mean_filter} o el mismo filtro gaussiano, 
+suelen difuminar los bordes y detalles al promediar los valores de intensidad. En contrapartida, el filtro 
+de mediana es más costoso computacionalmente.
+
+En la \autoref{fig:14_median_filter_example} se muestra un claro ejemplo de aplicación del filtro de mediana
+sobre una imagen a color con ruido de tipo sal y pimienta, utilizando diferentes tamaños de ventana \(k\).
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/median_filter_original.png}
+        \caption{Imagen original}
+        \label{fig:14_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/median_filter_3.png}
+        \caption{Con \(k = 3\)}
+        \label{fig:14_b_median_filter_3_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/median_filter_7.png}
+        \caption{Con \(k = 7\)}
+        \label{fig:14_c_median_filter_7_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de filtro de mediana}
+    \label{fig:14_median_filter_example}
+\end{figure}
 
 \newpage
 
@@ -890,6 +1009,10 @@ la función sigmoide sobre una imagen a color.
 \paragraph{Realce de bordes: \textit{Unsharp Masking}} \label{subsubsec:3_9_1_realce_bordes_unsharp_masking}
 
 \newpage
+
+\subsubsection{Otras operaciones} \label{subsec:3_9_2_otras_operaciones}
+
+\subsubsection{El \textit{pipeline} de revelado digital} \label{subsec:3_9_3_pipeline_revelado_digital}
 
 \subsection{Representación computacional de imágenes digitales} \label{subsec:3_10_representacion_computacional_imagenes_digitales}
 \subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_10_1_pytorch_framework_procesamiento_imagenes}
