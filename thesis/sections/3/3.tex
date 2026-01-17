@@ -785,7 +785,7 @@ por un parámetro denominado \textit{gamma} (\(\gamma\)) \cite{gamma_correction}
 Se define mediante la siguiente ecuación:
 \begin{myequation}
     \begin{equation}
-        I_{salida}(x, y) = I_{entrada}(x, y) \times c ^{\gamma}
+        I_{salida}(x, y) = I_{entrada}(x, y) \cdot c ^{\gamma}
         \label{eq:9_correccion_gamma}
     \end{equation}
     \myequations{Corrección gamma en procesamiento de imágenes}
@@ -1004,13 +1004,104 @@ sobre una imagen a color con ruido de tipo sal y pimienta, utilizando diferentes
 
 \newpage
 
+\subsubsection{Normalización}
+La normalización es una operación destinada a reescalar los valores de intensidad de una imagen
+para que se ajusten a un rango determinado. Su objetivo principal es mejorar el aprovechamiento
+del rango dinámico disponible y facilitar la comparación entre imágenes o su posterior
+procesado.
+
+\subparagraph{Normalización min-max} \label{subsubsubsec:3_9_2_2_1_normalizacion_min_max}
+La normalización min--max \cite{image_normalization} es una de las técnicas más sencillas y utilizadas para el reescalado de
+intensidades. Este método consiste en mapear el valor mínimo presente en la imagen al extremo
+inferior del rango de destino, y el valor máximo al extremo superior. De este modo, los valores
+intermedios se redistribuyen de forma proporcional, permitiendo que la imagen utilice la totalidad
+del rango dinámico disponible. Matemáticamente, la normalización min--max se expresa como:
+
+\begin{myequation}
+    \begin{equation}
+        I_{salida}(x,y) = \frac{I_{entrada}(x,y) - I_{min}}{I_{max} - I_{min}}
+        \label{eq:14_normalizacion_min_max}
+    \end{equation}
+    \myequations{Normalización min--max en procesamiento de imágenes}
+    \caption{Normalización min--max en procesamiento de imágenes}
+\end{myequation}
+
+Es importante mencionar que, en imágenes con más de un canal (por ejemplo, imágenes en color RGB), la normalización
+se aplica de forma independiente a cada canal para preservar la relación cromática original. La normalización 
+resulta muy útil cuando la imagen presenta un contraste reducido debido a
+una ocupación limitada del rango de intensidades, aunque puede verse afectada por la presencia de
+valores extremos atípicos que condicionen el reescalado global.
+
+En la \autoref{fig:15_minmax_normalization_example} se muestra un ejemplo de aplicación de la
+normalización min--max sobre una imagen a color. 
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/pre_normalization.png}
+        \caption{Imagen original}
+        \label{fig:15_a_original_image}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/minmax_normalized.png}
+        \caption{Imagen normalizada}
+        \label{fig:15_b_minmax_normalized_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de normalización min-max}
+    \label{fig:15_minmax_normalization_example}
+\end{figure}
+
+\newpage
+
+\subparagraph{Normalización min-max con percentiles} \label{subsubsubsec:3_9_2_2_2_normalizacion_min_max_percentiles}
+Para mitigar la influencia de valores extremos, es habitual emplear una variante de la
+normalización min--max basada en percentiles. En este caso, en lugar de utilizar los valores
+mínimo y máximo absolutos de la imagen, se seleccionan percentiles bajos y altos del histograma
+como límites del rango de reescalado. Matemáticamente, esta técnica se define como:
+
+\begin{myequation}
+    \begin{equation}
+        I_{salida}(x,y) = \frac{I_{entrada}(x,y) - P_{inf}}{P_{sup} - P_{inf}}
+        \label{eq:15_normalizacion_min_max_percentiles}
+    \end{equation}
+    \myequations{Normalización min--max con percentiles en procesamiento de imágenes}
+    \caption{Normalización min--max con percentiles en procesamiento de imágenes}
+\end{myequation}
+
+\noindent{\(P_{inf}\) y \(P_{sup}\) representan los percentiles inferior y superior
+seleccionados, respectivamente.} La \autoref{fig:16_minmax_percentile_normalization_example} 
+muestra un ejemplo de aplicación de la normalización min--max con percentiles sobre una imagen a color,
+utilizando los percentiles 2 y 98 como límites de reescalado.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/pre_normalization.png}
+        \caption{Imagen original}
+        \label{fig:16_a_original_image}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/minmax_percentile_02_98.png}
+        \caption{Imagen normalizada}
+        \label{fig:16_b_minmax_percentile_normalized_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de normalización min-max con percentiles}
+    \label{fig:16_minmax_percentile_normalization_example}
+\end{figure}
+
+\newpage
+
 \subsubsection{Realce de detalle y nitidez} \label{subsec:3_5_5_realce_detalle_nitidez}
 Además de la mejora del contraste y la reducción de ruido, es habitual aplicar técnicas destinadas 
 a realzar el detalle y aumentar la percepción de nitidez de la imagen. Estas operaciones no añaden 
 nueva información, sino que actúan sobre la existente para resaltar transiciones de intensidad, bordes 
 y texturas. Esto hace que los contornos y detalles sean más definidos para el observador \cite{image_sharpening}.
 
-\paragraph{Realce de bordes: \textit{Unsharp Masking}} \label{subsubsec:3_9_1_realce_bordes_unsharp_masking}
+\paragraph{Realce de bordes: \textit{Unsharp Masking}} \label{subsubsec:3_5_5_1_realce_bordes_unsharp_masking}
 La técnica conocida como \textit{Unsharp Masking} (USM) es una de las más extendidas para el 
 realce de bordes y la mejora de la nitidez aparente de una imagen. A pesar de su nombre, su
 funcionamiento se basa en el principio opuesto: enfatizar las diferencias locales de intensidad
@@ -1037,7 +1128,7 @@ El realce se aplica sobre una ventana de tamaño \(k \times k\) alrededor de cad
 
 \newpage
 
-En la \autoref{fig:15_unsharp_masking_example} se muestra un ejemplo de aplicación de
+En la \autoref{fig:17_unsharp_masking_example} se muestra un ejemplo de aplicación de
 \textit{Unsharp Masking} sobre una imagen a color, utilizando diferentes valores de \(k\) y \(\sigma\),
 que ilustran el efecto de realce progresivo de los bordes y detalles y nitidez de la imagen.
 
@@ -1047,31 +1138,174 @@ que ilustran el efecto de realce progresivo de los bordes y detalles y nitidez d
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/lion_original.png}
         \caption{Imagen original}
-        \label{fig:15_a_original_image}
+        \label{fig:17_a_original_image}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/lion_unsharped_5_3.png}
         \caption{Con \(k = 5\) y \(\sigma = 3\)}
-        \label{fig:15_b_unsharp_masking_5_3_image}
+        \label{fig:17_b_unsharp_masking_5_3_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/lion_unsharped_13_5.png}
         \caption{Con \(k = 13\) y \(\sigma = 5\)}
-        \label{fig:15_c_unsharp_masking_13_5_image}
+        \label{fig:17_c_unsharp_masking_13_5_image}
     \end{subfigure}
     \caption{Ejemplo de aplicación de \textit{Unsharp Masking}}
-    \label{fig:15_unsharp_masking_example}
+    \label{fig:17_unsharp_masking_example}
 \end{figure}
 
 \newpage
 
-\subsubsection{Otras operaciones} \label{subsec:3_9_2_otras_operaciones}
+\subsubsection{Otras operaciones} \label{subsec:3_5_6_otras_operaciones}
+Además de todas las técnicas de procesamiento de imágenes descritas anteriormente, existen otras
+operaciones comunes que suelen ser necesarias en el flujo de trabajo de revelado digital.
+
+\paragraph{Operaciones geométricas} \label{subsubsec:3_5_6_1_operaciones_geometricas}
+Las operaciones geométricas actúan sobre la estructura espacial de la imagen, alterando la 
+posición de los píxeles sin modificar sus valores de intensidad o color. Su objetivo es 
+el ajuste de la orientación, la disposición o el encuadre de la imagen, manteniendo intacta
+la información visual contenida en cada píxel.
+
+\subparagraph{Volteo} \label{subsubsubsec:3_5_6_1_1_volteo}
+El volteo consiste en la inversión de la imagen respecto a uno de sus ejes principales, 
+ya sea horizontal o vertical. Esta operación se utiliza habitualmente para corregir orientaciones 
+incorrectas derivadas del proceso de captura o para generar imágenes simétricas con fines de 
+análisis o presentación. Desde el punto de vista visual, el contenido de la imagen se conserva, 
+cambiando únicamente su disposición espacial.
+
+En la \autoref{fig:18_flip_example} se muestra un ejemplo de aplicación de volteo sobre una
+imagen a color, ilustrando tanto el volteo sobre el eje horizontal como sobre el eje vertical.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+        \label{fig:18_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/dog_horizontal_flip.png}
+        \caption{Volteo horizontal}
+        \label{fig:18_b_horizontal_flip_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/dog_vertical_flip.png}
+        \caption{Volteo vertical}
+        \label{fig:18_c_vertical_flip_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de volteo}
+    \label{fig:18_flip_example}
+\end{figure}
+
+\newpage
+
+\subparagraph{Rotación} \label{subsubsubsec:3_5_6_1_2_rotacion}
+La rotación permite girar la imagen un determinado ángulo alrededor de su centro o de un punto
+específico. Es una operación común en el ajuste de la orientación de imágenes capturadas con
+inclinaciones no deseadas o en la normalización de conjuntos de datos visuales. Dependiendo del
+ángulo de rotación, esta transformación puede requerir un proceso de interpolación para estimar
+los valores de los nuevos píxeles, lo que puede afectar ligeramente a la calidad final de la
+imagen.
+
+En la \autoref{fig:19_rotation_example} se muestra un ejemplo de aplicación de rotación sobre
+una imagen a color, ilustrando los resultados obtenidos al rotar la imagen 45°
+y 135° respectivamente.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+        \label{fig:19_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/dog_rotated_45.png}
+        \caption{Rotación 45°}
+        \label{fig:19_b_rotated_45_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/dog_rotated_135.png}
+        \caption{Rotación 135°}
+        \label{fig:19_c_rotated_135_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de rotación}
+    \label{fig:19_rotation_example}
+\end{figure}
+
+\newpage
+
+\paragraph{Conversión de espacios de color} \label{subsubsec:3_5_7_2_conversion_espacios_color}
+La conversión entre espacios de color es una operación habitual en el procesamiento de imágenes.
+Permite adaptar la representación de la información visual a los objetivos concretos de cada etapa 
+del procesado.
+
+\subparagraph{De RGB a escala de grises} \label{subsubsubsec:3_5_7_2_1_de_rgb_a_escala_grises}
+La conversión de una imagen desde el espacio de color RGB a escala de grises consiste en la 
+eliminación de la información cromática, conservando únicamente la información de intensidad 
+luminosa. Esta operación reduce la imagen a un único canal, lo que simplifica el procesamiento
+posterior.
+
+La conversión no se realiza como una simple combinación de los valores de los canales 
+rojo, verde y azul, sino que se emplean ponderaciones específicas para reflejar la
+percepción humana del brillo. La fórmula comúnmente utilizada es la siguiente:
+\begin{myequation}
+    \begin{equation}
+        I_{gris}(x,y) = 0.2989 \cdot I_{R}(x,y) + 0.5870 \cdot I_{G}(x,y) + 0.1140 \cdot I_{B}(x,y)
+        \label{eq:16_rgb_to_grayscale}
+    \end{equation}
+    \myequations{Conversión de RGB a escala de grises en procesamiento de imágenes}
+    \caption{Conversión de RGB a escala de grises en procesamiento de imágenes}
+\end{myequation}
+
+\subparagraph{De RGB a HSV} \label{subsubsubsec:3_5_7_2_2_de_rgb_a_hsv}
+La conversión de una imagen desde el espacio de color RGB al espacio HSV permite 
+separar la información de color de la información de intensidad. 
+Esta conversión resulta especialmente útil en operaciones que requieren actuar de forma separada
+sobre el brillo o sobre el color de la imagen, como ajustes de iluminación, segmentación por color
+o realce selectivo. 
+
+Matemáticamente, la conversión \cite{rgb_hsv_conversion} se realiza mediante una serie de transformaciones que
+calculan los componentes de matiz (H), saturación (S) y valor (V) a partir de los valores
+de los canales rojo, verde y azul. La fórmula completa es más compleja que la conversión a escala de grises,
+pero se basa en la identificación del valor máximo y mínimo entre los canales RGB y en el cálculo de las diferencias relativas.
+
+\newpage
+
+\subsubsection{Conversión de formato de representación para visualización} \label{subsec:3_5_8_conversion_formato_representacion_visualizacion}
+A lo largo del procesamiento de una imagen es habitual trabajar con valores en coma flotante, ya
+que este tipo de representación ofrece mayor flexibilidad y precisión durante la aplicación de
+las distintas operaciones. Sin embargo, para poder visualizar la imagen o almacenarla en formatos
+convencionales, es necesario convertir estos valores a una representación entera dentro de un rango
+finito.
+
+Este proceso consiste en el ajuste de los valores obtenidos al rango admitido por los dispositivos de
+visualización, normalmente de 8 bits por canal, y la realización de la correspondiente cuantificación. Esta
+etapa final permite obtener una imagen compatible con los formatos estándar, asegurando que el
+resultado del procesado pueda ser correctamente interpretado desde el punto de vista visual.
+
+De este modo, la conversión de formato actúa como el paso final que conecta las operaciones de
+procesamiento con la representación visual de la imagen, cerrando el conjunto de transformaciones
+descritas en este capítulo.
+
+\newpage
 
 \subsubsection{El \textit{pipeline} de revelado digital} \label{subsec:3_9_3_pipeline_revelado_digital}
+
+\newpage
 
 \subsection{Representación computacional de imágenes digitales} \label{subsec:3_10_representacion_computacional_imagenes_digitales}
 \subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_10_1_pytorch_framework_procesamiento_imagenes}
