@@ -1554,7 +1554,36 @@ rendimiento del sistema, por lo que su uso será evaluado en los análisis compa
 \newpage
 
 \subsection{Procesamiento en tiempo real} \label{subsec:3_7_procesamiento_tiempo_real}
+En el marco de este TFM, resulta necesario introducir el concepto de \textit{procesamiento en tiempo real}.
+Este paradigma se refiere a la capacidad de un sistema para procesar datos y producir resultados dentro
+de unas restricciones temporales bien definidas, de manera que la salida generada sea útil para la aplicación
+en la que se integra \cite{rt_image_processing}. A diferencia de otros enfoques de procesamiento, los sistemas 
+en tiempo real deben garantizar que cada operación se complete antes de un instante límite o \textit{deadline}.
 
+En el ámbito del procesamiento digital de imágenes, el tiempo real se asocia habitualmente a escenarios
+en los que las imágenes se capturan y procesan de forma continua, como flujos de vídeo, sistemas de visión
+artificial, aplicaciones interactivas o procesos de supervisión automática. En estos contextos, el ritmo de
+procesado viene determinado por la frecuencia de adquisición, de modo que cada imagen debe ser procesada
+en un intervalo de tiempo suficientemente corto para no introducir retardos acumulativos ni pérdida de datos.
+
+El \textit{pipeline} de revelado digital (\autoref{subsec:3_5_7_pipeline_revelado_digital})
+constituye un ejemplo representativo de este tipo de procesamiento. Dicho \textit{pipeline} está formado por
+una secuencia de etapas, cada una de las cuales introduce un coste computacional específico.
+Cuando estas etapas se encadenan, el tiempo total de ejecución puede convertirse en un factor limitante
+si no se diseñan e implementan de manera eficiente.
+
+Además, el tiempo total de ejecución no depende únicamente de la complejidad teórica de los
+algoritmos empleados, sino también de aspectos prácticos como la organización de los datos, la elección
+de los tipos numéricos, el paralelismo implícito de las operaciones y el aprovechamiento de los recursos
+hardware disponibles. En particular, el uso de \textit{PyTorch} permite expresar
+muchas de estas operaciones de forma vectorizada y facilita su ejecución eficiente tanto en CPU como en GPU.
+
+En este trabajo, el procesamiento en tiempo real se enfoca desde una perspectiva experimental y comparativa.
+El \textit{pipeline} de revelado digital se utiliza como banco de pruebas para evaluar el rendimiento de
+diferentes configuraciones, analizando cómo influyen factores como el tamaño de la imagen, la precisión
+numérica o el dispositivo de ejecución en el tiempo de procesado. Este análisis permitirá estudiar la
+viabilidad de distintos enfoques bajo restricciones temporales realistas y sentará las bases para la
+comparación entre implementaciones sobre CPU y GPU en los apartados posteriores.
 \newpage
 
 \subsection{Computación acelerada por GPU} \label{subsec:3_8_computacion_acelerada_gpu}
