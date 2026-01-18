@@ -1371,7 +1371,7 @@ de alta dimensión. Además, ofrece un modelo de programación basado en tensore
 y una gestión transparente de la ejecución tanto en CPU como en GPU.
 
 \subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_6_2_tensores_representacion_imagenes}
-En \textit{PyTorch}, las imágenes digitales se representan mediante tensores. Estos pueden entenderse 
+En \textit{PyTorch}, las imágenes digitales se representan mediante tensores \cite{torch_tensor}. Estos pueden entenderse 
 como generalizaciones de vectores y matrices a múltiples dimensiones. Desde un punto de vista matemático, 
 un tensor de orden $n$ puede expresarse como:
 
@@ -1535,7 +1535,7 @@ En la \autoref{fig:23_image_tensor_example} se muestra un ejemplo concreto de es
 Los tensores pueden definirse utilizando distintos tipos de datos numéricos, los cuales influyen 
 directamente tanto en la precisión de los cálculos como en el consumo de memoria y el rendimiento 
 computacional. \textit{PyTorch} soporta una amplia variedad de tipos numéricos, que pueden 
-especificarse mediante el parámetro \texttt{dtype} durante la creación y manipulación de tensores.
+especificarse mediante el parámetro \texttt{dtype} \cite{torch_dtype} durante la creación y manipulación de tensores.
 
 \noindent En el contexto del procesamiento de imágenes, los tipos de datos más relevantes son:
 \begin{itemize}
