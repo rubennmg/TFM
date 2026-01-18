@@ -1350,23 +1350,211 @@ entre las implementaciones en CPU y GPU.
 
 \newpage
 
-\subsection{Representación computacional de imágenes digitales} \label{subsec:3_10_representacion_computacional_imagenes_digitales}
-\subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_10_1_pytorch_framework_procesamiento_imagenes}
+\subsection{Representación computacional de imágenes digitales} \label{subsec:3_6_representacion_computacional_imagenes_digitales}
+Tras haber analizado la naturaleza de las imágenes digitales, su representación numérica, fundamentos 
+básicos y operaciones de procesamiento empleadas en el revelado digital, es necesario concretar 
+la materialización de estos conceptos en un entorno computacional concreto.
+La representación computacional de una imagen no es únicamente una cuestión de almacenamiento, sino 
+que condiciona directamente la forma en la que se aplican las operaciones de procesado, la 
+precisión de los cálculos, el consumo de recursos y el rendimiento del sistema. 
 
-\subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_10_2_tensores_representacion_imagenes}
+En los apartados siguientes se describe el modelo de representación adoptado en este TFM, basado en el uso de 
+tensores multidimensionales y apoyado en el \textit{framework} \textit{PyTorch}, que proporciona 
+las herramientas necesarias para la implementación eficiente, flexible y escalable del 
+procesamiento de imágenes digitales.
 
-\subsubsection{Organización de datos: canales, \textit{batch} y dimensiones} \label{subsubsec:3_10_3_organizacion_datos_canales_batch_dimensiones}
+\subsubsection{\textit{PyTorch} como \textit{framework} para el procesamiento de imágenes} \label{subsubsec:3_6_1_pytorch_framework_procesamiento_imagenes}
+\textit{PyTorch} \cite{pytorch} es una biblioteca de cómputo científico diseñada principalmente para 
+el desarrollo de algoritmos de aprendizaje automático, aunque su estructura y diseño la convierten 
+en una herramienta muy versátil para el cálculo numérico general y el procesamiento de datos 
+de alta dimensión. Además, ofrece un modelo de programación basado en tensores 
+y una gestión transparente de la ejecución tanto en CPU como en GPU.
 
-\subsubsection{Tipos de datos y precisión numérica} \label{subsubsec:3_10_4_tipos_datos_precision_numerica}
+\subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_6_2_tensores_representacion_imagenes}
+En \textit{PyTorch}, las imágenes digitales se representan mediante tensores. Estos pueden entenderse 
+como generalizaciones de vectores y matrices a múltiples dimensiones. Desde un punto de vista matemático, 
+un tensor de orden $n$ puede expresarse como:
+
+\begin{myequation}
+	\begin{equation}
+		T_{i_1 i_2 \ldots i_n} \in \mathbb{R}^{d_1 \times d_2 \times \ldots \times d_n}
+		\label{eq:17_tensor_representation}
+	\end{equation}
+	\myequations{Representación formal de un tensor de orden $n$.}
+	\caption{Representación formal de un tensor de orden $n$}
+\end{myequation}
+
+\noindent{donde cada índice $i_k$ recorre una dimensión $d_k$ del espacio de datos. Así, un escalar puede considerarse un tensor de orden 0,
+un vector un tensor de orden 1 y una matriz un tensor de orden 2. Esta generalización permite extender las operaciones algebraicas
+clásicas a dominios de mayor complejidad, conservando propiedades como la linealidad y la composicionalidad.}
 
 \newpage
 
-\subsection{Procesamiento en tiempo real} \label{subsec:3_11_procesamiento_tiempo_real}
+De forma simplificada, la \autoref{fig:21_tensor_representation} ilustra la representación de tensores
+de diferentes órdenes, ejemplificando cómo se almacenan los datos en cada caso.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=0.9]
+        % Escalar
+        \node[font=\small\bfseries] at (0, 4.5) {Escalar (0D)};
+        \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (0, 3.5) {2};
+        
+        % Vector
+        \node[font=\small\bfseries] at (3, 4.5) {Vector (1D)};
+        \foreach \x/\val in {0/2, 1/4, 2/6, 3/8} {
+            \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (1.975+\x*0.7, 3.5) {\val};
+        }
+        
+        % Matriz
+        \node[font=\small\bfseries] at (6.5, 4.5) {Matriz (2D)};
+        \foreach \idx/\val in {0/2, 1/4, 2/6, 3/8} {
+            \pgfmathparse{mod(\idx, 2)}
+            \let\x\pgfmathresult
+            \pgfmathparse{int(div(\idx, 2))}
+            \let\y\pgfmathresult
+            \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (6.15+\x*0.7, 3.7-\y*0.725) {\val};
+        }
+        
+        % Tensor
+        \node[font=\small\bfseries] at (9.5, 4.5) {Tensor (3D)};
+        \foreach \z in {0, 1, 2} {
+            \foreach \idx/\val in {0/2, 1/4, 2/6, 3/8} {
+                \pgfmathparse{mod(\idx, 2)}
+                \let\x\pgfmathresult
+                \pgfmathparse{int(div(\idx, 2))}
+                \let\y\pgfmathresult
+                \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (9.1+\x*0.7+\z*0.35, 3.75-\y*0.725-\z*0.35) {\val};
+            }
+        }
+        
+    \end{tikzpicture}
+    \caption{Representación visual de tensores de diferentes dimensiones}
+    \label{fig:21_tensor_representation}
+\end{figure}
+
+Esta disposición permite la representación de imágenes tal y como se describió en 
+\autoref{subsec:3_2_representacion_numerica_imagenes_digitales}, donde una imagen a color
+se almacenaría como un tensor tridimensional (3D) con las dimensiones correspondientes a
+alto, ancho y canales de color (RGB).
+
+\subsubsection{Organización de datos: canales, \textit{batch} y dimensiones} \label{subsubsec:3_6_3_organizacion_datos_canales_batch_dimensiones}
+En \textit{PyTorch}, una imagen se modela como un tensor tridimensional $I \in \mathbb{R}^{C \times H \times W}$, donde $C$
+representa el número de canales de color (por ejemplo, $C = 3$ para imágenes RGB) y $H$ y $W$ son las dimensiones de alto y ancho de la imagen, respectivamente.
+
+Cada elemento $I_{c,h,w}$ del tensor almacena la intensidad del píxel ubicado en la posición $(h, w)$ del canal $c$. Esta representación
+facilita la manipulación de imágenes, permitiendo aplicar transformaciones 
+mediante simples operaciones tensoriales. 
+Puede observarse una representación conceptual de una imagen RGB como tensor tridimensional en la
+\autoref{fig:22_image_tensor}.
+
+\begin{figure}[h!]
+	\centering
+	% --- Subfigure 1 ---
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\begin{tikzpicture}
+			[
+				x={(1cm, 0cm)},
+				y={(0cm, 1cm)},
+				z={(0.5cm, 0.5cm)}
+			]
+			% RGB Planes
+			\foreach \z/\color in {3/blue!40, 1.5/green!40, 0/red!40} {
+					\filldraw[fill=\color, draw=black!50]
+					(0,0,\z) -- ++(3,0,0) -- ++(0,3,0) -- ++(-3,0,0) -- cycle;
+				}
+			% Edges
+			\draw[thick] (0,0,0) -- (4,0,0) node[right] {\textrm{($W$)}};
+			\draw[thick] (0,0,0) -- (0,4,0) node[above] {\textrm{($H$)}};
+		\end{tikzpicture}
+		\caption{}
+	\end{subfigure}
+	\hfill
+	% --- Subfigure 2 ---
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\begin{tikzpicture}
+			% RGB Planes
+			\foreach \z/\color in {0/red!40,1.25/green!40,2.5/blue!40} {
+					\filldraw[fill=\color, draw=black!50]
+					(\z,0,0) -- ++(0,3,0) -- ++(0,0,3) -- ++(0,-3,0) -- cycle;
+				}
+			% Edges
+			\draw[thick] (0,0,0) -- (3,0,0) node[right] {\textrm{($C$)}};
+			\draw[thick] (0,0,0) -- (0,3.5,0) node[above] {\textrm{($H$)}};
+			\draw[thick] (0,0,0) -- (0,0,4) node[above left] {\textrm{($W$)}};
+		\end{tikzpicture}
+		\caption{}
+	\end{subfigure}
+	\caption{Representación conceptual de una imagen RGB como tensor tridimensional}
+	\label{fig:22_image_tensor}
+\end{figure}
 
 \newpage
 
-\subsection{Procesamiento vectorizado y paralelismo de datos} \label{subsec:3_12_procesamiento_vectorizado_paralelismo_datos}    
+Numéricamente, una imagen RGB de tamaño $3 \times 3$ píxeles puede representarse como el tensor $I$ de forma $[3, 3, 3]$ \footnotemark, donde
+cada canal de color contiene una matriz bidimensional con los valores de intensidad correspondientes.
+En la \autoref{fig:23_image_tensor_example} se muestra un ejemplo concreto de esta representación.
+
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.95\textwidth}
+        \[
+            I = \left[
+                \text{R} =
+                \begin{bmatrix}
+                    1 & 2 & 3 \\
+                    4 & 5 & 6 \\
+                    7 & 8 & 9
+                \end{bmatrix},
+                \quad
+                \text{G} =
+                \begin{bmatrix}
+                    1 & 2 & 3 \\
+                    4 & 5 & 6 \\
+                    7 & 8 & 9
+                \end{bmatrix},
+                \quad
+                \text{B} =
+                \begin{bmatrix}
+                    1 & 2 & 3 \\
+                    4 & 5 & 6 \\
+                    7 & 8 & 9
+                \end{bmatrix}
+            \right]
+        \]
+    \end{minipage}
+    \caption{Ejemplo de representación tensorial de una imagen RGB de $3 \times 3$ píxeles}
+    \label{fig:23_image_tensor_example}
+\end{figure}
+
+\footnotetext{$[3, 3, 3]$ indica las dimensiones en el orden $[C, H, W]$. Esto es, 3 canales de color, 3 píxeles de alto y 3 píxeles de ancho.}
+
+\subsubsection{Tipos de datos y precisión numérica} \label{subsubsec:3_6_4_tipos_datos_precision_numerica}
+Los tensores pueden definirse utilizando distintos tipos de datos numéricos, los cuales influyen 
+directamente tanto en la precisión de los cálculos como en el consumo de memoria y el rendimiento 
+computacional. \textit{PyTorch} soporta una amplia variedad de tipos numéricos, que pueden 
+especificarse mediante el parámetro \texttt{dtype} durante la creación y manipulación de tensores.
+
+\noindent En el contexto del procesamiento de imágenes, los tipos de datos más relevantes son:
+\begin{itemize}
+    \item \texttt{torch.uint8}: Enteros sin signo de 8 bits, empleados para la representación de imágenes en formatos estándar. Son necesarios para la visualización y el almacenamiento final de las imágenes.
+    \item \texttt{torch.float16}: Números en coma flotante de 16 bits, que reducen el consumo de memoria y pueden ofrecer un mayor rendimiento, especialmente en GPU, a costa de una menor precisión.
+    \item \texttt{torch.float32}: Números en coma flotante de 32 bits, que proporcionan un equilibrio adecuado entre precisión numérica y eficiencia computacional, siendo el tipo más común durante el procesado.
+    \item \texttt{torch.float64}: Números en coma flotante de 64 bits, que ofrecen una mayor precisión numérica, aunque con un mayor coste en memoria y tiempo de cálculo.
+\end{itemize}
+
+A lo largo del \textit{pipeline} de revelado digital, estos tipos de datos se utilizan en 
+diferentes etapas en función de los requisitos de precisión, eficiencia y compatibilidad con las 
+operaciones aplicadas. Asimismo, la elección del \texttt{dtype} tiene un impacto directo en el 
+rendimiento del sistema, por lo que su uso será evaluado en los análisis comparativos y 
+\textit{benchmarks} realizados, tanto en CPU como en GPU.
 
 \newpage
 
-\subsection{Computación acelerada por GPU} \label{subsec:3_13_computacion_acelerada_gpu}
+\subsection{Procesamiento en tiempo real} \label{subsec:3_7_procesamiento_tiempo_real}
+
+\newpage
+
+\subsection{Computación acelerada por GPU} \label{subsec:3_8_computacion_acelerada_gpu}
