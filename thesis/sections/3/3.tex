@@ -1587,3 +1587,88 @@ comparación entre implementaciones sobre CPU y GPU en los apartados posteriores
 \newpage
 
 \subsection{Computación acelerada por GPU} \label{subsec:3_8_computacion_acelerada_gpu}
+La creciente complejidad de los \textit{pipelines} de procesamiento de imágenes y la necesidad de cumplir 
+requisitos de tiempo real hacen que la computación tradicional basada exclusivamente en CPU, resulte, en 
+muchos casos, insuficiente. En este escenario, la computación acelerada por GPU se consolida
+como una solución imprescindible para la ejecución de tareas intensivas de procesamiento de datos de 
+forma eficiente y escalable.
+
+Las Unidades de Procesamiento Gráfico (GPU) fueron creadas originalmente para acelerar el renderizado gráfico, 
+una tarea que requiere la ejecución de un gran número de operaciones similares de forma simultánea.
+A diferencia de las CPUs (Unidad Central de Procesamiento), las GPUs adoptan una arquitectura orientada al paralelismo masivo.
+Esto se traduce en la presencia de un elevado número de núcleos simples, capaces de ejecutar la
+misma operación sobre diferentes datos en paralelo. En la \autoref{fig:24_cpu_vs_gpu} se muestra una
+comparación conceptual entre ambas arquitecturas.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        core/.style={draw, rectangle, minimum width=0.85cm, minimum height=0.75cm, fill=blue!30},
+        gcore/.style={draw, rectangle, minimum width=0.3cm, minimum height=0.3cm, fill=blue!30},
+        label/.style={font=\small\bfseries},
+        box/.style={draw=black, rounded corners, line width=1pt, fill=black!5}
+    ]
+    
+    % CPU
+    \def\cpuLabelX{-3.85}
+    \def\cpuLabelY{1.6}
+    \def\cpuBoxLeft{-5.65}
+    \def\cpuBoxRight{-2.1}
+    \def\cpuBoxBottom{-1.0}
+    \def\cpuBoxTop{1.2}
+    \def\cpuCoreXA{-4.7}
+    \def\cpuCoreXB{-3.05}
+    \def\cpuCoreTopY{0.6}
+    \def\cpuCoreBottomY{-0.4}
+    
+    % GPU
+    \def\gpuLabelX{3.65}
+    \def\gpuLabelY{2.2}
+    \def\gpuBoxLeft{1.9}
+    \def\gpuBoxRight{5.5}
+    \def\gpuBoxBottom{-1.8}
+    \def\gpuBoxTop{1.8}
+    \def\gpuCoresStartX{2.2}
+    \def\gpuCoresStartY{1.5}
+    \def\gpuCoreSpacingX{0.375}
+    \def\gpuCoreSpacingY{0.375}
+
+    % ========== CPU ==========
+    \node[label] at (\cpuLabelX,\cpuLabelY) {CPU};
+    \draw[box] (\cpuBoxLeft,\cpuBoxBottom) rectangle (\cpuBoxRight,\cpuBoxTop);
+
+    \node[core] at (\cpuCoreXA,\cpuCoreTopY) {Core 1};
+    \node[core] at (\cpuCoreXB,\cpuCoreTopY) {Core 2};
+    \node[core] at (\cpuCoreXA,\cpuCoreBottomY) {Core 3};
+    \node[core] at (\cpuCoreXB,\cpuCoreBottomY) {Core 4};
+
+    % ========== GPU ==========
+    \node[label] at (\gpuLabelX,\gpuLabelY) {GPU};
+    \draw[box] (\gpuBoxLeft,\gpuBoxBottom) rectangle (\gpuBoxRight,\gpuBoxTop);
+
+    \foreach \row in {0,1,2,3,4,5,6,7,8} {
+        \foreach \col in {0,1,2,3,4,5,6,7,8} {
+            \pgfmathsetmacro{\xpos}{\gpuCoresStartX + \col*\gpuCoreSpacingX}
+            \pgfmathsetmacro{\ypos}{\gpuCoresStartY - \row*\gpuCoreSpacingY}
+            \node[gcore] at (\xpos,\ypos) {};
+        }
+    }
+
+    \end{tikzpicture}
+    \caption{Comparación conceptual entre arquitecturas CPU y GPU}
+    \label{fig:24_cpu_vs_gpu}
+\end{figure}
+
+Una CPU cuenta con una cantidad de núcleos o \textit{cores} reducida. Estos núcleos son potentes y están optimizados 
+para manejar tareas secuenciales, con un alto nivel de flujo de ejecución y una baja latencia en la respuesta. Por el 
+contrario, una GPU dispone de cientos o incluso miles de núcleos más simples, organizados para ejecutar una misma 
+instrucción sobre grandes conjuntos de datos. Este modelo de ejecución favorece
+aquellas tareas en las que se repite la misma operación sobre múltiples elementos independientes, como ocurre 
+en el procesamiento de imágenes y el cálculo matricial. Así pues, cada píxel o pequeño bloque de la imagen puede 
+ser procesado de forma paralela, reduciendo de forma significativa el tiempo total de ejecución.
+
+Dentro del \textit{pipeline} de revelado digital, cada etapa introduce un coste computacional que depende tanto del 
+tamaño de la imagen procesada como del tipo de operación y del formato numérico empleado. A medida 
+que aumenta la resolución de la imagen o la complejidad de las transformaciones aplicadas, el uso exclusivo 
+de CPU puede convertirse en un cuello de botella. La computación acelerada por GPU permite mitigar este problema.
+Esta coyuntura sirve de fundamento para los análisis y experimentos de \textit{benchmarking} desarrollados en este trabajo.
