@@ -1,1 +1,91 @@
 \section{Diseño} \label{sec:8_diseno}
+En esta sección se describe la especificación del diseño del sistema, proporcionando 
+una visión global de la arquitectura. Se describen los principales
+componentes y sus interacciones, con el fin de facilitar la comprensión de la estructura 
+interna del sistema y las decisiones de diseño adoptadas.
+
+\subsection{Visión general} \label{subsec:8_1_visión_general}
+El sistema desarrollado tiene dos objetivos. Por un lado, proporcionar una interfaz 
+gráfica sencilla, que permita la carga de imágenes en formato crudo y la aplicación de
+filtros y operaciones de procesamiento. Este proceso tiene como propósito la definición 
+interactiva de \textit{pipelines} de procesado de imágenes. Estos \textit{pipelines} 
+deben de poder ser exportados a un formato estándar. 
+
+Por otra parte, el sistema debe incorporar un módulo de \textit{benchmarking}
+que permita analizar el rendimient computacional de los \textit{pipelines} definidos. 
+Este módulo debe permitir la importación de los \textit{pipelines} definidos en la 
+interfaz gráfica y su ejecución en diferentes condiciones experimentales.
+
+\subsubsection{Principios de diseño} \label{subsubsec:8_1_1_principios_de_diseno}
+\noindent{Para lograr los objetivos planteados, se han seguido los siguientes principios de diseño:}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Separación de responsabilidades.} Distinción clara entre componentes
+    encargados de funciones específicas, minimizando las dependencias entre ellos.
+    \item \textbf{Modularidad.} Funcionalidades encapsuladas en módulos bien 
+    definidos, permitiendo ampliar partes del sistema sin afectar al conjunto.
+    \item \textbf{Simplicidad y claridad estructural.} Se evita introducir complejidad innecesaria, 
+    manteniendo flujos de trabajo y relaciones entre módulos fácilmente identificables.
+\end{itemize}
+
+\subsubsection{Flujo de ejecución} \label{subsubsec:8_1_2_flujo_de_ejecucion}
+De forma esquemática, el flujo de ejecución del sistema se divide en dos grandes bloques funcionales:
+la interfaz gráfica y el módulo de \textit{benchmarking}. Se muestra<
+en la Figura \ref{fig:flujo_ejecucion_sistema}.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        node distance=3.5cm,
+        startstop/.style={draw, line width=1pt, align=center, font=\small,
+                          minimum width=2.75cm, minimum height=1cm, fill=blue!20},
+        process/.style={draw, line width=1pt, align=center, font=\small,
+                         minimum width=2.75cm, minimum height=1cm, fill=blue!10}
+    ]
+
+    \node (ui) [startstop] {\textbf{Interfaz gráfica}};
+    \node (raw_load) [process, right of=ui] {\textbf{Carga de imagen}\\\textbf{\textit{RAW}}};
+    \node (processing) [process, right of=raw_load] {\textbf{Procesamiento} \\ \textbf{de imagen}};
+    \node (defining) [process, right of=processing] {\textbf{Definición del}\\\textbf{\textit{pipeline}}};
+    \node (export) [startstop, right of=defining] {\textbf{\textit{Pipeline}}\\\textbf{exportado}};
+
+    \draw[arrow] (ui) -- (raw_load);
+    \draw[arrow] (raw_load) -- (processing);
+    \draw[arrow] (processing) -- (defining);
+    \draw[arrow] (defining) -- (export);
+
+    \end{tikzpicture}
+
+    \vspace{0.225cm}
+
+    \begin{tikzpicture}[
+        node distance=3.5cm,
+        startstop/.style={draw, line width=1pt, align=center, font=\small,
+                          minimum width=2.75cm, minimum height=1cm, fill=blue!20},
+        process/.style={draw, line width=1pt, align=center, font=\small,
+                         minimum width=2.75cm, minimum height=1cm, fill=blue!10}
+    ]
+
+    \node (benchmark) [startstop] {\textbf{Módulo de}\\\textbf{\textit{benchmarking}}};
+    \node (import) [process, right of=benchmark] {\textbf{Importación del}\\\textbf{\textit{pipeline}}};
+    \node (defining) [process, right of=import] {\textbf{Ejecución}};
+    \node (metrics) [startstop, right of=defining] {\textbf{Resultados}\\\textbf{y métricas}};
+
+    \draw[arrow] (benchmark) -- (import);
+    \draw[arrow] (import) -- (defining);
+    \draw[arrow] (defining) -- (metrics);
+
+    \end{tikzpicture}
+    \caption{Flujo general de ejecución del sistema}
+    \label{fig:flujo_ejecucion_sistema}
+\end{figure}
+
+\newpage
+
+\subsection{Arquitectura} \label{subsec:8_2_arquitectura}
+
+\subsubsection{Enfoque arquitectónico} \label{subsubsec:8_2_1_enfoque_arquitectonico}
+
+\subsubsection{Componentes} \label{subsubsec:8_2_2_componentes}
+
+\subsection{Diagrama de paquetes} \label{subsec:8_3_diagrama_de_paquetes}
