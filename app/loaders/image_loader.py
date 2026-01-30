@@ -4,6 +4,7 @@ from loaders.arw_loader import ArwLoader
 from loaders.base_loader import ImageLoader
 from loaders.dng_loader import DngLoader
 from loaders.jpg_loader import JpgLoader
+from loaders.pkl_gz_loader import PklGzLoader
 from loaders.raw_loader import RawLoader
 from models.image import Image
 
@@ -16,7 +17,13 @@ def _build_extension_map(loaders: list[ImageLoader]) -> dict[str, ImageLoader]:
     return ext_map
 
 
-_LOADERS: list[ImageLoader] = [RawLoader(), ArwLoader(), DngLoader(), JpgLoader()]
+_LOADERS: list[ImageLoader] = [
+    RawLoader(),
+    ArwLoader(),
+    DngLoader(),
+    JpgLoader(),
+    PklGzLoader(),
+]
 _EXTENSION_MAP: dict[str, ImageLoader] = _build_extension_map(_LOADERS)
 
 

@@ -8,3 +8,4 @@ class ImageFormat(Enum):
     ARW = auto()
     DNG = auto()
     JPG = auto()
+    PKL_GZ = auto()
