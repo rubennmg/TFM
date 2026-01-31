@@ -2,7 +2,7 @@
 En esta sección se describe la especificación del diseño del sistema, proporcionando 
 una visión global de la arquitectura. Se describen los principales
 componentes y sus interacciones, con el fin de facilitar la comprensión de la estructura 
-interna del sistema y las decisiones de diseño adoptadas.
+interna y las decisiones de diseño adoptadas.
 
 \subsection{Visión general} \label{subsec:8_1_visión_general}
 El sistema desarrollado tiene dos objetivos. Por un lado, proporcionar una interfaz 
@@ -30,8 +30,8 @@ interfaz gráfica y su ejecución en diferentes condiciones experimentales.
 
 \subsubsection{Flujo de ejecución} \label{subsubsec:8_1_2_flujo_de_ejecucion}
 De forma esquemática, el flujo de ejecución del sistema se divide en dos grandes bloques funcionales:
-la interfaz gráfica y el módulo de \textit{benchmarking}. Se muestra<
-en la Figura \ref{fig:flujo_ejecucion_sistema}.
+la interfaz gráfica y el módulo de \textit{benchmarking}. Se muestra
+en la Figura \ref{fig:25_flujo_ejecucion_sistema}.
 
 \begin{figure}[h!]
     \centering
@@ -77,15 +77,83 @@ en la Figura \ref{fig:flujo_ejecucion_sistema}.
 
     \end{tikzpicture}
     \caption{Flujo general de ejecución del sistema}
-    \label{fig:flujo_ejecucion_sistema}
+    \label{fig:25_flujo_ejecucion_sistema}
 \end{figure}
 
 \newpage
 
 \subsection{Arquitectura} \label{subsec:8_2_arquitectura}
+Se presenta a continuación la arquitectura del sistema desarrollado. Dicha arquitectura
+se ha planteado y diseñado siguiendo los objetivos y principios mencionados anteriormente.
 
 \subsubsection{Enfoque arquitectónico} \label{subsubsec:8_2_1_enfoque_arquitectonico}
+El sistema desarrollado sigue un enfoque de arquitectura en capas, combinando el patrón 
+MVC (Modelo-Vista-Controlador) con un modelo de ejecución basado en \textit{pipelines} de 
+procesamiento de imágenes.
 
-\subsubsection{Componentes} \label{subsubsec:8_2_2_componentes}
+El patrón MVC facilita el desarrollo de la aplicación interactiva, manteniendo desacoplada la 
+interfaz gráfica de la lógica de negocio y de las estructuras de datos y entidades principales.
+De este modo, las acciones del usuario se traducen en eventos gestionados por un controlador, 
+que coordina la actualización del estado de la aplicación y la representación visual. Por otra 
+parte, el modelo de \textit{pipelines} permite definir secuencias de operaciones de procesamiento
+de imágenes, favoreciendo su reutilización y exportación. Esto facilita la integración con el módulo de
+\textit{benchmarking}.
 
-\subsection{Diagrama de paquetes} \label{subsec:8_3_diagrama_de_paquetes}
+La \autoref{fig:26_arch_diagram} muestra el diagrama general de arquitectura del sistema, donde se identifican 
+los principales componentes y sus interacciones. Cada uno de ellos tiene un rol específico, actuando 
+de forma coordinada para cumplir con los objetivos funcionales del sistema.
+
+\begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[
+        node distance=3.75cm,
+        process/.style={draw, line width=1pt, align=center, font=\small,
+                         minimum width=2.5cm, minimum height=1cm, fill=blue!20}
+    ]
+
+    \node (gui) [process] {\textbf{GUI}};
+    \node (controller) [process, right of=gui] {\textbf{Controller}};
+    \node (core) [process, right of=controller] {\textbf{Core}};
+    \node (models) [process, below of=gui, node distance=2cm, xshift=1.75cm] {\textbf{Models}};
+    \node (loaders) [process, right of=models] {\textbf{Loaders}};
+    \node (benchmark) [process, right of=core, yshift=1cm] {\textbf{Benchmark}};
+    \node (tests) [process, below of=benchmark, node distance=2cm] {\textbf{Tests}};
+
+    \draw[darrow] (gui) -- (controller);
+    \draw[darrow] (controller) -- (core);
+    \draw[darrow] (controller) -- (models);
+    \draw[darrow] (controller) -- (loaders);
+    \draw[darrow] (core) |- (benchmark.west);
+    \draw[darrow] (core) |- (tests.west);
+
+    \end{tikzpicture}
+    \caption{Diagrama de arquitectura del sistema}
+    \label{fig:26_arch_diagram}
+\end{figure}
+
+A partir de esta organización, se logra una arquitectura modular, mantenible y fácilmente extensible,
+en la que es posible incorporar nuevas operaciones de procesamiento de imágenes, ampliar el 
+soporte de formatos de entrada o introducir nuevas métricas de rendimiento de forma muy sencilla, 
+sin afectar al conjunto del sistema.
+
+\newpage
+
+\subsection{Componentes} \label{subsubsec:8_3_componentes}
+
+\subsubsection{Models} \label{subsubsec:8_3_1_models}
+
+\subsubsection{Loaders} \label{subsubsec:8_3_2_loaders}
+
+\subsubsection{Core} \label{subsubsec:8_3_3_core}
+
+\subsubsection{Controller} \label{subsubsec:8_3_4_controller}
+
+\subsubsection{GUI} \label{subsubsec:8_3_5_gui}
+
+\subsubsection{Benchmark} \label{subsubsec:8_3_6_benchmark}
+
+\subsubsection{Tests} \label{subsubsec:8_3_7_tests}
+
+\newpage
+
+\subsection{Diagrama de paquetes} \label{subsec:8_4_diagrama_de_paquetes}
