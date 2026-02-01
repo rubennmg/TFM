@@ -88,7 +88,7 @@ se ha planteado y diseñado siguiendo los objetivos y principios mencionados ant
 
 \subsubsection{Enfoque arquitectónico} \label{subsubsec:8_2_1_enfoque_arquitectonico}
 El sistema desarrollado sigue un enfoque de arquitectura en capas, combinando el patrón 
-MVC (Modelo-Vista-Controlador) con un modelo de ejecución basado en \textit{pipelines} de 
+MVC \cite{mvc_pattern} con un modelo de ejecución basado en \textit{pipelines} de 
 procesamiento de imágenes.
 
 El patrón MVC facilita el desarrollo de la aplicación interactiva, manteniendo desacoplada la 
@@ -139,8 +139,84 @@ sin afectar al conjunto del sistema.
 \newpage
 
 \subsection{Componentes} \label{subsubsec:8_3_componentes}
+En esta sección, se describen en detalle los componentes principales que conforman el sistema.
+Se definen sus funciones, responsabilidades y los criterios de diseño específicos que rigen 
+su implementación.
 
 \subsubsection{Models} \label{subsubsec:8_3_1_models}
+El componente \textit{Models} define las estructuras de datos del sistema, encapsulando 
+la representación de imágenes, operaciones y sus metadatos asociados. Este componente sigue el 
+patrón de diseño \textit{Data Transfer Object} (DTO) y utiliza \textit{dataclasses} 
+\cite{python_dataclasses} de Python para garantizar inmutabilidad y validación de tipos.
+Se organiza en dos niveles:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Modelos}. Clases que representan las entidades centrales del sistema: 
+    \textit{Image}, \textit{Metadata}, \textit{OperationDefinition} y \textit{FloatParamSpec}.
+    \item \textbf{Enumeraciones}. Tipos enumerados que definen valores válidos para espacios de 
+    color, formatos de imagen y patrones Bayer: \textit{ColorSpace}, \textit{ImageFormat} y \textit{Layout},
+    respectivamente.
+\end{itemize}
+
+\noindent{A continuación, se describen las clases y enumeraciones más relevantes:}
+
+\paragraph{Clase \textit{Image}} \label{par:8_3_1_1_image}
+Constituye el modelo central, representando el estado completo de una imagen durante su procesamiento.
+Sus atributos principales son:
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{tensor}} $\rightarrow$ Tensor con el estado actual de la imagen.
+    \item \texttt{\textbf{original\_tensor}} $\rightarrow$ Tensor inmutable que preserva la imagen original 
+    cargada, permitiendo operaciones de reseteo.
+    \item \texttt{\textbf{operation\_result\_tensor}} $\rightarrow$ Tensor temporal que almacena el resultado 
+    de la última operación aplicada, facilitando la previsualización antes de confirmar cambios.
+    \item \texttt{\textbf{path}} y \texttt{\textbf{name}} $\rightarrow$ Información de ubicación e identificación del archivo.
+    \item \texttt{\textbf{image\_format}} $\rightarrow$ Enumeración que especifica el formato original del archivo.
+    \item \texttt{\textbf{metadata}} $\rightarrow$ Objeto \texttt{Metadata} con información técnica de la imagen.
+    \item \texttt{\textbf{color\_space}} $\rightarrow$ Espacio de color actual.
+\end{itemize}
+
+\newpage
+
+\paragraph{Clase \textit{Metadata}} \label{par:8_3_1_2_metadata}
+\noindent{Encapsula los metadatos técnicos asociados a una imagen. Sus atributos incluyen:}
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{width}} y \texttt{\textbf{height}} $\rightarrow$ Dimensiones de la imagen en píxeles.
+    \item \texttt{\textbf{bit\_depth}} $\rightarrow$ Profundidad de bits.
+    \item \texttt{\textbf{bayer\_pattern}} $\rightarrow$ Patrón del filtro de color Bayer, utilizado 
+    en la etapa de demosaicing.
+\end{itemize}
+
+\paragraph{Clase \textit{OperationDefinition}} \label{par:8_3_1_3_operation_definition}
+Define la especificación completa de una operación de procesamiento de imagen. Actúa como plantilla para 
+todas las operaciones disponibles. Utilizada para encapsular datos y parámetros necesarios para la 
+ejecución de operaciones desde la interfaz de usuario. Sus atributos principales son:
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{name}} $\rightarrow$ Identificador único de la operación.
+    \item \texttt{\textbf{label}} $\rightarrow$ Etiqueta descriptiva para la interfaz de usuario.
+    \item \texttt{\textbf{category}} $\rightarrow$ Categoría de agrupación (``Filters'', ``Color'', 
+    ``Normalization'', ``Geometry'', ``Format'', ``Bayer'').
+    \item \texttt{\textbf{control\_type}} $\rightarrow$ Tipo de control GUI asociado (``filter'', ``no\_param'', 
+    ``debayer'', ``flip'', etc.).
+    \item \texttt{\textbf{params}} $\rightarrow$ Lista opcional de especificaciones de parámetros 
+    (\texttt{FloatParamSpec}).
+    \item \texttt{\textbf{default\_params}} $\rightarrow$ Diccionario con valores por defecto de los parámetros.
+\end{itemize}
+
+\paragraph{Enumeraciones} \label{par:8_3_1_4_enumeraciones}
+Proporcionan validación de tipos y documentación explícita de valores permitidos. Se definen las 
+siguientes:
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{ColorSpace}} $\rightarrow$ RGB, HSV y Grayscale.
+    \item \texttt{\textbf{ImageFormat}} $\rightarrow$ RAW, ARW, DNG, PKL\_GZ y JPG.
+    \item \texttt{\textbf{Layout}} $\rightarrow$ Patrones Bayer (RGGB, GRBG, GBRG, BGGR), donde cada valor 
+    representa los índices de color (R=0, G=1, B=2) en un bloque 2×2.
+\end{itemize}
+
+
 
 \subsubsection{Loaders} \label{subsubsec:8_3_2_loaders}
 
