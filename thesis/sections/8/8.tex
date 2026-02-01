@@ -220,12 +220,12 @@ siguientes:
 
 \subsubsection{Loaders} \label{subsubsec:8_3_2_loaders}
 El componente \textit{Loaders} implementa un sistema extensible de carga de imágenes en múltiples 
-formatos. Utiliza un patrón de diseño basado en una clase base abstracta que define la interfaz 
+formatos. Utiliza un patrón de diseño basado en una clase base abstracta \cite{python_abc} que define la interfaz 
 común para todos los \textit{loaders}. Esto permite añadir soporte para nuevos formatos de imagen 
 sin modificar el código existente. Cada \textit{loader} concreto hereda de esta clase base e implementa la lógica
 específica para leer y convertir archivos de un formato particular en objetos \textit{Image}. 
 El conjunto de todos los \textit{loaders} disponibles se gestiona mediante un módulo de orquestación 
-que contiene un registro dinámico.
+que contiene un registro dinámico. 
 
 \paragraph{Clase base \textit{ImageLoader}} \label{par:8_3_2_1_image_loader}
 \noindent{Define la interfaz común para todos los \textit{loaders} de imágenes:}
@@ -240,7 +240,7 @@ que contiene un registro dinámico.
     \texttt{Image} inicializado.
 \end{itemize}
 
-\paragraph{Loaders } \label{par:8_3_2_2_loaders}
+\paragraph{Loaders implementados} \label{par:8_3_2_2_loaders}
 Se implementan los siguientes \textit{loaders} concretos, para dar soporte a diferentes formatos de imagen cruda: \footnotemark
 
 \begin{itemize}[noitemsep]
@@ -266,6 +266,95 @@ el \autoref{sec:appendix_C_raw_formats}.}
 \newpage
 
 \subsubsection{Core} \label{subsubsec:8_3_3_core}
+Este componente constituye el motor de procesamiento de imágenes. Implementa todas las operaciones de transformación 
+siguiendo, de nuevo, un patrón de diseño basado en una clase abstracta. Las operaciones se organizan en varias 
+categorías temáticas. Cada operación concreta hereda de la clase base e implementa la lógica específica. 
+De esta forma, la implementación de cada operación es completamente autónoma e independiente, además de fácilmente 
+\textit{testeable}. También incluye un módulo de utilidades para la gestión de tensores y un sistema de registro 
+dinámico de todas las operaciones disponibles.
+
+\paragraph{Clase base \textit{ImageOperation}} \label{par:8_3_3_1_image_operation}
+\noindent{Define la interfaz común para todas las operaciones de procesamiento de imágenes:}
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{\_\_call\_\_(x)}} $\rightarrow$ Punto de entrada público que:
+    \begin{enumerate}
+        \item Valida que la entrada sea un tensor 3D (C,H,W).
+        \item Invoca el método abstracto \texttt{apply()}.
+        \item Valida que la salida sea un tensor 3D.
+        \item Garantiza que el tensor de salida sea contíguo en memoria.
+        \item Proporciona validación de tipos de entrada y salida.
+    \end{enumerate}
+    \item \texttt{\textbf{apply(x)}} $\rightarrow$ Método abstracto que implementa la lógica específica 
+    de cada operación.
+\end{itemize}
+
+\paragraph{Sistema de registro} \label{par:8_3_3_2_sistema_registro}
+Utiliza un diccionario global (\texttt{OPERATION\_REGISTRY}) que mapea los nombres de las operaciones
+a sus clases concretas. Además, proporciona un decorador (\texttt{@register\_operation}) que registra 
+automáticamente cada clase de operación al momento de su definición. Este sistema de registro es 
+utilizado gestionado por el \textit{Controller} y por el módulo de \textit{benchmarking} de forma 
+completamente independiente y dinámica para la invocación de operaciones.
+
+\newpage
+
+\paragraph{Operaciones implementadas} \label{par:8_3_3_3_operaciones_implementadas}
+Se implementan todas las operaciones de procesamiento de imágenes descritas previamente en la 
+\autoref{subsec:3_5_fundamentos_procesamiento_digital_imagenes}, organizadas en las siguiente 
+categorías:
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{Filters}}. Operaciones de filtrado y mejora de contraste.
+    \begin{itemize}[noitemsep]
+        \item \texttt{\textbf{SigmoidContrast}} $\rightarrow$ Mejora de contraste mediante función sigmoide.
+        \item \texttt{\textbf{GaussianFilter}} $\rightarrow$ Filtro de desenfoque gaussiano.
+        \item \texttt{\textbf{MedianFilter}} $\rightarrow$ Filtro de mediana para reducción de ruido.
+        \item \texttt{\textbf{GammaAdjustment}} $\rightarrow$ Ajuste gamma para corrección tonal.
+        \item \texttt{\textbf{HistogramEqualization}} $\rightarrow$ Ecualización de histograma.
+        \item \texttt{\textbf{CLAHE}} $\rightarrow$ Ecualización adaptativa de histograma con limitación de contraste.
+        \item \texttt{\textbf{UnsharpMask}} $\rightarrow$ Máscara de enfoque para realce de bordes.
+    \end{itemize}
+    \vspace{0.15cm}
+    \item \texttt{\textbf{Color}}. Operaciones de conversión entre espacios de color.
+    \begin{itemize}[noitemsep]
+        \item \texttt{\textbf{ColorToGray}} $\rightarrow$ Conversión RGB a escala de grises.
+        \item \texttt{\textbf{GrayToColor}} $\rightarrow$ Conversión de escala de grises a RGB.
+        \item \texttt{\textbf{RgbToHsv}} $\rightarrow$ Conversión de espacio de color RGB a HSV.
+        \item \texttt{\textbf{HsvToRgb}} $\rightarrow$ Conversión de espacio de color HSV a RGB.
+    \end{itemize}
+    \vspace{0.15cm}
+    \item \texttt{\textbf{Geometry}}. Transformaciones geométricas sobre la imagen.
+    \begin{itemize}[noitemsep]
+        \item \texttt{\textbf{Flip}} $\rightarrow$ Volteo horizontal o vertical.
+        \item \texttt{\textbf{Rotate}} $\rightarrow$ Rotación de la imagen.
+    \end{itemize}
+    \vspace{0.15cm}
+    \item \texttt{\textbf{Normalization}}. Normalización de valores de píxeles.
+    \begin{itemize}[noitemsep]
+        \item \texttt{\textbf{MinMaxNormalization}} $\rightarrow$ Normalización Min-Max estándar.
+        \item \texttt{\textbf{MinMaxPercentileNormalization}} $\rightarrow$ Normalización Min-Max con percentiles.
+    \end{itemize}
+    \vspace{0.15cm}
+    \item \texttt{\textbf{Bayer}}. \textit{Demosaicing} de imágenes RAW con patrón Bayer.
+    \begin{itemize}[noitemsep]
+        \item \texttt{\textbf{Debayer}} $\rightarrow$ Conversión de imagen Bayer monocanal a RGB. Se implementan 
+        diferentes módulos de \textit{demosaicing} que implican distintos compromisos entre calidad y rendimiento:
+        \begin{itemize}[noitemsep]
+            \item \texttt{\textbf{Debayer2x2}} $\rightarrow$ Interpolación bilineal básica.
+            \item \texttt{\textbf{Debayer3x3}} $\rightarrow$ Interpolación con kernel 3x3.
+            \item \texttt{\textbf{Debayer5x5}} $\rightarrow$ Interpolación con kernel 5x5.
+            \item \texttt{\textbf{DebayerSplit}} $\rightarrow$ Método alternativo basado en separación de canales.
+        \end{itemize}
+    \end{itemize}
+    \vspace{0.15cm}
+    \item \texttt{\textbf{Format}}. Conversiones de formato de datos.
+    \begin{itemize}[noitemsep]
+        \item \texttt{\textbf{RealToRGB8}} $\rightarrow$ Conversión de coma flotante a enteros de 8 bits.
+        \item \texttt{\textbf{RGB8ToReal}} $\rightarrow$ Conversión de enteros de 8 bits a coma flotante.
+    \end{itemize}
+\end{itemize}
+
+\newpage
 
 \subsubsection{Controller} \label{subsubsec:8_3_4_controller}
 
