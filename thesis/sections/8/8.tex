@@ -158,7 +158,7 @@ Se organiza en dos niveles:
     respectivamente.
 \end{itemize}
 
-\noindent{A continuación, se describen las clases y enumeraciones más relevantes:}
+\noindent{A continuación, se describen las clases y enumeraciones de mayor relevancia.}
 
 \paragraph{Clase \textit{Image}} \label{par:8_3_1_1_image}
 Constituye el modelo central, representando el estado completo de una imagen durante su procesamiento.
@@ -216,9 +216,54 @@ siguientes:
     representa los índices de color (R=0, G=1, B=2) en un bloque 2×2.
 \end{itemize}
 
-
+\newpage
 
 \subsubsection{Loaders} \label{subsubsec:8_3_2_loaders}
+El componente \textit{Loaders} implementa un sistema extensible de carga de imágenes en múltiples 
+formatos. Utiliza un patrón de diseño basado en una clase base abstracta que define la interfaz 
+común para todos los \textit{loaders}. Esto permite añadir soporte para nuevos formatos de imagen 
+sin modificar el código existente. Cada \textit{loader} concreto hereda de esta clase base e implementa la lógica
+específica para leer y convertir archivos de un formato particular en objetos \textit{Image}. 
+El conjunto de todos los \textit{loaders} disponibles se gestiona mediante un módulo de orquestación 
+que contiene un registro dinámico.
+
+\paragraph{Clase base \textit{ImageLoader}} \label{par:8_3_2_1_image_loader}
+\noindent{Define la interfaz común para todos los \textit{loaders} de imágenes:}
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{extensions}} $\rightarrow$ Propiedad que retorna una secuencia de extensiones soportadas 
+    en formato de cadena de texto.
+    \item \texttt{\textbf{formats}} $\rightarrow$ Propiedad que retorna los valores \texttt{ImageFormat} 
+    correspondientes.
+    \item \texttt{\textbf{load(path, device)}} $\rightarrow$ Método abstracto que carga una imagen desde la ruta 
+    especificada y la coloca en el dispositivo PyTorch indicado, retornando un objeto 
+    \texttt{Image} inicializado.
+\end{itemize}
+
+\paragraph{Loaders } \label{par:8_3_2_2_loaders}
+Se implementan los siguientes \textit{loaders} concretos, para dar soporte a diferentes formatos de imagen cruda: \footnotemark
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{RawLoader}} $\rightarrow$ Soporta archivos con extensión \texttt{.raw}.
+    \item \texttt{\textbf{ArwLoader}} $\rightarrow$ Soporta archivos con extensión \texttt{.arw} (Sony).
+    \item \texttt{\textbf{DngLoader}} $\rightarrow$ Soporta archivos con extensión \texttt{.dng} (Adobe, Apple).
+    \item \texttt{\textbf{PklGzLoader}} $\rightarrow$ Soporta archivos con extensión \texttt{.pkl.gz} 
+    (formato personalizado).
+\end{itemize}
+
+Con el fin de facilitar el desarrollo y pruebas, también se implementa un \textit{loader} (\texttt{\textbf{JpgLoader}})
+que permite cargar imágenes en formato comprimido \texttt{.jpg}. 
+
+\paragraph{Módulo de orquestación} \label{par:8_3_2_3_modulo_orquestacion}
+Gestiona la carga automática de imágenes utilizando el \textit{loader} adecuado según la extensión del archivo. 
+Proporciona una función \texttt{load\_image(path, device)} que identifica el \textit{loader} correcto
+y delega la tarea de carga, retornando un objeto \texttt{Image}. También ofrece una función
+\texttt{get\_supported\_formats()} que retorna la lista de todos los formatos de imagen soportados.
+
+\footnotetext{Existen numerosos formatos de imagen cruda. Información sobre ellos puede encontrarse en 
+el \autoref{sec:appendix_C_raw_formats}.}
+
+\newpage
 
 \subsubsection{Core} \label{subsubsec:8_3_3_core}
 
