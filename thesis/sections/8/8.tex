@@ -357,6 +357,96 @@ categorías:
 \newpage
 
 \subsubsection{Controller} \label{subsubsec:8_3_4_controller}
+El \textit{Controller} actúa como el coordinador central del sistema. Su responsabilidad principal es la 
+orquesatación de la interacción de entra la interfaz gráfica, los \textit{loaders} y el motor de 
+procesamiento (\textit{Core}). Mantiene el estado de la imagen cargada, gestiona el \textit{pipeline} de operaciones 
+y mantiene un registro de eventos. A continuación, se describen en detalle sus principales cometidos.
+
+\paragraph{Gestión de la imagen y su estado} \label{par:8_3_4_1_gestion_imagen_estado}
+\noindent{Cuando el usuario carga una imagen a través de la interfaz gráfica, el \textit{Controller}}
+
+\begin{enumerate}[noitemsep]
+    \item La guarda como imagen actual.
+    \item Controla su estado tras la aplicación de operaciones.
+    \item Mantiene una copia de referencia de la imagen original para permitir reseteos.
+\end{enumerate}
+
+Este flujo garantiza que el usuario pueda experimentar con diferentes operaciones sin perder 
+la imagen inicial, pero no permite la ejecución secuencial de múltiples operaciones acumulativas. Tampoco 
+permite deshacer operaciones individuales.
+
+\paragraph{Gestión del \textit{pipeline} de operaciones} \label{par:8_3_4_2_gestion_pipeline_operaciones}
+Para mitigar las limitaciones anteriores, el \textit{Controller} mantiene una lista ordenada de
+operaciones que constituyen el \textit{pipeline} de procesamiento definido por el usuario. 
+Cuando el usuario aplica una nueva operación, esta se añade al final de la lista, recalculando 
+el resultado para toda la secuencia. Esto permite:
+
+\begin{enumerate}[noitemsep]
+    \item Aplicar múltiples operaciones de forma acumulativa.
+    \item Modificar, reordenar o eliminar operaciones individuales.
+    \item Previsualizar el resultado tras cada cambio en el \textit{pipeline}.
+\end{enumerate}
+
+Sin embargo, este enfoque es computacionalmente costoso para \textit{pipelines} largos 
+o imágenes de gran tamaño, ya que cada modificación requiere recalcular desde el inicio.
+
+\newpage
+
+\paragraph{Sistema de \textit{snaphots}} \label{par:8_3_4_3_sistema_snapshots}
+Para optimizar el rendimiento, el \textit{Controller} implementa un sistema de \textit{snapshots}. Este sistema
+guarda estados intermedios de la imagen tras haber aplicado cierto número de operaciones. De este modo,
+cuando se modifica una operación en el \textit{pipeline}, el \textit{Controller} puede restaurar el estado 
+más reciente guardado antes de la operación modificada y continuar desde ese punto, en lugar de recalcular 
+continuamente desde el inicio. En la \autoref{fig:controller_snapshots} se ilustra este concepto.
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        original/.style={draw, minimum width=1.5cm, minimum height=0.8cm, line width=0.75pt, align=center, font=\small},
+        operation/.style={draw, minimum width=1cm, minimum height=0.8cm, line width=0.75pt, align=center, font=\small, fill=black!5},
+        snap/.style={draw, fill=blue!20, minimum width=1.5cm, minimum height=0.6cm, align=center, font=\small},
+        ]
+
+        \node (original) [original]  at (0,0) {Original};
+
+        \node (op1) [operation, right=1pt of original] {Op 1};
+        \node (op2) [operation, right=1pt of op1] {Op 2};
+        \node (op3) [operation, right=1pt of op2] {Op 3};
+        \node (op4) [operation, right=1pt of op3] {Op 4};
+        \node (op5) [operation, right=1pt of op4] {Op 5};
+        \node (op6) [operation, right=1pt of op5] {Op 6};
+        \node (op7) [operation, right=1pt of op6] {Op 7};
+        
+        \node[snap] (snap0) [below=0.7cm of original] {Snap 0};
+        \node[snap] (snap1) [below=0.7cm of op3] {Snap 1};
+        \node[snap] (snap2) [below=0.7cm of op6] {Snap 2};
+
+        \draw[dorrow] (original) -- (snap0);
+        \draw[dorrow] (op3) -- (snap1);
+        \draw[dorrow] (op6) -- (snap2);
+
+    \end{tikzpicture}
+    \caption{Sistema de \textit{snapshots} para optimización del \textit{pipeline} de operaciones}
+    \label{fig:controller_snapshots}
+\end{figure}
+
+Se observa como, tras aplicar 3 operaciones, se guarda el primer \textit{snapshot} (Snap 1).
+Después de aplicar otras 3 operaciones, se guarda el segundo \textit{snapshot} (Snap 2). Si el usuario
+modifica la operación 5, el \textit{Controller} puede restaurar el estado desde Snap 1 y continuar desde ahí, 
+aplicando las operaciones 5, 6 y 7, en lugar de recalcular desde el estado original.
+
+\paragraph{Actualización de la interfaz} \label{par:8_3_4_4_actualizacion_interfaz}
+Por último, el \textit{Controller} es responsable de manejar las actualizaciones de la interfaz gráfica. 
+Cuando el usuario realiza una acción (carga de imagen, aplicación de operación, modificación del 
+\textit{pipeline}, etc.), el \textit{Controller} procesa la solicitud y notifica a la GUI para que 
+refresque la visualización correspondiente. La interfaz siempre representa el estado real del sistema 
+y el usuario recibe una respuesta inmediata a sus acciones.
+
+Además, el \textit{Controller} mantiene un registro de todas las acciones realizadas por el usuario
+durante una sesión. Dicho registro se muestra en la interfaz para proporcionar retroalimentación y facilitar 
+el seguimiento de cambios realizados.
+
+\newpage
 
 \subsubsection{GUI} \label{subsubsec:8_3_5_gui}
 
