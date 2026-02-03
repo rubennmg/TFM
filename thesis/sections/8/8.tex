@@ -449,6 +449,41 @@ el seguimiento de cambios realizados.
 \newpage
 
 \subsubsection{GUI} \label{subsubsec:8_3_5_gui}
+El componente \textit{GUI} implementa la interfaz gráfica de usuario utilizando PyQt6 \cite{pyqt6}. Su responsabilidad 
+es presentar la imagen, permitir la interacción del usuario y mostrar información relevante sobre el procesamiento. 
+El diseño sigue una estructura completamente modular, donde cada panel o \textit{widget} tiene una función específica 
+bien definida. En la \autoref{fig:28_gui_no_image_loaded_overview} y la \autoref{fig:29_gui_image_loaded_overview}
+se muestra una visión general.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/8/img/gui_no_image_loaded.png}
+    \caption{Visión general de la interfaz gráfica (sin imagen cargada)}
+    \label{fig:28_gui_no_image_loaded_overview}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/8/img/gui_image_loaded.png}
+    \caption{Visión general de la interfaz gráfica (con imagen cargada)}
+    \label{fig:29_gui_image_loaded_overview}
+\end{figure}
+
+\newpage
+
+\noindent{La interfaz se organiza en tres paneles principales distribuidos horizontalmente:}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Panel izquierdo} (\textit{LeftPanel}). Controles de carga de imagen, histogramam, manejo y 
+    exportación del \textit{pipeline} de operaciones.
+    \item \textbf{Visor central} (\textit{ImageViewer}). Visualización de la imagen actual, con soporte para zoom y
+    tabs de información.
+    \item \textbf{Panel derecho} (\textit{RightPanel}). Controles de parámetros para operaciones aplicadas.
+\end{itemize}
+
+\dots
+
+\newpage
 
 \subsubsection{Benchmark} \label{subsubsec:8_3_6_benchmark}
 
