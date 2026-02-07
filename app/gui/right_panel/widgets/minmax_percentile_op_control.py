@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import (
     QDoubleSpinBox,
     QHBoxLayout,
     QLabel,
-    QPushButton,
     QVBoxLayout,
     QWidget,
 )
@@ -37,6 +36,7 @@ class MinMaxPercentileOperationControl(QWidget):
         self.lower_spin.setValue(0.02)
         self.lower_spin.setToolTip("Lower percentile (>= 0.0 and < upper)")
         self.lower_spin.setPrefix("Low: ")
+        self.lower_spin.valueChanged.connect(self._on_apply)
 
         self.upper_spin = QDoubleSpinBox()
         self.upper_spin.setObjectName("percentileSpin")
@@ -46,32 +46,13 @@ class MinMaxPercentileOperationControl(QWidget):
         self.upper_spin.setValue(0.98)
         self.upper_spin.setToolTip("Upper percentile (> lower and <= 1.0)")
         self.upper_spin.setPrefix("Up: ")
+        self.upper_spin.valueChanged.connect(self._on_apply)
 
         controls_row.addWidget(self.lower_spin)
         controls_row.addWidget(self.upper_spin)
         layout.addLayout(controls_row)
 
-        self.apply_btn = QPushButton("Apply")
-        self.apply_btn.clicked.connect(self._on_apply)
-        layout.addWidget(self.apply_btn)
-
-        self.lower_spin.valueChanged.connect(self._validate)
-        self.upper_spin.valueChanged.connect(self._validate)
-        self._validate()
-
         self.setLayout(layout)
-
-    def _validate(self):
-        lower = self.lower_spin.value()
-        upper = self.upper_spin.value()
-        valid = 0.0 <= lower < upper <= 1.0
-        self.apply_btn.setEnabled(valid)
-        if not valid:
-            self.apply_btn.setToolTip(
-                "Invalid percentiles: must satisfy 0.0 <= lower < upper <= 1.0"
-            )
-        else:
-            self.apply_btn.setToolTip("Apply with L=%.3f U=%.3f" % (lower, upper))
 
     def _on_apply(self):
         lower = self.lower_spin.value()
@@ -87,4 +68,3 @@ class MinMaxPercentileOperationControl(QWidget):
     def reset(self) -> None:
         self.lower_spin.setValue(0.02)
         self.upper_spin.setValue(0.98)
-        self._validate()
