@@ -29,6 +29,7 @@ class Controller:
         self.operation_logs: list[str] = []
 
         self._snapshots: list[tuple[int, Tensor, ColorSpace]] = []
+        self._last_op_exec_time: float = 0.0
 
     def __log_event(self, message: str) -> None:
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -139,6 +140,12 @@ class Controller:
             with torch.no_grad():
                 out = op(current)
 
+            if idx == total_ops - 1:
+                self._last_op_exec_time = op.execution_time * 1000
+                self.__log_event(
+                    f"Applied '{op_name}' with params {params} in {self._last_op_exec_time:.2f} ms [{self.image.tensor.device.type}]"
+                )
+
             if op_name == "RgbToHsv":
                 current_color = ColorSpace.HSV
             elif op_name == "HsvToRgb":
@@ -236,6 +243,8 @@ class Controller:
 
         start_idx = max(0, op_idx - CHECKPOINT_INTERVAL)
 
+        self.__log_event(f"Added operation '{operation_name}'")
+
         try:
             self._recompute_from(start_idx)
         except Exception as e:
@@ -243,7 +252,6 @@ class Controller:
             show_error("Operation Error", str(e))
             return
 
-        self.__log_event(f"Added operation '{operation_name}'")
         self.__update_viewer()
 
         if self.window:
@@ -293,7 +301,6 @@ class Controller:
             show_error("Operation Error", str(e))
             return
 
-        self.__log_event(f"Applied {operation_name} with params {params}")
         self.__update_viewer()
 
     def remove_last_operation(self) -> None:

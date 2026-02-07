@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-
+import time
+import torch
 from torch import Tensor
 
 from core import _tensor_utils as T_u
@@ -11,6 +12,9 @@ class ImageOperation(ABC):
 
     Every Image transformation in the system must inherit from this class.
     """
+
+    def __init__(self):
+        self.execution_time: float = 0.0
 
     def __call__(self, x: Tensor) -> Tensor:
         """Public entry point.
@@ -29,7 +33,14 @@ class ImageOperation(ABC):
         """
         T_u.assert_image_tensor(x)
 
+        start_time = time.perf_counter()
+
         out = self.apply(x)
+        torch.cuda.synchronize() if x.device.type == "cuda" else None
+
+        end_time = time.perf_counter()
+
+        self.execution_time = end_time - start_time
 
         T_u.assert_image_tensor(out)
 
