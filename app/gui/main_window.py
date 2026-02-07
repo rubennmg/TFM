@@ -46,7 +46,10 @@ class MainWindow(QMainWindow):
         self.left_panel.set_pipeline_enabled(enabled)
 
     def append_operation_log(self, entry: str) -> None:
-        self.viewer.append_log_entry(entry)
+        self.viewer.append_operation_log_entry(entry)
 
     def clear_operation_log(self) -> None:
-        self.viewer.clear_log()
+        self.viewer.clear_operation_log()
+
+    def append_device_log(self, entry: str) -> None:
+        self.viewer.append_device_log_entry(entry)

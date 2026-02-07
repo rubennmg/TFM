@@ -55,3 +55,47 @@ def free_cuda_cache() -> None:
             torch.cuda.empty_cache()
         except Exception:
             pass
+
+
+def get_device_info() -> list[str]:
+    """Get detailed information about available CPU and GPU devices.
+
+    Returns:
+        list[str]: List of information lines about devices.
+    """
+    info_lines: list[str] = []
+
+    info_lines.append(f"PyTorch Version: {torch.__version__}")
+    info_lines.append(f"CUDA Available: {torch.cuda.is_available()}")
+    info_lines.append("")
+
+    if torch.cuda.is_available():
+        info_lines.append("GPU Information")
+        info_lines.append("=" * 50)
+        info_lines.append(f"CUDA Version: {torch.version.cuda}")
+        info_lines.append(f"cuDNN Version: {torch.backends.cudnn.version()}")
+        info_lines.append(f"Number of GPUs: {torch.cuda.device_count()}")
+        info_lines.append("")
+
+        for i in range(torch.cuda.device_count()):
+            try:
+                props = torch.cuda.get_device_properties(i)
+                info_lines.append(f"GPU {i}: {props.name}")
+                info_lines.append(f"  Compute Capability: {props.major}.{props.minor}")
+                info_lines.append(
+                    f"  Total Memory: {props.total_memory / (1024**3):.2f} GB"
+                )
+
+                allocated = torch.cuda.memory_allocated(i) / (1024**3)
+                reserved = torch.cuda.memory_reserved(i) / (1024**3)
+                info_lines.append(f"  Allocated Memory: {allocated:.2f} GB")
+                info_lines.append(f"  Reserved Memory: {reserved:.2f} GB")
+                info_lines.append("")
+            except Exception as e:
+                info_lines.append(f"GPU {i}: Error retrieving properties - {e}")
+                info_lines.append("")
+    else:
+        info_lines.append("No GPU detected. Using CPU.")
+        info_lines.append("")
+
+    return info_lines

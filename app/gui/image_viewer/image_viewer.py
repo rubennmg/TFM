@@ -3,6 +3,7 @@ from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QImage, QPixmap, QWheelEvent
 from PyQt6.QtWidgets import QScrollArea, QTabWidget, QVBoxLayout, QWidget
 
+from gui.image_viewer.widgets.device_logger import DeviceLogger
 from gui.image_viewer.widgets.image_canvas import ImageCanvas
 from gui.image_viewer.widgets.image_info import ImageInfo
 from gui.image_viewer.widgets.operation_logger import OperationLogger
@@ -26,6 +27,7 @@ class ImageViewer(QWidget):
 
         self.info_widget: ImageInfo = ImageInfo()
         self.logger_widget: OperationLogger = OperationLogger()
+        self.device_info_widget: DeviceLogger = DeviceLogger()
 
         self.image_canvas: ImageCanvas = ImageCanvas()
 
@@ -43,6 +45,7 @@ class ImageViewer(QWidget):
         self.tabs.setObjectName("infoLoggerTabs")
         self.tabs.addTab(self.info_widget, "Image Info")
         self.tabs.addTab(self.logger_widget, "Logger")
+        self.tabs.addTab(self.device_info_widget, "Device Info")
 
         layout.addWidget(self.scroll_area, stretch=5)
         layout.addWidget(self.tabs, stretch=1)
@@ -87,11 +90,17 @@ class ImageViewer(QWidget):
 
         self.image_canvas.set_pixmap(pix)
 
-    def append_log_entry(self, entry: str) -> None:
+    def append_operation_log_entry(self, entry: str) -> None:
         self.logger_widget.append_entry(entry)
 
-    def clear_log(self) -> None:
+    def clear_operation_log(self) -> None:
         self.logger_widget.clear_entries()
+
+    def append_device_log_entry(self, entry: str) -> None:
+        self.device_info_widget.append_entry(entry)
+
+    def clear_device_log(self) -> None:
+        self.device_info_widget.clear_entries()
 
     def set_zoom(self, factor: float) -> None:
         factor = max(self._min_zoom, min(self._max_zoom, factor))

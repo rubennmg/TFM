@@ -132,7 +132,7 @@
     color: #f0f0f0;
 }
 
-#operationLogger {
+#generalLogger {
     background-color: #151515;
     color: #e0e0e0;
     border: 0.05em solid #555;
