@@ -1,6 +1,6 @@
 import numpy as np
-from PyQt6.QtCore import QEvent, Qt
-from PyQt6.QtGui import QImage, QPixmap, QWheelEvent
+from PyQt6.QtCore import QPoint, QEvent, Qt
+from PyQt6.QtGui import QImage, QMouseEvent, QPixmap, QWheelEvent
 from PyQt6.QtWidgets import QScrollArea, QTabWidget, QVBoxLayout, QWidget
 
 from gui.image_viewer.widgets.device_logger import DeviceLogger
@@ -19,6 +19,10 @@ class ImageViewer(QWidget):
         self._zoom_step: float = 1.15
         self._min_zoom: float = 0.05
         self._max_zoom: float = 10.0
+        self._dragging: bool = False
+        self._drag_start_pos: QPoint = QPoint()
+        self._drag_start_h: int = 0
+        self._drag_start_v: int = 0
 
         self.__setup_ui()
 
@@ -109,6 +113,35 @@ class ImageViewer(QWidget):
         self._zoom = factor
         self.__update_display()
 
+    def __zoom_at(self, viewport_pos: QPoint, factor: float) -> None:
+        if self._qimg is None or self._pixmap is None:
+            return
+
+        old_size = self.image_canvas.size()
+        if old_size.width() == 0 or old_size.height() == 0:
+            return
+
+        hbar = self.scroll_area.horizontalScrollBar()
+        vbar = self.scroll_area.verticalScrollBar()
+
+        if hbar is None or vbar is None:
+            return
+
+        rel_x = (hbar.value() + viewport_pos.x()) / old_size.width()
+        rel_y = (vbar.value() + viewport_pos.y()) / old_size.height()
+
+        self.set_zoom(factor)
+
+        new_size = self.image_canvas.size()
+        if new_size.width() == 0 or new_size.height() == 0:
+            return
+
+        new_x = int(rel_x * new_size.width() - viewport_pos.x())
+        new_y = int(rel_y * new_size.height() - viewport_pos.y())
+
+        hbar.setValue(max(hbar.minimum(), min(hbar.maximum(), new_x)))
+        vbar.setValue(max(vbar.minimum(), min(vbar.maximum(), new_y)))
+
     def zoom_in(self) -> None:
         self.set_zoom(self._zoom * self._zoom_step)
 
@@ -125,13 +158,47 @@ class ImageViewer(QWidget):
         if a1.type() == QEvent.Type.Wheel:
             if not isinstance(a1, QWheelEvent):
                 return False
-            modifiers = a1.modifiers()
-            if modifiers & Qt.KeyboardModifier.ControlModifier:
-                delta = a1.angleDelta().y()
-                if delta > 0:
-                    self.zoom_in()
-                else:
-                    self.zoom_out()
+            delta = a1.angleDelta().y()
+            if delta == 0:
+                return False
+
+            factor = (
+                self._zoom * self._zoom_step
+                if delta > 0
+                else self._zoom / self._zoom_step
+            )
+            self.__zoom_at(a1.position().toPoint(), factor)
+            return True
+        elif a1.type() == QEvent.Type.MouseButtonPress:
+            if not isinstance(a1, QMouseEvent):
+                return False
+            if a1.button() == Qt.MouseButton.LeftButton:
+                hbar = self.scroll_area.horizontalScrollBar()
+                vbar = self.scroll_area.verticalScrollBar()
+                if hbar is None or vbar is None:
+                    return False
+                self._dragging = True
+                self._drag_start_pos = a1.position().toPoint()
+                self._drag_start_h = hbar.value()
+                self._drag_start_v = vbar.value()
+                return True
+        elif a1.type() == QEvent.Type.MouseMove:
+            if not isinstance(a1, QMouseEvent):
+                return False
+            if self._dragging:
+                hbar = self.scroll_area.horizontalScrollBar()
+                vbar = self.scroll_area.verticalScrollBar()
+                if hbar is None or vbar is None:
+                    return False
+                delta = a1.position().toPoint() - self._drag_start_pos
+                hbar.setValue(self._drag_start_h - delta.x())
+                vbar.setValue(self._drag_start_v - delta.y())
+                return True
+        elif a1.type() == QEvent.Type.MouseButtonRelease:
+            if not isinstance(a1, QMouseEvent):
+                return False
+            if a1.button() == Qt.MouseButton.LeftButton and self._dragging:
+                self._dragging = False
                 return True
         elif a1.type() == QEvent.Type.Resize:
             pass
