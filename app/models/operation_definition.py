@@ -30,7 +30,7 @@ _FILTER_SIGMOID_PARAMS = [
     FloatParamSpec(
         key="cutoff",
         label="Cutoff",
-        minimum=-1.0,
+        minimum=0,
         maximum=1.0,
         step=0.01,
         default=0.0,
