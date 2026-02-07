@@ -319,6 +319,33 @@ class Controller:
         free_cuda_cache()
         self.__update_viewer()
 
+    def change_device(self, device_str: str) -> None:
+        device_str = device_str.lower()
+        if device_str == "cpu":
+            self._device = torch.device("cpu")
+        elif device_str == "gpu":
+            if torch.cuda.is_available():
+                self._device = torch.device("cuda")
+            else:
+                show_error("GPU Error", "CUDA is not available. Falling back to CPU.")
+                self._device = torch.device("cpu")
+                return
+        else:
+            show_error("Device Error", f"Unknown device: {device_str}")
+            return
+
+        if self.image and self.image.tensor is not None:
+            self.image.tensor = self.image.tensor.to(self._device)
+
+        self.__log_event(f"Device changed to {self._device.type.upper()}")
+
+        if self.image and self.operations_profile:
+            try:
+                self._recompute_from(0)
+                self.__update_viewer()
+            except Exception as e:
+                show_error("Device Change Error", str(e))
+
     def export_profile(self, path: str) -> None:
         if self.image is None:
             return

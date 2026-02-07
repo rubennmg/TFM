@@ -16,17 +16,23 @@ from models.operation_definition import (
     get_operation_choices_by_category,
 )
 
+from utils.torch import get_device
+
 
 class OperationPipeline(QWidget):
     add_operation_requested = pyqtSignal(str)
     remove_operation_requested = pyqtSignal()
+    device_changed = pyqtSignal(str)
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
         self._operations: list[dict] = []
         self._definitions_by_name: dict[str, OperationDefinition] = {}
+        self._device: str = get_device().type
         self._build_definition_lookup()
         self._setup_ui()
+
+        self.set_device(self._device)
 
     def _build_definition_lookup(self) -> None:
         for definitions in get_operation_choices_by_category().values():
@@ -52,18 +58,30 @@ class OperationPipeline(QWidget):
         controls_row.setContentsMargins(0, 0, 0, 0)
         controls_row.setSpacing(2)
 
+        self._cpu_button = QPushButton("CPU")
+        self._cpu_button.setObjectName("deviceButton")
+        self._cpu_button.setToolTip("Run operations on CPU")
+        self._cpu_button.clicked.connect(self._on_cpu_clicked)
+
+        self._gpu_button = QPushButton("GPU")
+        self._gpu_button.setObjectName("deviceButton")
+        self._gpu_button.setToolTip("Run operations on GPU")
+        self._gpu_button.clicked.connect(self._on_gpu_clicked)
+
         self._add_button = QPushButton("+")
-        self._add_button.setObjectName("addOperationButton")
+        self._add_button.setObjectName("operationButton")
         self._add_button.setToolTip("Add operation to pipeline")
         self._add_button.clicked.connect(self._on_add_clicked)
         self._add_button.setEnabled(False)
 
         self._remove_button = QPushButton("-")
-        self._remove_button.setObjectName("removeOperationButton")
+        self._remove_button.setObjectName("operationButton")
         self._remove_button.setToolTip("Remove last operation")
         self._remove_button.clicked.connect(self.remove_operation_requested.emit)
         self._remove_button.setEnabled(False)
 
+        controls_row.addWidget(self._cpu_button)
+        controls_row.addWidget(self._gpu_button)
         controls_row.addStretch()
         controls_row.addWidget(self._add_button)
         controls_row.addWidget(self._remove_button)
@@ -149,3 +167,22 @@ class OperationPipeline(QWidget):
             if action is None:
                 continue
             action.setData(definition.name)
+
+    def _on_cpu_clicked(self) -> None:
+        self._cpu_button.setEnabled(False)
+        self._gpu_button.setEnabled(True)
+        self.device_changed.emit("cpu")
+
+    def _on_gpu_clicked(self) -> None:
+        self._cpu_button.setEnabled(True)
+        self._gpu_button.setEnabled(False)
+        self.device_changed.emit("gpu")
+
+    def set_device(self, device: str) -> None:
+        device = device.lower()
+        if device == "cpu":
+            self._cpu_button.setEnabled(False)
+            self._gpu_button.setEnabled(True)
+        elif device == "cuda" or device == "gpu":
+            self._gpu_button.setEnabled(False)
+            self._cpu_button.setEnabled(True)

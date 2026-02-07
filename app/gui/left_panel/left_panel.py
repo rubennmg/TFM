@@ -29,6 +29,7 @@ class LeftPanel(QWidget):
         self.pipeline.remove_operation_requested.connect(
             self.controller.remove_last_operation
         )
+        self.pipeline.device_changed.connect(self.controller.change_device)
 
         # load / reset controls
         self.load_control: LabelledButton = LabelledButton(
