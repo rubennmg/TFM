@@ -339,13 +339,6 @@ class Controller:
 
         self.__log_event(f"Device changed to {self._device.type.upper()}")
 
-        if self.image and self.operations_profile:
-            try:
-                self._recompute_from(0)
-                self.__update_viewer()
-            except Exception as e:
-                show_error("Device Change Error", str(e))
-
     def export_profile(self, path: str) -> None:
         if self.image is None:
             return
