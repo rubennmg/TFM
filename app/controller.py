@@ -11,7 +11,7 @@ from loaders import image_loader
 from models.image import Image
 from models.operation_definition import get_operation_definition
 from utils.error import show_error
-from utils.torch import get_device, free_cuda_cache
+from utils.torch import get_device, free_cuda_cache, save_image_as_jpg
 
 CHECKPOINT_INTERVAL = 4
 MAX_SNAPSHOTS = 8
@@ -350,3 +350,20 @@ class Controller:
 
         except Exception as e:
             show_error("Export Profile Error", str(e))
+
+    def save_image(self, path: str) -> None:
+        """Save the current image tensor to a file (JPG).
+
+        Args:
+            path (str): The file path where the image should be saved.
+        """
+        if self.image is None:
+            show_error("Save Error", "No image loaded.")
+            return
+
+        try:
+            save_image_as_jpg(self.image.tensor, path)
+            self.__log_event(f"Saved image to {path}")
+
+        except Exception as e:
+            show_error("Save Image Error", str(e))

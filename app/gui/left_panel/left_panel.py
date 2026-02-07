@@ -48,6 +48,12 @@ class LeftPanel(QWidget):
             self._on_generate_operations_profile_clicked
         )
 
+        # save image
+        self.save_control: LabelledButton = LabelledButton(
+            "Save image:", "Save file..."
+        )
+        self.save_control.clicked.connect(self._on_save_clicked)
+
         layout.addWidget(self.load_control)
         layout.addWidget(self.reset_control)
         layout.addWidget(self.pipeline, stretch=1)
@@ -55,6 +61,7 @@ class LeftPanel(QWidget):
         layout.addStretch()
 
         layout.addWidget(self.operations_profile_control)
+        layout.addWidget(self.save_control)
 
         self.setLayout(layout)
 
@@ -110,3 +117,16 @@ class LeftPanel(QWidget):
             return
 
         self.controller.export_profile(save_path)
+
+    def _on_save_clicked(self) -> None:
+        save_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Image",
+            "image.jpg",
+            "JPG Files (*.jpg);;JPEG Files (*.jpeg);;All Files (*)",
+        )
+
+        if not save_path:
+            return
+
+        self.controller.save_image(save_path)

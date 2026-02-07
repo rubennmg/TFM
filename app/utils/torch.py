@@ -1,4 +1,6 @@
+from PIL import Image
 import numpy as np
+from pyparsing import Path
 import torch
 from torch import Tensor, device
 
@@ -99,3 +101,34 @@ def get_device_info() -> list[str]:
         info_lines.append("")
 
     return info_lines
+
+
+def save_image_as_jpg(tensor: Tensor, file_path: str) -> None:
+    """Save a torch Tensor as a JPG image file.
+
+    Args:
+        tensor (Tensor): Input tensor in (C,H,W) or (H,W,C) format.
+        file_path (str): Path to save the JPG image.
+    """
+    path_obj = Path(file_path)
+    if path_obj.suffix.lower() not in [".jpg", ".jpeg"]:
+        path_obj = path_obj.with_suffix(".jpg")
+    file_path = str(path_obj)
+
+    np_image = tensor_to_uint8_np(tensor)
+
+    if np_image.ndim == 2:
+        image = Image.fromarray(np_image, mode="L")
+    elif np_image.ndim == 3:
+        if np_image.shape[2] == 1:
+            image = Image.fromarray(np_image[:, :, 0], mode="L")
+        elif np_image.shape[2] == 3:
+            image = Image.fromarray(np_image, mode="RGB")
+        elif np_image.shape[2] == 4:
+            image = Image.fromarray(np_image[:, :, :3], mode="RGB")
+        else:
+            raise ValueError(f"Unsupported number of channels: {np_image.shape[2]}")
+    else:
+        raise ValueError(f"Unsupported array shape: {np_image.shape}")
+
+    image.save(file_path, format="JPEG", quality=95)
