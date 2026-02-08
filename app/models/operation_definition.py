@@ -154,6 +154,17 @@ _FILTER_AFFINE_INTENSITY_TRANSFORMATION_PARAMS = [
     ),
 ]
 
+_FILTER_BRIGHTNESS_ADJUSTMENT_PARAMS = [
+    FloatParamSpec(
+        key="alfa",
+        label="Alfa",
+        minimum=0.0,
+        maximum=10.0,
+        step=0.01,
+        default=1.0,
+    ),
+]
+
 _OPERATIONS: List[OperationDefinition] = [
     OperationDefinition(
         name="SigmoidContrast",
@@ -296,6 +307,14 @@ _OPERATIONS: List[OperationDefinition] = [
         default_params=_build_filter_params(
             _FILTER_AFFINE_INTENSITY_TRANSFORMATION_PARAMS
         ),
+    ),
+    OperationDefinition(
+        name="BrightnessAdjustment",
+        label="Brightness Adjustment",
+        category="Filters",
+        control_type="filter",
+        params=_FILTER_BRIGHTNESS_ADJUSTMENT_PARAMS,
+        default_params=_build_filter_params(_FILTER_BRIGHTNESS_ADJUSTMENT_PARAMS),
     ),
 ]
 
