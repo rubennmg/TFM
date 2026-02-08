@@ -25,7 +25,7 @@ class ImageInfo(QWidget):
             ("Name", "name"),
             ("Format", "format"),
             ("Color space", "color_space"),
-            ("Resolution", "resolution"),
+            ("Initial resolution", "resolution"),
             ("Channels", "channels"),
             ("Bit depth", "bit_depth"),
             ("Bayer pattern", "bayer_pattern"),

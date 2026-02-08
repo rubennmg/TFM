@@ -335,6 +335,13 @@ _OPERATIONS: List[OperationDefinition] = [
         params=_FILTER_MEAN_CONTRAST_ADJUSTMENT_PARAMS,
         default_params=_build_filter_params(_FILTER_MEAN_CONTRAST_ADJUSTMENT_PARAMS),
     ),
+    OperationDefinition(
+        name="Resize",
+        label="Resize",
+        category="Geometry",
+        control_type="resize",
+        default_params={"size": (768, 1024)},
+    ),
 ]
 
 

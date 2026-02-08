@@ -18,6 +18,7 @@ from gui.right_panel.widgets.minmax_percentile_op_control import (
     MinMaxPercentileOperationControl,
 )
 from gui.right_panel.widgets.no_param_op_control import NoParamOperationControl
+from gui.right_panel.widgets.resize_op_control import ResizeOperationControl
 from models.operation_definition import OperationDefinition, get_operation_definitions
 
 
@@ -127,6 +128,11 @@ class RightPanel(QWidget):
                 controller=self.controller,
                 title=definition.label,
                 operation_name=definition.name,
+                operation_index=operation_index,
+                parent=self,
+            ),
+            "resize": lambda: ResizeOperationControl(
+                controller=self.controller,
                 operation_index=operation_index,
                 parent=self,
             ),
