@@ -135,6 +135,25 @@ _FILTER_MEDIAN_PARAMS = [
     ),
 ]
 
+_FILTER_AFFINE_INTENSITY_TRANSFORMATION_PARAMS = [
+    FloatParamSpec(
+        key="gain",
+        label="Gain",
+        minimum=0.0,
+        maximum=10.0,
+        step=0.1,
+        default=1.0,
+    ),
+    FloatParamSpec(
+        key="bias",
+        label="Bias",
+        minimum=-1.0,
+        maximum=1.0,
+        step=0.1,
+        default=0.0,
+    ),
+]
+
 _OPERATIONS: List[OperationDefinition] = [
     OperationDefinition(
         name="SigmoidContrast",
@@ -267,6 +286,16 @@ _OPERATIONS: List[OperationDefinition] = [
         category="Normalization",
         control_type="minmax_with_params",
         default_params={"min": 0.0, "max": 1.0},
+    ),
+    OperationDefinition(
+        name="AffineIntensityTransformation",
+        label="Affine Intensity Transformation",
+        category="Filters",
+        control_type="filter",
+        params=_FILTER_AFFINE_INTENSITY_TRANSFORMATION_PARAMS,
+        default_params=_build_filter_params(
+            _FILTER_AFFINE_INTENSITY_TRANSFORMATION_PARAMS
+        ),
     ),
 ]
 
