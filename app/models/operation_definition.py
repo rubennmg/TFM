@@ -165,6 +165,17 @@ _FILTER_BRIGHTNESS_ADJUSTMENT_PARAMS = [
     ),
 ]
 
+_FILTER_MEAN_CONTRAST_ADJUSTMENT_PARAMS = [
+    FloatParamSpec(
+        key="beta",
+        label="Beta",
+        minimum=0.0,
+        maximum=10.0,
+        step=0.01,
+        default=1.0,
+    ),
+]
+
 _OPERATIONS: List[OperationDefinition] = [
     OperationDefinition(
         name="SigmoidContrast",
@@ -315,6 +326,14 @@ _OPERATIONS: List[OperationDefinition] = [
         control_type="filter",
         params=_FILTER_BRIGHTNESS_ADJUSTMENT_PARAMS,
         default_params=_build_filter_params(_FILTER_BRIGHTNESS_ADJUSTMENT_PARAMS),
+    ),
+    OperationDefinition(
+        name="MeanContrastAdjustment",
+        label="Mean Contrast Adjustment",
+        category="Filters",
+        control_type="filter",
+        params=_FILTER_MEAN_CONTRAST_ADJUSTMENT_PARAMS,
+        default_params=_build_filter_params(_FILTER_MEAN_CONTRAST_ADJUSTMENT_PARAMS),
     ),
 ]
 
