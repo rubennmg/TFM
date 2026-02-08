@@ -261,6 +261,13 @@ _OPERATIONS: List[OperationDefinition] = [
         params=_FILTER_UNSHARP_MASKING_PARAMS,
         default_params=_build_filter_params(_FILTER_UNSHARP_MASKING_PARAMS),
     ),
+    OperationDefinition(
+        name="MinMaxNormalizationWithParams",
+        label="Min-Max Normalization (with Params)",
+        category="Normalization",
+        control_type="minmax_with_params",
+        default_params={"min": 0.0, "max": 1.0},
+    ),
 ]
 
 
