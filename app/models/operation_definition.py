@@ -24,7 +24,7 @@ _FILTER_SIGMOID_PARAMS = [
         label="Gain",
         minimum=0.0,
         maximum=10.0,
-        step=0.1,
+        step=0.01,
         default=0.0,
     ),
     FloatParamSpec(
@@ -62,7 +62,7 @@ _FILTER_GAMMA_PARAMS = [
         label="C",
         minimum=0.1,
         maximum=2.0,
-        step=0.1,
+        step=0.01,
         default=1.0,
     ),
     FloatParamSpec(
@@ -70,7 +70,7 @@ _FILTER_GAMMA_PARAMS = [
         label="Gamma",
         minimum=0.1,
         maximum=3.0,
-        step=0.1,
+        step=0.01,
         default=1.0,
     ),
 ]
@@ -141,7 +141,7 @@ _FILTER_AFFINE_INTENSITY_TRANSFORMATION_PARAMS = [
         label="Gain",
         minimum=0.0,
         maximum=10.0,
-        step=0.1,
+        step=0.01,
         default=1.0,
     ),
     FloatParamSpec(
@@ -149,7 +149,7 @@ _FILTER_AFFINE_INTENSITY_TRANSFORMATION_PARAMS = [
         label="Bias",
         minimum=-1.0,
         maximum=1.0,
-        step=0.1,
+        step=0.01,
         default=0.0,
     ),
 ]
