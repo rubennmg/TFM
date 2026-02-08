@@ -342,6 +342,13 @@ _OPERATIONS: List[OperationDefinition] = [
         control_type="resize",
         default_params={"size": (768, 1024)},
     ),
+    OperationDefinition(
+        name="WhiteBalance",
+        label="White Balance",
+        category="Filters",
+        control_type="white_balance",
+        default_params={"method": "gray_world"},
+    ),
 ]
 
 

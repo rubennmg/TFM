@@ -19,6 +19,9 @@ from gui.right_panel.widgets.minmax_percentile_op_control import (
 )
 from gui.right_panel.widgets.no_param_op_control import NoParamOperationControl
 from gui.right_panel.widgets.resize_op_control import ResizeOperationControl
+from gui.right_panel.widgets.white_balance_op_control import (
+    WhiteBalanceOperationControl,
+)
 from models.operation_definition import OperationDefinition, get_operation_definitions
 
 
@@ -132,6 +135,11 @@ class RightPanel(QWidget):
                 parent=self,
             ),
             "resize": lambda: ResizeOperationControl(
+                controller=self.controller,
+                operation_index=operation_index,
+                parent=self,
+            ),
+            "white_balance": lambda: WhiteBalanceOperationControl(
                 controller=self.controller,
                 operation_index=operation_index,
                 parent=self,
