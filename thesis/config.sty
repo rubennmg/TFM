@@ -92,29 +92,6 @@
 \titlespacing*{\subparagraph}{0pt}{2.0ex plus 1ex minus .2ex}{0.4ex}
 
 % ----------------------------------------
-% Custom Equation List
-% ----------------------------------------
-\newcommand{\listequationsname}{\fontsize{20pt}{20pt}\textbf{Índice de ecuaciones}}
-\newlistof{myequations}{equ}{\listequationsname}
-\cftsetindents{myequations}{1.5em}{2.25em}
-\makeatletter
-\renewcommand{\listofmyequations}{%
-  {\section*{\Large \listequationsname}%
-   \@starttoc{equ}}%
-}
-\makeatother
-\newcommand{\myequations}[1]{%
-\addcontentsline{equ}{myequations}{\protect\numberline{\theequation}#1}\par}
-
-\DeclareFloatingEnvironment[
-    fileext=loe,
-    listname=\listequationsname,
-    name=Ecuación,
-    placement=tbhp
-]{myequation}
-\captionsetup[myequation]{skip=0pt}
-
-% ----------------------------------------
 % Table of Contents and Lists Formatting
 % ----------------------------------------
 \renewcommand{\cfttoctitlefont}{\fontsize{20pt}{20pt}\bfseries}

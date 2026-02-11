@@ -13,17 +13,11 @@ la percepción visual humana y los procesos de interpretación cognitiva.
 Desde un punto de vista teórico, y con anterioridad a su tratamiento computacional, una imagen
 puede modelarse como una función bidimensional continua de intensidad o color. En este dominio 
 analógico, la imagen representa una escena asociando a cada punto del plano $(x, y)$ un valor de 
-intensidad luminosa. Esta relación puede expresarse matemáticamente como:
-
-\begin{myequation}
-    \begin{equation}
-        I = f(x,y) \quad \text{donde } (x,y) \in \mathbb{R}^2 \text{ e } I \in \mathbb{R}
-        \label{eq:1_imagen_funcion}
-    \end{equation}
-    \myequations{Representación de una imagen analógica en términos matemáticos}
-    \caption{Representación de una imagen analógica en términos matemáticos}
-\end{myequation}
-
+intensidad luminosa. Esta relación puede expresarse matemáticamente como se muestra en \eqref{eq:1_imagen_funcion}:
+\begin{equation}
+    I = f(x,y) \quad \text{donde } (x,y) \in \mathbb{R}^2 \text{ e } I \in \mathbb{R}
+    \label{eq:1_imagen_funcion}
+\end{equation}
 En este contexto pre-digital, la calidad de la imagen depende fundamentalmente de 
 las características físicas del sistema de captura, tales como la óptica empleada, las condiciones de iluminación 
 o la naturaleza de la emulsión química. Tradicionalmente, la captura de imágenes se realizaba mediante procesos 
@@ -54,17 +48,11 @@ El muestreo consiste en la discretización del dominio continuo de la imagen, di
 el plano $(x, y)$ en una rejilla regular de posiciones finitas: los \textit{píxeles}. Cada píxel representa una pequeña región de la escena original
 y constituye la unidad mínima de información espacial en una imagen digital. 
 El resultado de este proceso es una imagen discreta definida sobre un conjunto finito de 
-corrdenadas enteras:
-
-\begin{myequation}
-    \begin{equation}
-        I[i,j] = f(i \Delta x, j \Delta y)
-        \label{eq:2_imagen_discreta}
-    \end{equation}
-    \myequations{Imagen digital como función discreta muestreada}
-    \caption{Imagen digital como función discreta muestreada}
-\end{myequation}
-
+coordenadas enteras \eqref{eq:2_imagen_discreta}:
+\begin{equation}
+    I[i,j] = f(i \Delta x, j \Delta y)
+    \label{eq:2_imagen_discreta}
+\end{equation}
 donde $(i,j)$ representan las coordenadas del píxel y $\Delta x$, $\Delta y$ las resoluciones
 espaciales en cada dimensión. El número total de muestras en cada dimensión determina la 
 resolución espacial de la imagen y establece un compromiso entre el nivel de detalle representable 
@@ -77,17 +65,11 @@ actúa sobre el dominio espacial de la imagen, la cuantificación opera sobre su
 es, los valores numéricos que representan la intensidad luminosa o el color en cada píxel.
 
 La cuantificación puede modelarse como una función no lineal $Q(\cdot)$ que asigna a cada valor 
-continuo uno de los valores discretos disponibles:
-
-\begin{myequation}
-    \begin{equation}
-        I[i,j] = Q(f(i, j))
-        \label{eq:3_imagen_cuantificada}
-    \end{equation}
-    \myequations{Cuantificación de la intensidad de píxeles en una imagen digital}
-    \caption{Cuantificación de la intensidad de píxeles en una imagen digital}
-\end{myequation}
-
+continuo uno de los valores discretos disponibles \eqref{eq:3_imagen_cuantificada}:
+\begin{equation}
+    I[i,j] = Q(f(i, j))
+    \label{eq:3_imagen_cuantificada}
+\end{equation}
 El conjunto de valores posibles tras la cuantificación está determinado por la profundidad de bits 
 (\textit{bit depth}) $b$ del sistema de representación, que define un total de $L = 2^b$ niveles distintos. 
 Este valor determina la precisión con la que se puede representar la intensidad de cada píxel,
@@ -162,45 +144,28 @@ hasta la imagen digital final $I[m,n]$.
 
 El resultado final de este proceso es la imagen digital, que se representa como una matriz 
 bidimensional ($M \times N$) de valores discretos. Cada elemento de esta matriz corresponde a un píxel
-con un valor cuantificado que refleja la intensidad luminosa o color en esa posición específica:
-
-\begin{myequation}
-    \begin{equation}
-        I[m,n] \quad \text{donde } m = 0, 1, \ldots, M-1 \text{ y } n = 0, 1, \ldots, N-1
-        \label{eq:4_imagen_matriz}
-    \end{equation}
-    \myequations{Imagen digital representada como matriz de píxeles}
-    \caption{Imagen digital representada como matriz de píxeles}
-\end{myequation}
-
+con un valor cuantificado que refleja la intensidad luminosa o color en esa posición específica \eqref{eq:4_imagen_matriz}.
+\begin{equation}
+    I[m,n] \quad \text{donde } m = 0, 1, \ldots, M-1 \text{ y } n = 0, 1, \ldots, N-1
+    \label{eq:4_imagen_matriz}
+\end{equation}
 No obstante, la forma concreta que adopta esta representación matricial depende de la naturaleza 
 cromática de la imagen. En el caso de imágenes en escala de grises, tal y como mostró en la 
 \autoref{fig:1_muestreo_cuantificacion}, cada píxel queda descrito por un único valor 
-de intensidad $i \in [0, I]$, donde $I$ es el valor máximo determinado por la profundidad de bits. 
-
-\begin{myequation}
-    \begin{equation}
-        \textit{Imagen Gris} \rightarrow I \in R^{M \times N}
-        \label{eq:5_imagen_gris}
-    \end{equation}
-    \myequations{Representación de una imagen en escala de grises}
-    \caption{Representación de una imagen en escala de grises}
-\end{myequation}
+de intensidad $i \in [0, I]$, donde $I$ es el valor máximo determinado por la profundidad de bits \eqref{eq:5_imagen_gris}.  
+\begin{equation}
+    \textit{Imagen Gris} \rightarrow I \in R^{M \times N}
+    \label{eq:5_imagen_gris}
+\end{equation}
 
 Por el contrario, en las imágenes a color, cada píxel se 
 representa mediante múltiples componentes, generalmente organizadas en distintos canales que 
 codifican la información cromática según un modelo de color determinado. En el modelo más común,
-el modelo RGB (\textit{Red, Green, Blue}), cada píxel se define por tres valores de intensidad:
-
-\begin{myequation}[h!]
-    \begin{equation}
-        \textit{Imagen Color (RGB)} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
-        \label{eq:6_imagen_color}
-    \end{equation}
-    \myequations{Representación de una imagen a color en formato RGB}
-    \caption{Representación de una imagen a color en formato RGB}
-\end{myequation}
-
+el modelo RGB (\textit{Red, Green, Blue}), cada píxel se define por tres valores de intensidad \eqref{eq:6_imagen_color}:
+\begin{equation}
+    \textit{Imagen Color (RGB)} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
+    \label{eq:6_imagen_color}
+\end{equation}
 El valor de color final de cada píxel específico ($i, j$) es un vector que combina los valores 
 de los tres canales en esa posición: $I[i, j] = (I_R[i, j], I_G[i, j], I_B[i, j])$.
 
@@ -493,60 +458,49 @@ utilizada para calcular el valor de cada píxel en la imagen resultante.
 \paragraph{Operaciones puntuales} \label{subsubsubsec:3_5_1_1_operaciones_puntuales}
 Las operaciones puntuales son aquellas en las que el valor de cada píxel 
 de salida depende únicamente del valor del píxel correspondiente en la imagen de entrada.
-Este tipo de transformaciones se expresan como:
-
-\begin{myequation}
-    \begin{equation}
-        I_{salida}(x,y) = T(I_{entrada}(x,y))
-        \label{eq:7_operacion_puntual}
-    \end{equation}
-    \myequations{Operación puntual en procesamiento de imágenes}
-    \caption{Operación puntual en procesamiento de imágenes}
-\end{myequation}
-
-\noindent{donde \(T\) es una función de transformación aplicada a cada píxel.}
+Este tipo de transformaciones se expresan como \eqref{eq:7_operacion_puntual}:
+\begin{equation}
+    I_{salida}(x,y) = T(I_{entrada}(x,y))
+    \label{eq:7_operacion_puntual}
+\end{equation}
+donde \(T\) es una función de transformación aplicada a cada píxel.
 
 Este tipo de transformaciones no modifica la estructura espacial de la imagen, pero sí su 
 distribución de intensidades, lo que las hace especialmente adecuadas para tareas de ajuste de 
 contraste, corrección de iluminación o normalización de niveles de gris. En el marco de este 
 TFM, las operaciones puntuales más relevantes incluyen:
 
-\begin{itemize}
+\begin{itemize}[noitemsep]
     \item Corrección gamma
     \item Transformaciones sigmoides
     \item Ecualización del histograma
 \end{itemize}
 
-Estas técnicas presentan un bajo coste computacional y son fácilmente paralelizables, 
-por lo que son muy adecuadas para su implementación eficiente en arquitecturas modernas.
+\noindent{Estas técnicas presentan un bajo coste computacional y son fácilmente paralelizables, 
+por lo que son muy adecuadas para su implementación eficiente en arquitecturas modernas.}
+
+\newpage
 
 \paragraph{Operaciones espaciales} \label{subsubsubsec:3_5_1_2_operaciones_espaciales}
 Las operaciones espaciales, en contraposición, son aquellas en las que el valor de cada píxel de 
 salida depende no sólo del píxel de entrada correspondiente, sino de un conjunto de píxeles vecnios. 
-De forma general, pueden expresarse como:
-
-\begin{myequation}
-    \begin{equation}
-        I_{salida}(x,y) = T(I_{entrada}(S_{x,y}))
-        \label{eq:8_operacion_espacial}
-    \end{equation}
-    \myequations{Operación espacial en procesamiento de imágenes}
-    \caption{Operación espacial en procesamiento de imágenes}
-\end{myequation}
-
-\noindent{donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \((x,y)\) 
-y \(T\) es una función que combina estos valores.}
+De forma general, pueden expresarse como \eqref{eq:8_operacion_espacial}:
+\begin{equation}
+    I_{salida}(x,y) = T(I_{entrada}(S_{x,y}))
+    \label{eq:8_operacion_espacial}
+\end{equation}
+donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \((x,y)\) 
+y \(T\) es una función que combina estos valores.
 
 Este tipo de operaciones permite explotar la correlación espacial existente entre píxeles adyacentes. 
 Son las empleadas en tareas de reducción de ruido, el realce de bordes y la detección de características.
 En el contexto de este TFM, se consideran principalmente:
 
-\begin{itemize}
+\begin{itemize}[noitemsep]
     \item Filtros lineales
     \item Filtros no lineales
     \item \textit{Unsharp Masking}
 \end{itemize}
-
 Estas técnicas suelen implicar un mayor coste computacional debido a la necesidad de acceso
 a múltiples píxeles para calcular cada valor de salida.
 
@@ -782,16 +736,11 @@ La normalización min--max \cite{image_normalization} es una de las técnicas m�
 intensidades. Este método consiste en mapear el valor mínimo presente en la imagen al extremo
 inferior del rango de destino, y el valor máximo al extremo superior. De este modo, los valores
 intermedios se redistribuyen de forma proporcional, permitiendo que la imagen utilice la totalidad
-del rango dinámico disponible. Matemáticamente, la normalización min--max se expresa como:
-
-\begin{myequation}
-    \begin{equation}
-        I_{salida}(x,y) = \frac{I_{entrada}(x,y) - I_{min}}{I_{max} - I_{min}}
-        \label{eq:9_normalizacion_min_max}
-    \end{equation}
-    \myequations{Normalización min--max en procesamiento de imágenes}
-    \caption{Normalización min--max en procesamiento de imágenes}
-\end{myequation}
+del rango dinámico disponible. Matemáticamente, la normalización min--max se expresa como \eqref{eq:9_normalizacion_min_max}:
+\begin{equation}
+    I_{salida}(x,y) = \frac{I_{entrada}(x,y) - I_{min}}{I_{max} - I_{min}}
+    \label{eq:9_normalizacion_min_max}
+\end{equation}
 
 Es importante mencionar que, en imágenes con más de un canal (por ejemplo, imágenes en color RGB), la normalización
 se aplica de forma independiente a cada canal para preservar la relación cromática original. La normalización 
@@ -826,19 +775,13 @@ normalización min--max sobre una imagen a color.
 Para mitigar la influencia de valores extremos, es habitual emplear una variante de la
 normalización min--max basada en percentiles. En este caso, en lugar de utilizar los valores
 mínimo y máximo absolutos de la imagen, se seleccionan percentiles bajos y altos del histograma
-como límites del rango de reescalado. Matemáticamente, esta técnica se define como:
-
-\begin{myequation}
-    \begin{equation}
-        I_{salida}(x,y) = \frac{I_{entrada}(x,y) - P_{inf}}{P_{sup} - P_{inf}}
-        \label{eq:10_normalizacion_min_max_percentiles}
-    \end{equation}
-    \myequations{Normalización min--max con percentiles en procesamiento de imágenes}
-    \caption{Normalización min--max con percentiles en procesamiento de imágenes}
-\end{myequation}
-
-\noindent{\(P_{inf}\) y \(P_{sup}\) representan los percentiles inferior y superior
-seleccionados, respectivamente.} La \autoref{fig:12_minmax_percentile_normalization_example} 
+como límites del rango de reescalado. Matemáticamente, esta técnica se define como \eqref{eq:10_normalizacion_min_max_percentiles}:
+\begin{equation}
+    I_{salida}(x,y) = \frac{I_{entrada}(x,y) - P_{inf}}{P_{sup} - P_{inf}}
+    \label{eq:10_normalizacion_min_max_percentiles}
+\end{equation}
+\(P_{inf}\) y \(P_{sup}\) representan los percentiles inferior y superior
+seleccionados, respectivamente. La \autoref{fig:12_minmax_percentile_normalization_example} 
 muestra un ejemplo de aplicación de la normalización min--max con percentiles sobre una imagen a color,
 utilizando los percentiles 2 y 98 como límites de reescalado.
 
@@ -873,16 +816,11 @@ explícitamente el histograma.
 La corrección gamma es una transformación no lineal que ajusta la luminosidad de una imagen.
 Consiste en la aplicación de una función exponencial a los valores de intensidad, controlada 
 por un parámetro denominado \textit{gamma} (\(\gamma\)) \cite{gamma_correction}.
-Se define mediante la siguiente ecuación:
-\begin{myequation}
-    \begin{equation}
-        I_{salida}(x, y) = I_{entrada}(x, y) \cdot c ^{\gamma}
-        \label{eq:11_correccion_gamma}
-    \end{equation}
-    \myequations{Corrección gamma en procesamiento de imágenes}
-    \caption{Corrección gamma en procesamiento de imágenes}
-\end{myequation}
-
+Se define mediante la siguiente ecuación \eqref{eq:11_correccion_gamma}:
+\begin{equation}
+    I_{salida}(x, y) = I_{entrada}(x, y) \cdot c ^{\gamma}
+    \label{eq:11_correccion_gamma}
+\end{equation}
 Valores de $\gamma < 1$ realzan las zonas oscuras de la imagen, mientras que valores de 
 $\gamma > 1$ atenúan las zonas más claras. La constante \(c\) se utiliza para normalizar 
 los valores de intensidad y asegurar que permanezcan dentro del rango válido. La 
@@ -922,19 +860,13 @@ La mejora del contraste también puede realizarse mediante la aplicación de la 
 que proporciona una transición suave entre las regiones de baja y alta intensidad. A diferencia 
 de la corrección gamma, la función sigmoide permite enfatizar el contraste en torno a un rango 
 de intensidades específico, controlando la pendiente y el punto de inflexión de la curva.
-Matemáticamente, se expresa como:
-
-\begin{myequation}
-    \begin{equation}
-        I_{salida}(x, y) = \frac{1}{1 + e^{-k (I_{entrada}(x, y) - I_0)}}
-        \label{eq:12_funcion_sigmoide}
-    \end{equation}
-    \myequations{Función sigmoide en procesamiento de imágenes}
-    \caption{Función sigmoide en procesamiento de imágenes}
-\end{myequation}
-
-\noindent{donde \(k\), también denominada \textit{gain} (ganancia), controla la pendiente de la
-curva y \(I_0\) determina el punto de inflexión (\textit{cutoff}).} Normalmente, suele aplicarse 
+Matemáticamente, se expresa como \eqref{eq:12_funcion_sigmoide}:
+\begin{equation}
+    I_{salida}(x, y) = \frac{1}{1 + e^{-k (I_{entrada}(x, y) - I_0)}}
+    \label{eq:12_funcion_sigmoide}
+\end{equation}
+donde \(k\), también denominada \textit{gain} (ganancia), controla la pendiente de la
+curva y \(I_0\) determina el punto de inflexión (\textit{cutoff}). Normalmente, suele aplicarse 
 una normalización posterior para ajustar los valores de salida al rango dinámico válido. La 
 \autoref{fig:14_sigmoid_contrast_example} muestra un ejemplo de mejora del contraste mediante 
 la función sigmoide sobre una imagen a color.
@@ -985,17 +917,12 @@ este TFM.
 El filtro gaussiano \cite{gaussian_filter} es uno de los métodos más empleados para la reducción de 
 ruido de alta frecuencia. Se trata de un filtro lineal que realiza un suavizado progresivo de la 
 imagen mediante la convolución con una máscara basada en la función gaussiana.
-La función gaussiana en dos dimensiones se define como:
-\begin{myequation}
-    \begin{equation}
-        G(x,y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}}
-        \label{eq:13_filtro_gaussiano}
-    \end{equation}
-    \myequations{Función gaussiana en dos dimensiones}
-    \caption{Función gaussiana en dos dimensiones}
-\end{myequation}
-
-\noindent{donde \(\sigma\) es la desviación estándar que controla el grado de suavizado.}
+La función gaussiana en dos dimensiones se define como \eqref{eq:13_filtro_gaussiano}:
+\begin{equation}
+    G(x,y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}}
+    \label{eq:13_filtro_gaussiano}
+\end{equation}
+donde \(\sigma\) es la desviación estándar que controla el grado de suavizado.
 Además, la máscara del filtro gaussiano se realiza sobre una ventana de 
 tamaño \(k \times k\), donde \(k\) es un número impar que determina el área de influencia
 del filtro. Computacionalmente, esta ventana suele denominarse \textit{kernel}.
@@ -1045,17 +972,12 @@ la eliminación del ruido impulsivo, como el conocido ruido de tipo \textit{sal 
 A diferencia de los filtros lineales, este filtro sustitye directamente el valor de cada píxel 
 por la mediana de los valores de intensidad presentes en su vecindad definida por una ventana
 de tamaño \(k \times k\).
-Matemáticamente, el proceso se describe como:
-\begin{myequation}
-    \begin{equation}
-        I_{salida}(x,y) = \text{mediana} \{ I_{entrada}(i,j) \mid (i,j) \in S_{x,y} \}
-        \label{eq:14_filtro_mediana}
-    \end{equation}
-    \myequations{Filtro de mediana en procesamiento de imágenes}
-    \caption{Filtro de mediana en procesamiento de imágenes}
-\end{myequation}
-
-\noindent{donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \((x,y)\).}
+Matemáticamente, el proceso se describe como \eqref{eq:14_filtro_mediana}:
+\begin{equation}
+    I_{salida}(x,y) = \text{mediana} \{ I_{entrada}(i,j) \mid (i,j) \in S_{x,y} \}
+    \label{eq:14_filtro_mediana}
+\end{equation}
+donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \((x,y)\).
 
 El filtro de mediana es especialmente eficaz para eliminar píxeles atípicos sin afectar
 significativamente los bordes y detalles de la imagen. Esto se debe a que la mediana es menos sensible
@@ -1110,19 +1032,13 @@ De forma conceptual, el proceso consiste en generar una versión suavizada de la
 compararla con esta. La diferencia entre ambas resalta las transiciones de intensidad, que se
 corresponden principalmente con los bordes. Esta información se añade posteriormente a la imagen
 original, aumentando el contraste local en dichas zonas y, por tanto, la percepción de nitidez.
-Matemáticamente se puede expresar como:
-
-\begin{myequation}
-    \begin{equation}
-        I_{salida}(x,y) = I_{entrada}(x,y) + \sigma \left( I_{entrada}(x,y) - I_{suavizada}(x,y) \right)
-        \label{eq:15_unsharp_masking}
-    \end{equation}
-    \myequations{Unsharp Masking en procesamiento de imágenes}
-    \caption{Unsharp Masking en procesamiento de imágenes}
-\end{myequation}
-
-\noindent{donde \(I_{suavizada}(x,y)\) es la imagen suavizada obtenida mediante un filtro
-y \(\sigma\) es un factor de escala que controla la intensidad del realce.}
+Matemáticamente se puede expresar como \eqref{eq:15_unsharp_masking}:
+\begin{equation}
+    I_{salida}(x,y) = I_{entrada}(x,y) + \sigma \left( I_{entrada}(x,y) - I_{suavizada}(x,y) \right)
+    \label{eq:15_unsharp_masking}
+\end{equation}
+donde \(I_{suavizada}(x,y)\) es la imagen suavizada obtenida mediante un filtro
+y \(\sigma\) es un factor de escala que controla la intensidad del realce.
 El realce se aplica sobre una ventana de tamaño \(k \times k\) alrededor de cada píxel.
 
 \newpage
@@ -1260,15 +1176,11 @@ posterior.
 
 La conversión no se realiza como una simple combinación de los valores de los canales 
 rojo, verde y azul, sino que se emplean ponderaciones específicas para reflejar la
-percepción humana del brillo. La fórmula comúnmente utilizada es la siguiente:
-\begin{myequation}
-    \begin{equation}
-        I_{gris}(x,y) = 0.2989 \cdot I_{R}(x,y) + 0.5870 \cdot I_{G}(x,y) + 0.1140 \cdot I_{B}(x,y)
-        \label{eq:16_rgb_to_grayscale}
-    \end{equation}
-    \myequations{Conversión de RGB a escala de grises en procesamiento de imágenes}
-    \caption{Conversión de RGB a escala de grises en procesamiento de imágenes}
-\end{myequation}
+percepción humana del brillo. La fórmula comúnmente utilizada es \eqref{eq:16_rgb_to_grayscale}:
+\begin{equation}
+    I_{gris}(x,y) = 0.2989 \cdot I_{R}(x,y) + 0.5870 \cdot I_{G}(x,y) + 0.1140 \cdot I_{B}(x,y)
+    \label{eq:16_rgb_to_grayscale}
+\end{equation}
 
 \subparagraph{De RGB a HSV} \label{subsubsubsec:3_5_6_2_2_de_rgb_a_hsv}
 La conversión de una imagen desde el espacio de color RGB al espacio HSV permite 
@@ -1373,20 +1285,14 @@ y una gestión transparente de la ejecución tanto en CPU como en GPU.
 \subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_6_2_tensores_representacion_imagenes}
 En \textit{PyTorch}, las imágenes digitales se representan mediante tensores \cite{torch_tensor}. Estos pueden entenderse 
 como generalizaciones de vectores y matrices a múltiples dimensiones. Desde un punto de vista matemático, 
-un tensor de orden $n$ puede expresarse como:
-
-\begin{myequation}
-	\begin{equation}
-		T_{i_1 i_2 \ldots i_n} \in \mathbb{R}^{d_1 \times d_2 \times \ldots \times d_n}
-		\label{eq:17_tensor_representation}
-	\end{equation}
-	\myequations{Representación formal de un tensor de orden $n$.}
-	\caption{Representación formal de un tensor de orden $n$}
-\end{myequation}
-
-\noindent{donde cada índice $i_k$ recorre una dimensión $d_k$ del espacio de datos. Así, un escalar puede considerarse un tensor de orden 0,
+un tensor de orden $n$ puede expresarse como \eqref{eq:17_tensor_representation}:
+\begin{equation}
+    T_{i_1 i_2 \ldots i_n} \in \mathbb{R}^{d_1 \times d_2 \times \ldots \times d_n}
+    \label{eq:17_tensor_representation}
+\end{equation}
+donde cada índice $i_k$ recorre una dimensión $d_k$ del espacio de datos. Así, un escalar puede considerarse un tensor de orden 0,
 un vector un tensor de orden 1 y una matriz un tensor de orden 2. Esta generalización permite extender las operaciones algebraicas
-clásicas a dominios de mayor complejidad, conservando propiedades como la linealidad y la composicionalidad.}
+clásicas a dominios de mayor complejidad, conservando propiedades como la linealidad y la composicionalidad.
 
 \newpage
 
