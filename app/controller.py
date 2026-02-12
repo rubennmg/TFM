@@ -97,7 +97,9 @@ class Controller:
         self._snapshots.clear()
         free_cuda_cache()
 
-    def _recompute_from(self, start_op_index: int) -> None:
+    def _recompute_from(
+        self, start_op_index: int, current_op_index: int | None
+    ) -> None:
         if self.image is None:
             return
 
@@ -140,7 +142,7 @@ class Controller:
             with torch.no_grad():
                 out = op(current)
 
-            if idx == total_ops - 1:
+            if idx == current_op_index:
                 self._last_op_exec_time = op.execution_time * 1000
                 self.__log_event(
                     f"Applied '{op_name}' with params {params} in {self._last_op_exec_time:.2f} ms [{self.image.tensor.device.type}]"
@@ -246,7 +248,7 @@ class Controller:
         self.__log_event(f"Added operation '{operation_name}'")
 
         try:
-            self._recompute_from(start_idx)
+            self._recompute_from(start_idx, op_idx)
         except Exception as e:
             self.operations_profile.pop()
             show_error("Operation Error", str(e))
@@ -290,7 +292,7 @@ class Controller:
         start_idx = max(0, op_idx - CHECKPOINT_INTERVAL)
 
         try:
-            self._recompute_from(start_idx)
+            self._recompute_from(start_idx, operation_idx)
 
         except Exception as e:
             if is_new:
@@ -310,7 +312,7 @@ class Controller:
         removed = self.operations_profile.pop()
         last_idx = max(0, len(self.operations_profile) - 1)
 
-        self._recompute_from(last_idx)
+        self._recompute_from(last_idx, None)
         self.__log_event(f"Removed operation {removed.get('operation')}")
 
         if self.window:
