@@ -80,7 +80,6 @@ def pipeline_factory(bench_profile):
             x = x.to(device)
             for op in ops:
                 x = op(x)
-                torch.cuda.synchronize() if device.type == "cuda" else None
             return x
 
         return _run
