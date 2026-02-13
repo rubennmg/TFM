@@ -1,0 +1,8 @@
+[
+    {
+        "operation": "Debayer",
+        "params": {
+            "algorithm_name": "debayer5x5"
+        }
+    }
+]

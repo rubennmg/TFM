@@ -1,0 +1,19 @@
+[
+    {
+        "operation": "Debayer",
+        "params": {
+            "algorithm_name": "debayer5x5"
+        }
+    },
+    {
+        "operation": "SigmoidContrast",
+        "params": {
+            "gain": 2.25,
+            "cutoff": 0.25
+        }
+    },
+    {
+        "operation": "RealToRGB8",
+        "params": {}
+    }
+]
