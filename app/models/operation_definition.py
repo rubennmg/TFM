@@ -39,14 +39,6 @@ _FILTER_SIGMOID_PARAMS = [
 
 _FILTER_GAUSSIAN_PARAMS = [
     FloatParamSpec(
-        key="kernel_size",
-        label="Kernel Size",
-        minimum=1,
-        maximum=21,
-        step=2,
-        default=5,
-    ),
-    FloatParamSpec(
         key="sigma",
         label="Sigma",
         minimum=0.1,

@@ -1,3 +1,4 @@
+import math
 from torch import Tensor
 from torchvision import transforms as T
 
@@ -14,17 +15,16 @@ class GaussianFilter(ImageOperation):
         ImageOperation (ImageOperation): Base class for image operations.
     """
 
-    def __init__(self, kernel_size: int = 5, sigma: float = 1.0):
+    def __init__(self, sigma: float = 1.0):
         """Class constructor.
 
         Args:
-            kernel_size (int): Size of the Gaussian kernel. Default is 5.
             sigma (float): Standard deviation of the Gaussian kernel. Default is 1.0.
         """
-        if kernel_size % 2 == 0 or kernel_size <= 0:
-            raise ValueError("kernel_size must be a positive odd integer.")
         if sigma <= 0:
             raise ValueError("sigma must be a positive float.")
+
+        kernel_size = self._calculate_kernel_size(sigma)
 
         self.blur = T.GaussianBlur(kernel_size=kernel_size, sigma=sigma)
 
@@ -40,3 +40,17 @@ class GaussianFilter(ImageOperation):
         T_u.assert_real_valued_tensor(x)
 
         return self.blur(x)
+
+    def _calculate_kernel_size(self, sigma: float, k: float = 3.0) -> int:
+        """
+        Calculate the kernel size based on the standard deviation and a scaling factor.
+
+        Args:
+            sigma (float): Standard deviation of the Gaussian kernel.
+            k (float): Truncation factor (default 3 → ~99.7% coverage)
+
+        Returns:
+            int: Calculated kernel size, which is an odd integer.
+        """
+
+        return 2 * math.ceil(k * sigma) + 1
