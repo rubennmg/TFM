@@ -16,7 +16,7 @@ from models.operation_definition import (
     get_operation_choices_by_category,
 )
 
-from utils.torch import get_device
+from utils.torch import format_params_dict, get_device
 
 
 class OperationPipeline(QWidget):
@@ -102,9 +102,7 @@ class OperationPipeline(QWidget):
             definition = self._definitions_by_name.get(op_name)
             label = definition.label if definition else op_name
             params = op.get("params", {})
-            params_str = ", ".join(f"{k}={v}" for k, v in params.items())
-            if not params_str:
-                params_str = "default"
+            params_str = format_params_dict(params)
             text = f"{idx}. {label} ({params_str})"
             item = QListWidgetItem(text)
             if idx == len(self._operations):

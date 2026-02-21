@@ -1,6 +1,6 @@
 from PIL import Image
 import numpy as np
-from pyparsing import Path
+from pathlib import Path
 import torch
 from torch import Tensor, device
 
@@ -132,3 +132,50 @@ def save_image_as_jpg(tensor: Tensor, file_path: str) -> None:
         raise ValueError(f"Unsupported array shape: {np_image.shape}")
 
     image.save(file_path, format="JPEG", quality=95)
+
+
+def format_param_value(value) -> str:
+    """Format a parameter value for display, handling tensors specially.
+
+    Args:
+        value: The parameter value to format.
+
+    Returns:
+        str: A concise string representation of the value.
+    """
+    if isinstance(value, Tensor):
+        if value.ndim == 2:
+            H, W = value.shape
+            return f"Tensor[{H}×{W}]"
+        elif value.ndim == 3:
+            C, H, W = value.shape
+            return f"Tensor[{C}×{H}×{W}]"
+        else:
+            shape_str = "×".join(str(d) for d in value.shape)
+            return f"Tensor[{shape_str}]"
+    elif isinstance(value, (int, float)):
+        if isinstance(value, float):
+            return f"{value:.4g}"
+        return str(value)
+    elif isinstance(value, str):
+        return value
+    elif value is None:
+        return "None"
+    else:
+        return str(value)
+
+
+def format_params_dict(params: dict) -> str:
+    """Format a dictionary of parameters for display.
+
+    Args:
+        params (dict): Dictionary of parameter names and values.
+
+    Returns:
+        str: A formatted string of parameters.
+    """
+    if not params:
+        return "default"
+
+    formatted = [f"{k}={format_param_value(v)}" for k, v in params.items()]
+    return ", ".join(formatted)

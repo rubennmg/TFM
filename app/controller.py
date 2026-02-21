@@ -11,7 +11,12 @@ from loaders import image_loader
 from models.image import Image
 from models.operation_definition import get_operation_definition
 from utils.error import show_error
-from utils.torch import get_device, free_cuda_cache, save_image_as_jpg
+from utils.torch import (
+    format_params_dict,
+    free_cuda_cache,
+    get_device,
+    save_image_as_jpg,
+)
 
 CHECKPOINT_INTERVAL = 4
 MAX_SNAPSHOTS = 8
@@ -144,8 +149,9 @@ class Controller:
 
             if idx == current_op_index:
                 self._last_op_exec_time = op.execution_time * 1000
+                params_str = format_params_dict(params)
                 self.__log_event(
-                    f"Applied '{op_name}' with params {params} in {self._last_op_exec_time:.2f} ms [{self.image.tensor.device.type}]"
+                    f"Applied '{op_name}' with {params_str} in {self._last_op_exec_time:.2f} ms [{self.image.tensor.device.type}]"
                 )
 
             if op_name == "RgbToHsv":
