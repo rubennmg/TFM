@@ -349,6 +349,13 @@ _OPERATIONS: List[OperationDefinition] = [
         control_type="white_balance",
         default_params={"method": "gray_world"},
     ),
+    OperationDefinition(
+        name="LightCompensation",
+        label="Light Compensation",
+        category="Filters",
+        control_type="light_compensation",
+        default_params={"light_gain_compensation": None, "strength": 1.0},
+    ),
 ]
 
 

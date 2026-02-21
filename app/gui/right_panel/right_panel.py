@@ -11,6 +11,9 @@ from PyQt6.QtWidgets import (
 from gui.right_panel.widgets.debayer_op_control import DebayerOperationControl
 from gui.right_panel.widgets.filter_op_control import FilterOperationControl
 from gui.right_panel.widgets.flip_op_control import FlipOperationControl
+from gui.right_panel.widgets.light_compensation_op_control import (
+    LightCompensationOperationControl,
+)
 from gui.right_panel.widgets.min_max_with_params_op_control import (
     MinMaxWithParamsOperationControl,
 )
@@ -140,6 +143,11 @@ class RightPanel(QWidget):
                 parent=self,
             ),
             "white_balance": lambda: WhiteBalanceOperationControl(
+                controller=self.controller,
+                operation_index=operation_index,
+                parent=self,
+            ),
+            "light_compensation": lambda: LightCompensationOperationControl(
                 controller=self.controller,
                 operation_index=operation_index,
                 parent=self,
