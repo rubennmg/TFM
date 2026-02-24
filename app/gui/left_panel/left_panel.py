@@ -1,7 +1,8 @@
 import numpy as np
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QFileDialog, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QFileDialog, QVBoxLayout, QWidget, QLabel
 
+from gui.left_panel.widgets.center_intensity_profile import CenterIntensityProfile
 from gui.left_panel.widgets.labelled_button import LabelledButton
 from gui.left_panel.widgets.operation_pipeline import OperationPipeline
 from gui.left_panel.widgets.rgb_histogram import RgbHistogram
@@ -18,8 +19,16 @@ class LeftPanel(QWidget):
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # rgb histogram
-        self.histogram: RgbHistogram = RgbHistogram(self, height=180)
+        self.histogram_label = QLabel("RGB histogram")
+        self.histogram: RgbHistogram = RgbHistogram(self)
+        layout.addWidget(self.histogram_label)
         layout.addWidget(self.histogram)
+
+        # center intensity profiles
+        self.center_profile_label = QLabel("Center intensity profile")
+        self.center_profile: CenterIntensityProfile = CenterIntensityProfile(self)
+        layout.addWidget(self.center_profile_label)
+        layout.addWidget(self.center_profile)
 
         # operation pipeline
         self.pipeline: OperationPipeline = OperationPipeline(self)
@@ -68,8 +77,10 @@ class LeftPanel(QWidget):
     def update_histogram(self, img_np: np.ndarray | None) -> None:
         if img_np is None or img_np.size == 0:
             self.histogram.clear()
+            self.center_profile.clear()
             return
         self.histogram.update_from_array(img_np)
+        self.center_profile.update_from_array(img_np)
 
     def build_loader_extensions_filter(self) -> str:
         extensions: list[str] = self.controller.get_image_extensions()
