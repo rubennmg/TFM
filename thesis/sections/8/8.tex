@@ -12,8 +12,8 @@ interactiva de \textit{pipelines} de procesado de imágenes. Estos \textit{pipel
 deben de poder ser exportados a un formato estándar. 
 
 Por otra parte, el sistema debe incorporar un módulo de \textit{benchmarking}
-que permita analizar el rendimient computacional de los \textit{pipelines} definidos. 
-Este módulo debe permitir la importación de los \textit{pipelines} definidos en la 
+que permita analizar el rendimiento computacional de los \textit{pipelines} definidos. 
+Este módulo debe permitir la importación de los \textit{pipelines} creados desde la 
 interfaz gráfica y su ejecución en diferentes condiciones experimentales.
 
 \subsubsection{Principios de diseño} \label{subsubsec:8_1_1_principios_de_diseno}
@@ -89,19 +89,20 @@ se ha planteado y diseñado siguiendo los objetivos y principios mencionados ant
 \subsubsection{Enfoque arquitectónico} \label{subsubsec:8_2_1_enfoque_arquitectonico}
 El sistema desarrollado sigue un enfoque de arquitectura en capas, combinando el patrón 
 MVC \cite{mvc_pattern} con un modelo de ejecución basado en \textit{pipelines} de 
-procesamiento de imágenes.
+procesamiento.
 
 El patrón MVC facilita el desarrollo de la aplicación interactiva, manteniendo desacoplada la 
 interfaz gráfica de la lógica de negocio y de las estructuras de datos y entidades principales.
 De este modo, las acciones del usuario se traducen en eventos gestionados por un controlador, 
-que coordina la actualización del estado de la aplicación y la representación visual. Por otra 
-parte, el modelo de \textit{pipelines} permite definir secuencias de operaciones de procesamiento
-de imágenes, favoreciendo su reutilización y exportación. Esto facilita la integración con el módulo de
-\textit{benchmarking}.
+que coordina la actualización del estado de la aplicación y la representación visual.
+
+Por otra parte, el modelo de ejecución basado en \textit{pipelines} permite definir secuencias
+de operaciones de procesamiento de imágenes, favoreciendo su reutilización y exportación. 
+Esto facilita la integración con el módulo de \textit{benchmarking}.
 
 La \autoref{fig:26_arch_diagram} muestra el diagrama general de arquitectura del sistema, donde se identifican 
 los principales componentes y sus interacciones. Cada uno de ellos tiene un rol específico, actuando 
-de forma coordinada para cumplir con los objetivos funcionales del sistema.
+de forma coordinada para cumplir con los objetivos funcionales.
 
 \begin{figure}[h!]
     \centering
@@ -134,7 +135,7 @@ de forma coordinada para cumplir con los objetivos funcionales del sistema.
 A partir de esta organización, se logra una arquitectura modular, mantenible y fácilmente extensible,
 en la que es posible incorporar nuevas operaciones de procesamiento de imágenes, ampliar el 
 soporte de formatos de entrada o introducir nuevas métricas de rendimiento de forma muy sencilla, 
-sin afectar al conjunto del sistema.
+sin afectar al conjunto global del sistema. 
 
 \newpage
 
@@ -258,7 +259,9 @@ que permite cargar imágenes en formato comprimido \texttt{.jpg}.
 Gestiona la carga automática de imágenes utilizando el \textit{loader} adecuado según la extensión del archivo. 
 Proporciona una función \texttt{load\_image(path, device)} que identifica el \textit{loader} correcto
 y delega la tarea de carga, retornando un objeto \texttt{Image}. También ofrece una función
-\texttt{get\_supported\_formats()} que retorna la lista de todos los formatos de imagen soportados.
+\texttt{get\_supported\_formats()} que retorna la lista de todos los formatos de imagen soportados, 
+en función de los \textit{loaders} registrados. Este módulo es utilizado por el \textit{Controller} para gestionar 
+la carga de imágenes desde la interfaz gráfica.
 
 \footnotetext{Existen numerosos formatos de imagen cruda. Información sobre ellos puede encontrarse en 
 el \autoref{sec:appendix_C_raw_formats}.}
@@ -288,6 +291,11 @@ dinámico de todas las operaciones disponibles.
     \item \texttt{\textbf{apply(x)}} $\rightarrow$ Método abstracto que implementa la lógica específica 
     de cada operación.
 \end{itemize}
+
+Además, con fines de análisis, la clase base incluye un parámetro (\texttt{execution\_time}) que 
+almacena el tiempo de ejecución de la última llamada a la operación, medido en milisegundos.
+Esta medida se muestra en la interfaz gráfica para proporcionar retroalimentación al usuario 
+sobre el rendimiento de cada operación aplicada.
 
 \paragraph{Sistema de registro} \label{par:8_3_3_2_sistema_registro}
 Utiliza un diccionario global (\texttt{OPERATION\_REGISTRY}) que mapea los nombres de las operaciones
@@ -387,14 +395,14 @@ el resultado para toda la secuencia. Esto permite:
     \item Previsualizar el resultado tras cada cambio en el \textit{pipeline}.
 \end{enumerate}
 
-Sin embargo, este enfoque es computacionalmente costoso para \textit{pipelines} largos 
+Sin embargo, este planteamiento es computacionalmente costoso para \textit{pipelines} largos 
 o imágenes de gran tamaño, ya que cada modificación requiere recalcular desde el inicio.
 
 \newpage
 
 \paragraph{Sistema de \textit{snaphots}} \label{par:8_3_4_3_sistema_snapshots}
 Para optimizar el rendimiento, el \textit{Controller} implementa un sistema de \textit{snapshots}. Este sistema
-guarda estados intermedios de la imagen tras haber aplicado cierto número de operaciones. De este modo,
+guarda estados intermedios de la imagen tras la aplicación de cierto número de operaciones. De este modo,
 cuando se modifica una operación en el \textit{pipeline}, el \textit{Controller} puede restaurar el estado 
 más reciente guardado antes de la operación modificada y continuar desde ese punto, en lugar de recalcular 
 continuamente desde el inicio. En la \autoref{fig:controller_snapshots} se ilustra este concepto.
@@ -443,28 +451,28 @@ refresque la visualización correspondiente. La interfaz siempre representa el e
 y el usuario recibe una respuesta inmediata a sus acciones.
 
 Además, el \textit{Controller} mantiene un registro de todas las acciones realizadas por el usuario
-durante una sesión. Dicho registro se muestra en la interfaz para proporcionar retroalimentación y facilitar 
-el seguimiento de cambios realizados.
+durante una sesión. Dicho registro se muestra en la interfaz en forma de \textit{logger} para proporcionar 
+retroalimentación y facilitar el seguimiento de cambios realizados.
 
 \newpage
 
 \subsubsection{GUI} \label{subsubsec:8_3_5_gui}
-El componente \textit{GUI} implementa la interfaz gráfica de usuario utilizando PyQt6 \cite{pyqt6}. Su responsabilidad 
-es presentar la imagen, permitir la interacción del usuario y mostrar información relevante sobre el procesamiento. 
+El componente \textit{GUI} implementa la interfaz gráfica utilizando PyQt6 \cite{pyqt6}. Su responsabilidades 
+son la presentación de la imagen, el manejo de la interacción del usuario y la visualización de información relevante sobre el procesamiento.
 El diseño sigue una estructura completamente modular, donde cada panel o \textit{widget} tiene una función específica 
 bien definida. En la \autoref{fig:28_gui_no_image_loaded_overview} y la \autoref{fig:29_gui_image_loaded_overview}
 se muestra una visión general.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.85\textwidth]{sections/8/img/gui_no_image_loaded.png}
+    \includegraphics[width=0.8425\textwidth]{sections/8/img/gui_no_image_loaded.png}
     \caption{Visión general de la interfaz gráfica (sin imagen cargada)}
     \label{fig:28_gui_no_image_loaded_overview}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.85\textwidth]{sections/8/img/gui_image_loaded.png}
+    \includegraphics[width=0.8425\textwidth]{sections/8/img/gui_image_loaded.png}
     \caption{Visión general de la interfaz gráfica (con imagen cargada)}
     \label{fig:29_gui_image_loaded_overview}
 \end{figure}
@@ -474,14 +482,40 @@ se muestra una visión general.
 \noindent{La interfaz se organiza en tres paneles principales distribuidos verticalmente:}
 
 \begin{itemize}[noitemsep]
-    \item \textbf{Panel izquierdo} (\textit{LeftPanel}). Controles de carga de imagen, histogramam, manejo y 
-    exportación del \textit{pipeline} de operaciones.
-    \item \textbf{Visor central} (\textit{ImageViewer}). Visualización de la imagen actual, con soporte para zoom y
-    tabs de información.
-    \item \textbf{Panel derecho} (\textit{RightPanel}). Controles de parámetros para operaciones aplicadas.
+    \item \textbf{Panel izquierdo} (\texttt{LeftPanel})
+    \item \textbf{Visor central} (\texttt{ImageViewer})
+    \item \textbf{Panel derecho} (\texttt{RightPanel})
 \end{itemize}
 
-\dots
+\paragraph{Panel izquierdo (\textit{LeftPanel})} \label{par:8_3_5_1_left_panel}
+El panel izquierdo \dots
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8425\textwidth]{sections/8/img/gui_left_panel.png}
+    \caption{Panel izquierdo (\textit{LeftPanel})}
+    \label{fig:30_gui_left_panel_overview}
+\end{figure}
+
+\newpage
+
+\paragraph{Visor central (\textit{ImageViewer})} \label{par:8_3_5_2_image_viewer}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8425\textwidth]{sections/8/img/gui_image_viewer.png}
+    \caption{Visor central (\textit{ImageViewer})}
+    \label{fig:31_gui_image_viewer_overview}
+\end{figure}
+
+\newpage
+
+\paragraph{Panel derecho (\textit{RightPanel})} \label{par:8_3_5_3_right_panel}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8425\textwidth]{sections/8/img/gui_right_panel.png}
+    \caption{Panel derecho (\textit{RightPanel})}
+    \label{fig:32_gui_right_panel_overview}
+\end{figure}
 
 \newpage
 
