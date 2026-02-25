@@ -17,16 +17,24 @@ class ImageViewer(QWidget):
         super().__init__()
         self._pixmap: QPixmap | None = None
         self._qimg: QImage | None = None
+        self._display_np: np.ndarray | None = None
+        self._display_buf: memoryview | None = None
         self._zoom: float = 0.25
         self._zoom_step: float = 1.15
         self._min_zoom: float = 0.1
-        self._max_zoom: float = 5.0
+        self._max_zoom: float = 128.0
+        self._max_scaled_pixels: int = 1_000_000_000
+        self._performance_mode: bool = True
+        self._performance_max_side: int = 1920
         self._dragging: bool = False
         self._drag_start_pos: QPoint = QPoint()
         self._drag_start_h: int = 0
         self._drag_start_v: int = 0
         self._scaled_cache: OrderedDict[float, QPixmap] = OrderedDict()
         self._scaled_cache_max: int = 12
+        self._scaled_cache_max_bytes: int = 128 * 1024 * 1024
+        self._scaled_cache_max_entry_bytes: int = 24 * 1024 * 1024
+        self._scaled_cache_bytes: int = 0
 
         self.__setup_ui()
 
@@ -63,25 +71,91 @@ class ImageViewer(QWidget):
     def update_image(self, np_array: np.ndarray, image: Image) -> None:
         self.info_widget.update_from_image(image)
 
-        buf = memoryview(np_array)
+        display_np = self.__prepare_display_array(np_array)
+        self._display_np = display_np
+        self._display_buf = memoryview(display_np)
 
-        h, w, c = np_array.shape
-        bytes_per_line: int = np_array.strides[0]
+        h, w, c = display_np.shape
+        bytes_per_line: int = display_np.strides[0]
         img_format: QImage.Format = (
             QImage.Format.Format_Grayscale8 if c == 1 else QImage.Format.Format_RGB888
         )
 
-        qimg = QImage(buf, w, h, bytes_per_line, img_format).copy()
+        qimg = QImage(self._display_buf, w, h, bytes_per_line, img_format)
         self._qimg = qimg
         self._pixmap = QPixmap.fromImage(self._qimg)
-        self._scaled_cache.clear()
+        self.__clear_scaled_cache()
         self.__update_display()
+
+    @staticmethod
+    def __estimate_pixmap_bytes(width: int, height: int) -> int:
+        return max(1, width) * max(1, height) * 4
+
+    def __effective_max_zoom(self) -> float:
+        if self._qimg is None:
+            return self._max_zoom
+
+        base_pixels = max(1, self._qimg.width() * self._qimg.height())
+        max_zoom_by_pixels = float(np.sqrt(self._max_scaled_pixels / base_pixels))
+        return max(self._min_zoom, min(self._max_zoom, max_zoom_by_pixels))
+
+    def __clear_scaled_cache(self) -> None:
+        self._scaled_cache.clear()
+        self._scaled_cache_bytes = 0
+
+    def __cache_scaled_pixmap(self, cache_key: float, pix: QPixmap) -> None:
+        pix_bytes = self.__estimate_pixmap_bytes(pix.width(), pix.height())
+
+        if pix_bytes > self._scaled_cache_max_entry_bytes:
+            return
+
+        self._scaled_cache[cache_key] = pix
+        self._scaled_cache_bytes += pix_bytes
+
+        while self._scaled_cache and (
+            len(self._scaled_cache) > self._scaled_cache_max
+            or self._scaled_cache_bytes > self._scaled_cache_max_bytes
+        ):
+            _, evicted = self._scaled_cache.popitem(last=False)
+            self._scaled_cache_bytes -= self.__estimate_pixmap_bytes(
+                evicted.width(), evicted.height()
+            )
+
+    def __prepare_display_array(self, np_array: np.ndarray) -> np.ndarray:
+        arr = np_array
+
+        if arr.ndim == 2:
+            arr = arr[:, :, np.newaxis]
+        elif arr.ndim != 3:
+            raise ValueError(f"Expected image array with 2 or 3 dims, got {arr.shape}")
+
+        if arr.shape[2] > 3:
+            arr = arr[:, :, :3]
+
+        if self._performance_mode:
+            h, w = arr.shape[:2]
+            max_side = max(h, w)
+            if max_side > self._performance_max_side:
+                step = int(np.ceil(max_side / self._performance_max_side))
+                arr = arr[::step, ::step, :]
+
+        if arr.dtype != np.uint8:
+            arr = arr.astype(np.uint8, copy=False)
+
+        if not arr.flags.c_contiguous:
+            arr = np.ascontiguousarray(arr)
+
+        return arr
 
     def __update_display(self) -> None:
         if self._pixmap is None:
             self.image_canvas.clear()
             self.info_widget.update_from_image(None)
             return
+
+        effective_max_zoom = self.__effective_max_zoom()
+        if self._zoom > effective_max_zoom:
+            self._zoom = effective_max_zoom
 
         if self._zoom == 1.0:
             pix = self._pixmap
@@ -96,12 +170,10 @@ class ImageViewer(QWidget):
                 pix = self._pixmap.scaled(
                     w,
                     h,
-                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.AspectRatioMode.IgnoreAspectRatio,
                     Qt.TransformationMode.FastTransformation,
                 )
-                self._scaled_cache[cache_key] = pix
-                if len(self._scaled_cache) > self._scaled_cache_max:
-                    self._scaled_cache.popitem(last=False)
+                self.__cache_scaled_pixmap(cache_key, pix)
             else:
                 self._scaled_cache.move_to_end(cache_key)
 
@@ -120,7 +192,7 @@ class ImageViewer(QWidget):
         self.device_info_widget.clear_entries()
 
     def set_zoom(self, factor: float) -> None:
-        factor = max(self._min_zoom, min(self._max_zoom, factor))
+        factor = max(self._min_zoom, min(self.__effective_max_zoom(), factor))
         if abs(self._zoom - factor) < 1e-6:
             return
         self._zoom = factor

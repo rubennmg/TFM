@@ -39,6 +39,7 @@ class ImageCanvas(QWidget):
     def paintEvent(self, a0) -> None:  # noqa: N802
         assert a0 is not None
         painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform, False)
         painter.fillRect(a0.rect(), self.palette().color(QPalette.ColorRole.Base))
 
         if self._pixmap is None:
