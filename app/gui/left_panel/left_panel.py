@@ -20,13 +20,15 @@ class LeftPanel(QWidget):
 
         # rgb histogram
         self.histogram_label = QLabel("RGB histogram")
-        self.histogram: RgbHistogram = RgbHistogram(self)
+        self.histogram: RgbHistogram = RgbHistogram(self, height=160)
         layout.addWidget(self.histogram_label)
         layout.addWidget(self.histogram)
 
         # center intensity profiles
         self.center_profile_label = QLabel("Center intensity profile")
-        self.center_profile: CenterIntensityProfile = CenterIntensityProfile(self)
+        self.center_profile: CenterIntensityProfile = CenterIntensityProfile(
+            self, height=160
+        )
         layout.addWidget(self.center_profile_label)
         layout.addWidget(self.center_profile)
 
