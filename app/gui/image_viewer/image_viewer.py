@@ -32,9 +32,6 @@ class ImageViewer(QWidget):
         self._drag_start_v: int = 0
         self._scaled_cache: OrderedDict[float, QPixmap] = OrderedDict()
         self._scaled_cache_max: int = 12
-        self._scaled_cache_max_bytes: int = 128 * 1024 * 1024
-        self._scaled_cache_max_entry_bytes: int = 24 * 1024 * 1024
-        self._scaled_cache_bytes: int = 0
 
         self.__setup_ui()
 
@@ -84,12 +81,8 @@ class ImageViewer(QWidget):
         qimg = QImage(self._display_buf, w, h, bytes_per_line, img_format)
         self._qimg = qimg
         self._pixmap = QPixmap.fromImage(self._qimg)
-        self.__clear_scaled_cache()
+        self._scaled_cache.clear()
         self.__update_display()
-
-    @staticmethod
-    def __estimate_pixmap_bytes(width: int, height: int) -> int:
-        return max(1, width) * max(1, height) * 4
 
     def __effective_max_zoom(self) -> float:
         if self._qimg is None:
@@ -98,28 +91,6 @@ class ImageViewer(QWidget):
         base_pixels = max(1, self._qimg.width() * self._qimg.height())
         max_zoom_by_pixels = float(np.sqrt(self._max_scaled_pixels / base_pixels))
         return max(self._min_zoom, min(self._max_zoom, max_zoom_by_pixels))
-
-    def __clear_scaled_cache(self) -> None:
-        self._scaled_cache.clear()
-        self._scaled_cache_bytes = 0
-
-    def __cache_scaled_pixmap(self, cache_key: float, pix: QPixmap) -> None:
-        pix_bytes = self.__estimate_pixmap_bytes(pix.width(), pix.height())
-
-        if pix_bytes > self._scaled_cache_max_entry_bytes:
-            return
-
-        self._scaled_cache[cache_key] = pix
-        self._scaled_cache_bytes += pix_bytes
-
-        while self._scaled_cache and (
-            len(self._scaled_cache) > self._scaled_cache_max
-            or self._scaled_cache_bytes > self._scaled_cache_max_bytes
-        ):
-            _, evicted = self._scaled_cache.popitem(last=False)
-            self._scaled_cache_bytes -= self.__estimate_pixmap_bytes(
-                evicted.width(), evicted.height()
-            )
 
     def __prepare_display_array(self, np_array: np.ndarray) -> np.ndarray:
         arr = np_array
@@ -173,7 +144,9 @@ class ImageViewer(QWidget):
                     Qt.AspectRatioMode.IgnoreAspectRatio,
                     Qt.TransformationMode.FastTransformation,
                 )
-                self.__cache_scaled_pixmap(cache_key, pix)
+                self._scaled_cache[cache_key] = pix
+                if len(self._scaled_cache) > self._scaled_cache_max:
+                    self._scaled_cache.popitem(last=False)
             else:
                 self._scaled_cache.move_to_end(cache_key)
 
