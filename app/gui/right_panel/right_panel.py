@@ -14,14 +14,11 @@ from gui.right_panel.widgets.flip_op_control import FlipOperationControl
 from gui.right_panel.widgets.light_compensation_op_control import (
     LightCompensationOperationControl,
 )
-from gui.right_panel.widgets.min_max_with_params_op_control import (
-    MinMaxWithParamsOperationControl,
-)
-from gui.right_panel.widgets.minmax_percentile_op_control import (
-    MinMaxPercentileOperationControl,
-)
 from gui.right_panel.widgets.no_param_op_control import NoParamOperationControl
-from gui.right_panel.widgets.resize_op_control import ResizeOperationControl
+from gui.right_panel.widgets.two_numeric_op_control import (
+    NumericSpinConfig,
+    TwoNumericOperationControl,
+)
 from gui.right_panel.widgets.white_balance_op_control import (
     WhiteBalanceOperationControl,
 )
@@ -110,14 +107,69 @@ class RightPanel(QWidget):
                 params=definition.params or [],
                 parent=self,
             ),
-            "minmax_percentile": lambda: MinMaxPercentileOperationControl(
+            "minmax_percentile": lambda: TwoNumericOperationControl(
                 controller=self.controller,
                 operation_index=operation_index,
+                operation_name="MinMaxPercentileNormalization",
+                title="Min-Max Percentile Normalization",
+                tooltip="Apply Min-Max Percentile Normalization to the image",
+                first_spin=NumericSpinConfig(
+                    object_name="percentileSpin",
+                    minimum=0.0,
+                    maximum=1.0,
+                    step=0.01,
+                    decimals=2,
+                    default=0.02,
+                    prefix="Low: ",
+                    tooltip="Lower percentile (>= 0.0 and < upper)",
+                ),
+                second_spin=NumericSpinConfig(
+                    object_name="percentileSpin",
+                    minimum=0.0,
+                    maximum=1.0,
+                    step=0.01,
+                    decimals=2,
+                    default=0.98,
+                    prefix="Up: ",
+                    tooltip="Upper percentile (> lower and <= 1.0)",
+                ),
+                build_operation_params=lambda lower, upper: {
+                    "lower_percentile": lower,
+                    "upper_percentile": upper,
+                },
                 parent=self,
             ),
-            "minmax_with_params": lambda: MinMaxWithParamsOperationControl(
+            "minmax_with_params": lambda: TwoNumericOperationControl(
                 controller=self.controller,
                 operation_index=operation_index,
+                operation_name="MinMaxNormalizationWithParams",
+                title="Min-Max Normalization with Params",
+                tooltip="Apply Min-Max Normalization with specified min and max values",
+                first_spin=NumericSpinConfig(
+                    object_name="minSpin",
+                    minimum=0.0,
+                    maximum=1.0,
+                    step=0.01,
+                    decimals=2,
+                    default=0.0,
+                    prefix="Min: ",
+                    tooltip="Minimum value for normalization (>= 0.0 and < max)",
+                ),
+                second_spin=NumericSpinConfig(
+                    object_name="maxSpin",
+                    minimum=0.0,
+                    maximum=1.0,
+                    step=0.01,
+                    decimals=2,
+                    default=1.0,
+                    prefix="Max: ",
+                    tooltip="Maximum value for normalization (> min and <= 1.0)",
+                ),
+                build_operation_params=lambda min_value, max_value: {
+                    "min": min_value,
+                    "max": max_value,
+                },
+                validator=lambda min_value, max_value: min_value < max_value,
                 parent=self,
             ),
             "flip": lambda: FlipOperationControl(
@@ -137,9 +189,35 @@ class RightPanel(QWidget):
                 operation_index=operation_index,
                 parent=self,
             ),
-            "resize": lambda: ResizeOperationControl(
+            "resize": lambda: TwoNumericOperationControl(
                 controller=self.controller,
                 operation_index=operation_index,
+                operation_name="Resize",
+                title="Resize",
+                tooltip="Resize the image to specified width and height",
+                first_spin=NumericSpinConfig(
+                    object_name="widthSpin",
+                    minimum=1.0,
+                    maximum=4096.0,
+                    step=1.0,
+                    decimals=0,
+                    default=1024.0,
+                    prefix="Width: ",
+                    tooltip="Width to resize the image to (>= 1)",
+                ),
+                second_spin=NumericSpinConfig(
+                    object_name="heightSpin",
+                    minimum=1.0,
+                    maximum=4096.0,
+                    step=1.0,
+                    decimals=0,
+                    default=768.0,
+                    prefix="Height: ",
+                    tooltip="Height to resize the image to (>= 1)",
+                ),
+                build_operation_params=lambda width, height: {
+                    "size": (int(height), int(width)),
+                },
                 parent=self,
             ),
             "white_balance": lambda: WhiteBalanceOperationControl(
