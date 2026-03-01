@@ -827,7 +827,7 @@ que renderiza un botón para cargar el fichero de compensación y un \textit{sli
 Finalmente, existen operaciones que no requieren ningún tipo de parámetro, simplemente su aplicación implica la ejecución de 
 un proceso específico sobre la imagen, como puede ser el caso de una conversión de formato o espacio de color, etc. 
 Para este tipo de operaciones, se renderiza un control muy simple que muestra el nombre de la operación aplicada y un texto 
-informativo que indica que no requiere ningún parámetro, como se muestra en la \autoref{fig:46_op_control_no_param}.
+informativo que indica que no requiere ningún parámetro, como se muestra en la \autoref{fig:46_op_controls_no_param}.
 
 \begin{figure}[h!]
     \centering
@@ -894,8 +894,123 @@ mínimo y máximo, lo que se corresponde con la operación mostrada en la \autor
 \newpage
 
 \subsubsection{Benchmark} \label{subsubsec:8_3_6_benchmark}
+El componente \textit{Benchmark} se encarga de medir y analizar el rendimiento de los \textit{pipelines} de operaciones 
+definidos por el usuario desde la \textit{GUI}. Su implementación se basa en \textit{pytest} \cite{pytest} y en el 
+\textit{plugin} \textit{pytest-benchmark} \cite{pytest_benchmark}, lo que permite ejecutar medidas de rendimiento de forma repetitiva y
+con salida estructurada en formato \textit{json}.
+
+\paragraph{Arquitectura interna} \label{par:8_3_6_1_arquitectura_interna_benchmark}
+El módulo se organiza alrededor de dos piezas principales: un archivo de configuración
+(\textit{benchmark/conftest.py}) y un archivo de ejecución de pruebas de rendimiento
+(\textit{benchmark/run.py}). Esta organización es típica de \textit{pytest} y permite separar la configuración 
+general del \textit{benchmark} de la lógica específica de ejecución. Las funcionalidades clave del módulo incluyen:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Configuración global del \textit{benchmark}.} En \texttt{conftest.py} se definen
+    parámetros comunes de ejecución (unidad temporal en milisegundos, \textit{warmup} activo,
+    criterio de ordenación y tiempo máximo por caso).
+    \item \textbf{Perfil de ejecución externo.} El módulo añade el argumento de línea de comandos
+    \texttt{-{}-bench-profile}, que recibe la ruta de un fichero \textit{json} con la definición del
+    \textit{pipeline} a evaluar.
+    \item \textbf{Construcción dinámica del \textit{pipeline}.} Mediante una \textit{fixture}
+    (\texttt{pipeline\_factory}), cada entrada del perfil se transforma en una instancia real de
+    operación utilizando el registro global de operaciones (\texttt{OPERATION\_REGISTRY}, \autoref{par:8_3_3_2_sistema_registro}).
+    \item \textbf{Matriz experimental parametrizada.} En \texttt{run.py}, el \textit{benchmark}
+    se ejecuta para múltiples combinaciones de dispositivo de procesamiento, tamaño de imagen y tipo de dato,
+    permitiendo comparar rendimiento y coste computacional en diferentes escenarios.
+\end{itemize}
+
+\paragraph{Flujo técnico de ejecución} \label{par:8_3_6_2_flujo_tecnico_benchmark}
+\noindent{Para cada caso de la matriz experimental definida, el flujo es el siguiente:}
+
+\begin{enumerate}[noitemsep]
+    \item Carga y validación del perfil \textit{json} recibido por \texttt{-{}-bench-profile}, que representa el \textit{pipeline} de operaciones a evaluar.
+    \item Resolución de operaciones por nombre a través de \texttt{OPERATION\_REGISTRY}.
+    \item Instanciación de cada operación con sus parámetros.
+    \item Construcción de una función \textit{pipeline} que aplica secuencialmente todas las operaciones recogidas en el mismo.
+    \item Generación de un tensor sintético de entrada con las dimensiones y precisión numérica configuradas.
+    \item Ejecución repetida del \textit{pipeline} mediante \textit{pytest-benchmark} para obtener métricas temporales.
+    \item Persistencia de resultados en el directorio \texttt{.benchmarks/} para su análisis posterior.
+\end{enumerate}
+
+\newpage
+
+\paragraph{Comunicación con el resto de la aplicación} \label{par:8_3_6_3_comunicacion_benchmark}
+El componente \textit{Benchmark} es un componente especial porque no forma parte del flujo de ejecución normal de la aplicación interactiva, 
+sino que se ejecuta de forma autónoma. 
+La integración de dicho componente con el sistema completo se realiza mediante dos
+mecanismos: un contrato de datos compartido y la reutilización del mismo núcleo \textit{Core} de operaciones. Dicha integración 
+se basa en los siguientes principios:
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Interfaz de intercambio (GUI $\leftrightarrow$ Benchmark).}
+    Desde la interfaz gráfica, el usuario exporta el \textit{pipeline} actual; el \textit{Controller}
+    lo serializa como una lista ordenada de operaciones y parámetros en formato \textit{json}.
+    Ese fichero se convierte en la entrada directa del módulo \textit{Benchmark}.
+    \item \textbf{Consistencia funcional (Core compartido).}
+    El \textit{Benchmark} no reimplementa operaciones: instancia exactamente las mismas clases
+    del componente \textit{Core} usando \texttt{OPERATION\_REGISTRY}. Lo que se mide es exactamente el mismo
+    comportamiento que se ejecuta en la aplicación interactiva.
+    \item \textbf{Desacoplamiento arquitectónico.}
+    No existe dependencia directa entre \textit{GUI} y \textit{Benchmark} en tiempo de ejecución;
+    la comunicación se realiza a través del perfil exportado. Esto reduce acoplamiento y permite
+    ejecutar \textit{benchmarks} de forma autónoma, incluso por lotes mediante \textit{scripts} de ejecución.
+\end{itemize}
+
+\newpage
 
 \subsubsection{Tests} \label{subsubsec:8_3_7_tests}
+El componente \textit{Tests} proporciona un marco de validación automatizada para todas las operaciones
+de procesamiento implementadas en el módulo \textit{Core}. Su implementación se basa en \textit{pytest}
+\cite{pytest}, siguiendo un enfoque de pruebas unitarias que verifica el comportamiento correcto de
+cada operación de forma independiente.
+
+\paragraph{Organización y estructura} \label{par:8_3_7_1_organizacion_estructura_tests}
+La \textit{suite} de pruebas replica la estructura de categorías del componente \textit{Core}, organizándose
+en módulos temáticos que agrupan tests relacionados:
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{tests/bayer/}} $\rightarrow$ Validación de algoritmos de \textit{demosaicing}.
+    \item \texttt{\textbf{tests/color/}} $\rightarrow$ Conversiones entre espacios de color.
+    \item \texttt{\textbf{tests/filters/}} $\rightarrow$ Operaciones de filtrado y mejora de contraste.
+    \item \texttt{\textbf{tests/format/}} $\rightarrow$ Conversiones de formato de datos.
+    \item \texttt{\textbf{tests/geometry/}} $\rightarrow$ Transformaciones geométricas.
+    \item \texttt{\textbf{tests/normalization/}} $\rightarrow$ Técnicas de normalización.
+\end{itemize}
+
+\paragraph{Infraestructura de \textit{fixtures}} \label{par:8_3_7_2_infraestructura_fixtures}
+El módulo \texttt{tests/conftest.py} define un conjunto de \textit{fixtures} compartidas que
+proporcionan utilidades reutilizables a toda la \textit{suite}:
+
+\begin{itemize}[noitemsep]
+    \item \texttt{\textbf{base\_tensor}} $\rightarrow$ Genera tensores sintéticos de prueba con forma
+    [C, H, W] configurable y tipo de dato especificado (float o int). Permite crear entradas de test
+    reproducibles de forma programática.
+    \item \texttt{\textbf{assert\_tensors}} $\rightarrow$ Compara dos tensores verificando igualdad de
+    forma, tipo de dato y valores dentro de una tolerancia configurable. Facilita la validación de
+    resultados numéricos con margen de error controlado.
+    \item \texttt{\textbf{assert\_channels}} $\rightarrow$ Verifica que un tensor de imagen tenga el
+    número esperado de canales en la dimensión correspondiente. Útil para validar transformaciones
+    que alteran la dimensionalidad (como conversiones de color).
+\end{itemize}
+
+\paragraph{Tipología de pruebas} \label{par:8_3_7_3_tipologia_pruebas}
+Cada operación se somete a múltiples categorías de validación que verifican distintos aspectos
+de su implementación:
+
+\begin{enumerate}[noitemsep]
+    \item \textbf{Validación de parámetros.} Comprueba que el constructor de la operación rechace
+    valores inválidos (tipos incorrectos, rangos fuera de límites, configuraciones inconsistentes)
+    mediante la verificación de excepciones esperadas.
+    \item \textbf{Corrección funcional.} Valida que la operación produzca el resultado matemático
+    esperado para entradas conocidas, comparando la salida real con valores de referencia calculados
+    independientemente.
+\end{enumerate}
+
+En situaciones más complejas o inusuales, se incluyen pruebas adicionales que verifican casos límite, 
+comportamiento con entradas atípicas o validación de propiedades específicas. También, en escenarios 
+más concreto, se ejecutan pruebas paramétricas utilizando la anotación \textit{@pytest.mark.parametrize}
+para evaluar múltiples combinaciones de parámetros de forma sistemática.
 
 \newpage
 
