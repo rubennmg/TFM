@@ -457,9 +457,9 @@ retroalimentación y facilitar el seguimiento de cambios realizados.
 \newpage
 
 \subsubsection{GUI} \label{subsubsec:8_3_5_gui}
-El componente \textit{GUI} implementa la interfaz gráfica utilizando PyQt6 \cite{pyqt6}. Su responsabilidades 
-son la presentación de la imagen, el manejo de la interacción del usuario y la visualización de información relevante sobre el procesamiento.
-El diseño sigue una estructura completamente modular, donde cada panel o \textit{widget} tiene una función específica 
+El componente \textit{GUI} implementa la interfaz gráfica utilizando PyQt6 \cite{pyqt6}. Ocupa varias responsabilidades: 
+la presentación de la imagen, el manejo de la interacción del usuario y la visualización de información relevante sobre el procesamiento.
+Su diseño sigue una estructura completamente modular, donde cada panel o \textit{widget} tiene una función específica 
 bien definida. En la \autoref{fig:28_gui_no_image_loaded_overview} y la \autoref{fig:29_gui_image_loaded_overview}
 se muestra una visión general.
 
@@ -488,7 +488,9 @@ se muestra una visión general.
 \end{itemize}
 
 \paragraph{Panel izquierdo (\textit{LeftPanel})} \label{par:8_3_5_1_left_panel}
-El panel izquierdo \dots
+El panel izquierdo es el encargado de gestionar las principales acciones que se pueden realizar desde 
+la interfaz gráfica. Actúa como centro de control. En la \autoref{fig:30_gui_left_panel_overview} se 
+muestra su disposición respecto al resto de la interfaz.
 
 \begin{figure}[h!]
     \centering
@@ -497,25 +499,397 @@ El panel izquierdo \dots
     \label{fig:30_gui_left_panel_overview}
 \end{figure}
 
+\noindent
+\begin{minipage}[t]{0.49\textwidth}
+    \vspace{0pt}
+    \setlength{\parindent}{2em}
+    Los primeros elementos que renderiza este componente son dos gráficos que muestran 
+    información de análisis sobre la imagen cargada, los cuales se muestran en la parte superior del panel.
+    \begin{itemize}[noitemsep]
+        \item \textbf{Histograma RGB}. Muestra la distribución de valores de píxeles para cada canal de color.
+        \item \textbf{Perfiles centrales de intensidad}. Representa la intensidad de los perfiles vertical 
+        y horizontal que atraviesan el centro de la imagen.
+    \end{itemize}
+    En la \autoref{fig:31_left_panel} se muestran dichos gráficos.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}
+    \vspace{0pt}
+    \centering
+    \includegraphics[width=0.8\linewidth]{sections/8/img/left_panel_plots.png}
+    \captionsetup{justification=centering}
+    \captionof{figure}{Gráficos de información \\ de la imagen}
+    \label{fig:31_left_panel}
+\end{minipage}
+
+\newpage
+
+\noindent
+\begin{minipage}[t]{0.49\textwidth}
+    \vspace{0pt}
+    \setlength{\parindent}{2em}
+    Justo debajo de los gráficos, se renderizan dos botones. El primero de ellos permite cargar una nueva imagen 
+    completamente desde cero, mientras que el segundo restablece la imagen actual a su estado original, eliminando 
+    todas las operaciones de procesamiento aplicadas. Dichos botones se muestran en la \autoref{fig:32_save_reset_buttons}.
+    \vspace{1em}
+
+    Tras estos botones, se renderiza uno de los componentes más importantes de la interfaz, el \textit{selector de operaciones}
+    (\autoref{fig:33_pipeline_component}) para el \textit{pipeline} de procesamiento. Este componente permite añadir y eliminar 
+    operaciones a la secuencia de procesamiento, mostrando una lista ordenada de las operaciones aplicadas y sus respectivos parámetros.
+    Actúa como una pila: añade nuevas operaciones al final de la lista y permite eliminar la última operación aplicada. Esta pila se maneja 
+    con los botones ``+'' y ``-'' ubicados en la parte inferior derecha del componente. El botón ``+'' despliega un menú con todas las operaciones
+    disponibles, organizadas por categorías. Cada operación se aplica con sus parámetros por defecto, aunque el usuario puede modificarlos 
+    posteriormente. Además, en la parte inferior izquierda del componente, se rederiza un botón de tipo \textit{toggle} [CPU/GPU] que permite 
+    cambiar el dispositivo de procesamiento en el que se ejecutan las operaciones, mostrando el dispositivo seleccionado.
+    \vspace{1em}
+
+    Finalmente, en la parte inferior del panel izquierdo, se renderizan dos botones adicionales (\autoref{fig:34_op_profile_save_image_buttons}).
+    El primero de ellos genera un perfil de ejecución en formato \textit{json} que representa el \textit{pipeline} de operaciones. Su 
+    función es la exportación de la secuencia de operaciones aplicadas para su análisis en el módulo de \textit{benchmarking}. 
+    El segundo botón permite guardar la imagen procesada en formato \textit{jpg}.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}
+    \vspace{0pt}
+    \centering
+    \includegraphics[width=0.85\textwidth]{sections/8/img/save_reset_buttons.png}
+    \captionsetup{justification=centering}
+    \captionof{figure}{Botones de guardado y \\ reinicio}
+    \label{fig:32_save_reset_buttons}
+    \vspace{2.25em}
+    \includegraphics[width=0.85\linewidth]{sections/8/img/pipeline_component.png}
+    \captionsetup{justification=centering}
+    \captionof{figure}{Selector de operaciones}
+    \label{fig:33_pipeline_component}
+    \vspace{2.25em}
+    \includegraphics[width=0.85\linewidth]{sections/8/img/op_profile_save_image_buttons.png}
+    \captionsetup{justification=centering}
+    \captionof{figure}{Botones para generar el \\ perfil de ejecución de operaciones y \\ para guardar la imagen procesada}
+    \label{fig:34_op_profile_save_image_buttons}
+\end{minipage}
+
 \newpage
 
 \paragraph{Visor central (\textit{ImageViewer})} \label{par:8_3_5_2_image_viewer}
+El visor central es el componente principal de toda la interfaz. Es el encargado de mostrar la imagen cargada y procesada, actualizdándose 
+cada vez que se aplica una nueva operación o se lleva a cabo un ajuste de parámetros. Además, muestra información técnica sobre la imagen y 
+el propio procesamiento. En la \autoref{fig:35_gui_image_viewer_overview} se muestra su disposición respecto al resto de la interfaz.
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.8425\textwidth]{sections/8/img/gui_image_viewer.png}
     \caption{Visor central (\textit{ImageViewer})}
-    \label{fig:31_gui_image_viewer_overview}
+    \label{fig:35_gui_image_viewer_overview}
+\end{figure}
+
+Este componente se divide en dos partes claramente diferenciadas: un visor principal que muestra la imagen y una sección de \textit{tabs} 
+inferior que muestra información. El visor principal permite, además de visualizar la imagen, realizar acciones de zoom y desplazamiento para facilitar 
+la inspección de detalles. La sección de \textit{tabs} se organiza en tres pestañas: \textit{Image Info}, \textit{Logger} y \textit{Device Info}, como 
+se puede observar en la \autoref{fig:36_image_info_tab_pane}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9425\textwidth]{sections/8/img/image_info_tab_pane.png}
+    \caption{Sección de \textit{tabs} del visor central}
+    \label{fig:36_image_info_tab_pane}
+\end{figure}
+
+\noindent
+La primera de las pestañas (\textit{Image Info}) muestra información técnica sobre la imagen cargada:
+\vspace{-0.8em}
+\begin{multicols}{2}
+\begin{itemize}[noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt]
+    \item Nombre de la imagen
+    \item Formato
+    \item Espacio de color
+    \item Dimensiones (ancho $\times$ alto)
+    \item Número de canales
+    \item Profundidad de bits
+    \item Patrón Bayer (si aplica)
+    \item Estado del tensor $\rightarrow$ [C, H, W] | Tipo de dato
+\end{itemize}
+\end{multicols}
+
+\newpage
+
+La segunda de las pestañas (\textit{Logger}) muestra un registro de eventos que representa todas las acciones realizadas por el usuario durante la sesión actual.
+Esta pestaña tiene una función meramente informativa, proporcionando retroalimentación al usuario sobre las operaciones aplicadas, los cambios de parámetros, el dispositivo de procesamiento seleccionado, etc.
+En la \autoref{fig:37_logger_tab_pane} se muestra un ejemplo de esta pestaña, que refleja el registro de acciones realizadas para la toma de las capturas de pantalla anteriores:
+Carga de imagen $\rightarrow$ Aplicación de \textit{Debyaer} $\rightarrow$ Aplicación de Normalización mín. máx. $\rightarrow$ Aplicación de Ecualización de Histograma $\rightarrow$ Aplicación de Ajuste \textit{Gamma}.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.98\textwidth]{sections/8/img/logger_tab_pane.png}
+    \caption{Pestaña de \textit{Logger} del visor central}
+    \label{fig:37_logger_tab_pane}
+\end{figure}
+
+Además, tras la aplicación de cada operación, se muestra el tiempo de ejecución de la misma en milisegundos, que permite obtener una primera referencia sobre el rendimiento de cada operación aplicada.
+Como desde la propia aplicación se puede modificar el dispositivo de procesamiento (CPU o GPU), pueden hacerse pequeñas comparativas de rendimiento de forma sencilla e interactiva, lo 
+que puede ser de gran utilidad. En la \autoref{fig:38_logger_cuda_cpu} se muestra un ejemplo de esta funcionalidad, donde se observa la aplicación de ciertas operaciones en ambos dispositvos 
+de ejecución y los tiempos correspondientes.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.98\textwidth]{sections/8/img/logger_cuda_cpu.png}
+    \caption{Cambio de dispositivo de procesamiento y referencia de tiempos de ejecución}
+    \label{fig:38_logger_cuda_cpu}
+\end{figure}
+
+Finalmente, la última de las pestañas (\textit{Device Info}) muestra información que \textit{PyTorch} proporciona sobre CUDA \cite{cuda} y 
+las GPUs disponibles en el sistema, como puede observarse en la \autoref{fig:39_device_info_tab_pane}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.98\textwidth]{sections/8/img/device_info_tab_pane.png}
+    \caption{Pestaña de \textit{Device Info} del visor central}
+    \label{fig:39_device_info_tab_pane}
 \end{figure}
 
 \newpage
 
 \paragraph{Panel derecho (\textit{RightPanel})} \label{par:8_3_5_3_right_panel}
+El panel derecho se encarga de renderizar controles sobre las operaciones aplicadas desde el panel izquierdo para modificar
+y ajustar sus parámetros. Cada vez que se añade una nueva operación al \textit{pipeline} de procesamiento, se añade 
+un control específico para dicha operación en el panel derecho. En la \autoref{fig:40_gui_right_panel_overview} 
+se muestra su disposición respecto al resto de la interfaz, así como un ejemplo de los controles renderizados 
+para un \textit{pipeline} en específico.
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.8425\textwidth]{sections/8/img/gui_right_panel.png}
     \caption{Panel derecho (\textit{RightPanel})}
-    \label{fig:32_gui_right_panel_overview}
+    \label{fig:40_gui_right_panel_overview}
 \end{figure}
+
+Desde estos controles, el usuario puede modificar los parámetros de cada operación aplicada, independientemente 
+del orden en el que se encuentren en el \textit{pipeline}. Como cada operación tiene sus propios parámetros, 
+se han desarrollado diferentes tipos de controles para cada caso.
+
+El primer tipo de control es el específico para operaciones que requieren la selección de tipo de algoritmo o método 
+a aplicar, esto es, una selección entre varias opciones predefinidas. Este es el caso de la operación \textit{Debayer}, que 
+tiene diferentes módulos implementados, y de la operación de Balance de Blancos (\textit{White Balance}), que permite la 
+selección entre diferentes algoritmos. Dicho control, muetra un simple menú desplegable de tipo \textit{dropdown} con las opciones 
+disponibles para cada operación, como se muestra en la \autoref{fig:41_op_controls_method_selection}.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/debayer_op_control.png}
+        \caption{Control para operación \textit{Debayer}}
+        \label{fig:41_a_debayer_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/white_balance_op_control.png}
+        \caption{Control para operación \textit{White Balance}}
+        \label{fig:41_b_white_balance_op_control}
+    \end{subfigure}
+    \caption{Controles para operaciones con selección de método o algoritmo}
+    \label{fig:41_op_controls_method_selection}
+\end{figure}
+
+\newpage
+
+Otro tipo de control es el específico para operaciones que requieren la modificación de uno o varios parámetros numéricos.
+En este caso, se renderizan de forma dinámica elementos de tipo \textit{slider} o \textit{spinbox} para cada parámetro 
+de la operación, permitiendo su ajuste de forma interactiva. Cada cambio en cualquiera de estos elementos implica la 
+actualización inmediata de la imagen en el visor central, mostrando el resultado del ajuste. En la \autoref{fig:42_op_controls_filters}
+se muestran todas las operaciones que utilizan este tipo de control.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/affine_intensity_transformation_op_control.png}
+        \caption{Control para Ajuste de Intensidad Afín}
+        \label{fig:42_a_affine_intensity_transformation_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/clahe_op_control.png}
+        \caption{Control para \textit{CLAHE}}
+        \label{fig:42_b_clahe_op_control}
+    \end{subfigure}
+    \\[1em]
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/gamma_adjustment_op_control.png}
+        \caption{Control para Ajuste \textit{Gamma}}
+        \label{fig:42_c_gamma_adjustment_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/sigmoid_contrast_op_control.png}
+        \caption{Control para Ajuste de Contraste mediante Sigmoide}
+        \label{fig:42_d_sigmoid_contrast_op_control}
+    \end{subfigure}
+    \\[1em]
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/unsharp_masking_op_control.png}
+        \caption{Control para \textit{Unsharp Masking}}
+        \label{fig:42_e_unsharp_masking_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/brightness_adjustment_op_control.png}
+        \caption{Control para Ajuste de Brillo}
+        \label{fig:42_f_brightness_adjustment_op_control}
+    \end{subfigure}
+    \\[1em]
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/gaussian_filter_op_control.png}
+        \caption{Control para Filtro Gaussiano}
+        \label{fig:42_g_gaussian_filter_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/mean_contrast_adjustment_op_control.png}
+        \caption{Control para Ajuste de Contraste}
+        \label{fig:42_h_mean_contrast_adjustment_op_control}
+    \end{subfigure}
+    \\[1em]
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/median_filter_op_control.png}
+        \caption{Control para Filtro de Mediana}
+        \label{fig:42_i_median_filter_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/rotate_op_control.png}
+        \caption{Control para Rotación de imagen}
+        \label{fig:42_j_rotate_op_control}
+    \end{subfigure}
+    \caption{Controles para operaciones con parámetros numéricos ajustables}
+    \label{fig:42_op_controls_filters}
+\end{figure}
+
+\newpage
+
+Similar al caso anterior, se implementa otro tipo de control para operaciones que requieren la modificación de dos parámetros
+numéricos para un rango de valores. Este es el caso de las operaciones mostradas en la 
+\autoref{fig:43_numeric_spin_op_controls}. Estos controles renderizan dos elementos de tipo \textit{spinbox} para cada 
+parámetro, permitiendo su ajuste de forma interactiva.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/min_max_with_params_op_control.png}
+        \caption{Control para Normalización con parámetros}
+        \label{fig:43_a_min_max_with_params_op_control}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/min_max_percentile_op_control.png}
+        \caption{Control para Normalización con percentiles}
+        \label{fig:43_b_min_max_percentile_op_control}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/resize_op_control.png}
+        \caption{Control para Redimensionamiento}
+        \label{fig:43_c_resize_op_control}
+    \end{subfigure}
+    \caption{Controles para operaciones con parámetros numéricos ajustables (continuación)}
+    \label{fig:43_numeric_spin_op_controls}
+\end{figure}
+
+Otras operaciones requieren otros tipos de parámetros, por lo que se han desarrollado otros controles específicos. Este 
+es el caso de la operación de volteo de imagen (\textit{Flip}), que requiere el \textit{toggle} entre dos opciones (volteo
+horizontal o vertical). Como puede observarse en la \autoref{fig:44_flip_op_control}, este control renderiza un \textit{radio button}
+que permite seleccionar entre ambas opciones.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.45\textwidth]{sections/8/img/flip_op_control.png}
+    \caption{Control para Volteo de imagen}
+    \label{fig:44_flip_op_control}
+\end{figure}
+
+Otro caso es el de la operación de Compensación de Iluminación (\textit{Light Compensation}), que requiere la carga 
+de un fichero \textit{npy} para especificar la matriz de compensación y el ajuste de un parámetro numérico para 
+la intensidad. Para manejar esta operación, se desarrolla el control mostrado en la \autoref{fig:45_light_compensation_op_control}, 
+que renderiza un botón para cargar el fichero de compensación y un \textit{slider} para ajustar la intensidad de la compensación aplicada a la imagen.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.45\textwidth]{sections/8/img/light_compensation_op_control.png}
+    \caption{Control para Compensación de Iluminación}
+    \label{fig:45_light_compensation_op_control}
+\end{figure}
+
+\newpage
+
+Finalmente, existen operaciones que no requieren ningún tipo de parámetro, simplemente su aplicación implica la ejecución de 
+un proceso específico sobre la imagen, como puede ser el caso de una conversión de formato o espacio de color, etc. 
+Para este tipo de operaciones, se renderiza un control muy simple que muestra el nombre de la operación aplicada y un texto 
+informativo que indica que no requiere ningún parámetro, como se muestra en la \autoref{fig:46_op_control_no_param}.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/no_param_op_control/color_to_grayscale_op_control.png}
+        \caption{Control para Conversión a Escala de Grises}
+        \label{fig:46_a_color_to_grayscale_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/no_param_op_control/grayscale_to_color_op_control.png}
+        \caption{Control para Conversión a Color}
+        \label{fig:46_b_grayscale_to_color_op_control}
+    \end{subfigure}
+    \\[1em]
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/no_param_op_control/histogram_equalization_op_control.png}
+        \caption{Control para Ecualización de Histograma}
+        \label{fig:46_c_histogram_equalization_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/no_param_op_control/hsv_to_rgb_op_control.png}
+        \caption{Control para Conversión HSV a RGB}
+        \label{fig:46_d_hsv_to_rgb_op_control}
+    \end{subfigure}
+    \\[1em]
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/no_param_op_control/rgb_to_hsv_op_control.png}
+        \caption{Control para Conversión RGB a HSV}
+        \label{fig:46_e_rgb_to_hsv_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/no_param_op_control/min_max_normalization_op_control.png}
+        \caption{Control para Normalización mín. máx. \footnotemark}
+        \label{fig:46_f_min_max_normalization_op_control}
+    \end{subfigure}
+    \\[1em]
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/no_param_op_control/rgb8_to_real_op_control.png}
+        \caption{Control para Conversión RGB8 a Real}
+        \label{fig:46_g_rgb8_to_real_op_control}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.925\textwidth]{sections/8/img/no_param_op_control/real_to_rgb8_op_control.png}
+        \caption{Control para Conversión Real a RGB8}
+        \label{fig:46_h_real_to_rgb8_op_control}
+    \end{subfigure}
+    \caption{Controles para operaciones sin parámetros}
+    \label{fig:46_op_controls_no_param}
+\end{figure}
+
+\footnotetext{La operación de Normalización mín. máx. (\autoref{fig:46_f_min_max_normalization_op_control}) sin parámetros se
+corresponde con la aplicación de esta técnica utilizando el valor mínimo y máximo de la imagen como parámetros, es decir, 
+sin especificar manualmente ningún valor. Esta operación también puede aplicarse especificando manualmente los parámetros de 
+mínimo y máximo, lo que se corresponde con la operación mostrada en la \autoref{fig:43_a_min_max_with_params_op_control}.}
 
 \newpage
 
