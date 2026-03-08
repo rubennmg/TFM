@@ -238,6 +238,16 @@ class TestUnsharpMasking:
 
 
 class TestAffineIntensityTransformation:
+    """Unit tests for the AffineIntensityTransformation operation class.
+
+    Tests cover:
+    - Parameter validation (type and value constraints)
+    - Correct application of the affine intensity transformation operation
+
+    See Also:
+        core.filters.affine_intensity_transformation.AffineIntensityTransformation: The AffineIntensityTransformation operation class being tested
+    """
+
     def test_parameter_validation(self) -> None:
         with pytest.raises(TypeError):
             AffineIntensityTransformation(gain="1.0")
@@ -259,6 +269,16 @@ class TestAffineIntensityTransformation:
 
 
 class TestBrightnessAdjustment:
+    """Unit tests for the BrightnessAdjustment operation class.
+
+    Tests cover:
+    - Parameter validation (type and value constraints)
+    - Correct application of the brightness adjustment operation
+
+    See Also:
+        core.filters.brightness_adjustment.BrightnessAdjustment: The BrightnessAdjustment operation class being tested
+    """
+
     def test_parameter_validation(self) -> None:
         with pytest.raises(TypeError):
             BrightnessAdjustment(alfa="1.0")
@@ -277,6 +297,16 @@ class TestBrightnessAdjustment:
 
 
 class TestLightCompensation:
+    """Unit tests for the LightCompensation operation class.
+
+    Tests cover:
+    - Parameter validation (type and value constraints)
+    - Correct application of the light compensation operation
+
+    See Also:
+        core.filters.light_compensation.LightCompensation: The LightCompensation operation class being tested
+    """
+
     def test_parameter_validation(self) -> None:
         with pytest.raises(ValueError):
             LightCompensation(strength=-0.1)
@@ -297,6 +327,16 @@ class TestLightCompensation:
 
 
 class TestMeanContrastAdjustment:
+    """Unit tests for the MeanContrastAdjustment operation class.
+
+    Tests cover:
+    - Parameter validation (type and value constraints)
+    - Correct application of the mean contrast adjustment operation
+
+    See Also:
+        core.filters.mean_contrast_adjustment.MeanContrastAdjustment: The MeanContrastAdjustment operation class being tested
+    """
+
     def test_parameter_validation(self) -> None:
         with pytest.raises(TypeError):
             MeanContrastAdjustment(beta="1.0")
@@ -316,6 +356,16 @@ class TestMeanContrastAdjustment:
 
 
 class TestWhiteBalance:
+    """Unit tests for the WhiteBalance operation class.
+
+    Tests cover:
+    - Parameter validation (type and value constraints)
+    - Correct application of the white balance operation
+
+    See Also:
+        core.filters.white_balance.WhiteBalance: The WhiteBalance operation class being tested
+    """
+
     def test_parameter_validation(self) -> None:
         with pytest.raises(ValueError):
             WhiteBalance(method="unsupported")
