@@ -471,8 +471,10 @@ contraste, corrección de iluminación o normalización de niveles de gris. En e
 TFM, las operaciones puntuales más relevantes incluyen:
 
 \begin{itemize}[noitemsep]
+    \item Ajuste de brillo y contraste
+    \item Transformación de intensidad afín
     \item Corrección gamma
-    \item Transformaciones sigmoides
+    \item Transformación sigmoide
     \item Ecualización del histograma
 \end{itemize}
 
@@ -513,7 +515,14 @@ que permitan evaluar la distribución de intensidades y la calidad visual de la 
 
 \newpage
 
-\subsubsection{El histograma como herramienta de diagnóstico} \label{subsubsec:3_5_2_histograma_herramienta_diagnostico}
+\subsubsection{Herramientas de diagnóstico} \label{subsubsec:3_5_2_herramientas_diagnostico}
+Para evaluar la calidad visual de una imagen digital y guiar el ajuste de los parámetros de las 
+operaciones de procesado, es necesario emplear herramientas de diagnóstico que analicen la distribución 
+de intensidades y la información visual presente en la imagen. Dichas herramientas permiten identificar posibles 
+problemas relacionados con la exposición, el contraste o la pérdida de detalle, influenciando en la toma de 
+decisiones de procesado.
+
+\paragraph{El histograma} \label{subsubsubsec:3_5_2_1_histograma}
 La representación gráfica del histograma de una imagen digital es la principal herramienta para 
 analizar la distribución de intensidades y evaluar la calidad visual de la misma. Desde el punto 
 de vista matemático, el histograma describe la distribución de frecuencias de los 
@@ -556,6 +565,75 @@ conjunto con el contenido de la escena y los objetivos del procesado.
 
 \newpage
 
+\paragraph{Gráfico de perfiles de intensidad} \label{subsubsubsec:3_5_2_2_grafico_perfiles_intensidad}
+El histograma proporciona una descripción global de la distribución de intensidades de una imagen, pero no conserva 
+información sobre la localización espacial de dichos valores. Como complemento a esta representación, resulta útil 
+emplear un gráfico de perfiles de intensidad, cuya finalidad es mostrar cómo varía la intensidad luminosa a lo largo 
+de trayectorias concretas de la imagen. En el contexto de este TFM, se consideran específicamente los perfiles 
+horizontal y vertical que atraviesan el centro de la imagen.
+
+Si $I(x,y)$ representa la intensidad luminosa de la imagen, y $(x_c, y_c)$ denota su posición central, los perfiles pueden expresarse como:
+\begin{equation}
+    P_H(x) = I(x, y_c), \qquad P_V(y) = I(x_c, y)
+    \label{eq:9_perfiles_intensidad}
+\end{equation}
+donde $P_H(x)$ corresponde al perfil horizontal y $P_V(y)$ al perfil vertical. En imágenes a color, estos perfiles se calculan habitualmente 
+sobre una magnitud de luminancia, de forma que la representación resultante refleja la variación del brillo percibido y no únicamente 
+la evolución independiente de cada canal cromático. En la \autoref{fig:8_profiles_intensity} se muestran ejemplos de imágenes 
+con sus correspondientes gráficos de perfiles de intensidad.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.475\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/dog_center_overlay.png}
+        \caption{Imagen con perfiles superpuestos}
+        \label{fig:8_a_dog_center_overlay}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.475\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/dog_center_profile_plot.png}
+        \caption{Gráfico de perfiles de intensidad}
+        \label{fig:8_b_dog_center_profile_plot}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.475\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/raw_intensity_overlay.png}
+        \caption{Imagen con perfiles superpuestos}
+        \label{fig:8_c_raw_intensity_overlay}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.475\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/raw_intensity_profile_plot.png}
+        \caption{Gráfico de perfiles de intensidad}
+        \label{fig:8_d_raw_intensity_profile_plot}
+    \end{subfigure}
+    \caption{Imágenes y sus correspondientes gráficos de perfiles de intensidad}
+    \label{fig:8_profiles_intensity}
+\end{figure}
+
+En el primero de los ejemplos (\autoref{fig:8_a_dog_center_overlay} y \autoref{fig:8_b_dog_center_profile_plot}), se pueden observar las numerosas
+variaciones de intensidad presentes a lo largo de ambos perfiles, distinguiendo transiciones asociadas a bordes, regiones de iluminación más uniforme
+y oscilaciones vinculadas a la variedad de texturas. En el segundo ejemplo (\autoref{fig:8_c_raw_intensity_overlay} y \autoref{fig:8_d_raw_intensity_profile_plot}),
+un ejemplo mucho más sencillo, se aprecia una clara evolución y distribución de las intensidades a lo largo de ambos perfiles, dsitinguiendo claramente las zonas de 
+sombra presentes en los laterales y la zona inferior de la imagen.
+
+Esta herramienta de diagnóstico cuenta con una gran ventaja, y es que conserva el orden espacial de las intensidades a lo largo de cada recorrido.
+Gracias a ello, el gráfico permite identificar transiciones asociadas a bordes o cambios bruscos de intensidad, regiones más o menos uniformes,
+gradientes suaves de iluminación\dots{} A diferencia del histograma, que resume cuántos píxeles poseen una determinada intensidad sin indicar dónde se
+encuentran, el gráfico de perfiles muestra cómo se distribuyen dichas intensidades en una sección concreta de la imagen.
+
+Durante el ajuste del contraste, por ejemplo, el gráfico de perfiles de intensidad permite comprobar si las transformaciones aplicadas expanden adecuadamente el rango dinámico 
+en la zona observada o si, por el contrario, producen saturación en sombras o altas luces. Un aplanamiento del perfil en sus valores máximos o mínimos 
+puede indicar la aparición de \textit{clipping}, mientras que un incremento moderado de la separación entre niveles próximos suele reflejar una mejora 
+del contraste local. De forma análoga, en operaciones de filtrado espacial, una reducción de pequeñas oscilaciones en el perfil puede interpretarse 
+como una atenuación del ruido, mientras que un suavizado excesivo de las transiciones puede evidenciar pérdida de detalle.
+
+\newpage
+
 \subsubsection{Mejora del contraste} \label{subsec:3_5_3_mejora_contraste}
 La mejora del contraste es una de las técnicas más comunes en el procesamiento digital de imágenes.
 Influye directamente en la percepción visual de los detalles y en la calidad global de la imagen.
@@ -571,7 +649,7 @@ y sus alrededores \cite{contrast}.
 Un alto contraste implica una diferencia significativa en la luminosidad, lo que facilita la distinción
 de detalles y características dentro de la imagen. Por el contrario, un bajo contraste resulta en una
 imagen apagada o deslavada, donde los detalles pueden perderse debido a la falta de variación tonal. Esta 
-diferencia puede observarse en la \autoref{fig:8_contrast_examples}, donde se presentan ejemplos de imágenes 
+diferencia puede observarse en la \autoref{fig:9_contrast_examples}, donde se presentan ejemplos de imágenes 
 con diferentes niveles de contraste, tanto en escala de grises como en color.
 
 \begin{figure}[h]
@@ -580,35 +658,35 @@ con diferentes niveles de contraste, tanto en escala de grises como en color.
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_low_contrast_gray.png}
         \caption{Bajo contraste (gris)}
-        \label{fig:8_a_low_contrast_gray}
+        \label{fig:9_a_low_contrast_gray}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_high_contrast_gray.png}
         \caption{Alto contraste (gris)}
-        \label{fig:8_b_high_contrast_gray}
+        \label{fig:9_b_high_contrast_gray}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_low_contrast.png}
         \caption{Bajo contraste (color)}
-        \label{fig:8_c_low_contrast}
+        \label{fig:9_c_low_contrast}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_high_contrast.png}
         \caption{Alto contraste (color)}
-        \label{fig:8_d_high_contrast}
+        \label{fig:9_d_high_contrast}
     \end{subfigure}
     \caption{Ejemplos de imágenes con diferentes niveles de contraste}
-    \label{fig:8_contrast_examples}
+    \label{fig:9_contrast_examples}
 \end{figure}
 
-A continuación, se describen una serie de técnicas de mejora del contraste comúnmente empleadas 
-en el procesamiento digital de imágenes y que son relevantes para el desarrollo de este TFM.
+A continuación, se describen una serie de técnicas comúnmente empleadas en el procesamiento digital
+de imágenes y que son relevantes para el desarrollo del presente TFM.
 
 \newpage
 
@@ -624,71 +702,14 @@ global, la ecualización del histograma puede producir efectos no deseados, como
 ruido o la pérdida de naturalidad en ciertas escenas, especialmente cuando existen grandes variaciones
 locales de iluminación.
 
-En la \autoref{fig:9_histogram_equalization_example} se muestra un ejemplo de aplicación de la ecualización
-global del histograma sobre una imagen. La imagen original (\autoref{fig:9_a_original_image}) es una imagen 
+En la \autoref{fig:10_histogram_equalization_example} se muestra un ejemplo de aplicación de la ecualización
+global del histograma sobre una imagen. La imagen original (\autoref{fig:10_a_original_image}) es una imagen 
 en formato crudo en etapas tempranas de revelado. Su histograma correspondiente 
-(\autoref{fig:9_b_original_histogram}) muestra una distribución de intensidades concentrada en la parte 
+(\autoref{fig:10_b_original_histogram}) muestra una distribución de intensidades concentrada en la parte 
 inferior del rango dinámico. Tras aplicar la ecualización del histograma, se obtiene la imagen ecualizada 
-(\autoref{fig:9_c_equalized_image}), que presenta un contraste significativamente mejorado. El histograma
-resultante (\autoref{fig:9_d_equalized_histogram}) muestra una distribución más uniforme de los niveles de
+(\autoref{fig:10_c_equalized_image}), que presenta un contraste significativamente mejorado. El histograma
+resultante (\autoref{fig:10_d_equalized_histogram}) muestra una distribución más uniforme de los niveles de
 intensidad. En este caso, la imagen resultante exhibe un detalle visual muy mejorado.
-
-
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}{0.45\textwidth}
-        \centering
-        \includegraphics[width=0.8\textwidth]{sections/3/img/unequalized.png}
-        \caption{Imagen original}
-        \label{fig:9_a_original_image}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.45\textwidth}
-        \centering
-        \includegraphics[width=0.95\textwidth]{sections/3/img/unequalized_histogram.png}
-        \caption{Histograma original}
-        \label{fig:9_b_original_histogram}
-    \end{subfigure}
-    \\[1.5em]
-    \begin{subfigure}{0.45\textwidth}
-        \centering
-        \includegraphics[width=0.8\textwidth]{sections/3/img/equalized.png}
-        \caption{Imagen resultante}
-        \label{fig:9_c_equalized_image}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.45\textwidth}
-        \centering
-        \includegraphics[width=0.95\textwidth]{sections/3/img/equalized_histogram.png}
-        \caption{Histograma resultante}
-        \label{fig:9_d_equalized_histogram}
-    \end{subfigure}
-    \caption{Ejemplo de aplicación de ecualización global del histograma}
-    \label{fig:9_histogram_equalization_example}
-\end{figure}
-
-\newpage
-
-\paragraph{Ecualización adaptativa y CLAHE} \label{subsubsubsec:3_5_3_3_ecualizacion_adaptativa_clahe}
-La ecualización global del histograma no considera las variaciones locales de contraste dentro de la imagen, 
-sino que aplica una transformación uniforme a toda la imagen. Para superar esta limitación, se emplean 
-técnicas de ecualización adaptativa \cite{adaptative_histogram_equalization}, que actúan sobre regiones 
-locales de la imagen en lugar de hacerlo a nivel global. Siguiendo este enfoque, la imagen se divide en 
-múltiples regiones, y se aplica la ecualización del histograma de forma independiente en cada una de ellas.
-Así se consigue una mejora del contraste a nivel local, sin aplicar generalizaciones que 
-puedan resultar inapropiadas para ciertas áreas de la imagen.
-
-Una variante ampliamente utilizada es la ecualización adaptativa con limitación de contraste
-(\textit{Contrast Limited Adaptive Histogram Equalization}, CLAHE) \cite{clahe}. Este método introduce un
-mecanismo de control que evita la amplificación excesiva del contraste y del ruido, limitando el
-crecimiento de los picos del histograma local.
-
-En la \autoref{fig:10_clahe_example} se muestra un ejemplo de aplicación de CLAHE sobre una imagen.
-De nuevo, la imagen original (\autoref{fig:10_a_original_image}) es una imagen en formato crudo en etapas
-tempranas de revelado. El resultado en este caso, muestra una mejora del contraste más sutil pero efectiva
-(\autoref{fig:10_c_clahed_image}), con un histograma resultante (\autoref{fig:10_d_clahed_histogram})
-que refleja una distribución de intensidades mejorada sin los picos tan pronunciados de la ecualización 
-global (\autoref{fig:9_d_equalized_histogram}).
 
 \begin{figure}[h]
     \centering
@@ -708,19 +729,75 @@ global (\autoref{fig:9_d_equalized_histogram}).
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
+        \includegraphics[width=0.8\textwidth]{sections/3/img/equalized.png}
+        \caption{Imagen resultante}
+        \label{fig:10_c_equalized_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.95\textwidth]{sections/3/img/equalized_histogram.png}
+        \caption{Histograma resultante}
+        \label{fig:10_d_equalized_histogram}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de ecualización global del histograma}
+    \label{fig:10_histogram_equalization_example}
+\end{figure}
+
+\newpage
+
+\paragraph{Ecualización adaptativa y CLAHE} \label{subsubsubsec:3_5_3_3_ecualizacion_adaptativa_clahe}
+La ecualización global del histograma no considera las variaciones locales de contraste dentro de la imagen, 
+sino que aplica una transformación uniforme a toda la imagen. Para superar esta limitación, se emplean 
+técnicas de ecualización adaptativa \cite{adaptative_histogram_equalization}, que actúan sobre regiones 
+locales de la imagen en lugar de hacerlo a nivel global. Siguiendo este enfoque, la imagen se divide en 
+múltiples regiones, y se aplica la ecualización del histograma de forma independiente en cada una de ellas.
+Así se consigue una mejora del contraste a nivel local, sin aplicar generalizaciones que 
+puedan resultar inapropiadas para ciertas áreas de la imagen.
+
+Una variante ampliamente utilizada es la ecualización adaptativa con limitación de contraste
+(\textit{Contrast Limited Adaptive Histogram Equalization}, CLAHE) \cite{clahe}. Este método introduce un
+mecanismo de control que evita la amplificación excesiva del contraste y del ruido, limitando el
+crecimiento de los picos del histograma local.
+
+En la \autoref{fig:11_clahe_example} se muestra un ejemplo de aplicación de CLAHE sobre una imagen.
+De nuevo, la imagen original (\autoref{fig:11_a_original_image}) es una imagen en formato crudo en etapas
+tempranas de revelado. El resultado en este caso, muestra una mejora del contraste más sutil pero efectiva
+(\autoref{fig:11_c_clahed_image}), con un histograma resultante (\autoref{fig:11_d_clahed_histogram})
+que refleja una distribución de intensidades mejorada sin los picos tan pronunciados de la ecualización 
+global (\autoref{fig:10_d_equalized_histogram}).
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{sections/3/img/unequalized.png}
+        \caption{Imagen original}
+        \label{fig:11_a_original_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.95\textwidth]{sections/3/img/unequalized_histogram.png}
+        \caption{Histograma original}
+        \label{fig:11_b_original_histogram}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
         \includegraphics[width=0.8\textwidth]{sections/3/img/clahed.png}
         \caption{Imagen resultante}
-        \label{fig:10_c_clahed_image}
+        \label{fig:11_c_clahed_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.95\textwidth]{sections/3/img/clahed_histogram.png}
         \caption{Histograma resultante}
-        \label{fig:10_d_clahed_histogram}
+        \label{fig:11_d_clahed_histogram}
     \end{subfigure}
     \caption{Ejemplo de aplicación de CLAHE}
-    \label{fig:10_clahe_example}
+    \label{fig:11_clahe_example}
 \end{figure}
 
 \newpage
@@ -736,10 +813,10 @@ La normalización min--max \cite{image_normalization} es una de las técnicas m�
 intensidades. Este método consiste en mapear el valor mínimo presente en la imagen al extremo
 inferior del rango de destino, y el valor máximo al extremo superior. De este modo, los valores
 intermedios se redistribuyen de forma proporcional, permitiendo que la imagen utilice la totalidad
-del rango dinámico disponible. Matemáticamente, la normalización min--max se expresa como \eqref{eq:9_normalizacion_min_max}:
+del rango dinámico disponible. Matemáticamente, la normalización min--max se expresa como \eqref{eq:10_normalizacion_min_max}:
 \begin{equation}
     I_{salida}(x,y) = \frac{I_{entrada}(x,y) - I_{min}}{I_{max} - I_{min}}
-    \label{eq:9_normalizacion_min_max}
+    \label{eq:10_normalizacion_min_max}
 \end{equation}
 
 Es importante mencionar que, en imágenes con más de un canal (por ejemplo, imágenes en color RGB), la normalización
@@ -748,7 +825,7 @@ resulta muy útil cuando la imagen presenta un contraste reducido debido a
 una ocupación limitada del rango de intensidades, aunque puede verse afectada por la presencia de
 valores extremos atípicos que condicionen el reescalado global.
 
-En la \autoref{fig:11_minmax_normalization_example} se muestra un ejemplo de aplicación de la
+En la \autoref{fig:12_minmax_normalization_example} se muestra un ejemplo de aplicación de la
 normalización min--max sobre una imagen a color. 
 
 \begin{figure}[h!]
@@ -757,16 +834,16 @@ normalización min--max sobre una imagen a color.
         \centering
         \includegraphics[width=0.75\textwidth]{sections/3/img/pre_normalization.png}
         \caption{Imagen original}
-        \label{fig:11_a_original_image}
+        \label{fig:12_e_original_image}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.75\textwidth]{sections/3/img/minmax_normalized.png}
         \caption{Imagen normalizada}
-        \label{fig:11_b_minmax_normalized_image}
+        \label{fig:12_b_minmax_normalized_image}
     \end{subfigure}
     \caption{Ejemplo de aplicación de normalización min-max}
-    \label{fig:11_minmax_normalization_example}
+    \label{fig:12_minmax_normalization_example}
 \end{figure}
 
 \newpage
@@ -775,13 +852,13 @@ normalización min--max sobre una imagen a color.
 Para mitigar la influencia de valores extremos, es habitual emplear una variante de la
 normalización min--max basada en percentiles. En este caso, en lugar de utilizar los valores
 mínimo y máximo absolutos de la imagen, se seleccionan percentiles bajos y altos del histograma
-como límites del rango de reescalado. Matemáticamente, esta técnica se define como \eqref{eq:10_normalizacion_min_max_percentiles}:
+como límites del rango de reescalado. Matemáticamente, esta técnica se define como \eqref{eq:11_normalizacion_min_max_percentiles}:
 \begin{equation}
     I_{salida}(x,y) = \frac{I_{entrada}(x,y) - P_{inf}}{P_{sup} - P_{inf}}
-    \label{eq:10_normalizacion_min_max_percentiles}
+    \label{eq:11_normalizacion_min_max_percentiles}
 \end{equation}
 \(P_{inf}\) y \(P_{sup}\) representan los percentiles inferior y superior
-seleccionados, respectivamente. La \autoref{fig:12_minmax_percentile_normalization_example} 
+seleccionados, respectivamente. La \autoref{fig:13_minmax_percentile_normalization_example} 
 muestra un ejemplo de aplicación de la normalización min--max con percentiles sobre una imagen a color,
 utilizando los percentiles 2 y 98 como límites de reescalado.
 
@@ -791,16 +868,16 @@ utilizando los percentiles 2 y 98 como límites de reescalado.
         \centering
         \includegraphics[width=0.75\textwidth]{sections/3/img/pre_normalization.png}
         \caption{Imagen original}
-        \label{fig:12_a_original_image}
+        \label{fig:13_a_original_image}
     \end{subfigure}
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.75\textwidth]{sections/3/img/minmax_percentile_02_98.png}
         \caption{Imagen normalizada}
-        \label{fig:12_b_minmax_percentile_normalized_image}
+        \label{fig:13_b_minmax_percentile_normalized_image}
     \end{subfigure}
     \caption{Ejemplo de aplicación de normalización min-max con percentiles}
-    \label{fig:12_minmax_percentile_normalization_example}
+    \label{fig:13_minmax_percentile_normalization_example}
 \end{figure}
 
 \newpage
@@ -812,19 +889,153 @@ Estas transformaciones modifican la relación entre los valores de entrada y sal
 permitiendo ajustar selectivamente determinadas regiones del rango dinámico sin redistribuir
 explícitamente el histograma.
 
+\subparagraph{Ajuste de brillo} \label{subsubsubsec:3_5_3_5_0_ajuste_brillo}
+Una de las transformaciones más básicas es el ajuste de brillo \cite{contrast_brightness_adjustment}, que consiste en el producto de cada valor de intensidad por 
+un parámetro (\(\alpha\)) que controla el nivel de brillo de la imagen. Matemáticamente, se expresa como \eqref{eq:12_ajuste_brillo}:
+\begin{equation}
+    I_{salida}(x, y) = I_{entrada}(x, y) \cdot \alpha
+    \label{eq:12_ajuste_brillo}
+\end{equation}
+Valores de \(\alpha > 1\) aumentan el brillo de la imagen, mientras que valores de \(\alpha < 1\) lo reducen. Por otro lado, 
+un valor de \(\alpha = 1\) no produce ningún cambio en la imagen, mientras que \(\alpha = 0\) resultaría en una imagen completamente negra.
+
+Esta técnica es útil para corregir imágenes subexpuestas o sobreexpuestas, aunque su aplicación indiscriminada puede llevar 
+a la saturación de detalles en altas luces o sombras. En la \autoref{fig:14_brightness_example} se muestra un ejemplo de aplicación del 
+ajuste de brillo sobre una imagen a color, utilizando distintos valores de \(\alpha\) para ilustrar su efecto sobre la apariencia visual de la imagen.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+        \label{fig:14_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_brightness_2_5.png}
+        \caption{Con \(\alpha = 2.5\)}
+        \label{fig:14_b_brightness_2_5_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_brightness_0_5.png}
+        \caption{Con \(\alpha = 0.5\)}
+        \label{fig:14_c_brightness_0_5_image}
+    \end{subfigure}
+    \caption{Ejemplo de ajuste de brillo}
+    \label{fig:14_brightness_example}
+\end{figure}
+
+\newpage
+
+\subparagraph{Ajuste de contraste} \label{subsubsubsec:3_5_3_5_0_ajuste_contraste}
+El ajuste de contraste \cite{contrast_brightness_adjustment} es una transformación de intensidad orientada a modificar la separación
+entre niveles tonales alrededor de un valor de referencia. En términos prácticos, su objetivo es
+aumentar o reducir la diferencia visual entre zonas claras y oscuras sin alterar de forma
+significativa la estructura global de la escena. 
+
+La implementación llevada a cabo en el presente TFM se basa en la media global de la imagen como punto 
+de referencia para el ajuste de contraste. A partir de esta media, el ajuste de contraste puede expresarse 
+como \eqref{eq:13_ajuste_contraste_media_global}:
+\begin{equation}
+    I_{salida}(x,y) = \beta \left(I_{entrada}(x,y) - \mu\right) + \mu
+    \label{eq:13_ajuste_contraste_media_global}
+\end{equation}
+Donde \(\mu\) representa la media global de los valores de intensidad de la imagen, y \(\beta\) es un parámetro que controla el nivel de contraste.
+Cuando $\beta = 1$, la imagen no se modifica.
+Si $\beta > 1$, las diferencias respecto a la media aumentan y el contraste se incrementa.
+Si $0 < \beta < 1$, dichas diferencias se comprimen y el contraste disminuye, produciendo una
+apariencia más suave. En el caso límite $\beta = 0$, todos los píxeles toman el valor medio,
+obteniéndose una imagen uniforme sin detalle tonal.
+
+En la \autoref{fig:15_mean_contrast_example} se muestra un ejemplo de aplicación del ajuste de contraste basado en la media global 
+sobre una imagen a color, utilizando distintos valores de \(\beta\) para ilustrar su efecto sobre la imagen.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+        \label{fig:15_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_mean_contrast_2_5.png}
+        \caption{Con \(\beta = 2.5\)}
+        \label{fig:15_b_mean_contrast_2_5_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_mean_contrast_0_5.png}
+        \caption{Con \(\beta = 0.5\)}
+        \label{fig:15_c_mean_contrast_0_5_image}
+    \end{subfigure}
+    \caption{Ejemplo de ajuste de contraste}
+    \label{fig:15_mean_contrast_example}
+\end{figure}
+
+\newpage
+
+\subparagraph{Transformación de intensidad afín} \label{subsubsubsec:3_5_3_5_0_transformacion_intensidad_afín}
+Un enfoque más general tanto para el ajuste de brillo como de contraste es la aplicación de una transformación de intensidad afín \cite{affine_transformation}, 
+que combina ambos ajustes en una única operación. Esta transformación introduce dos parámetros: la ganancia (\(a\)) y el sesgo (\(b\)). 
+Matemáticamente, se define como \eqref{eq:14_transformacion_intensidad_afin}:
+\begin{equation}
+    I_{salida}(x,y) = a \cdot I_{entrada}(x,y) + b
+    \label{eq:14_transformacion_intensidad_afin}
+\end{equation}
+Donde \(a\) ajusta la pendiente de la función de transformación, afectando al contraste, mientras que \(b\) desplaza la función verticalmente, modificando el brillo.
+Valores de \(a > 1\) aumentan el contraste, mientras que \(0 < a < 1\) lo reducen. Por otro lado, \(b > 0\) incrementa el brillo, y \(b < 0\) lo disminuye.
+En el caso de \(a = 1\) y \(b = 0\), la imagen no se modifica. La \autoref{fig:16_affine_intensity_transformation_example} muestra un ejemplo de aplicación de 
+la transformación de intensidad afín sobre una imagen a color, utilizando distintos valores de \(a\) y \(b\) para ilustrar su efecto sobre la imagen.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original}
+        \label{fig:16_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_gain_2_bias_0_2_5.png}
+        \caption{Con \(a = 2\) y \(b = 0.25\)}
+        \label{fig:16_b_gain_2_bias_0_2_5_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_gain_0_5_bias-01.png}
+        \caption{Con \(a = 0.5\) y \(b = -0.1\)}
+        \label{fig:16_c_gain_0_5_bias-01_image}
+    \end{subfigure}
+    \caption{Ejemplo de transformación de intensidad afín}
+    \label{fig:16_affine_intensity_transformation_example}
+\end{figure}
+
+\newpage
+
 \subparagraph{Corrección gamma} \label{subsubsubsec:3_5_3_5_1_correccion_gamma}
 La corrección gamma es una transformación no lineal que ajusta la luminosidad de una imagen.
 Consiste en la aplicación de una función exponencial a los valores de intensidad, controlada 
 por un parámetro denominado \textit{gamma} (\(\gamma\)) \cite{gamma_correction}.
-Se define mediante la siguiente ecuación \eqref{eq:11_correccion_gamma}:
+Se define mediante la siguiente ecuación \eqref{eq:15_correccion_gamma}:
 \begin{equation}
     I_{salida}(x, y) = I_{entrada}(x, y) \cdot c ^{\gamma}
-    \label{eq:11_correccion_gamma}
+    \label{eq:15_correccion_gamma}
 \end{equation}
 Valores de $\gamma < 1$ realzan las zonas oscuras de la imagen, mientras que valores de 
 $\gamma > 1$ atenúan las zonas más claras. La constante \(c\) se utiliza para normalizar 
 los valores de intensidad y asegurar que permanezcan dentro del rango válido. La 
-\autoref{fig:13_gamma_correction_example} muestra un ejemplo de aplicación de la corrección gamma
+\autoref{fig:17_gamma_correction_example} muestra un ejemplo de aplicación de la corrección gamma
 sobre una imagen a color.
 
 \begin{figure}[h!]
@@ -833,24 +1044,24 @@ sobre una imagen a color.
         \centering
         \includegraphics[width=0.55\textwidth]{sections/3/img/dog_color.jpg}
         \caption{Imagen original}
-        \label{fig:13_a_original_image}
+        \label{fig:17_a_original_image}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.55\textwidth]{sections/3/img/gamma_corrected_1_5.png}
         \caption{Con \(\gamma = 1.5\) y \(c = 1\)}
-        \label{fig:13_b_gamma_corrected_1_5_image}
+        \label{fig:17_b_gamma_corrected_1_5_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.55\textwidth]{sections/3/img/gamma_corrected_0_5.png}
         \caption{Con \(\gamma = 0.5\) y \(c = 1\)}
-        \label{fig:13_c_gamma_corrected_0_5_image}
+        \label{fig:17_c_gamma_corrected_0_5_image}
     \end{subfigure}
     \caption{Ejemplo de corrección gamma}
-    \label{fig:13_gamma_correction_example}
+    \label{fig:17_gamma_correction_example}
 \end{figure}
 
 \newpage
@@ -860,15 +1071,15 @@ La mejora del contraste también puede realizarse mediante la aplicación de la 
 que proporciona una transición suave entre las regiones de baja y alta intensidad. A diferencia 
 de la corrección gamma, la función sigmoide permite enfatizar el contraste en torno a un rango 
 de intensidades específico, controlando la pendiente y el punto de inflexión de la curva.
-Matemáticamente, se expresa como \eqref{eq:12_funcion_sigmoide}:
+Matemáticamente, se expresa como \eqref{eq:16_funcion_sigmoide}:
 \begin{equation}
     I_{salida}(x, y) = \frac{1}{1 + e^{-k (I_{entrada}(x, y) - I_0)}}
-    \label{eq:12_funcion_sigmoide}
+    \label{eq:16_funcion_sigmoide}
 \end{equation}
 donde \(k\), también denominada \textit{gain} (ganancia), controla la pendiente de la
 curva y \(I_0\) determina el punto de inflexión (\textit{cutoff}). Normalmente, suele aplicarse 
 una normalización posterior para ajustar los valores de salida al rango dinámico válido. La 
-\autoref{fig:14_sigmoid_contrast_example} muestra un ejemplo de mejora del contraste mediante 
+\autoref{fig:18_sigmoid_contrast_example} muestra un ejemplo de mejora del contraste mediante 
 la función sigmoide sobre una imagen a color.
 
 \begin{figure}[h!]
@@ -877,25 +1088,86 @@ la función sigmoide sobre una imagen a color.
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/dog_color.jpg}
         \caption{Imagen original}
-        \label{fig:14_a_original_image}
+        \label{fig:18_a_original_image}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/sigmoid_5_0.png}
         \caption{Con \(k = 5\) y \(I_0 = 0\)}
-        \label{fig:14_b_sigmoid_5_0_image}
+        \label{fig:18_b_sigmoid_5_0_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.6\textwidth]{sections/3/img/sigmoid_5_0_5.png}
         \caption{Con \(k = 5\) y \(I_0 = 0.5\)}
-        \label{fig:14_c_sigmoid_5_0_5_image}
+        \label{fig:18_c_sigmoid_5_0_5_image}
     \end{subfigure}
     \caption{Ejemplo de mejora del contraste mediante función sigmoide}
-    \label{fig:14_sigmoid_contrast_example}
+    \label{fig:18_sigmoid_contrast_example}
 \end{figure}
+
+\newpage
+
+\subparagraph{Compensación de luz} \label{subsubsubsec:3_5_3_5_3_compensacion_luz}
+La compensación de luz es una operación puntual orientada a corregir variaciones espaciales de
+iluminación. Se trata de una operación distinta a las mencionadas anteriormente, ya que utiliza 
+direcramente una máscara de ganancia espacial que se aplica de forma multiplicativa a la imagen de entrada.
+Esta máscara se representa como una matriz bidimensional de igual tamaño a dicha imagen.
+Matemáticamente puede describirse como \eqref{eq:17_compensacion_luz_mascara}:
+\begin{equation}
+    I_{salida}(x,y) = I_{entrada}(x,y) \cdot G(x,y)
+    \label{eq:17_compensacion_luz_mascara}
+\end{equation}
+Donde \(G(x,y)\) representa la máscara de ganancia espacial que define el factor de corrección en cada punto de la imagen.
+En la implementación utilizada en este TFM, se incorpora además un parámetro de
+intensidad de aplicación, denominado \textit{strength} ($s \in [0,1]$), que permite controlar de forma
+continua la transición entre no corregir y aplicar la corrección completa. Para ello se define
+una ganancia efectiva \eqref{eq:18_compensacion_luz_ganancia_efectiva}:
+\begin{equation}
+    G_{ef}(x,y) = 1 + \left(G(x,y)-1\right)\cdot s
+    \label{eq:18_compensacion_luz_ganancia_efectiva}
+\end{equation}
+y la salida final viene dada por \eqref{eq:19_compensacion_luz_salida_efectiva}:
+\begin{equation}
+    I_{salida}(x,y) = I_{entrada}(x,y) \cdot G_{ef}(x,y)
+    \label{eq:19_compensacion_luz_salida_efectiva}
+\end{equation}
+Cuando $s=0$, se obtiene $G_{ef}(x,y)=1$ para todo $(x,y)$ y la imagen permanece inalterada.
+Cuando $s=1$, se aplica la compensación completa definida por $G(x,y)$. En la \autoref{fig:19_light_compensation_example} se muestra 
+un ejemplo de aplicación, utilizando la misma máscara de compensación de luz con diferentes valores de $s$.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.465\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/raw_image_compensation.png}
+        \caption{Imagen original}
+        \label{fig:19_a_original_image}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.465\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/raw_image_compensation_full.png}
+        \caption{Máscara de compensación completa ($s=1$)}
+        \label{fig:19_b_light_compensation_full}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.465\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth]{sections/3/img/raw_image_compensation_medium.png}
+        \caption{Máscara de compensación intermedia ($s=0.5$)}
+        \label{fig:19_c_light_compensation_medium}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de compensación de luz}
+    \label{fig:19_light_compensation_example}
+\end{figure}
+
+En situaciones prácticas, puede ocurrir que la matriz de ganancia no tenga exactamente el mismo
+tamaño espacial que la imagen de entrada. En ese caso, se realiza un redimensionado de la máscara
+al tamaño $(H,W)$ de la imagen antes de aplicar la compensación, preservando la naturaleza local de
+la corrección. 
 
 \newpage
 
@@ -910,33 +1182,40 @@ El filtrado espacial \cite{spacial_filtering} consiste en la modificación del v
 valores de sus píxeles vecinos, con el objetivo de suavizar la imagen, reducir el ruido o resaltar
 características específicas. En función de la forma en la que se combinan los valores locales, los 
 filtros espaciales pueden clasificarse en lineales y en no lineales. A continuación, se describen 
-dos de los filtros más representativos de cada categoría, que son relevantes para el desarrollo de 
+dos de los filtros más representativos de cada categoría, relevantes para el desarrollo de 
 este TFM.
 
 \paragraph{Filtrado lineal: filtro gaussiano} \label{subsubsec:3_5_4_1_filtrado_lineal_filtro_gaussiano}
 El filtro gaussiano \cite{gaussian_filter} es uno de los métodos más empleados para la reducción de 
 ruido de alta frecuencia. Se trata de un filtro lineal que realiza un suavizado progresivo de la 
 imagen mediante la convolución con una máscara basada en la función gaussiana.
-La función gaussiana en dos dimensiones se define como \eqref{eq:13_filtro_gaussiano}:
+La función gaussiana en dos dimensiones se define como \eqref{eq:20_filtro_gaussiano}:
 \begin{equation}
     G(x,y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}}
-    \label{eq:13_filtro_gaussiano}
+    \label{eq:20_filtro_gaussiano}
 \end{equation}
 donde \(\sigma\) es la desviación estándar que controla el grado de suavizado.
-Además, la máscara del filtro gaussiano se realiza sobre una ventana de 
-tamaño \(k \times k\), donde \(k\) es un número impar que determina el área de influencia
-del filtro. Computacionalmente, esta ventana suele denominarse \textit{kernel}.
+El tamaño de la ventana de convolución no se fija manualmente, sino que se calcula
+dinámicamente a partir de \(\sigma\), de modo que la máscara cubra aproximadamente el
+rango efectivo de la distribución gaussiana. Con un factor de truncamiento \(t=3\),
+el tamaño del \textit{kernel} \(k\) se define como \eqref{eq:21_kernel_gaussiano_dinamico}:
+\begin{equation}
+    k = 2\left\lceil t\,\sigma \right\rceil + 1, \qquad t=3
+    \label{eq:21_kernel_gaussiano_dinamico}
+\end{equation}
+Esta expresión garantiza que \(k\) sea siempre impar y que la ventana de convolución
+se adapte automáticamente al nivel de suavizado seleccionado.
 
 Este tipo de filtrado atenúa variaciones abruptas de intensidad, lo que contribuye a eliminar
-ruido aleatorio y pequeñas irregularidades. Sin embargo, como efecto secundario, el filtro
-gaussiano también puede provocar una ligera pérdida de nitidez y difuminar los bordes de la
-imagen. 
+ruido aleatorio y pequeñas irregularidades. Sin embargo, como efecto secundario, también puede provocar 
+una ligera pérdida de nitidez y difuminar los bordes de la imagen. 
 
 \newpage
 
-En la \autoref{fig:15_gaussian_filter_example} se muestra un ejemplo de aplicación del filtro
-gaussiano sobre una imagen a color, utilizando diferentes valores de \(k\) y \(\sigma\), 
-que ilustran el efecto de suavizado progresivo.
+En la \autoref{fig:20_gaussian_filter_example} se muestra un ejemplo de aplicación del filtro
+gaussiano sobre una imagen a color, utilizando diferentes valores de \(\sigma\)
+y su correspondiente \(k\) calculado dinámicamente, que ilustran el efecto de suavizado
+progresivo.
 
 \begin{figure}[h!]
     \centering
@@ -944,24 +1223,24 @@ que ilustran el efecto de suavizado progresivo.
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/sharp_chameleon.png}
         \caption{Imagen original}
-        \label{fig:15_a_original_image}
+        \label{fig:20_a_original_image}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/gaussian_7_5.png}
-        \caption{Con \(k = 7\) y \(\sigma = 5\)}
-        \label{fig:15_b_gaussian_7_5_image}
+        \caption{Con \(\sigma = 1.0\) (\(k=7\))}
+        \label{fig:20_b_gaussian_7_5_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/gaussian_13_9.png}
-        \caption{Con \(k = 13\) y \(\sigma = 9\)}
-        \label{fig:15_c_gaussian_13_9_image}
+        \caption{Con \(\sigma = 2.0\) (\(k=13\))}
+        \label{fig:20_c_gaussian_13_9_image}
     \end{subfigure}
     \caption{Ejemplo de aplicación de filtro gaussiano}
-    \label{fig:15_gaussian_filter_example}
+    \label{fig:20_gaussian_filter_example}
 \end{figure}
 
 \newpage
@@ -972,10 +1251,10 @@ la eliminación del ruido impulsivo, como el conocido ruido de tipo \textit{sal 
 A diferencia de los filtros lineales, este filtro sustitye directamente el valor de cada píxel 
 por la mediana de los valores de intensidad presentes en su vecindad definida por una ventana
 de tamaño \(k \times k\).
-Matemáticamente, el proceso se describe como \eqref{eq:14_filtro_mediana}:
+Matemáticamente, el proceso se describe como \eqref{eq:21_filtro_mediana}:
 \begin{equation}
     I_{salida}(x,y) = \text{mediana} \{ I_{entrada}(i,j) \mid (i,j) \in S_{x,y} \}
-    \label{eq:14_filtro_mediana}
+    \label{eq:21_filtro_mediana}
 \end{equation}
 donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \((x,y)\).
 
@@ -985,7 +1264,7 @@ a valores extremos. Otros filtros, como el filtro de media \cite{mean_filter} o 
 suelen difuminar los bordes y detalles al promediar los valores de intensidad. En contrapartida, el filtro 
 de mediana es más costoso computacionalmente.
 
-En la \autoref{fig:16_median_filter_example} se muestra un claro ejemplo de aplicación del filtro de mediana
+En la \autoref{fig:21_median_filter_example} se muestra un claro ejemplo de aplicación del filtro de mediana
 sobre una imagen a color con ruido de tipo sal y pimienta, utilizando diferentes tamaños de ventana \(k\).
 
 \begin{figure}[h!]
@@ -994,24 +1273,24 @@ sobre una imagen a color con ruido de tipo sal y pimienta, utilizando diferentes
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/median_filter_original.png}
         \caption{Imagen original}
-        \label{fig:16_a_original_image}
+        \label{fig:21_a_original_image}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/median_filter_3.png}
         \caption{Con \(k = 3\)}
-        \label{fig:16_b_median_filter_3_image}
+        \label{fig:21_b_median_filter_3_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/median_filter_7.png}
         \caption{Con \(k = 7\)}
-        \label{fig:16_c_median_filter_7_image}
+        \label{fig:21_c_median_filter_7_image}
     \end{subfigure}
     \caption{Ejemplo de aplicación de filtro de mediana}
-    \label{fig:16_median_filter_example}
+    \label{fig:21_median_filter_example}
 \end{figure}
 
 \newpage
@@ -1032,18 +1311,15 @@ De forma conceptual, el proceso consiste en generar una versión suavizada de la
 compararla con esta. La diferencia entre ambas resalta las transiciones de intensidad, que se
 corresponden principalmente con los bordes. Esta información se añade posteriormente a la imagen
 original, aumentando el contraste local en dichas zonas y, por tanto, la percepción de nitidez.
-Matemáticamente se puede expresar como \eqref{eq:15_unsharp_masking}:
+Matemáticamente se puede expresar como \eqref{eq:22_unsharp_masking}:
 \begin{equation}
     I_{salida}(x,y) = I_{entrada}(x,y) + \sigma \left( I_{entrada}(x,y) - I_{suavizada}(x,y) \right)
-    \label{eq:15_unsharp_masking}
+    \label{eq:22_unsharp_masking}
 \end{equation}
 donde \(I_{suavizada}(x,y)\) es la imagen suavizada obtenida mediante un filtro
 y \(\sigma\) es un factor de escala que controla la intensidad del realce.
 El realce se aplica sobre una ventana de tamaño \(k \times k\) alrededor de cada píxel.
-
-\newpage
-
-En la \autoref{fig:17_unsharp_masking_example} se muestra un ejemplo de aplicación de
+En la \autoref{fig:22_unsharp_masking_example} se muestra un ejemplo de aplicación de
 \textit{Unsharp Masking} sobre una imagen a color, utilizando diferentes valores de \(k\) y \(\sigma\),
 que ilustran el efecto de realce progresivo de los bordes y detalles y nitidez de la imagen.
 
@@ -1051,26 +1327,26 @@ que ilustran el efecto de realce progresivo de los bordes y detalles y nitidez d
     \centering
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=0.65\textwidth]{sections/3/img/lion_original.png}
+        \includegraphics[width=0.6\textwidth]{sections/3/img/lion_original.png}
         \caption{Imagen original}
-        \label{fig:17_a_original_image}
+        \label{fig:22_a_original_image}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=0.65\textwidth]{sections/3/img/lion_unsharped_5_3.png}
+        \includegraphics[width=0.6\textwidth]{sections/3/img/lion_unsharped_5_3.png}
         \caption{Con \(k = 5\) y \(\sigma = 3\)}
-        \label{fig:17_b_unsharp_masking_5_3_image}
+        \label{fig:22_b_unsharp_masking_5_3_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=0.65\textwidth]{sections/3/img/lion_unsharped_13_5.png}
+        \includegraphics[width=0.6\textwidth]{sections/3/img/lion_unsharped_13_5.png}
         \caption{Con \(k = 13\) y \(\sigma = 5\)}
-        \label{fig:17_c_unsharp_masking_13_5_image}
+        \label{fig:22_c_unsharp_masking_13_5_image}
     \end{subfigure}
     \caption{Ejemplo de aplicación de \textit{Unsharp Masking}}
-    \label{fig:17_unsharp_masking_example}
+    \label{fig:22_unsharp_masking_example}
 \end{figure}
 
 \newpage
@@ -1092,7 +1368,7 @@ incorrectas derivadas del proceso de captura o para generar imágenes simétrica
 análisis o presentación. Desde el punto de vista visual, el contenido de la imagen se conserva, 
 cambiando únicamente su disposición espacial.
 
-En la \autoref{fig:18_flip_example} se muestra un ejemplo de aplicación de volteo sobre una
+En la \autoref{fig:23_flip_example} se muestra un ejemplo de aplicación de volteo sobre una
 imagen a color, ilustrando tanto el volteo sobre el eje horizontal como sobre el eje vertical.
 
 \begin{figure}[h!]
@@ -1101,24 +1377,24 @@ imagen a color, ilustrando tanto el volteo sobre el eje horizontal como sobre el
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/dog_color.jpg}
         \caption{Imagen original}
-        \label{fig:18_a_original_image}
+        \label{fig:23_a_original_image}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/dog_horizontal_flip.png}
         \caption{Volteo horizontal}
-        \label{fig:18_b_horizontal_flip_image}
+        \label{fig:23_b_horizontal_flip_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/dog_vertical_flip.png}
         \caption{Volteo vertical}
-        \label{fig:18_c_vertical_flip_image}
+        \label{fig:23_c_vertical_flip_image}
     \end{subfigure}
     \caption{Ejemplo de aplicación de volteo}
-    \label{fig:18_flip_example}
+    \label{fig:23_flip_example}
 \end{figure}
 
 \newpage
@@ -1131,7 +1407,7 @@ inclinaciones no deseadas o en la normalización de conjuntos de datos visuales.
 los valores de los nuevos píxeles, lo que puede afectar ligeramente a la calidad final de la
 imagen.
 
-En la \autoref{fig:19_rotation_example} se muestra un ejemplo de aplicación de rotación sobre
+En la \autoref{fig:24_rotation_example} se muestra un ejemplo de aplicación de rotación sobre
 una imagen a color, ilustrando los resultados obtenidos al rotar la imagen 45°
 y 135° respectivamente.
 
@@ -1141,24 +1417,172 @@ y 135° respectivamente.
         \centering
         \includegraphics[width=0.65\textwidth]{sections/3/img/dog_color.jpg}
         \caption{Imagen original}
-        \label{fig:19_a_original_image}
+        \label{fig:24_a_original_image}
     \end{subfigure}
     \\[1.5em]
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.75\textwidth]{sections/3/img/dog_rotated_45.png}
         \caption{Rotación 45°}
-        \label{fig:19_b_rotated_45_image}
+        \label{fig:24_b_rotated_45_image}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.45\textwidth}
         \centering
         \includegraphics[width=0.75\textwidth]{sections/3/img/dog_rotated_135.png}
         \caption{Rotación 135°}
-        \label{fig:19_c_rotated_135_image}
+        \label{fig:24_c_rotated_135_image}
     \end{subfigure}
     \caption{Ejemplo de aplicación de rotación}
-    \label{fig:19_rotation_example}
+    \label{fig:24_rotation_example}
+\end{figure}
+
+\newpage
+
+\subparagraph{Redimensionamiento} \label{subsubsubsec:3_5_6_1_3_redimensionamiento}
+El redimensionamiento es una operación que modifica el tamaño de la imagen, ya sea para reducirla o ampliarla.
+Esta transformación es común en la preparación de imágenes para su visualización, almacenamiento o procesamiento posterior.
+
+Esta operación se realiza mediante técnicas de interpolación que estiman los valores 
+de los nuevos píxeles basándose en los valores de los píxeles originales. Existen varios métodos de interpolación, 
+como la interpolación bilineal, bicúbica o por vecinos más cercanos, cada uno con sus propias características y 
+efectos sobre la calidad de la imagen resultante. El método de interpolación utilizado en este TFM es la interpolación 
+bilineal \cite{bilineal_interpolation}, que ofrece un buen equilibrio entre calidad y eficiencia computacional.
+
+En la \autoref{fig:24_resizing_example} se muestra un ejemplo de aplicación de redimensionamiento sobre una imagen a color, 
+ilustrando los resultados obtenidos al redimensionar la imagen original de 1024x768 a 1000x600 píxeles y a 800x1400 píxeles respectivamente.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/dog_color.jpg}
+        \caption{Imagen original (1024x768)}
+        \label{fig:24_a_original_image_resize}
+    \end{subfigure}
+    \\[1.5em]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.65\textwidth]{sections/3/img/dog_1600_900.png}
+        \caption{Redimensionamiento 1000x600}
+        \label{fig:24_b_resized_1600_900_image}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.55\textwidth]{sections/3/img/dog_800_1200.png}
+        \caption{Redimensionamiento 800x1400}
+        \label{fig:24_c_resized_800_1200_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de redimensionamiento}
+    \label{fig:24_resizing_example}
+\end{figure}
+
+\newpage
+
+\paragraph{Operaciones cromáticas} \label{subsubsec:3_5_6_2_operaciones_cromaticas}
+La información de color es un componente fundamental de la percepción visual, y su procesamiento es de gran importancia 
+para la obtención de imágenes finales de alta calidad. Las operaciones cromáticas actúan sobre los valores de color de cada 
+píxel, ajustando su representación para mejorar la fidelidad.
+
+\subparagraph{Balance de blancos} \label{subsubsubsec:3_5_6_2_1_balance_blancos}
+El balance de blancos es una operación cromática cuyo objetivo es corregir dominantes de color
+no deseadas introducidas por la iluminación de la escena o por las características espectrales
+del sensor durante la captura. En términos prácticos, esta corrección busca que las superficies
+neutras (blancos y grises) se representen sin sesgos hacia rojo, verde o azul, mejorando la
+fidelidad cromática de la imagen.
+
+En el marco de este TFM, el balance de blancos se implementa mediante dos métodos clásicos:
+\textit{Gray World} y \textit{Max RGB}. Ambos enfoques comparten la misma idea: aplicar
+factores de ganancia independientes a cada canal de color. Si $I_R(x,y)$, $I_G(x,y)$ e $I_B(x,y)$
+denotan los canales de entrada, la corrección puede expresarse de forma general como \eqref{eq:23_balance_blancos_forma_general}:
+\begin{equation}
+    I'_{R}(x,y)=g_R\,I_R(x,y), \quad I'_{G}(x,y)=g_G\,I_G(x,y), \quad I'_{B}(x,y)=g_B\,I_B(x,y)
+    \label{eq:23_balance_blancos_forma_general}
+\end{equation}
+donde $g_R$, $g_G$ y $g_B$ son las ganancias estimadas para cada canal.
+
+\textbf{Método Gray World.} Este método parte de la hipótesis de que, en promedio, una escena
+natural contiene una distribución cromática aproximadamente neutra. Por tanto, se calcula la media
+de cada canal \eqref{eq:24_balance_blancos_gray_world_medias}:
+\begin{equation}
+    \mu_R = \frac{1}{HW}\sum_{x=0}^{H-1}\sum_{y=0}^{W-1} I_R(x,y), \;
+    \mu_G = \frac{1}{HW}\sum_{x=0}^{H-1}\sum_{y=0}^{W-1} I_G(x,y), \;
+    \mu_B = \frac{1}{HW}\sum_{x=0}^{H-1}\sum_{y=0}^{W-1} I_B(x,y)
+    \label{eq:24_balance_blancos_gray_world_medias}
+\end{equation}
+y se define una media global como referencia para la corrección \eqref{eq:25_balance_blancos_gray_world_media_global}:
+\begin{equation}
+    \mu = \frac{\mu_R + \mu_G + \mu_B}{3}
+    \label{eq:25_balance_blancos_gray_world_media_global}
+\end{equation}
+Las ganancias se obtienen entonces como \eqref{eq:26_balance_blancos_gray_world_ganancias}:
+\begin{equation}
+    g_R = \frac{\mu}{\mu_R + \varepsilon}, \quad g_G = \frac{\mu}{\mu_G + \varepsilon}, \quad g_B = \frac{\mu}{\mu_B + \varepsilon}
+    \label{eq:26_balance_blancos_gray_world_ganancias}
+\end{equation}
+donde $\varepsilon$ es una constante pequeña para evitar divisiones por cero.
+
+\textbf{Método Max RGB.} Este otro enfoque asume que, tras la corrección, al menos un píxel de cada
+canal debería alcanzar el nivel de referencia máximo. Para ello se calculan los máximos de cada canal \eqref{eq:27_balance_blancos_max_rgb_maximos}:
+\begin{equation}
+    M_R = \max_{x,y} I_R(x,y), \quad M_G = \max_{x,y} I_G(x,y), \quad M_B = \max_{x,y} I_B(x,y)
+    \label{eq:27_balance_blancos_max_rgb_maximos}
+\end{equation}
+y se toma como referencia el máximo global entre los tres canales \eqref{eq:28_balance_blancos_max_rgb_referencia}:
+\begin{equation}
+    M = \max(M_R, M_G, M_B)
+    \label{eq:28_balance_blancos_max_rgb_referencia}
+\end{equation}
+Las ganancias quedan definidas por \eqref{eq:29_balance_blancos_max_rgb_ganancias}:
+\begin{equation}
+    g_R = \frac{M}{M_R + \varepsilon}, \quad g_G = \frac{M}{M_G + \varepsilon}, \quad g_B = \frac{M}{M_B + \varepsilon}
+    \label{eq:29_balance_blancos_max_rgb_ganancias}
+\end{equation}
+
+Ambos métodos presentan ventajas y limitaciones complementarias. \textit{Gray World} suele ser
+más estable cuando la escena contiene variedad cromática suficiente, mientras que \textit{Max RGB}
+puede resultar más efectivo en situaciones donde existen referencias brillantes bien definidas.
+No obstante, ambos pueden verse afectados por escenas con distribución de color muy sesgada o por
+saturaciones locales. En las \autoref{fig:25_white_balance_example} y \autoref{fig:26_white_balance_example} se muestran 
+ejemplos de aplicación de ambos métodos sobre la misma imagen a color, ilustrando las diferencias en el resultado final.
+Debe hacerse notar que, la imagen utilizada para este ejemplo es una imagen directamente \textit{debayerizada}, sin ningún tipo de 
+corrección previa.
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/white_balance_original.png}
+        \caption{Imagen original}
+        \label{fig:25_a_original_image}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/white_balance_gray_world.png}
+        \caption{Con método Gray World}
+        \label{fig:25_b_gray_world_normalized_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de balance de blancos utilizando el método Gray World}
+    \label{fig:25_white_balance_example}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/white_balance_original.png}
+        \caption{Imagen original}
+        \label{fig:26_a_original_image}
+    \end{subfigure}
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{sections/3/img/white_balance_max_rgb.png}
+        \caption{Con método Max RGB}
+        \label{fig:26_c_max_rgb_normalized_image}
+    \end{subfigure}
+    \caption{Ejemplo de aplicación de balance de blancos utilizando el método Max RGB}
+    \label{fig:26_white_balance_example}
 \end{figure}
 
 \newpage
@@ -1176,10 +1600,10 @@ posterior.
 
 La conversión no se realiza como una simple combinación de los valores de los canales 
 rojo, verde y azul, sino que se emplean ponderaciones específicas para reflejar la
-percepción humana del brillo. La fórmula comúnmente utilizada es \eqref{eq:16_rgb_to_grayscale}:
+percepción humana del brillo. La fórmula comúnmente utilizada es \eqref{eq:30_rgb_to_grayscale}:
 \begin{equation}
     I_{gris}(x,y) = 0.2989 \cdot I_{R}(x,y) + 0.5870 \cdot I_{G}(x,y) + 0.1140 \cdot I_{B}(x,y)
-    \label{eq:16_rgb_to_grayscale}
+    \label{eq:30_rgb_to_grayscale}
 \end{equation}
 
 \subparagraph{De RGB a HSV} \label{subsubsubsec:3_5_6_2_2_de_rgb_a_hsv}
@@ -1225,7 +1649,7 @@ El \textit{pipeline} de revelado digital comienza con el tratamiento de los dato
 del sensor y finaliza con la obtención de una imagen en un formato estándar. Entre ambos extremos, 
 se encadenan diversas operaciones de procesamiento. El orden en el que se aplican es de vital 
 importancia, ya que influye de manera directa en la calidad del resultado final. De forma general,
-el \textit{pipeline} incluye las etapas que se ilustran en la \autoref{fig:20_etapas_pipeline_revelado}.
+el \textit{pipeline} incluye las etapas que se ilustran en la \autoref{fig:27_etapas_pipeline_revelado}.
 
 \begin{figure}[h]
     \centering
@@ -1248,7 +1672,7 @@ el \textit{pipeline} incluye las etapas que se ilustran en la \autoref{fig:20_et
 
     \end{tikzpicture}
     \caption{Etapas del \textit{pipeline} de revelado digital}
-    \label{fig:20_etapas_pipeline_revelado}
+    \label{fig:27_etapas_pipeline_revelado}
 \end{figure}
 \footnotetext{Incluye mejora del contraste, reducción de ruido, realce de detalle, etc.}
 
@@ -1285,10 +1709,10 @@ y una gestión transparente de la ejecución tanto en CPU como en GPU.
 \subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_6_2_tensores_representacion_imagenes}
 En \textit{PyTorch}, las imágenes digitales se representan mediante tensores \cite{torch_tensor}. Estos pueden entenderse 
 como generalizaciones de vectores y matrices a múltiples dimensiones. Desde un punto de vista matemático, 
-un tensor de orden $n$ puede expresarse como \eqref{eq:17_tensor_representation}:
+un tensor de orden $n$ puede expresarse como \eqref{eq:31_tensor_representation}:
 \begin{equation}
     T_{i_1 i_2 \ldots i_n} \in \mathbb{R}^{d_1 \times d_2 \times \ldots \times d_n}
-    \label{eq:17_tensor_representation}
+    \label{eq:31_tensor_representation}
 \end{equation}
 donde cada índice $i_k$ recorre una dimensión $d_k$ del espacio de datos. Así, un escalar puede considerarse un tensor de orden 0,
 un vector un tensor de orden 1 y una matriz un tensor de orden 2. Esta generalización permite extender las operaciones algebraicas
@@ -1296,7 +1720,7 @@ clásicas a dominios de mayor complejidad, conservando propiedades como la linea
 
 \newpage
 
-De forma simplificada, la \autoref{fig:21_tensor_representation} ilustra la representación de tensores
+De forma simplificada, la \autoref{fig:28_tensor_representation} ilustra la representación de tensores
 de diferentes órdenes, ejemplificando cómo se almacenan los datos en cada caso.
 
 \begin{figure}[h]
@@ -1336,7 +1760,7 @@ de diferentes órdenes, ejemplificando cómo se almacenan los datos en cada caso
         
     \end{tikzpicture}
     \caption{Representación visual de tensores de diferentes dimensiones}
-    \label{fig:21_tensor_representation}
+    \label{fig:28_tensor_representation}
 \end{figure}
 
 Esta disposición permite la representación de imágenes tal y como se describió en 
@@ -1352,7 +1776,7 @@ Cada elemento $I_{c,h,w}$ del tensor almacena la intensidad del píxel ubicado e
 facilita la manipulación de imágenes, permitiendo aplicar transformaciones 
 mediante simples operaciones tensoriales. 
 Puede observarse una representación conceptual de una imagen RGB como tensor tridimensional en la
-\autoref{fig:22_image_tensor}.
+\autoref{fig:29_image_tensor}.
 
 \begin{figure}[h!]
 	\centering
@@ -1394,14 +1818,14 @@ Puede observarse una representación conceptual de una imagen RGB como tensor tr
 		\caption{}
 	\end{subfigure}
 	\caption{Representación conceptual de una imagen RGB como tensor tridimensional}
-	\label{fig:22_image_tensor}
+	\label{fig:29_image_tensor}
 \end{figure}
 
 \newpage
 
 Numéricamente, una imagen RGB de tamaño $3 \times 3$ píxeles puede representarse como el tensor $I$ de forma $[3, 3, 3]$ \footnotemark, donde
 cada canal de color contiene una matriz bidimensional con los valores de intensidad correspondientes.
-En la \autoref{fig:23_image_tensor_example} se muestra un ejemplo concreto de esta representación.
+En la \autoref{fig:30_image_tensor_example} se muestra un ejemplo concreto de esta representación.
 
 \begin{figure}[h]
     \centering
@@ -1432,7 +1856,7 @@ En la \autoref{fig:23_image_tensor_example} se muestra un ejemplo concreto de es
         \]
     \end{minipage}
     \caption{Ejemplo de representación tensorial de una imagen RGB de $3 \times 3$ píxeles}
-    \label{fig:23_image_tensor_example}
+    \label{fig:30_image_tensor_example}
 \end{figure}
 
 \footnotetext{$[3, 3, 3]$ indica las dimensiones en el orden $[C, H, W]$. Esto es, 3 canales de color, 3 píxeles de alto y 3 píxeles de ancho.}
@@ -1503,7 +1927,7 @@ Las Unidades de Procesamiento Gráfico (GPU) fueron creadas originalmente para a
 una tarea que requiere la ejecución de un gran número de operaciones similares de forma simultánea.
 A diferencia de las CPUs (Unidad Central de Procesamiento), las GPUs adoptan una arquitectura orientada al paralelismo masivo.
 Esto se traduce en la presencia de un elevado número de núcleos simples, capaces de ejecutar la
-misma operación sobre diferentes datos en paralelo. En la \autoref{fig:24_cpu_vs_gpu} se muestra una
+misma operación sobre diferentes datos en paralelo. En la \autoref{fig:31_cpu_vs_gpu} se muestra una
 comparación conceptual entre ambas arquitecturas.
 
 \begin{figure}[h]
@@ -1562,7 +1986,7 @@ comparación conceptual entre ambas arquitecturas.
 
     \end{tikzpicture}
     \caption{Comparación conceptual entre arquitecturas CPU y GPU}
-    \label{fig:24_cpu_vs_gpu}
+    \label{fig:31_cpu_vs_gpu}
 \end{figure}
 
 Una CPU cuenta con una cantidad de núcleos o \textit{cores} reducida. Estos núcleos son potentes y están optimizados 
