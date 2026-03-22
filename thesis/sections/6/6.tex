@@ -1,6 +1,164 @@
 \section{Análisis} \label{sec:6_analisis}
+Se detallan en esta sección los requisitos de usuario que influencian el diseño y desarrollo del sistema. A partir de los mismos, se 
+construye un mapa de historias de usuario, propio de la metodología Scrum, utilizado para organizar el trabajo en sprints.
+Finalmente, se presentan los prototipos de interfaz de usuario y el mapa de navegación.
+
 
 \subsection{Requisitos de usuario} \label{subsec:6_1_requisitos_usuario}
+A continuación, se enumeran los requisitos de usuario, organizados en requisitos funcionales y no funcionales. Los requisitos funcionales describen las capacidades 
+y comportamientos específicos que el sistema debe cumplir para satisfacer las necesidades del usuario, mientras que los requisitos no funcionales 
+definen características de calidad, tales como el rendimiento, usabilidad, fiabilidad y mantenibilidad.
+
+\subsubsection{Requisitos funcionales} \label{subsubsec:6_1_1_requisitos_funcionales}
+Se presentan los requisitos funcionales del sistema, organizados en áreas temáticas que reflejan sus principales funcionalidades.
+
+\vspace{0.5em}
+
+\begin{enumerate}
+	\item \textbf{Gestión de imágenes de entrada}\label{req:rf-1}
+	\begin{enumerate}
+		\item[1.1.] El sistema debe permitir al usuario cargar imágenes desde disco.\label{req:rf-1-1}
+		\item[1.2.] El sistema debe soportar, como mínimo, la carga de imágenes en diferentes formatos de imagen cruda, así como en el formato propio \texttt{PKL.GZ}.\label{req:rf-1-2}
+		\item[1.3.] La carga de imágenes debe realizarse a través de un diálogo de selección que filtre por los formatos soportados y permita al usuario navegar por el sistema de archivos para seleccionar la imagen deseada.\label{req:rf-1-3} 
+		\item[1.4.] Si el formato no está soportado o el archivo es inválido, el sistema debe notificar el error al usuario sin bloquear la aplicación.\label{req:rf-1-4}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Visualización y análisis de imagen}\label{req:rf-2}
+	\begin{enumerate}
+		\item[2.1.] El sistema debe mostrar la imagen cargada en un visor central y actualizarla tras cada operación aplicada o ajuste de parámetros.\label{req:rf-2-1}
+		\item[2.2.] El visor debe permitir inspección detallada mediante operaciones de zoom y desplazamiento.\label{req:rf-2-2}
+		\item[2.3.] El sistema debe mostrar información y especificaciones técnicas de la imagen.\label{req:rf-2-3}
+		\item[2.4.] El sistema debe mostrar herramientas de diagnóstico visual, incluyendo un histograma RGB y un gráfico de perfiles centrales de intensidad.\label{req:rf-2-4}
+	\end{enumerate}
+
+	\newpage
+
+	\item \textbf{Definición de \textit{pipeline} de procesado}\label{req:rf-3}
+	\begin{enumerate}
+		\item[3.1.] El sistema debe permitir definir un \textit{pipeline} de procesado como una secuencia ordenada de operaciones sobre la imagen.\label{req:rf-3-1}
+		\item[3.2.] El usuario debe poder añadir operaciones al final del \textit{pipeline} desde un menú organizado por categorías funcionales.\label{req:rf-3-2}
+		\item[3.3.] El sistema debe mostrar en la interfaz la secuencia de operaciones activas y los parámetros asociados a cada una.\label{req:rf-3-3}
+		\item[3.4.] El usuario debe poder eliminar la última operación del \textit{pipeline}.\label{req:rf-3-4}
+		\item[3.5.] El sistema debe permitir restablecer completamente el \textit{pipeline} y recuperar la imagen original.\label{req:rf-3-5}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Configuración y ajuste de operaciones}\label{req:rf-4}
+	\begin{enumerate}
+		\item[4.1.] Cada operación añadida al \textit{pipeline} debe inicializarse con parámetros por defecto válidos.\label{req:rf-4-1}
+		\item[4.2.] El sistema debe proporcionar controles específicos para la edición de parámetros propios de cada operación.\label{req:rf-4-2}
+		\item[4.3.] El usuario debe poder modificar los parámetros de cualquier operación presente en el \textit{pipeline}, aplicando los cambios de forma interactiva.\label{req:rf-4-3}
+		\item[4.4.] El sistema debe validar los parámetros introducidos y evitar la ejecución con configuraciones inválidas.\label{req:rf-4-4}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Operaciones de procesado disponibles}\label{req:rf-5}
+	\begin{enumerate}
+		\item[5.1.] El sistema debe ofrecer operaciones de mejora y filtrado, incluyendo al menos: ajuste de brillo, ajuste de contraste, transformación de intensidad afín, ajuste de contraste mediante función sigmoide, filtro gaussiano, filtro de mediana, ajuste gamma, ecualización de histograma, CLAHE, \textit{unsharp masking}, balance de blancos y compensación de luz.\label{req:rf-5-1}
+		\item[5.2.] El sistema debe ofrecer conversiones de color entre los espacios soportados, incluyendo RGB, HSV y escala de grises.\label{req:rf-5-2}
+		\item[5.3.] El sistema debe ofrecer transformaciones geométricas, incluyendo volteo, rotación y redimensionado.\label{req:rf-5-3}
+		\item[5.4.] El sistema debe ofrecer normalizaciones de intensidad, incluyendo normalización mín.-máx. estándar, con parámetros explícitos y por percentiles.\label{req:rf-5-4}
+		\item[5.5.] El sistema debe ofrecer operación de \textit{demosaicing} para imágenes Bayer con selección de algoritmo, incluyendo al menos variantes \texttt{2x2}, \texttt{3x3}, \texttt{5x5} y \texttt{Split}.\label{req:rf-5-5}
+		\item[5.6.] El sistema debe ofrecer conversiones de formato numérico entre representación en coma flotante y representación RGB de 8 bits.\label{req:rf-5-6}
+	\end{enumerate}
+
+	\newpage
+
+	\item \textbf{Ejecución y dispositivo de cómputo}\label{req:rf-6}
+	\begin{enumerate}
+		\item[6.1.] El sistema debe permitir la selección del dispositivo de ejecución de operaciones (CPU o GPU) desde la propia interfaz.\label{req:rf-6-1}
+		\item[6.2.] Cuando la GPU no esté disponible, el sistema debe informar al usuario y mantener la ejecución en CPU.\label{req:rf-6-2}
+		\item[6.3.] El sistema debe recalcular el estado de la imagen de acuerdo con el \textit{pipeline} activo tras cambios de parámetros u operaciones.\label{req:rf-6-3}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Persistencia, exportación e interoperabilidad}\label{req:rf-7}
+	\begin{enumerate}
+		\item[7.1.] El sistema debe permitir exportar el \textit{pipeline} actual a un archivo que incluya las operaciones y parámetros especificados desde la interfaz.\label{req:rf-7-1}
+		\item[7.2.] El formato exportado debe ser compatible con el módulo de \textit{benchmarking} para su ejecución y análisis de rendimiento.\label{req:rf-7-2}
+		\item[7.3.] El sistema debe permitir guardar la imagen procesada en un formato estándar (\texttt{JPG}/\texttt{JPEG}).\label{req:rf-7-3}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Trazabilidad de sesión y retroalimentación}\label{req:rf-8}
+	\begin{enumerate}
+		\item[8.1.] El sistema debe mantener un registro cronológico de eventos de sesión (carga de imagen, operaciones aplicadas, cambios de dispositivo, exportaciones y guardados, etc.)
+		que refleje el historial de interacción del usuario.\label{req:rf-8-1}
+		\item[8.2.] Tras la ejecución de cada operación, el sistema debe registrar y mostrar su tiempo de ejecución en milisegundos.\label{req:rf-8-2}
+		\item[8.3.] El sistema debe mostrar información del entorno CUDA y de los dispositivos GPU disponibles cuando corresponda.\label{req:rf-8-3}
+	\end{enumerate}
+\end{enumerate}
+
+\newpage
+
+\subsubsection{Requisitos no funcionales} \label{subsubsec:6_1_2_requisitos_no_funcionales}
+Se presentan los requisitos no funcionales del sistema, organizados también en categorías temáticas que reflejan las principales características de calidad.
+
+\vspace{0.5em}
+
+\begin{enumerate}[leftmargin=15pt]
+	\item \textbf{Usabilidad e interacción}\label{req:rnf-1}
+	\begin{enumerate}
+		\item[1.1.] La interfaz debe presentar un flujo de trabajo claro, coherente e intuitivo para usuarios técnicos y no técnicos.\label{req:rnf-1-1}
+		\item[1.2.] Las acciones principales (cargar, resetear, añadir/eliminar operaciones, exportar perfil y guardar imagen) deben ser visibles y accesibles sin navegación compleja.\label{req:rnf-1-2}
+		\item[1.3.] El sistema debe minimizar la carga cognitiva mediante organización modular de la interfaz en paneles con responsabilidades diferenciadas.\label{req:rnf-1-3}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Rendimiento y capacidad de respuesta}\label{req:rnf-2}
+	\begin{enumerate}
+		\item[2.1.] El sistema debe ofrecer actualización interactiva de la visualización tras cambios en el \textit{pipeline} o sus parámetros.\label{req:rnf-2-1}
+		\item[2.2.] La arquitectura de procesado debe aprovechar operaciones vectorizadas sobre tensores para maximizar el rendimiento.\label{req:rnf-2-2}
+		\item[2.3.] El sistema debe poder ejecutar el procesado tanto en CPU como en GPU, permitiendo comparar su comportamiento temporal.\label{req:rnf-2-3}
+		\item[2.4.] El sistema debe incorporar mecanismos de optimización de recomputación para mantener la escalabilidad en secuencias de operaciones extensas.\label{req:rnf-2-4}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Fiabilidad}\label{req:rnf-3}
+	\begin{enumerate}
+		\item[3.1.] El sistema debe manejar de forma controlada cualquier tipo de error (procesado, carga, exportación, etc.), evitando cierres inesperados de la aplicación.\label{req:rnf-3-1}
+		\item[3.2.] La integridad de la imagen original debe preservarse durante toda la sesión.\label{req:rnf-3-2}
+		\item[3.3.] Los resultados del \textit{pipeline} deben ser deterministas para una misma entrada, secuencia de operaciones y configuración de parámetros.\label{req:rnf-3-3}
+	\end{enumerate}
+
+	\newpage
+
+	\item \textbf{Mantenibilidad y extensibilidad}\label{req:rnf-4}
+	\begin{enumerate}
+		\item[4.1.] La solución debe mantener separación de responsabilidades entre interfaz, lógica de control y operaciones de procesado.\label{req:rnf-4-1}
+		\item[4.2.] La incorporación de nuevas operaciones de procesado debe poder realizarse con impacto mínimo sobre el resto del sistema.\label{req:rnf-4-2}
+		\item[4.3.] La incorporación de nuevos formatos de entrada debe poder realizarse con impacto mínimo sobre el resto del sistema.\label{req:rnf-4-3}
+		\item[4.4.] Las operaciones deben ser independientes, parametrizables y reutilizables en distintos \textit{pipelines} y contextos.\label{req:rnf-4-4}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Portabilidad y compatibilidad}\label{req:rnf-5}
+	\begin{enumerate}
+		\item[5.1.] La aplicación debe poder ejecutarse en diferentes entornos de ejecución y plataformas.\label{req:rnf-5-1}
+		\item[5.2.] El sistema debe mantener funcionalidad completa en entornos sin GPU CUDA, degradando de forma controlada a CPU.\label{req:rnf-5-2}
+		\item[5.3.] El perfil de operaciones exportado debe ser interpretable por el módulo de \textit{benchmarking} en distintos equipos.\label{req:rnf-5-3}
+	\end{enumerate}
+
+	\vspace{0.5em}
+
+	\item \textbf{Calidad del software}\label{req:rnf-6}
+	\begin{enumerate}
+		\item[6.1.] Las operaciones de procesado deben ser verificables mediante pruebas unitarias que validen su corrección funcional.\label{req:rnf-6-1}
+		\item[6.2.] El sistema debe posibilitar la evaluación reproducible del rendimiento mediante un módulo de \textit{benchmarking} desacoplado de la interfaz gráfica.\label{req:rnf-6-2}
+		\item[6.3.] La traza de eventos y tiempos de ejecución debe facilitar el análisis y la validación experimental de configuraciones de procesado.\label{req:rnf-6-3}
+	\end{enumerate}
+\end{enumerate}
+
+\newpage
 
 \subsection{Mapa de historias de usuario} \label{subsec:6_2_mapa_historias_usuario}
 
