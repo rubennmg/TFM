@@ -1,0 +1,30 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+    \begin{tikzpicture}[
+        original/.style={draw, minimum width=1.5cm, minimum height=0.8cm, line width=0.75pt, align=center, font=\small},
+        operation/.style={draw, minimum width=1cm, minimum height=0.8cm, line width=0.75pt, align=center, font=\small, fill=black!5},
+        snap/.style={draw, fill=blue!20, minimum width=1.5cm, minimum height=0.6cm, align=center, font=\small},
+        ]
+
+        \node (original) [original]  at (0,0) {Original};
+
+        \node (op1) [operation, right=1pt of original] {Op 1};
+        \node (op2) [operation, right=1pt of op1] {Op 2};
+        \node (op3) [operation, right=1pt of op2] {Op 3};
+        \node (op4) [operation, right=1pt of op3] {Op 4};
+        \node (op5) [operation, right=1pt of op4] {Op 5};
+        \node (op6) [operation, right=1pt of op5] {Op 6};
+        \node (op7) [operation, right=1pt of op6] {Op 7};
+        
+        \node[snap] (snap0) [below=0.7cm of original] {Snap 0};
+        \node[snap] (snap1) [below=0.7cm of op3] {Snap 1};
+        \node[snap] (snap2) [below=0.7cm of op6] {Snap 2};
+
+        \draw[dorrow] (original) -- (snap0);
+        \draw[dorrow] (op3) -- (snap1);
+        \draw[dorrow] (op6) -- (snap2);
+
+    \end{tikzpicture}
+\end{document}

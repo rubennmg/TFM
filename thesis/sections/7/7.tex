@@ -35,47 +35,8 @@ en la Figura \ref{fig:32_flujo_ejecucion_sistema}.
 
 \begin{figure}[h!]
     \centering
-    \begin{tikzpicture}[
-        node distance=3.5cm,
-        startstop/.style={draw, line width=1pt, align=center, font=\small,
-                          minimum width=2.75cm, minimum height=1cm, fill=blue!20},
-        process/.style={draw, line width=1pt, align=center, font=\small,
-                         minimum width=2.75cm, minimum height=1cm, fill=blue!10}
-    ]
-
-    \node (ui) [startstop] {\textbf{Interfaz gráfica}};
-    \node (raw_load) [process, right of=ui] {\textbf{Carga de imagen}\\\textbf{\textit{RAW}}};
-    \node (processing) [process, right of=raw_load] {\textbf{Procesamiento} \\ \textbf{de imagen}};
-    \node (defining) [process, right of=processing] {\textbf{Definición del}\\\textbf{\textit{pipeline}}};
-    \node (export) [startstop, right of=defining] {\textbf{\textit{Pipeline}}\\\textbf{exportado}};
-
-    \draw[arrow] (ui) -- (raw_load);
-    \draw[arrow] (raw_load) -- (processing);
-    \draw[arrow] (processing) -- (defining);
-    \draw[arrow] (defining) -- (export);
-
-    \end{tikzpicture}
-
-    \vspace{0.225cm}
-
-    \begin{tikzpicture}[
-        node distance=3.5cm,
-        startstop/.style={draw, line width=1pt, align=center, font=\small,
-                          minimum width=2.75cm, minimum height=1cm, fill=blue!20},
-        process/.style={draw, line width=1pt, align=center, font=\small,
-                         minimum width=2.75cm, minimum height=1cm, fill=blue!10}
-    ]
-
-    \node (benchmark) [startstop] {\textbf{Módulo de}\\\textbf{\textit{benchmarking}}};
-    \node (import) [process, right of=benchmark] {\textbf{Importación del}\\\textbf{\textit{pipeline}}};
-    \node (defining) [process, right of=import] {\textbf{Ejecución}};
-    \node (metrics) [startstop, right of=defining] {\textbf{Resultados}\\\textbf{y métricas}};
-
-    \draw[arrow] (benchmark) -- (import);
-    \draw[arrow] (import) -- (defining);
-    \draw[arrow] (defining) -- (metrics);
-
-    \end{tikzpicture}
+    \includegraphics[width=\textwidth]{tikz_figures/system_execution_flow/system_execution_flow_1.pdf}
+    \includegraphics[width=0.8\textwidth]{tikz_figures/system_execution_flow/system_execution_flow_2.pdf}
     \caption{Flujo general de ejecución del sistema}
     \label{fig:32_flujo_ejecucion_sistema}
 \end{figure}
@@ -106,28 +67,7 @@ de forma coordinada para cumplir con los objetivos funcionales.
 
 \begin{figure}[h!]
     \centering
-    \begin{tikzpicture}[
-        node distance=3.75cm,
-        process/.style={draw, line width=1pt, align=center, font=\small,
-                         minimum width=2.5cm, minimum height=1cm, fill=blue!20}
-    ]
-
-    \node (gui) [process] {\textbf{GUI}};
-    \node (controller) [process, right of=gui] {\textbf{Controller}};
-    \node (core) [process, right of=controller] {\textbf{Core}};
-    \node (models) [process, below of=gui, node distance=2cm, xshift=1.75cm] {\textbf{Models}};
-    \node (loaders) [process, right of=models] {\textbf{Loaders}};
-    \node (benchmark) [process, right of=core, yshift=1cm] {\textbf{Benchmark}};
-    \node (tests) [process, below of=benchmark, node distance=2cm] {\textbf{Tests}};
-
-    \draw[darrow] (gui) -- (controller);
-    \draw[darrow] (controller) -- (core);
-    \draw[darrow] (controller) -- (models);
-    \draw[darrow] (controller) -- (loaders);
-    \draw[darrow] (core) |- (benchmark.west);
-    \draw[darrow] (core) |- (tests.west);
-
-    \end{tikzpicture}
+    \includegraphics[width=0.8\textwidth]{tikz_figures/architecture/architecture.pdf}
     \caption{Diagrama de arquitectura del sistema}
     \label{fig:33_arch_diagram}
 \end{figure}
@@ -416,31 +356,7 @@ continuamente desde el inicio. En la \autoref{fig:controller_snapshots} se ilust
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[
-        original/.style={draw, minimum width=1.5cm, minimum height=0.8cm, line width=0.75pt, align=center, font=\small},
-        operation/.style={draw, minimum width=1cm, minimum height=0.8cm, line width=0.75pt, align=center, font=\small, fill=black!5},
-        snap/.style={draw, fill=blue!20, minimum width=1.5cm, minimum height=0.6cm, align=center, font=\small},
-        ]
-
-        \node (original) [original]  at (0,0) {Original};
-
-        \node (op1) [operation, right=1pt of original] {Op 1};
-        \node (op2) [operation, right=1pt of op1] {Op 2};
-        \node (op3) [operation, right=1pt of op2] {Op 3};
-        \node (op4) [operation, right=1pt of op3] {Op 4};
-        \node (op5) [operation, right=1pt of op4] {Op 5};
-        \node (op6) [operation, right=1pt of op5] {Op 6};
-        \node (op7) [operation, right=1pt of op6] {Op 7};
-        
-        \node[snap] (snap0) [below=0.7cm of original] {Snap 0};
-        \node[snap] (snap1) [below=0.7cm of op3] {Snap 1};
-        \node[snap] (snap2) [below=0.7cm of op6] {Snap 2};
-
-        \draw[dorrow] (original) -- (snap0);
-        \draw[dorrow] (op3) -- (snap1);
-        \draw[dorrow] (op6) -- (snap2);
-
-    \end{tikzpicture}
+    \includegraphics[width=0.6\textwidth]{tikz_figures/snapshot_system/snapshot_system.pdf}
     \caption{Sistema de \textit{snapshots} para optimización del \textit{pipeline} de operaciones}
     \label{fig:controller_snapshots}
 \end{figure}

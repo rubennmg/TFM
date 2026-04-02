@@ -1,0 +1,105 @@
+\documentclass{article}
+
+\begin{document}
+Planificación del proyecto organizada en sprints, con tareas específicas para cada uno de ellos.
+Sprins de dos semanas de duración, reuniones cada dos semanas revisando el progreso y ajustando 
+la planificación según sea necesario.
+    
+\begin{itemize}
+    \item \textbf{Sprint 1: Investigación inicial (21/10/2025)}
+    \begin{itemize}
+        \item Investigación sobre PyTorch y tensores para procesado de imágenes
+        \item Investigación sobre imágenes en formato crudo y estructura interna
+        \item Investigación sobre procesado de imágenes
+        \begin{itemize}
+            \item Espacios de color (RGB, HSV)
+            \item Debayering
+        \end{itemize}
+        \item Investigación sobre la librería de interfaz gráfica PyQt6
+        \item Preparación del entorno de desarrollo:
+        \begin{itemize}
+            \item Configuración de repositorio Git
+            \item Configuración de entorno virtual con dependencias necesarias
+            \item Configuración de IDE de desarrollo (VSCode)
+            \item Instalación de CUDA y PyTorch para desarrollo con GPU
+        \end{itemize}
+    \end{itemize}
+    \item \textbf{Sprint 2: Primeras implementaciones (04/11/2025)}
+    \begin{itemize}
+        \item Investigación sobre funcionamiento de programas de procesado de imágenes
+        similares
+        \item Carga y tratamiento de imágenes con tensores de PyTorch
+        \item Debayering de imágenes RAW
+        \item Ajuste de contraste mediante función sigmoide
+        \item Visualización de resultados con matplotlib
+    \end{itemize}
+    \item \textbf{Sprint 3: Esqueleto inicial (18/11/2025)}
+    \begin{itemize}
+        \item Interfaz básica con PyQt6
+        \item Integración de carga de imágenes en la interfaz
+        \item Visualización de imágenes en la interfaz
+        \item Diseño de arquitectura
+        \begin{itemize}
+            \item Definición de módulos y clases principales
+            \item Core
+            \item GUI
+            \item Loaders
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\newpage 
+
+\begin{itemize}
+    \item \textbf{Sprint 4: Implementaciones avanzadas I (2/12/2025)}
+    \begin{itemize}
+        \item Diseño para la definición de \textit{pipelines} de procesado
+        \item Gestión completa de imagen en la aplicación
+        \begin{itemize}
+            \item Carga
+            \item Visualización
+            \item Aplicación de operaciones de procesado
+            \item Reseteo a estado original
+        \end{itemize}
+        \item Implementación de operaciones de procesado I
+        \item Implementación de histograma RGB
+        \item Exportación de \textit{pipelines} de procesado
+    \end{itemize}
+\end{itemize}
+
+\begin{itemize}
+    \item \textbf{Sprint 5: Implementaciones avanzadas II (16/12/2025)}
+    \begin{itemize}
+        \item Implementación de operaciones de procesado II
+        \item Diseño e implementación de sistema de \textit{snapshots} para mejorar
+        el rendimiento durante el procesado de la imagen 
+        \item Optimización de memoria durante el tratamiento de la imagen
+        \item Tests unitarios para las operaciones de procesado implementadas 
+        \item Revisión de gestión y manejo de errores en la aplicación
+        \item Implementación de módulo de \textit{benchmarking}
+    \end{itemize}
+    \item \textbf{Sprint 6: Implementaciones avanzadas III (13/01/2026)}
+    \begin{itemize}
+        \item Implementación de operaciones de procesado III
+        \item Implementación de carga de imágenes en formato propio (PKL.GZ)
+        \item Implementación de gráfico de perfiles de intensidad
+        \item Guardado de imagen en formato JPG/JPEG
+        \item Selección de dispositivo de procesamiento (CPU/GPU)
+        \item Implementación de \textit{logger} para seguimiento de eventos
+    \end{itemize}
+    \item \textbf{Sprint 7: Revisión y refinamiento (27/01/2026)}
+    \begin{itemize}
+        \item Revisión de interfaz gráfica y experiencia de usuario
+        \begin{itemize}
+            \item Mejoras en visualización y navegación del visor de imágenes
+            \item Mejoras y refinamiento de controles para ajuste de parámetros de procesado
+        \end{itemize}
+        \item Implementación y refinamiento de tests unitarios para nuevas operaciones
+        \item Ajuste y refinamiento de sistema de zoom
+        \item Revisión y refactorización de código
+    \end{itemize}
+\end{itemize}
+
+
+
+\end{document}

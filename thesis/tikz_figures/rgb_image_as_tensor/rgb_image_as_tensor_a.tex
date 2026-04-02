@@ -1,0 +1,20 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+    \begin{tikzpicture}
+        [
+            x={(1cm, 0cm)},
+            y={(0cm, 1cm)},
+            z={(0.5cm, 0.5cm)}
+        ]
+        % RGB Planes
+        \foreach \z/\color in {3/blue!40, 1.5/green!40, 0/red!40} {
+                \filldraw[fill=\color, draw=black!50]
+                (0,0,\z) -- ++(3,0,0) -- ++(0,3,0) -- ++(-3,0,0) -- cycle;
+            }
+        % Edges
+        \draw[thick] (0,0,0) -- (4,0,0) node[right] {\textrm{($W$)}};
+        \draw[thick] (0,0,0) -- (0,4,0) node[above] {\textrm{($H$)}};
+    \end{tikzpicture}
+\end{document}

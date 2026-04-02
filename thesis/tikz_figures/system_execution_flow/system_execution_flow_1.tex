@@ -1,0 +1,25 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+    \begin{tikzpicture}[
+        node distance=3.5cm,
+        startstop/.style={draw, line width=1pt, align=center, font=\small,
+                          minimum width=2.75cm, minimum height=1cm, fill=blue!20},
+        process/.style={draw, line width=1pt, align=center, font=\small,
+                         minimum width=2.75cm, minimum height=1cm, fill=blue!10}
+    ]
+
+    \node (ui) [startstop] {\textbf{Interfaz gráfica}};
+    \node (raw_load) [process, right of=ui] {\textbf{Carga de imagen}\\\textbf{\textit{RAW}}};
+    \node (processing) [process, right of=raw_load] {\textbf{Procesamiento} \\ \textbf{de imagen}};
+    \node (defining) [process, right of=processing] {\textbf{Definición del}\\\textbf{\textit{pipeline}}};
+    \node (export) [startstop, right of=defining] {\textbf{\textit{Pipeline}}\\\textbf{exportado}};
+
+    \draw[arrow] (ui) -- (raw_load);
+    \draw[arrow] (raw_load) -- (processing);
+    \draw[arrow] (processing) -- (defining);
+    \draw[arrow] (defining) -- (export);
+
+    \end{tikzpicture}
+\end{document}

@@ -1,0 +1,38 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+    \begin{tikzpicture}[scale=0.9]
+        % Escalar
+        \node[font=\small\bfseries] at (0, 4.5) {Escalar (0D)};
+        \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (0, 3.5) {2};
+        
+        % Vector
+        \node[font=\small\bfseries] at (3, 4.5) {Vector (1D)};
+        \foreach \x/\val in {0/2, 1/4, 2/6, 3/8} {
+            \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (1.975+\x*0.7, 3.5) {\val};
+        }
+        
+        % Matriz
+        \node[font=\small\bfseries] at (6.5, 4.5) {Matriz (2D)};
+        \foreach \idx/\val in {0/2, 1/4, 2/6, 3/8} {
+            \pgfmathparse{mod(\idx, 2)}
+            \let\x\pgfmathresult
+            \pgfmathparse{int(div(\idx, 2))}
+            \let\y\pgfmathresult
+            \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (6.15+\x*0.7, 3.7-\y*0.725) {\val};
+        }
+        
+        % Tensor
+        \node[font=\small\bfseries] at (9.5, 4.5) {Tensor (3D)};
+        \foreach \z in {0, 1, 2} {
+            \foreach \idx/\val in {0/2, 1/4, 2/6, 3/8} {
+                \pgfmathparse{mod(\idx, 2)}
+                \let\x\pgfmathresult
+                \pgfmathparse{int(div(\idx, 2))}
+                \let\y\pgfmathresult
+                \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (9.1+\x*0.7+\z*0.35, 3.75-\y*0.725-\z*0.35) {\val};
+            }
+        }
+    \end{tikzpicture}
+\end{document}

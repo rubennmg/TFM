@@ -1,0 +1,58 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+    \begin{tikzpicture}[
+        core/.style={draw, rectangle, minimum width=0.85cm, minimum height=0.75cm, fill=blue!30},
+        gcore/.style={draw, rectangle, minimum width=0.3cm, minimum height=0.3cm, fill=blue!30},
+        label/.style={font=\small\bfseries},
+        box/.style={draw=black, rounded corners, line width=1pt, fill=black!5}
+    ]
+    
+    % CPU
+    \def\cpuLabelX{-3.85}
+    \def\cpuLabelY{1.5}
+    \def\cpuBoxLeft{-5.25}
+    \def\cpuBoxRight{-2.35}
+    \def\cpuBoxBottom{-0.9}
+    \def\cpuBoxTop{1.0}
+    \def\cpuCoreXA{-4.5}
+    \def\cpuCoreXB{-3.1}
+    \def\cpuCoreTopY{0.5}
+    \def\cpuCoreBottomY{-0.4}
+    
+    % GPU
+    \def\gpuLabelX{3.65}
+    \def\gpuLabelY{2.2}
+    \def\gpuBoxLeft{1.9}
+    \def\gpuBoxRight{5.5}
+    \def\gpuBoxBottom{-1.8}
+    \def\gpuBoxTop{1.8}
+    \def\gpuCoresStartX{2.2}
+    \def\gpuCoresStartY{1.5}
+    \def\gpuCoreSpacingX{0.375}
+    \def\gpuCoreSpacingY{0.375}
+
+    % ========== CPU ==========
+    \node[label] at (\cpuLabelX,\cpuLabelY) {CPU};
+    \draw[box] (\cpuBoxLeft,\cpuBoxBottom) rectangle (\cpuBoxRight,\cpuBoxTop);
+
+    \node[core] at (\cpuCoreXA,\cpuCoreTopY) {Core 1};
+    \node[core] at (\cpuCoreXB,\cpuCoreTopY) {Core 2};
+    \node[core] at (\cpuCoreXA,\cpuCoreBottomY) {Core 3};
+    \node[core] at (\cpuCoreXB,\cpuCoreBottomY) {Core 4};
+
+    % ========== GPU ==========
+    \node[label] at (\gpuLabelX,\gpuLabelY) {GPU};
+    \draw[box] (\gpuBoxLeft,\gpuBoxBottom) rectangle (\gpuBoxRight,\gpuBoxTop);
+
+    \foreach \row in {0,1,2,3,4,5,6,7,8} {
+        \foreach \col in {0,1,2,3,4,5,6,7,8} {
+            \pgfmathsetmacro{\xpos}{\gpuCoresStartX + \col*\gpuCoreSpacingX}
+            \pgfmathsetmacro{\ypos}{\gpuCoresStartY - \row*\gpuCoreSpacingY}
+            \node[gcore] at (\xpos,\ypos) {};
+        }
+    }
+        
+    \end{tikzpicture}
+\end{document}

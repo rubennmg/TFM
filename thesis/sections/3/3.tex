@@ -83,61 +83,7 @@ hasta la imagen digital final $I[m,n]$.
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[
-        box/.style={draw=black!70, thick, minimum width=3.70cm, minimum height=3.25cm},
-        matrix_box/.style={draw=black!70, thick, minimum width=3.50cm, minimum height=3.50cm},
-        title/.style={font=\small, align=center}
-    ]
-        % BOX: Imagen continua
-        \node[box, label={[title]above:Imagen continua}] (cont) at (-3,0) {};
-        
-        \node (image_cont) at (-3,0) {
-            \includegraphics[width=3.70cm,height=3.25cm]{sections/3/img/dog.png}
-        }; 
-        
-        \node[font=\small] at (-3, -2) {$f(x,y)$};
-
-        % ARROW: Muestreo
-        \draw[arrow, thick] (-1,0) -- node[above, font=\small] {Muestreo} (1,0);
-
-        % BOX: Imagen muestreada
-        \node[box, fill=white, label={[title]above:Imagen muestreada}] (sampled) at (3,0) {};
-
-        \node (image_cont) at (3,0) {
-            \includegraphics[width=3.70cm,height=3.25cm]{sections/3/img/dog_pixelated.png}
-        }; 
-
-        \node[font=\small] at (3, -2) {$f[m,n]$};
-        
-        % ARROW: Cuantificación
-        \draw[arrow, thick] (5,0) -- node[above, font=\small] {Cuantificación} (7,0);
-
-        % BOX: Imagen digital
-        \node[matrix_box, fill=white, label={[title]above:Imagen digital}] (digital) at (9,0) {};
-
-            \begin{scope}[shift={(9,0)}]
-                \def\step{0.4375}
-
-                \foreach \x/\y/\g in {
-                    -1.75/ 1.75/5,     -1.3125/ 1.75/12,    -0.875/ 1.75/20,     -0.4375/ 1.75/28,     0/ 1.75/32,     0.4375/ 1.75/28,     0.875/ 1.75/20,     1.3125/ 1.75/12,
-                    -1.75/ 1.3125/12,  -1.3125/ 1.3125/35,  -0.875/ 1.3125/55,   -0.4375/ 1.3125/70,   0/ 1.3125/75,   0.4375/ 1.3125/70,   0.875/ 1.3125/55,   1.3125/ 1.3125/35,
-                    -1.75/ 0.875/20,   -1.3125/ 0.875/60,   -0.875/ 0.875/90,    -0.4375/ 0.875/110,   0/ 0.875/120,   0.4375/ 0.875/110,   0.875/ 0.875/90,    1.3125/ 0.875/60,
-                    -1.75/ 0.4375/28,  -1.3125/ 0.4375/80,  -0.875/ 0.4375/120,  -0.4375/ 0.4375/145,  0/ 0.4375/155,  0.4375/ 0.4375/145,  0.875/ 0.4375/120,  1.3125/ 0.4375/80,
-                    -1.75/ 0/32,       -1.3125/ 0/90,       -0.875/ 0/135,       -0.4375/ 0/165,       0/ 0/180,       0.4375/ 0/165,       0.875/ 0/135,       1.3125/ 0/90,
-                    -1.75/ -0.4375/28, -1.3125/ -0.4375/80, -0.875/ -0.4375/120, -0.4375/ -0.4375/145, 0/ -0.4375/155, 0.4375/ -0.4375/145, 0.875/ -0.4375/120, 1.3125/ -0.4375/80,
-                    -1.75/ -0.875/20,  -1.3125/ -0.875/60,  -0.875/ -0.875/90,   -0.4375/ -0.875/110,  0/ -0.875/120,  0.4375/ -0.875/110,  0.875/ -0.875/90,   1.3125/ -0.875/60,
-                    -1.75/ -1.3125/12, -1.3125/ -1.3125/35, -0.875/ -1.3125/55,  -0.4375/ -1.3125/70,  0/ -1.3125/75,  0.4375/ -1.3125/70,  0.875/ -1.3125/55,  1.3125/ -1.3125/35
-                }{
-                \node[font=\tiny, anchor=center, align=center] at (\x + 0.21875, \y - 0.21875) {\g};
-                }
-                
-                \draw[black!70, thin] (-1.75, -1.75) grid[step=0.4375] (1.75, 1.75);
-
-            \end{scope}
-
-        \node[font=\small] at (9, -2) {$I[m,n]$};
-
-    \end{tikzpicture}
+    \includegraphics[width=\textwidth]{tikz_figures/digitisation_process/digitisation_process.pdf}
     \caption{Proceso de digitalización de una imagen}
     \label{fig:1_muestreo_cuantificacion}
 \end{figure}
@@ -379,41 +325,7 @@ de imagen digitales.
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[
-        cell/.style={draw=black!80, ultra thin, minimum size=1cm, align=center, font=\small\bfseries},
-                    title/.style={font=\small}
-    ]
-    \usetikzlibrary{matrix}
-
-        % ---------- RGGB ----------
-        \node[title] at (-4,-1.5) {RGGB};
-        \matrix (rggb) at (-4,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
-            |[fill=red!60]| R & |[fill=green!60]| G \\
-            |[fill=green!60]| G & |[fill=blue!60]| B \\
-        };
-
-        % ---------- BGGR ----------
-        \node[title] at (-1.3,-1.5) {BGGR};
-        \matrix (bggr) at (-1.3,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
-            |[fill=blue!60]| B & |[fill=green!60]| G \\
-            |[fill=green!60]| G & |[fill=red!60]| R \\
-        };
-
-        % ---------- GBRG ----------
-        \node[title] at (1.3,-1.5) {GBRG};
-        \matrix (gbrg) at (1.3,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
-            |[fill=green!60]| G & |[fill=blue!60]| B \\
-            |[fill=red!60]| R & |[fill=green!60]| G \\
-        };
-
-        % ---------- GRBG ----------
-        \node[title] at (4,-1.5) {GRBG};
-        \matrix (grbg) at (4,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
-            |[fill=green!60]| G & |[fill=red!60]| R \\
-            |[fill=blue!60]| B & |[fill=green!60]| G \\
-        };
-
-    \end{tikzpicture}
+    \includegraphics[width=0.65\textwidth]{tikz_figures/bayer_patterns/bayer_patterns.pdf}
     \caption{Patrones Bayer más comunes utilizados en sensores de imagen digitales}
     \label{fig:6_patrones_bayer}
 \end{figure}
@@ -1653,28 +1565,10 @@ el \textit{pipeline} incluye las etapas que se ilustran en la \autoref{fig:27_et
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[
-        node distance=2cm,
-        startstop/.style={draw, line width=1pt, align=center, font=\small, minimum width=4.5cm, minimum height=1.2cm, fill=blue!20},
-        process/.style={draw, line width=1pt, align=center, font=\small, minimum width=4.5cm, minimum height=1.2cm, fill=blue!10}
-    ]
-
-    \node (raw) [startstop] {\textbf{Imagen RAW}};
-    \node (demosaic) [below of=raw, process] {\textbf{\textit{Demosaicing}}};
-    \node (processing) [below of=demosaic, process] {\textbf{Procesamiento}\footnotemark};
-    \node (uint8) [below of=processing, process] {\textbf{Conversión a} \\ \textbf{formato de visualización}};
-    \node (output) [below of=uint8, startstop] {\textbf{Imagen final}};
-
-    \draw[arrow] (raw) -- (demosaic);
-    \draw[arrow] (demosaic) -- (processing);
-    \draw[arrow] (processing) -- (uint8);
-    \draw[arrow] (uint8) -- (output);
-
-    \end{tikzpicture}
+    \includegraphics[width=0.275\textwidth]{tikz_figures/pipeline_stages/pipeline_stages.pdf}
     \caption{Etapas del \textit{pipeline} de revelado digital}
     \label{fig:27_etapas_pipeline_revelado}
 \end{figure}
-\footnotetext{Incluye mejora del contraste, reducción de ruido, realce de detalle, etc.}
 
 En el marco de este TFM, el pipeline de revelado digital es la base para la implementación 
 y optimización de las técnicas de procesamiento. Sobre dicho \textit{pipeline} se desarrollan las 
@@ -1725,40 +1619,7 @@ de diferentes órdenes, ejemplificando cómo se almacenan los datos en cada caso
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[scale=0.9]
-        % Escalar
-        \node[font=\small\bfseries] at (0, 4.5) {Escalar (0D)};
-        \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (0, 3.5) {2};
-        
-        % Vector
-        \node[font=\small\bfseries] at (3, 4.5) {Vector (1D)};
-        \foreach \x/\val in {0/2, 1/4, 2/6, 3/8} {
-            \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (1.975+\x*0.7, 3.5) {\val};
-        }
-        
-        % Matriz
-        \node[font=\small\bfseries] at (6.5, 4.5) {Matriz (2D)};
-        \foreach \idx/\val in {0/2, 1/4, 2/6, 3/8} {
-            \pgfmathparse{mod(\idx, 2)}
-            \let\x\pgfmathresult
-            \pgfmathparse{int(div(\idx, 2))}
-            \let\y\pgfmathresult
-            \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (6.15+\x*0.7, 3.7-\y*0.725) {\val};
-        }
-        
-        % Tensor
-        \node[font=\small\bfseries] at (9.5, 4.5) {Tensor (3D)};
-        \foreach \z in {0, 1, 2} {
-            \foreach \idx/\val in {0/2, 1/4, 2/6, 3/8} {
-                \pgfmathparse{mod(\idx, 2)}
-                \let\x\pgfmathresult
-                \pgfmathparse{int(div(\idx, 2))}
-                \let\y\pgfmathresult
-                \node[draw, rectangle, minimum width=0.65cm, minimum height=0.65cm, fill=blue!20, font=\small] at (9.1+\x*0.7+\z*0.35, 3.75-\y*0.725-\z*0.35) {\val};
-            }
-        }
-        
-    \end{tikzpicture}
+    \includegraphics[width=0.775\textwidth]{tikz_figures/tensor_representation/tensor_representation.pdf}
     \caption{Representación visual de tensores de diferentes dimensiones}
     \label{fig:28_tensor_representation}
 \end{figure}
@@ -1783,38 +1644,14 @@ Puede observarse una representación conceptual de una imagen RGB como tensor tr
 	% --- Subfigure 1 ---
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
-		\begin{tikzpicture}
-			[
-				x={(1cm, 0cm)},
-				y={(0cm, 1cm)},
-				z={(0.5cm, 0.5cm)}
-			]
-			% RGB Planes
-			\foreach \z/\color in {3/blue!40, 1.5/green!40, 0/red!40} {
-					\filldraw[fill=\color, draw=black!50]
-					(0,0,\z) -- ++(3,0,0) -- ++(0,3,0) -- ++(-3,0,0) -- cycle;
-				}
-			% Edges
-			\draw[thick] (0,0,0) -- (4,0,0) node[right] {\textrm{($W$)}};
-			\draw[thick] (0,0,0) -- (0,4,0) node[above] {\textrm{($H$)}};
-		\end{tikzpicture}
+		\includegraphics[width=0.75\textwidth]{tikz_figures/rgb_image_as_tensor/rgb_image_as_tensor_a.pdf}
 		\caption{}
 	\end{subfigure}
 	\hfill
 	% --- Subfigure 2 ---
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
-		\begin{tikzpicture}
-			% RGB Planes
-			\foreach \z/\color in {0/red!40,1.25/green!40,2.5/blue!40} {
-					\filldraw[fill=\color, draw=black!50]
-					(\z,0,0) -- ++(0,3,0) -- ++(0,0,3) -- ++(0,-3,0) -- cycle;
-				}
-			% Edges
-			\draw[thick] (0,0,0) -- (3,0,0) node[right] {\textrm{($C$)}};
-			\draw[thick] (0,0,0) -- (0,3.5,0) node[above] {\textrm{($H$)}};
-			\draw[thick] (0,0,0) -- (0,0,4) node[above left] {\textrm{($W$)}};
-		\end{tikzpicture}
+		\includegraphics[width=0.8\textwidth]{tikz_figures/rgb_image_as_tensor/rgb_image_as_tensor_b.pdf}
 		\caption{}
 	\end{subfigure}
 	\caption{Representación conceptual de una imagen RGB como tensor tridimensional}
@@ -1932,59 +1769,7 @@ comparación conceptual entre ambas arquitecturas.
 
 \begin{figure}[h]
     \centering
-    \begin{tikzpicture}[
-        core/.style={draw, rectangle, minimum width=0.85cm, minimum height=0.75cm, fill=blue!30},
-        gcore/.style={draw, rectangle, minimum width=0.3cm, minimum height=0.3cm, fill=blue!30},
-        label/.style={font=\small\bfseries},
-        box/.style={draw=black, rounded corners, line width=1pt, fill=black!5}
-    ]
-    
-    % CPU
-    \def\cpuLabelX{-3.85}
-    \def\cpuLabelY{1.6}
-    \def\cpuBoxLeft{-5.65}
-    \def\cpuBoxRight{-2.1}
-    \def\cpuBoxBottom{-1.0}
-    \def\cpuBoxTop{1.2}
-    \def\cpuCoreXA{-4.7}
-    \def\cpuCoreXB{-3.05}
-    \def\cpuCoreTopY{0.6}
-    \def\cpuCoreBottomY{-0.4}
-    
-    % GPU
-    \def\gpuLabelX{3.65}
-    \def\gpuLabelY{2.2}
-    \def\gpuBoxLeft{1.9}
-    \def\gpuBoxRight{5.5}
-    \def\gpuBoxBottom{-1.8}
-    \def\gpuBoxTop{1.8}
-    \def\gpuCoresStartX{2.2}
-    \def\gpuCoresStartY{1.5}
-    \def\gpuCoreSpacingX{0.375}
-    \def\gpuCoreSpacingY{0.375}
-
-    % ========== CPU ==========
-    \node[label] at (\cpuLabelX,\cpuLabelY) {CPU};
-    \draw[box] (\cpuBoxLeft,\cpuBoxBottom) rectangle (\cpuBoxRight,\cpuBoxTop);
-
-    \node[core] at (\cpuCoreXA,\cpuCoreTopY) {Core 1};
-    \node[core] at (\cpuCoreXB,\cpuCoreTopY) {Core 2};
-    \node[core] at (\cpuCoreXA,\cpuCoreBottomY) {Core 3};
-    \node[core] at (\cpuCoreXB,\cpuCoreBottomY) {Core 4};
-
-    % ========== GPU ==========
-    \node[label] at (\gpuLabelX,\gpuLabelY) {GPU};
-    \draw[box] (\gpuBoxLeft,\gpuBoxBottom) rectangle (\gpuBoxRight,\gpuBoxTop);
-
-    \foreach \row in {0,1,2,3,4,5,6,7,8} {
-        \foreach \col in {0,1,2,3,4,5,6,7,8} {
-            \pgfmathsetmacro{\xpos}{\gpuCoresStartX + \col*\gpuCoreSpacingX}
-            \pgfmathsetmacro{\ypos}{\gpuCoresStartY - \row*\gpuCoreSpacingY}
-            \node[gcore] at (\xpos,\ypos) {};
-        }
-    }
-
-    \end{tikzpicture}
+    \includegraphics[width=0.675\textwidth]{tikz_figures/cpu_vs_gpu/cpu_vs_gpu.pdf}
     \caption{Comparación conceptual entre arquitecturas CPU y GPU}
     \label{fig:31_cpu_vs_gpu}
 \end{figure}

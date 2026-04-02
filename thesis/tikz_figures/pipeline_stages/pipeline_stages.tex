@@ -1,0 +1,23 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+    \begin{tikzpicture}[
+        node distance=2cm,
+        startstop/.style={draw, line width=1pt, align=center, minimum width=4.5cm, minimum height=1.2cm, fill=blue!20},
+        process/.style={draw, line width=1pt, align=center, minimum width=4.5cm, minimum height=1.2cm, fill=blue!10}
+    ]
+
+    \node (raw) [startstop] {\textbf{Imagen RAW}};
+    \node (demosaic) [below of=raw, process] {\textbf{\textit{Demosaicing}}};
+    \node (processing) [below of=demosaic, process] {\textbf{Procesamiento}};
+    \node (uint8) [below of=processing, process] {\textbf{Conversión a} \\ \textbf{formato de visualización}};
+    \node (output) [below of=uint8, startstop] {\textbf{Imagen final}};
+
+    \draw[arrow] (raw) -- (demosaic);
+    \draw[arrow] (demosaic) -- (processing);
+    \draw[arrow] (processing) -- (uint8);
+    \draw[arrow] (uint8) -- (output);
+        
+    \end{tikzpicture}
+\end{document}

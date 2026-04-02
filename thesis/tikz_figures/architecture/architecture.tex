@@ -1,0 +1,27 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+    \begin{tikzpicture}[
+        node distance=3.75cm,
+        process/.style={draw, line width=1pt, align=center, font=\small,
+                         minimum width=2.5cm, minimum height=1cm, fill=blue!20}
+    ]
+
+    \node (gui) [process] {\textbf{GUI}};
+    \node (controller) [process, right of=gui] {\textbf{Controller}};
+    \node (core) [process, right of=controller] {\textbf{Core}};
+    \node (models) [process, below of=gui, node distance=2cm, xshift=1.75cm] {\textbf{Models}};
+    \node (loaders) [process, right of=models] {\textbf{Loaders}};
+    \node (benchmark) [process, right of=core, yshift=1cm] {\textbf{Benchmark}};
+    \node (tests) [process, below of=benchmark, node distance=2cm] {\textbf{Tests}};
+
+    \draw[darrow] (gui) -- (controller);
+    \draw[darrow] (controller) -- (core);
+    \draw[darrow] (controller) -- (models);
+    \draw[darrow] (controller) -- (loaders);
+    \draw[darrow] (core) |- (benchmark.west);
+    \draw[darrow] (core) |- (tests.west);
+
+    \end{tikzpicture}
+\end{document}

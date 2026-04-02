@@ -1,0 +1,60 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+\begin{tikzpicture}[
+	box/.style={draw=black!70, thick, minimum width=3.70cm, minimum height=3.25cm},
+	matrix_box/.style={draw=black!70, thick, minimum width=3.50cm, minimum height=3.50cm},
+	title/.style={font=\small, align=center}
+]
+	% BOX: Imagen continua
+	\node[box, label={[title]above:Imagen continua}] (cont) at (-3,0) {};
+    
+	\node (image_cont) at (-3,0) {
+		\includegraphics[width=3.70cm,height=3.25cm]{../../sections/3/img/dog.png}
+	};
+    
+	\node[font=\small] at (-3, -2) {$f(x,y)$};
+
+	% ARROW: Muestreo
+	\draw[arrow, thick] (-1,0) -- node[above, font=\small] {Muestreo} (1,0);
+
+	% BOX: Imagen muestreada
+	\node[box, fill=white, label={[title]above:Imagen muestreada}] (sampled) at (3,0) {};
+
+	\node (image_cont) at (3,0) {
+		\includegraphics[width=3.70cm,height=3.25cm]{../../sections/3/img/dog_pixelated.png}
+	};
+
+	\node[font=\small] at (3, -2) {$f[m,n]$};
+    
+	% ARROW: Cuantificacion
+	\draw[arrow, thick] (5,0) -- node[above, font=\small] {Cuantificacion} (7,0);
+
+	% BOX: Imagen digital
+	\node[matrix_box, fill=white, label={[title]above:Imagen digital}] (digital) at (9,0) {};
+
+		\begin{scope}[shift={(9,0)}]
+			\def\step{0.4375}
+
+			\foreach \x/\y/\g in {
+				-1.75/ 1.75/5,     -1.3125/ 1.75/12,    -0.875/ 1.75/20,     -0.4375/ 1.75/28,     0/ 1.75/32,     0.4375/ 1.75/28,     0.875/ 1.75/20,     1.3125/ 1.75/12,
+				-1.75/ 1.3125/12,  -1.3125/ 1.3125/35,  -0.875/ 1.3125/55,   -0.4375/ 1.3125/70,   0/ 1.3125/75,   0.4375/ 1.3125/70,   0.875/ 1.3125/55,   1.3125/ 1.3125/35,
+				-1.75/ 0.875/20,   -1.3125/ 0.875/60,   -0.875/ 0.875/90,    -0.4375/ 0.875/110,   0/ 0.875/120,   0.4375/ 0.875/110,   0.875/ 0.875/90,    1.3125/ 0.875/60,
+				-1.75/ 0.4375/28,  -1.3125/ 0.4375/80,  -0.875/ 0.4375/120,  -0.4375/ 0.4375/145,  0/ 0.4375/155,  0.4375/ 0.4375/145,  0.875/ 0.4375/120,  1.3125/ 0.4375/80,
+				-1.75/ 0/32,       -1.3125/ 0/90,       -0.875/ 0/135,       -0.4375/ 0/165,       0/ 0/180,       0.4375/ 0/165,       0.875/ 0/135,       1.3125/ 0/90,
+				-1.75/ -0.4375/28, -1.3125/ -0.4375/80, -0.875/ -0.4375/120, -0.4375/ -0.4375/145, 0/ -0.4375/155, 0.4375/ -0.4375/145, 0.875/ -0.4375/120, 1.3125/ -0.4375/80,
+				-1.75/ -0.875/20,  -1.3125/ -0.875/60,  -0.875/ -0.875/90,   -0.4375/ -0.875/110,  0/ -0.875/120,  0.4375/ -0.875/110,  0.875/ -0.875/90,   1.3125/ -0.875/60,
+				-1.75/ -1.3125/12, -1.3125/ -1.3125/35, -0.875/ -1.3125/55,  -0.4375/ -1.3125/70,  0/ -1.3125/75,  0.4375/ -1.3125/70,  0.875/ -1.3125/55,  1.3125/ -1.3125/35
+			}{
+			\node[font=\tiny, anchor=center, align=center] at (\x + 0.21875, \y - 0.21875) {\g};
+			}
+            
+			\draw[black!70, thin] (-1.75, -1.75) grid[step=0.4375] (1.75, 1.75);
+
+		\end{scope}
+
+	\node[font=\small] at (9, -2) {$I[m,n]$};
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,40 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+    \begin{tikzpicture}[
+        cell/.style={draw=black!80, ultra thin, minimum size=1cm, align=center, font=\small\bfseries},
+        title/.style={font=\small}
+    ]
+    
+    \usetikzlibrary{matrix}
+
+    % ---------- RGGB ----------
+    \node[title] at (-4,-1.5) {RGGB};
+    \matrix (rggb) at (-4,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
+        |[fill=red!60]| R & |[fill=green!60]| G \\
+        |[fill=green!60]| G & |[fill=blue!60]| B \\
+    };
+
+    % ---------- BGGR ----------
+    \node[title] at (-1.3,-1.5) {BGGR};
+    \matrix (bggr) at (-1.3,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
+        |[fill=blue!60]| B & |[fill=green!60]| G \\
+        |[fill=green!60]| G & |[fill=red!60]| R \\
+    };
+
+    % ---------- GBRG ----------
+    \node[title] at (1.3,-1.5) {GBRG};
+    \matrix (gbrg) at (1.3,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
+        |[fill=green!60]| G & |[fill=blue!60]| B \\
+        |[fill=red!60]| R & |[fill=green!60]| G \\
+    };
+
+    % ---------- GRBG ----------
+    \node[title] at (4,-1.5) {GRBG};
+    \matrix (grbg) at (4,0) [matrix of nodes, nodes={cell}, column sep=0pt, row sep=0pt] {
+        |[fill=green!60]| G & |[fill=red!60]| R \\
+        |[fill=blue!60]| B & |[fill=green!60]| G \\
+    };
+    \end{tikzpicture}
+\end{document}

@@ -1,0 +1,23 @@
+\documentclass{article}
+\input{../common_config.sty}
+
+\begin{document}
+     \begin{tikzpicture}[
+        node distance=3.5cm,
+        startstop/.style={draw, line width=1pt, align=center, font=\small,
+                          minimum width=2.75cm, minimum height=1cm, fill=blue!20},
+        process/.style={draw, line width=1pt, align=center, font=\small,
+                         minimum width=2.75cm, minimum height=1cm, fill=blue!10}
+    ]
+
+    \node (benchmark) [startstop] {\textbf{Módulo de}\\\textbf{\textit{benchmarking}}};
+    \node (import) [process, right of=benchmark] {\textbf{Importación del}\\\textbf{\textit{pipeline}}};
+    \node (defining) [process, right of=import] {\textbf{Ejecución}};
+    \node (metrics) [startstop, right of=defining] {\textbf{Resultados}\\\textbf{y métricas}};
+
+    \draw[arrow] (benchmark) -- (import);
+    \draw[arrow] (import) -- (defining);
+    \draw[arrow] (defining) -- (metrics);
+        
+    \end{tikzpicture}
+\end{document}
