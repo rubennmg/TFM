@@ -931,10 +931,23 @@ de su implementación:
 \end{enumerate}
 
 En situaciones más complejas o inusuales, se incluyen pruebas adicionales que verifican casos límite, 
-comportamiento con entradas atípicas o validación de propiedades específicas. También, en escenarios 
-más concreto, se ejecutan pruebas paramétricas utilizando la anotación \textit{@pytest.mark.parametrize}
-para evaluar múltiples combinaciones de parámetros de forma sistemática.
+comportamiento con entradas atípicas o validación de propiedades específicas.
 
 \newpage
 
 \subsection{Diagrama de paquetes} \label{subsec:7_4_diagrama_de_paquetes}
+Se presenta en la \autoref{fig:54_package_diagram} el diagrama de paquetes de la aplicación, que 
+muestra la organización de los diferentes directorios que componen el proyecto. El nivel de profundidad
+mostrado es de únicamente dos niveles, por lo que no se muestran los subdirectorios internos 
+de cada paquete. Aumentar el nivel de profundidad haría que el diagrama fuera demasiado complejo 
+y difícil de interpretar.
+
+\vspace{1em}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sections/7/img/package_diagram.pdf}
+    \caption{Diagrama de paquetes de la aplicación}
+    \label{fig:54_package_diagram}
+\end{figure}
+
