@@ -162,6 +162,477 @@ Se presentan los requisitos no funcionales del sistema, organizados también en 
 
 \subsection{Mapa de historias de usuario} \label{subsec:6_2_mapa_historias_usuario}
 
+\newpage
+
+\subsubsection{Historias de usuario} \label{subsubsec:6_2_1_historias_usuario}
+Se detalla a continuación la especificación de cada historia de usuario, incluyendo sus criterios de aceptación.
+
+\paragraph{Estudio sobre PyTorch y tensores} \label{hist:estudio_pytorch_tensors}
+Como desarrollador, quiero estudiar la biblioteca PyTorch y su modelo de tensores para comprender su funcionamiento 
+y capacidades. 
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben analizar las capacidades de la biblioteca en el contexto del procesado de imágenes.
+	\item Se deben analizar las operaciones básicas de manipulación de tensores.
+\end{itemize}
+
+\paragraph{Estudio sobre Imágenes RAW} \label{hist:estudio_imagenes_raw}
+Como desarrollador, quiero estudiar el formato de imágenes RAW para comprender su estructura y características.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben analizar las características del formato RAW.
+	\item Se debe analizar la variedad de formatos RAW existentes y su compatibilidad con bibliotecas de Python.
+	\item Se debe analizar la estructura de los archivos RAW y su contenido.
+\end{itemize}
+
+\paragraph{Estudio sobre procesamiento de Imágenes RAW} \label{hist:estudio_procesamiento_imagenes_raw}
+Como desarrollador, quiero estudiar las técnicas de procesamiento de imágenes RAW para comprender su funcionamiento y aplicaciones.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben analizar las técnicas de procesamiento específicas para imágenes RAW.
+	\item Se debe analizar, en específico, el proceso de \textit{demosaicing} y sus algoritmos asociados.
+	\item Se debe analizar el funcionamiento de un \textit{pipeline} de procesado de imágenes RAW.
+\end{itemize}
+
+\paragraph{Estudio sobre procesamiento en tiempo real} \label{hist:estudio_procesamiento_tiempo_real}
+Como desarrollador, quiero estudiar las técnicas de procesamiento en tiempo real para comprender su funcionamiento y aplicaciones.
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben analizar las técnicas de optimización para procesamiento en tiempo real.
+	\item Se debe analizar el uso de GPU para acelerar el procesamiento de imágenes.
+\end{itemize}
+
+\newpage
+
+\paragraph{Estudio sobre PyQt} \label{hist:estudio_pyqt}
+Como desarrollador, quiero estudiar la biblioteca PyQt para comprender su funcionamiento y capacidades en el desarrollo
+de interfaces gráficas de usuario.
+
+\noindent{Criterios de aceptación:}
+
+\begin{itemize}[noitemsep]
+	\item Se deben analizar las capacidades de la biblioteca en el contexto del desarrollo de interfaces gráficas.
+	\item Se deben analizar los componentes básicos de la biblioteca y su uso para construir interfaces gráficas.
+	\item La biblioteca debe ser evaluada en términos de su integración con PyTorch y su capacidad para manejar la visualización de imágenes y la interacción del usuario.
+\end{itemize}
+
+\paragraph{Preparación del entorno de desarrollo} \label{hist:preparacion_entorno_desarrollo}
+Como desarrollador, quiero preparar el entorno de desarrollo para la implementación del sistema, asegurando que todas las herramientas 
+y dependencias necesarias estén correctamente configuradas.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se debe disponer de un entorno de desarrollo que incluya un editor de código adecuado, como Visual Studio Code.
+	\item Se deben instalar y configurar, dentro de un entorno virtual de Python, las bibliotecas necesarias para el proyecto, incluyendo PyTorch, PyQt y cualquier otra dependencia relevante.
+	\item Se debe instalar y configurar CUDA Toolkit para el desarrollo en GPU, garantizando su correcta integración y funcionamiento con PyTorch.
+	\item El entorno debe estar configurado para facilitar el desarrollo, la depuración y la ejecución de pruebas, incluyendo la integración con sistemas de control de versiones como Git.
+\end{itemize}
+
+\paragraph{Estudio sobre aplicaciones de procesamiento de imágenes} \label{hist:estudio_aplicaciones_procesamiento_imagenes}
+Como desarrollador, quiero probar y analizar aplicaciones de procesamiento de imágenes actuales para comprender su funcionamiento y características.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben seleccionar y probar varias aplicaciones de procesamiento de imágenes que sean relevantes para el proyecto, 
+	como RawTherapee \cite{raw_therapee}, DarkTable \cite{darktable} e ImageMagick \cite{image_magick}.
+	\item Se debe analizar la funcionalidad, la interfaz de usuario y el rendimiento de estas aplicaciones para identificar buenas 
+	prácticas y áreas de mejora que puedan ser aplicadas en el desarrollo del sistema.
+\end{itemize}
+\newpage
+
+\newpage
+
+\paragraph{Carga y tratamiento de imágenes con tensores} \label{hist:carga_tratamiento_imagenes_tensores}
+Como desarrollador, quiero implementar la funcionalidad de carga y tratamiento de imágenes utilizando tensores para
+permitir un procesamiento eficiente y flexible de las imágenes.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se debe implementar la funcionalidad de carga de imágenes desde disco, soportando diferentes
+	formatos de imagen cruda.
+	\item Se debe de analizar la estructura de los tensores resultantes de la carga de imágenes para 
+	optimizar su uso en el procesamiento posterior.
+\end{itemize}
+
+\paragraph{Debayering de imágenes RAW} \label{hist:debayering_imagenes_raw}
+Como desarrollador, quiero implementar la funcionalidad de \textit{debayering} de imágenes RAW para permitir la 
+conversión de imágenes Bayer a formatos de color estándar, facilitando su visualización y procesamiento posterior.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se debe implementar la funcionalidad de \textit{debayering} para imágenes RAW con formato Bayer, utilizando 
+	distintos algoritmos de interpolación.
+	\item Se deben soportar, al menos, los patrones de mosaico Bayer más comunes (RGGB, BGGR, GRBG y GBRG).
+	\item Se debe garantizar que la imagen resultante se genere en un formato de color estándar (por ejemplo, RGB) adecuado para su visualización.
+	\item Se debe evaluar la calidad visual de las imágenes resultantes, teniendo en cuenta aspectos como la fidelidad del color y la presencia de artefactos.
+\end{itemize}
+
+\paragraph{Ajuste de contraste mediante función sigmoide} \label{hist:ajuste_contraste_funcion_sigmoide}
+Como desarrollador, quiero implementar la funcionalidad de ajuste de contraste mediante función sigmoide para
+permitir una mejora no lineal del contraste en las imágenes y analizar su efecto sobre la calidad visual de las mismas.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se debe implementar la transformación sigmoide sobre los valores de intensidad de la imagen como prueba de concepto.
+	\item Se debe garantizar que el ajuste de contraste se aplique de manera eficiente.
+	\item Se debe asegurar que los valores de salida se mantengan dentro del rango válido de intensidades.
+	\item Se debe realizar una evaluación básica del rendimiento de la implementación, sin requerir optimización exhaustiva.
+\end{itemize}
+
+\newpage
+
+\paragraph{Visualización de resultados} \label{hist:visualizacion_resultados}
+Como desarrollador, quiero implementar la funcionalidad de visualización de resultados para interpretar
+los resultados de las implementaciones de Debayering y ajuste de contraste.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se debe de mostrar la imagen resultante de las operaciones de Debayering y ajuste de contraste de forma sencilla utilizando,
+	por ejemplo, Matplotlib.
+	\item Se debe permitir la visualización de la imagen original junto con la imagen procesada para facilitar la comparación.
+	\item Se debe garantizar que la visualización represente correctamente los valores de intensidad y color de la imagen.
+\end{itemize}
+
+\paragraph{Desarrollo de la interfaz inicial} \label{hist:desarrollo_interfaz_inicial}
+Como desarrollador, quiero desarrollar una interfaz gráfica inicial para permitir la interacción básica con el sistema 
+y facilitar la visualización de imágenes y resultados.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se debe desarrollar una interfaz gráfica básica utilizando PyQt que permita cargar imágenes, visualizar
+	resultados y realizar ajustes de parámetros en operaciones de procesado de forma interactiva.
+	\item La interfaz debe ser funcional y permitir la interacción básica con el sistema, aunque no se requiera una implementación completa de todas las funcionalidades previstas.
+	\item Se debe garantizar que la interfaz sea estable y no presente errores críticos durante su uso.
+	\item Se debe realizar una evaluación inicial de la usabilidad de la interfaz, identificando áreas de mejora para iteraciones futuras.
+\end{itemize}
+
+\paragraph{Carga de imágenes desde la interfaz} \label{hist:carga_imagenes_interfaz}
+Como desarrollador, quiero implementar la funcionalidad de carga de imágenes desde la interfaz gráfica para permitir
+a los usuarios cargar imágenes de forma sencilla y directa a través de la aplicación.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item La interfaz debe incluir un botón o menú claramente identificado para cargar imágenes desde disco.
+	\item Al activar la opción de carga, se debe mostrar un diálogo de selección de archivos que permita al usuario navegar por el sistema de archivos y seleccionar una imagen.
+	\item El diálogo de selección debe filtrar los archivos para mostrar únicamente aquellos con formatos de imagen soportados.
+	\item Al seleccionarse una imagen válida, esta debe cargarse y mostrarse en el visor central de la interfaz.
+	\item Si el usuario intenta cargar un archivo con formato no soportado o un archivo inválido, el sistema debe mostrar un mensaje de error claro y no bloquear la aplicación.
+	\item La funcionalidad de carga debe de permitir la adición de otros formatos de imagen en el futuro con un impacto mínimo sobre el resto del sistema.
+\end{itemize}
+
+\newpage
+
+\paragraph{Visualización de imágenes desde la interfaz} \label{hist:visualizacion_imagenes_interfaz}
+Como desarrollador, quiero implementar la funcionalidad de visualización de imágenes desde la interfaz gráfica para
+permitir a los usuarios ver las imágenes cargadas y los resultados de las operaciones de procesado.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item La interfaz debe incluir un visor central que muestre la imagen cargada y se actualice dinámicamente tras cada operación aplicada o ajuste de parámetros.
+	\item La interfaz debe mostrar iformación relevante sobre la imagen cargada, como sus especificaciones técnicas (resolución, formato, etc.).
+\end{itemize}
+
+\paragraph{Diseño de Arquitectura} \label{hist:diseno_arquitectura}
+Como desarrollador, quiero diseñar la arquitectura del sistema para establecer una estructura clara y modular que
+facilite el desarrollo, mantenimiento y extensión del sistema a lo largo del tiempo.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se debe definir una arquitectura modular que separe claramente las responsabilidades entre la interfaz de usuario, la lógica de control y las operaciones de procesado.
+	\item La arquitectura debe permitir la incorporación de nuevas funcionalidades y operaciones de procesado con un impacto mínimo sobre el resto del sistema.
+	\item Se debe documentar la arquitectura propuesta, incluyendo diagramas de componentes y flujos de datos.
+\end{itemize}
+
+\paragraph{Definición de \textit{pipelines} de procesado} \label{hist:definicion_pipelines_procesado}
+Como desarrollador, quiero implementar la funcionalidad de definición de \textit{pipelines}
+desde la interfaz gráfica para permitir a los usuarios crear y gestionar secuencias de operaciones de procesado de imágenes de forma interactiva.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item La interfaz debe permitir a los usuarios añadir operaciones de procesado a un \textit{pipeline} de forma ordenada, utilizando un menú organizado por categorías funcionales.
+	\item La interfaz debe mostrar claramente la secuencia de operaciones activas en el \textit{pipeline}.
+\end{itemize}
+
+\newpage
+
+\paragraph{Flujo completo de procesamiento de imágenes} \label{hist:gestion_completa_imagen_cargada}
+Como desarrollador, quiero disponer de un flujo completo de procesamiento de imágenes que incluya la carga, 
+el procesamiento, la visualización de resultados y el restablecimiento al estado inicial, para poder gestionar 
+de forma integral el ciclo de vida de la imagen en el sistema.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item El sistema debe permitir la carga de imágenes y su incorporación al flujo de procesamiento.
+	\item El sistema debe permitir la aplicación secuencial de distintas operaciones de procesamiento sobre la imagen.
+	\item El sistema debe permitir la visualización de los resultados obtenidos tras cada operación.
+	\item El sistema debe permitir restablecer completamente el \textit{pipeline}, recuperando la imagen original en cualquier momento durante la sesión.
+	\item El sistema debe garantizar que la imagen original se mantenga intacta y disponible para su recuperación, independientemente de las operaciones aplicadas.
+	\item El sistema debe gestionar de forma eficiente la imagen original y las imágenes intermedias o resultantes, evitando problemas de memoria o degradación del rendimiento.
+\end{itemize}
+
+\paragraph{Implementación de operaciones de procesado I} \label{hist:implementacion_operaciones_procesado_i}
+Como desarrollador, quiero implementar un conjunto inicial de operaciones de procesado de imágenes para proporcionar funcionalidades
+básicas.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben implementar las siguientes operaciones de procesado: 
+	\begin{itemize}[noitemsep]
+		\item Debayering
+		\item Ajuste de contraste mediante función sigmoide
+		\item Corrección gamma
+		\item Filtro gaussiano
+		\item Conversión entre color y escala de grises
+		\item Conversión de color entre RGB Y HSV
+		\item Normalización de intensidad mín.-máx. estándar
+		\item Normalización de intensidad mín.-máx. utilizando percentiles
+		\item Rotación
+		\item Volteo
+		\item Conversión a representación RGB de 8 bits
+	\end{itemize}
+	\item Cada operación debe ser parametrizable y aplicable de forma interactiva desde la interfaz gráfica.
+\end{itemize}
+
+\newpage
+
+\paragraph{Visualización de histograma RGB} \label{hist:implementacion_histograma_rgb}
+Como desarrollador, quiero implementar la visualización del histograma RGB para proporcionar una herramienta 
+de análisis que permita interpretar la distribución de intensidades de las imágenes procesadas.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item El histograma debe actualizarse dinámicamente tras cada operación aplicada o modificación de parámetros en el \textit{pipeline}.
+	\item El histograma debe representar de forma diferenciada los canales RGB, utilizando una codificación de colores adecuada.
+	\item El histograma debe ser claro y fácil de interpretar, empleando escalas y ejes correctamente definidos.
+	\item El histograma debe integrarse en la interfaz de usuario en una posición accesible, sin interferir con la visualización principal de la imagen.
+\end{itemize}
+
+\paragraph{Exportación de \textit{pipelines} de procesado} \label{hist:exportacion_pipelines_procesado}
+Como desarrollador, quiero implementar la funcionalidad de exportación de \textit{pipelines}
+de procesado para permitir el guardado de las secuencias de operaciones y parámetros definidos desde 
+la interfaz.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item La interfaz debe incluir una opción claramente identificada para exportar el \textit{pipeline} actual a un archivo.
+	\item Al activar la opción de exportación, se debe mostrar un diálogo de selección de archivos que permita al usuario especificar la ubicación y el nombre del archivo de exportación.
+	\item El formato de exportación debe incluir toda la información necesaria para reproducir el \textit{pipeline} en el módulo de \textit{benchmarking}, incluyendo las operaciones aplicadas y sus parámetros asociados.
+	\item El sistema debe garantizar que la exportación se realice de forma eficiente y sin errores, proporcionando retroalimentación al usuario sobre el éxito o cualquier problema ocurrido durante el proceso.
+\end{itemize}
+
+\paragraph{Implementación de operaciones de propcesado II} \label{hist:implementacion_operaciones_procesado_ii}
+Como desarrollador, quiero implementar un conjunto adicional de operaciones de procesado de imágenes para ampliar 
+las funcionalidades disponibles en el sistema.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben implementar las siguientes operaciones de procesado adicionales:
+	\begin{itemize}[noitemsep]
+		\item Filtro de mediana
+		\item Ecualización de histograma
+		\item Ecualización de histograma adaptativa (CLAHE)
+		\item \textit{Unsharp masking}
+	\end{itemize}
+	\item Cada operación debe ser parametrizable y aplicable de forma interactiva desde la interfaz gráfica.
+\end{itemize}
+
+\newpage
+
+\paragraph{Optimización del procesamiento mediante snapshots} \label{hist:optimizacion_rendimiento}
+Como desarrollador, quiero optimizar el rendimiento del sistema durante el procesamiento y la gestión 
+de la imagen cargada mediante un sistema de snapshots, para mejorar la experiencia de usuario y garantizar 
+una ejecución eficiente de las operaciones aplicadas.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben implementar snapshots intermedios que permitan recalcular solo las operaciones necesarias al modificar parámetros o agregar nuevas transformaciones.
+	\item Se deben identificar y aplicar técnicas de optimización para la ejecución secuencial de operaciones de procesamiento, reduciendo la redundancia de cálculos.
+	\item Se debe garantizar que la recuperación de snapshots no afecte la consistencia de los resultados finales.
+	\item Se debe evaluar el rendimiento del sistema antes y después de aplicar optimizaciones para validar mejoras significativas.
+	\item El sistema debe mantener un uso eficiente de la memoria, evitando cargas innecesarias de imágenes o resultados intermedios.
+\end{itemize}
+
+\paragraph{Tests unitarios para operaciones de procesado de imágenes} \label{hist:tests_unitarios_operaciones_procesado}
+Como desarrollador, quiero implementar tests unitarios para las operaciones de procesado de imágenes, 
+para validar su correcto funcionamiento y garantizar la calidad del software desarrollado.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben implementar tests unitarios para cada operación de procesado, cubriendo distintos casos de prueba que validen el comportamiento esperado bajo diferentes escenarios de entrada.
+	\item Los tests deben implementarse utilizando un marco de pruebas adecuado, como \textit{pytest}, siguiendo buenas prácticas de organización y nomenclatura.
+	\item Se debe garantizar que cada test sea independiente, evitando efectos secundarios entre pruebas.
+	\item Se debe documentar brevemente el objetivo de cada test, facilitando la comprensión y el mantenimiento a futuro.
+\end{itemize}
+\paragraph{Sistema de gestión y manejo de errores} \label{hist:gestion_errores}
+Como desarrollador, quiero implementar un sistema de gestión y manejo de errores que garantice la estabilidad 
+del sistema y proporcione retroalimentación clara y útil ante cualquier situación de fallo.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben identificar y gestionar de forma controlada los posibles errores que puedan ocurrir durante todo el ciclo de vida de la aplicación.
+	\item El sistema debe proporcionar mensajes de error claros, específicos y comprensibles para el usuario.
+	\item La gestión de errores debe estar centralizada y unificada, facilitando su mantenimiento y extensión futura.
+\end{itemize}
+
+\newpage
+
+\paragraph{Implementación del módulo de \textit{benchmarking}} \label{hist:implementacion_modulo_benchmarking}
+Como desarrollador, quiero implementar un módulo de \textit{benchmarking} que permita evaluar los \textit{pipelines} 
+de procesamiento configurados desde la interfaz gráfica, proporcionando métricas de rendimiento precisas y 
+facilitando el análisis comparativo entre distintas configuraciones de manera reproducible.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item El módulo debe implementarse utilizando un entorno adecuado para benchmarking, como \textit{pytest-benchmark}, asegurando precisión y consistencia en las mediciones.
+	\item El módulo debe ser capaz de interpretar los archivos de \textit{pipeline} exportados desde la interfaz gráfica, reproduciendo fielmente las secuencias de operaciones y parámetros definidos por el usuario.
+	\item El módulo debe generar informes detallados que incluyan métricas de tiempo de ejecución y cualquier otra métrica relevante para cada \textit{pipeline}.
+	\item El módulo debe ser configurable, permitiendo la evaluación de distintos \textit{pipelines} bajo diferentes escenarios y contextos de ejecución.
+	\item La implementación debe garantizar que las operaciones de \textit{benchmarking} no modifiquen los datos originales ni afecten el estado de la sesión de la interfaz gráfica.
+\end{itemize}
+
+\paragraph{Implementación de operaciones de procesado III} \label{hist:implementacion_operaciones_procesado_iii}
+Como desarrollador, quiero implementar un conjunto adicional de operaciones de procesado de imágenes para ampliar
+aún más las funcionalidades disponibles en el sistema y proporcionar a los usuarios una mayor variedad de herramientas
+para el procesamiento de sus imágenes.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se deben implementar las siguientes operaciones de procesado adicionales:
+	\begin{itemize}[noitemsep]
+		\item Transformación de intensidad afín
+		\item Ajuste de brillo
+		\item Ajuste de contraste mediante media
+		\item Compensación de luz
+		\item Balance de blancos
+		\item Normalización de intensidad utilizando parámetros explícitos
+		\item Redimensionado
+	\end{itemize}
+	\item Cada operación debe ser parametrizable y aplicable de forma interactiva desde la interfaz gráfica.
+\end{itemize}
+
+\paragraph{Carga de imágenes en formato propio (\texttt{PKL.GZ})} \label{hist:carga_imagenes_formato_propio}
+Como desarrollador, quiero cargar imágenes en formato propio (\texttt{PKL.GZ}) para ampliar las opciones 
+de entrada y facilitar la integración con otros sistemas
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item El sistema debe permitir la carga de imágenes desde archivos en formato \texttt{PKL.GZ}.
+	\item Se debe validar la integridad del archivo antes de su carga, mostrando mensajes de error claros si el archivo está corrupto o no cumple el formato esperado.
+	\item La carga debe preservar todas las propiedades y metadatos originales contenidos en el archivo.
+\end{itemize}
+
+\newpage
+
+\paragraph{Visualización de gráfico de perfiles de intensidad} \label{hist:visualizacion_grafico_perfiles_intensidad}
+Como desarrollador, quiero implementar la visualización de un gráfico de perfiles de intensidad para proporcionar a
+los usuarios una herramienta de análisis que permita interpretar la distribución de intensidades a lo largo de los ejes
+vertical y horizontal que atraviesan el centro de la imagen.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item El gráfico debe actualizarse dinámicamente tras cada operación aplicada o modificación de parámetros en
+	el \textit{pipeline}.
+	\item El gráfico debe representar de forma diferenciada los perfiles de intensidad a lo largo de los ejes vertical y horizontal, utilizando una codificación de colores adecuada.
+	\item El gráfico debe ser claro y fácil de interpretar, empleando escalas y ejes correctamente definidos.
+	\item El gráfico debe integrarse en la interfaz de usuario en una posición accesible, sin interferir con la visualización principal de la imagen.
+\end{itemize}
+
+\paragraph{Guardado de imágenes procesadas} \label{hist:guardado_imagenes_procesadas}
+Como desarrollador, quiero implementar la funcionalidad de guardado de imágenes procesadas en formatos 
+estándar, como JPG/JPEG, para facilitar la conservación de los resultados obtenidos tras aplicar las 
+operaciones de procesamiento.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+    \item El sistema debe permitir guardar imágenes procesadas en formato JPG/JPEG, preservando la calidad del resultado final.
+    \item El guardado debe ser rápido y seguro, evitando pérdida de datos durante la operación.
+    \item El sistema debe permitir al usuario seleccionar la ubicación de guardado y el nombre del archivo.
+    \item El guardado debe integrarse con el flujo de procesamiento, permitiendo guardar imágenes intermedias o finales según sea necesario.
+\end{itemize}
+
+\paragraph{Selección de dispositvo de ejecución} \label{hist:seleccion_dispositivo_ejecucion}
+Como desarrollador, quiero implementar la funcionalidad de selección de dispositivo de ejecución (CPU o GPU)
+desde la interfaz gráfica para permitir a los usuarios elegir el entorno de procesamiento.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item La interfaz debe incluir una opción claramente identificada para seleccionar el dispositivo de ejecución.
+	\item Al seleccionar la opción de dispositivo, el sistema debe verificar la disponibilidad de GPU CUDA y ajustar el entorno de ejecución en consecuencia.
+	\item El sistema debe proporcionar retroalimentación al usuario sobre el dispositivo seleccionado y su disponibilidad.
+	\item Se debe garantizar que la selección de dispositivo se aplique de forma eficiente, sin afectar la estabilidad o el rendimiento del sistema.
+\end{itemize}
+
+\newpage
+
+\paragraph{Log de eventos de sesión} \label{hist:log_eventos_sesion}
+Como desarrollador, quiero implementar un log de eventos de sesión que registre cronológicamente todas 
+las acciones realizadas por el usuario durante la interacción con el sistema.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+    \item El sistema debe registrar todas las acciones posibles realizadas por el usuario.
+    \item Cada evento registrado debe incluir información de tiempo precisa, indicando el momento exacto en que se ejecutó la acción.
+    \item La interfaz gráfica debe incluir un panel o visor de log donde se muestren en tiempo real los eventos registrados.
+    \item Si el evento es la ejecución de una operación de procesamiento, el log debe incluir el tiempo de ejecución de la operación en milisegundos.
+    \item El sistema debe garantizar que el registro de eventos sea persistente durante la sesión y que no afecte el rendimiento general del sistema.
+\end{itemize}
+
+\paragraph{Revisión UX/UI} \label{hist:revision_ux_ui}
+Como desarrollador, quiero realizar una revisión de la experiencia de usuario (UX) y la interfaz
+de usuario (UI) para identificar áreas de mejora y optimización en la interacción con el sistema.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+	\item Se debe realizar una evaluación de la interfaz gráfica, analizando aspectos como la disposición de los elementos, la claridad de las opciones y la facilidad de navegación.
+	\item Se deben identificar áreas de mejora en la experiencia de usuario, proponiendo cambios específicos para optimizar la interacción y la usabilidad del sistema.
+	\item Se deben implementar las mejoras identificadas, asegurando que se integren de forma coherente con el diseño general de la interfaz y que no introduzcan errores o problemas de rendimiento.
+\end{itemize}
+
+\paragraph{Refinamiento y ampliación de tests unitarios} \label{hist:refinamiento_tests_unitarios}
+Como desarrollador, quiero refinar y ampliar los tests unitarios existentes para las operaciones de procesado de imágenes, 
+incorporando pruebas para las nuevas funcionalidades implementadas y asegurando que todas las operaciones mantengan 
+su comportamiento correcto.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+    \item Se deben identificar todas las operaciones nuevas implementadas y añadir tests unitarios que verifiquen su correcto funcionamiento.
+    \item Los tests existentes deben revisarse y ajustarse si es necesario para garantizar que siguen pasando correctamente después de las nuevas implementaciones.
+\end{itemize}
+
+\newpage
+
+\paragraph{Mejoras en el visor de imágenes} \label{hist:mejoras_visor_imagen}
+Como desarrollador, quiero mejorar el visor de imágenes para optimizar su rendimiento y simplificar su uso, 
+garantizando una experiencia fluida incluso al mostrar imágenes de alta resolución, y añadiendo funcionalidades 
+interactivas útiles para el usuario.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+    \item El visor debe mostrar imágenes de alta resolución de manera eficiente, sin retrasos perceptibles ni bloqueos de la interfaz.
+    \item Debe incluir herramientas de navegación, como desplazamiento, zoom y ajuste al tamaño de ventana, para facilitar la exploración de la imagen.
+    \item Se debe garantizar que las mejoras no afecten negativamente al rendimiento de otras operaciones del sistema.
+\end{itemize}
+
+\paragraph{Revisión y refactorización de código} \label{hist:revision_refactorizacion_codigo}
+Como desarrollador, quiero revisar y refactorizar el código del sistema para mejorar su legibilidad, mantener la coherencia 
+del estilo, facilitar el mantenimiento futuro y optimizar su rendimiento sin alterar la funcionalidad existente.
+
+\noindent{Criterios de aceptación:}
+\begin{itemize}[noitemsep]
+    \item Se debe analizar todo el código existente para identificar duplicaciones, estructuras ineficientes o complejas y áreas susceptibles de mejora.
+    \item El código refactorizado debe mantener la funcionalidad original, garantizando que todos los tests unitarios y de integración sigan pasando.
+    \item Se deben aplicar buenas prácticas de codificación, incluyendo nombres claros para variables y funciones, modularidad y documentación suficiente.
+    \item La refactorización debe mejorar la mantenibilidad y la claridad del código sin introducir regresiones ni errores.
+    \item Se debe verificar que el rendimiento no se degrade tras la refactorización.
+\end{itemize}
+
+\newpage
+
 \subsection{Prototipos de interfaz de usuario} \label{subsec:6_3_prototipos_interfaz_usuario}
+
+\newpage
 
 \subsection{Mapa de navegación} \label{subsec:6_4_mapa_navegacion}
