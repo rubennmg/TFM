@@ -1,0 +1,27 @@
+\documentclass{article}
+\input{../common_config.sty}
+\usetikzlibrary{fit, positioning}
+
+\begin{document}
+\begin{tikzpicture}[
+		backbone/.style={draw, rectangle, rounded corners, fill=blue!20, minimum width=5.2cm, minimum height=1.0cm, align=center, font=\bfseries},
+		story/.style={draw, rectangle, rounded corners, fill=yellow!10, minimum width=5.2cm, minimum height=1.1cm, text width=5.0cm, align=center, font=\small},
+		sprintbox/.style={draw, rectangle, thick, dashed, rounded corners, inner sep=0.35cm}
+	]
+
+	\node[backbone] (b1) {Benchmark de referencias};
+	\node[backbone, right=8mm of b1] (b2) {N\'ucleo de procesado};
+	\node[backbone, right=8mm of b2] (b3) {Visualizaci\'on inicial};
+
+	\node[story, below=8mm of b1] (us1) {US7\\Estudio sobre aplicaciones de procesamiento de im\'agenes};
+
+	\node[story, below=8mm of b2] (us2) {US8\\Carga y tratamiento de im\'agenes con tensores};
+	\node[story, below=4mm of us2] (us3) {US9\\Debayering de im\'agenes RAW};
+	\node[story, below=4mm of us3] (us4) {US10\\Ajuste de contraste mediante funci\'on sigmoide};
+
+	\node[story, below=8mm of b3] (us5) {US11\\Visualizaci\'on de resultados};
+
+	\node[sprintbox, fit=(b1)(b3)(us1)(us2)(us3)(us4)(us5), label={[font=\bfseries]above:Sprint 2}] {};
+
+\end{tikzpicture}
+\end{document}

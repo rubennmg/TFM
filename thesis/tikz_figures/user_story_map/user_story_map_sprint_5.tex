@@ -1,0 +1,27 @@
+\documentclass{article}
+\input{../common_config.sty}
+\usetikzlibrary{fit, positioning}
+
+\begin{document}
+\begin{tikzpicture}[
+		backbone/.style={draw, rectangle, rounded corners, fill=blue!20, minimum width=5.2cm, minimum height=1.0cm, align=center, font=\bfseries},
+		story/.style={draw, rectangle, rounded corners, fill=yellow!10, minimum width=5.2cm, minimum height=1.1cm, text width=5.0cm, align=center, font=\small},
+		sprintbox/.style={draw, rectangle, thick, dashed, rounded corners, inner sep=0.35cm}
+	]
+
+	\node[backbone] (b1) {Ampliaci\'on funcional};
+	\node[backbone, right=8mm of b1] (b2) {Calidad};
+	\node[backbone, right=8mm of b2] (b3) {Benchmarking};
+
+	\node[story, below=8mm of b1] (us1) {US21\\Implementaci\'on de operaciones de procesado II};
+	\node[story, below=4mm of us1] (us2) {US22\\Optimizaci\'on del procesamiento mediante snapshots};
+
+	\node[story, below=8mm of b2] (us3) {US23\\Tests unitarios para operaciones de procesado};
+	\node[story, below=4mm of us3] (us4) {US24\\Sistema de gesti\'on y manejo de errores};
+
+	\node[story, below=8mm of b3] (us5) {US25\\Implementaci\'on del m\'odulo de benchmarking};
+
+	\node[sprintbox, fit=(b1)(b3)(us1)(us2)(us3)(us4)(us5), label={[font=\bfseries]above:Sprint 5}] {};
+
+\end{tikzpicture}
+\end{document}

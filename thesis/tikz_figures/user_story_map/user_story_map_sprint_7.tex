@@ -1,0 +1,26 @@
+\documentclass{article}
+\input{../common_config.sty}
+\usetikzlibrary{fit, positioning}
+
+\begin{document}
+\begin{tikzpicture}[
+		backbone/.style={draw, rectangle, rounded corners, fill=blue!20, minimum width=5.2cm, minimum height=1.0cm, align=center, font=\bfseries},
+		story/.style={draw, rectangle, rounded corners, fill=yellow!10, minimum width=5.2cm, minimum height=1.1cm, text width=5.0cm, align=center, font=\small},
+		sprintbox/.style={draw, rectangle, thick, dashed, rounded corners, inner sep=0.35cm}
+	]
+
+	\node[backbone] (b1) {Experiencia de usuario};
+	\node[backbone, right=8mm of b1] (b2) {Calidad y pruebas};
+	\node[backbone, right=8mm of b2] (b3) {Estabilizaci\'on final};
+
+	\node[story, below=8mm of b1] (us1) {US32\\Revisi\'on UX/UI};
+	\node[story, below=4mm of us1] (us2) {US34\\Mejoras en el visor de im\'agenes};
+
+	\node[story, below=8mm of b2] (us3) {US33\\Refinamiento y ampliaci\'on de tests unitarios};
+
+	\node[story, below=8mm of b3] (us4) {US35\\Revisi\'on y refactorizaci\'on de c\'odigo};
+
+	\node[sprintbox, fit=(b1)(b3)(us1)(us2)(us3)(us4), label={[font=\bfseries]above:Sprint 7}] {};
+
+\end{tikzpicture}
+\end{document}

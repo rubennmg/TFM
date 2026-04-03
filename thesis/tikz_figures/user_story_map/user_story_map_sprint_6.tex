@@ -1,0 +1,28 @@
+\documentclass{article}
+\input{../common_config.sty}
+\usetikzlibrary{fit, positioning}
+
+\begin{document}
+\begin{tikzpicture}[
+		backbone/.style={draw, rectangle, rounded corners, fill=blue!20, minimum width=5.2cm, minimum height=1.0cm, align=center, font=\bfseries},
+		story/.style={draw, rectangle, rounded corners, fill=yellow!10, minimum width=5.2cm, minimum height=1.1cm, text width=5.0cm, align=center, font=\small},
+		sprintbox/.style={draw, rectangle, thick, dashed, rounded corners, inner sep=0.35cm}
+	]
+
+	\node[backbone] (b1) {Nuevas capacidades};
+	\node[backbone, right=8mm of b1] (b2) {An\'alisis visual};
+	\node[backbone, right=8mm of b2] (b3) {Ejecuci\'on y trazabilidad};
+
+	\node[story, below=8mm of b1] (us1) {US26\\Implementaci\'on de operaciones de procesado III};
+	\node[story, below=4mm of us1] (us2) {US27\\Carga de im\'agenes en formato propio (PKL.GZ)};
+	\node[story, below=4mm of us2] (us3) {US29\\Guardado de im\'agenes procesadas};
+
+	\node[story, below=8mm of b2] (us4) {US28\\Visualizaci\'on de gr\'afico de perfiles de intensidad};
+
+	\node[story, below=8mm of b3] (us5) {US30\\Selecci\'on de dispositivo de ejecuci\'on};
+	\node[story, below=4mm of us5] (us6) {US31\\Log de eventos de sesi\'on};
+
+	\node[sprintbox, fit=(b1)(b3)(us1)(us2)(us3)(us4)(us5)(us6), label={[font=\bfseries]above:Sprint 6}] {};
+
+\end{tikzpicture}
+\end{document}

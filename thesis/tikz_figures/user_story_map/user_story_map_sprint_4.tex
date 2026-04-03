@@ -1,0 +1,27 @@
+\documentclass{article}
+\input{../common_config.sty}
+\usetikzlibrary{fit, positioning}
+
+\begin{document}
+\begin{tikzpicture}[
+		backbone/.style={draw, rectangle, rounded corners, fill=blue!20, minimum width=5.2cm, minimum height=1.0cm, align=center, font=\bfseries},
+		story/.style={draw, rectangle, rounded corners, fill=yellow!10, minimum width=5.2cm, minimum height=1.1cm, text width=5.0cm, align=center, font=\small},
+		sprintbox/.style={draw, rectangle, thick, dashed, rounded corners, inner sep=0.35cm}
+	]
+
+	\node[backbone] (b1) {Pipeline interactivo};
+	\node[backbone, right=8mm of b1] (b2) {Operaciones base};
+	\node[backbone, right=8mm of b2] (b3) {An\'alisis y salida};
+
+	\node[story, below=8mm of b1] (us1) {US16\\Definici\'on de pipelines de procesado};
+	\node[story, below=4mm of us1] (us2) {US17\\Flujo completo de procesamiento de im\'agenes};
+
+	\node[story, below=8mm of b2] (us3) {US18\\Implementaci\'on de operaciones de procesado I};
+
+	\node[story, below=8mm of b3] (us4) {US19\\Visualizaci\'on de histograma RGB};
+	\node[story, below=4mm of us4] (us5) {US20\\Exportaci\'on de pipelines de procesado};
+
+	\node[sprintbox, fit=(b1)(b3)(us1)(us2)(us3)(us4)(us5), label={[font=\bfseries]above:Sprint 4}] {};
+
+\end{tikzpicture}
+\end{document}
