@@ -1,1 +1,37 @@
 \section{Benchmarking} \label{sec:9_benchmarking}
+En esta sección se presenta el análisis de los resultados de rendimiento obtenidos a través del módulo 
+de \textit{benchmarking}. Se detalla a continuación el objetivo de dicho análisis, la metodología seguida para 
+su ejecución, el entorno experimental utilizado y las comparativas realizadas.
+
+\subsection{Objetivo} \label{sec:9_benchmarking_objective}
+El objetivo de este análisis es realizar una comparación sistemática del rendimiento de \textit{pipelines} de procesado 
+de imágenes bajo distintas condiciones de ejecución, considerando tanto la influencia del hardware como de las configuraciones de procesado.
+\noindent{De forma concreta, el análisis persigue responder a las siguientes preguntas:}
+
+\begin{enumerate}[noitemsep]
+	\item ¿Qué ganancia aporta la ejecución de \textit{pipelines} de procesado en GPU respecto a CPU?
+	\item ¿Cómo varía el rendimiento con la resolución de imagen y con el tipo numérico empleado?
+	\item ¿Qué impacto tiene incrementar la complejidad del \textit{pipeline} de procesado?
+	\item ¿Qué diferencias de coste temporal presentan los módulos de \textit{Debayer} implementados?
+	\item ¿Cuál es el rendimiento en escenarios de uso realistas, propios de entornos de procesamiento en tiempo real?
+\end{enumerate}
+
+\subsection{Metodología} \label{sec:9_benchmarking_methodology}
+Los resultados analizados en esta sección proceden de los artefactos JSON generados por el módulo
+de \textit{benchmarking} de la aplicación (\texttt{app/benchmark}), ejecutado sobre tres equipos
+independientes y con perfiles de \textit{pipeline} diferenciados:
+
+\begin{itemize}[noitemsep]
+	\item \texttt{standard\_run}: \textit{pipeline} base de complejidad reducida.
+	\item \texttt{complex\_run}: \textit{pipeline} extendido con más operaciones.
+	\item \texttt{debayer2x2\_run}, \texttt{debayer3x3\_run}, \texttt{debayer5x5\_run},
+	      \texttt{debayerSplit\_run}: perfiles dedicados para comparar las variantes de \textit{Debayer} implementadas.
+\end{itemize}
+
+Las ejecuciones se han realizado para resoluciones \texttt{256x256}, \texttt{512x512},
+\texttt{1024x1024} y \texttt{2048x2048}, en dispositivos \texttt{cpu}/\texttt{cuda} y tipos
+\texttt{float16}/\texttt{float32}/\texttt{float64}.
+
+\newpage
+
+\subsection{Entorno experimental} \label{subsec:9_benchmarking_environment}
