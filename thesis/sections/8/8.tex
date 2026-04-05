@@ -41,22 +41,22 @@ por categorías funcionales equivalentes a la propia arquitectura de operaciones
 \newpage
 
 \newcommand{\testcasetable}[2]{%
-    \par\vspace{0.5em}\noindent
-    \renewcommand{\tabularxcolumn}[1]{m{##1}}%
-    \setlength{\tabcolsep}{8pt}%
-    \begin{tabularx}{\linewidth}
-        {|>{\columncolor[gray]{0.92}\hsize=0.35\hsize\bfseries\raggedright\arraybackslash}X|>{\hsize=1.65\hsize\raggedright\arraybackslash}X|}
-        \hline
-        Entrada         & #1 \\
-        \hline
-        Salida esperada & #2 \\
-        \hline
-    \end{tabularx}%
-    \par\vspace{0.5em}
+	\par\vspace{0.5em}\noindent
+	\renewcommand{\tabularxcolumn}[1]{m{##1}}%
+	\setlength{\tabcolsep}{8pt}%
+	\begin{tabularx}{\linewidth}
+		{|>{\columncolor[gray]{0.92}\hsize=0.35\hsize\bfseries\raggedright\arraybackslash}X|>{\hsize=1.65\hsize\raggedright\arraybackslash}X|}
+		\hline
+		Entrada         & #1 \\
+		\hline
+		Salida esperada & #2 \\
+		\hline
+	\end{tabularx}%
+	\par\vspace{0.5em}
 }
 
 \subsection{Especificación de pruebas unitarias} \label{subsec:8_2_especificacion_pruebas_unitarias}
-Se detallan en los sucesivos apartados los casos de prueba implementados para cada categoría de operaciones, siguiendo el esquema de validación 
+Se detallan en los sucesivos apartados los casos de prueba implementados para cada categoría de operaciones, siguiendo el esquema de validación
 descrito anteriormente.
 
 \subsubsection{Reconstrucción de color} \label{subsubsec:8_2_1_bayer}
@@ -430,3 +430,15 @@ descrito anteriormente.
 \testcasetable
 {Tensor \texttt{[1,2,2]} con valores \texttt{\{0,1,2,100\}}, \texttt{lower=0.25}, \texttt{upper=0.75}}
 {Normalización basada en cuantiles y acotado al intervalo $[0,1]$}
+
+\newpage
+
+\subsection{Conclusiones de la fase de verificación} \label{subsec:8_3_conclusiones_verificacion}
+Con base en el planteamiento definido y en los casos de prueba implementados, se considera
+validado el comportamiento funcional del componente de procesado en las categorías analizadas.
+La cobertura de escenarios nominales, validaciones de entrada y condiciones de error permite
+sostener, con evidencia experimental, la corrección y consistencia de las operaciones desarrolladas.
+
+En consecuencia, este apartado cierra la fase de verificación del sistema y establece un respaldo
+técnico suficiente para abordar, en los capítulos siguientes, el análisis de rendimiento y la
+valoración final del trabajo.

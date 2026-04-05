@@ -901,22 +901,6 @@ en módulos temáticos que agrupan tests relacionados:
     \item \texttt{\textbf{tests/normalization/}} $\rightarrow$ Técnicas de normalización.
 \end{itemize}
 
-\paragraph{Infraestructura de \textit{fixtures}} \label{par:7_3_7_2_infraestructura_fixtures}
-El módulo \texttt{tests/conftest.py} define un conjunto de \textit{fixtures} compartidas que
-proporcionan utilidades reutilizables a toda la \textit{suite}:
-
-\begin{itemize}[noitemsep]
-    \item \texttt{\textbf{base\_tensor}} $\rightarrow$ Genera tensores sintéticos de prueba con forma
-    [C, H, W] configurable y tipo de dato especificado (float o int). Permite crear entradas de test
-    reproducibles de forma programática.
-    \item \texttt{\textbf{assert\_tensors}} $\rightarrow$ Compara dos tensores verificando igualdad de
-    forma, tipo de dato y valores dentro de una tolerancia configurable. Facilita la validación de
-    resultados numéricos con margen de error controlado.
-    \item \texttt{\textbf{assert\_channels}} $\rightarrow$ Verifica que un tensor de imagen tenga el
-    número esperado de canales en la dimensión correspondiente. Útil para validar transformaciones
-    que alteran la dimensionalidad (como conversiones de color).
-\end{itemize}
-
 \paragraph{Tipología de pruebas} \label{par:7_3_7_3_tipologia_pruebas}
 Cada operación se somete a múltiples categorías de validación que verifican distintos aspectos
 de su implementación:
@@ -931,7 +915,8 @@ de su implementación:
 \end{enumerate}
 
 En situaciones más complejas o inusuales, se incluyen pruebas adicionales que verifican casos límite, 
-comportamiento con entradas atípicas o validación de propiedades específicas.
+comportamiento con entradas atípicas o validación de propiedades específicas. Toda la \textit{suite} de pruebas 
+se detalla de forma específica en su respectiva sección de documentación (\autoref{sec:8_pruebas}).
 
 \newpage
 
