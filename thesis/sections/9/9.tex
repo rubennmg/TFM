@@ -19,19 +19,41 @@ de imágenes bajo distintas condiciones de ejecución, considerando tanto la inf
 \subsection{Metodología} \label{sec:9_benchmarking_methodology}
 Los resultados analizados en esta sección proceden de los artefactos JSON generados por el módulo
 de \textit{benchmarking} de la aplicación (\texttt{app/benchmark}), ejecutado sobre tres equipos
-independientes y con perfiles de \textit{pipeline} diferenciados:
+independientes y distintas definiciones de \textit{pipelines} de procesado. 
+En concreto, se han definido los siguientes perfiles de ejecución:
 
 \begin{itemize}[noitemsep]
-	\item \texttt{standard\_run}: \textit{pipeline} base de complejidad reducida.
-	\item \texttt{complex\_run}: \textit{pipeline} extendido con más operaciones.
+	\item \texttt{standard\_run}: \textit{pipeline} simple de complejidad reducida.
+	\begin{enumerate}[noitemsep]
+		\item \textit{Debayer5x5()}
+		\item \textit{SigmoidContrast(gain=2.25, cutoff=0.25)}
+		\item \textit{RealToRGB8()}
+	\end{enumerate}
+	\item \texttt{complex\_run}: \textit{pipeline} complejo con más operaciones.
+	\begin{enumerate}[noitemsep]
+		\item \textit{Debayer5x5()}
+		\item \textit{MinMaxNormalization()}
+		\item \textit{GammaAdjustment(c=1.65, gamma=0.8)}
+		\item \textit{UnsharpMasking(kernel\_size=9, sigma=3.0)}
+		\item \textit{RealToRGB8()}
+		
+	\end{enumerate}
 	\item \texttt{debayer2x2\_run}, \texttt{debayer3x3\_run}, \texttt{debayer5x5\_run},
 	      \texttt{debayerSplit\_run}: perfiles dedicados para comparar las variantes de \textit{Debayer} implementadas.
 \end{itemize}
 
-Las ejecuciones se han realizado para resoluciones \texttt{256x256}, \texttt{512x512},
-\texttt{1024x1024} y \texttt{2048x2048}, en dispositivos \texttt{cpu}/\texttt{cuda} y tipos
-\texttt{float16}/\texttt{float32}/\texttt{float64}.
+\indent{Las ejecuciones se han llevado a cabo sobre imágenes sintéticas considerando todas las combinaciones posibles de los siguientes factores:}
+
+\begin{itemize}[noitemsep]
+	\item \textbf{Resolución de imagen}: \texttt{256x256}, \texttt{512x512}, \texttt{1024x1024} y \texttt{2048x2048}.
+	\item \textbf{Dispositivo de ejecución}: \texttt{cpu} y \texttt{cuda}.
+	\item \textbf{Tipo numérico de datos}: \texttt{float16}, \texttt{float32} y \texttt{float64}.
+\end{itemize}
 
 \newpage
 
 \subsection{Entorno experimental} \label{subsec:9_benchmarking_environment}
+[...]
+
+\subsection{Análisis} \label{subsec:9_benchmarking_analysis}
+[...]
