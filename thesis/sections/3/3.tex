@@ -1,11 +1,11 @@
-\section{Aspectos teóricos} \label{sec:3_aspectos_teoricos}
+\section{Revisión de la literatura} \label{sec:3_revision_literatura}
 Se plantean y describen en este apartado los aspectos teóricos y tecnológicos que sustentan 
 el desarrollo del presente TFM. Estos conceptos derivan directamente del estudio del estado del 
 arte y son necesarios para comprender las decisiones de diseño, los enfoques de implementación
 y los criterios de evaluación que se exponen en los capítulos posteriores.
 
-\subsection{Imágenes e Informática} \label{subsec:3_1_imagenes_informatica}
-La Imagen ha sido, históricamente, uno de los principales medios para la representación, 
+\subsection{Imágenes e informática} \label{subsec:3_1_imagenes_informatica}
+La imagen ha sido, históricamente, uno de los principales medios para la representación, 
 el registro y la comunicación de la realidad. Su valor informativo reside en la capacidad de 
 codificar la información espacial y tonal de una escena u objeto, actuando como nexo entre 
 la percepción visual humana y los procesos de interpretación cognitiva.
@@ -13,7 +13,7 @@ la percepción visual humana y los procesos de interpretación cognitiva.
 Desde un punto de vista teórico, y con anterioridad a su tratamiento computacional, una imagen
 puede modelarse como una función bidimensional continua de intensidad o color. En este dominio 
 analógico, la imagen representa una escena asociando a cada punto del plano $(x, y)$ un valor de 
-intensidad luminosa. Esta relación puede expresarse matemáticamente como se muestra en \eqref{eq:1_imagen_funcion}:
+intensidad luminosa. Esta relación puede expresarse matemáticamente como se muestra en \eqref{eq:1_imagen_funcion}.
 \begin{equation}
     I = f(x,y) \quad \text{donde } (x,y) \in \mathbb{R}^2 \text{ e } I \in \mathbb{R}
     \label{eq:1_imagen_funcion}
@@ -36,13 +36,13 @@ impacto en la era digital actual \cite{pdi}.
 
 Para que una imagen pueda ser procesada y tratada por un sistema informático, debe
 abandonar su naturaleza continua y transformarse en el único lenguaje que la 
-máquina es capaz de intepretar: el dato numérico.
+máquina es capaz de intepretar: el dato discreto.
 
 \newpage
 
 \subsection{Representación numérica de imágenes digitales} \label{subsec:3_2_representacion_numerica_imagenes_digitales}
 La captura de una imagen digital implica un proceso de digitalización que convierte la función continua
-mostrada en la \autoref{eq:1_imagen_funcion} en una representación discreta y cuantificada. 
+mostrada en \eqref{eq:1_imagen_funcion} en una representación discreta y cuantificada. 
 Dicho proceso consta de dos etapas principales: el muestreo y la cuantificación.
 
 \subsubsection{Muestreo} \label{subsubsec:3_2_1_muestreo}
@@ -50,7 +50,7 @@ El muestreo consiste en la discretización del dominio continuo de la imagen, di
 el plano $(x, y)$ en una rejilla regular de posiciones finitas: los \textit{píxeles}. Cada píxel representa una pequeña región de la escena original
 y constituye la unidad mínima de información espacial en una imagen digital. 
 El resultado de este proceso es una imagen discreta definida sobre un conjunto finito de 
-coordenadas enteras \eqref{eq:2_imagen_discreta}:
+coordenadas enteras \eqref{eq:2_imagen_discreta}
 \begin{equation}
     I[i,j] = f(i \Delta x, j \Delta y)
     \label{eq:2_imagen_discreta}
@@ -58,7 +58,8 @@ coordenadas enteras \eqref{eq:2_imagen_discreta}:
 donde $(i,j)$ representan las coordenadas del píxel y $\Delta x$, $\Delta y$ las resoluciones
 espaciales en cada dimensión. El número total de muestras en cada dimensión determina la 
 resolución espacial de la imagen y establece un compromiso entre el nivel de detalle representable 
-y los recursos necesarios para su almacenamiento y procesamiento.
+y los recursos necesarios para su almacenamiento y procesamiento. Dicho nivel de detalle también 
+está relacionado con el tamaño del sensor de captura y su sensibilidad.
 
 \subsubsection{Cuantificación} \label{subsubsec:3_2_2_cuantificacion}
 La cuantificación, por su parte, es el proceso mediante el cual los valores continuos de intensidad
@@ -67,7 +68,7 @@ actúa sobre el dominio espacial de la imagen, la cuantificación opera sobre su
 es, los valores numéricos que representan la intensidad luminosa o el color en cada píxel.
 
 La cuantificación puede modelarse como una función no lineal $Q(\cdot)$ que asigna a cada valor 
-continuo uno de los valores discretos disponibles \eqref{eq:3_imagen_cuantificada}:
+continuo uno de los valores discretos disponibles \eqref{eq:3_imagen_cuantificada}.
 \begin{equation}
     I[i,j] = Q(f(i, j))
     \label{eq:3_imagen_cuantificada}
@@ -109,7 +110,7 @@ de intensidad $i \in [0, I]$, donde $I$ es el valor máximo determinado por la p
 Por el contrario, en las imágenes a color, cada píxel se 
 representa mediante múltiples componentes, generalmente organizadas en distintos canales que 
 codifican la información cromática según un modelo de color determinado. En el modelo más común,
-el modelo RGB (\textit{Red, Green, Blue}), cada píxel se define por tres valores de intensidad \eqref{eq:6_imagen_color}:
+el modelo RGB (\textit{Red, Green, Blue}), cada píxel se define por tres valores de intensidad \eqref{eq:6_imagen_color}.
 \begin{equation}
     \textit{Imagen Color (RGB)} \rightarrow I = (I_R, I_G, I_B) \quad \text{donde } I_R, I_G, I_B \in R^{M \times N}
     \label{eq:6_imagen_color}
@@ -130,12 +131,12 @@ existen varios espacios de color que resultan relevantes.
 \subsubsection{RGB} \label{subsubsubsec:3_3_1_rgb}
 El espacio de color RGB es el modelo aditivo más comúnmente utilizado en los sitemas de captura,
 representación y visualización de imágenes digitales. En este modelo, los colores se generan 
-mediante la combinación de tres componentes primarias: Rojo (Red), Verde (Green) y Azul (Blue),
+mediante la combinación de tres componentes primarias: Rojo (\textit{Red}), Verde (\textit{Green}) y Azul (\textit{Blue}),
 cuyas intensidades determinan el color final percibido.
 
 Desde el punto de vista de la representación numérica, cada píxel de una imagen en el espacio
 RGB queda definido por un triplete ordenado $(R, G, B)$, donde cada componente corresponde a la
-intensidad cuantificada de uno de los canales de color, tal como se mostró en la \autoref{eq:6_imagen_color}. 
+intensidad cuantificada de uno de los canales de color, tal como se mostró en \eqref{eq:6_imagen_color}. 
 Estos valores suelen representarse en un rango discreto determinado por la profundidad de 
 bits del sistema, siendo habitual el uso de 8 bits por canal, lo que permite representar 
 hasta $256$ niveles por componente y un total de más de $16$ millones de combinaciones cromáticas posibles.
@@ -297,13 +298,13 @@ TIFF, cada uno de ellos diseñado con objetivos específicos relacionados con la
 imagen o la compatibilidad con distintos sistemas.
 
 No obstante, para los fines de este trabajo, se presta especial atención a las imágenes en \textit{formato
-crudo} (\textit{RAW}), ya que representan la información capturada por el sensor con un nivel mínimo de
+crudo} (RAW), ya que representan la información capturada por el sensor con un nivel mínimo de
 procesamiento y sin pérdidas asociadas a técnicas de compresión o postprocesado. Este tipo de formato
 constituye la base sobre la que se desarrollan los métodos de procesamiento propuestos en este TFM,
 permitiendo un mayor control sobre la información radiométrica y cromática de la imagen.
 
 \subsubsection{Imágenes en formato crudo} \label{subsec:3_4_1_formato_crudo}
-Las imágenes en formato crudo (\textit{RAW}), representan la forma más directa y fiel de los datos capturados
+Las imágenes en formato crudo (RAW), representan la forma más directa y fiel de los datos capturados
 por un sensor de imagen digital \cite{raw_image_formats}. A diferencia de los formatos convencionales procesados
 y comprimidos, los formatos crudos almacenan los valores de intensidad registrados por el sensor con un procesamiento 
 mínimo o nulo, preservando la información original de la escena capturada.
@@ -372,7 +373,7 @@ utilizada para calcular el valor de cada píxel en la imagen resultante.
 \paragraph{Operaciones puntuales} \label{subsubsubsec:3_5_1_1_operaciones_puntuales}
 Las operaciones puntuales son aquellas en las que el valor de cada píxel 
 de salida depende únicamente del valor del píxel correspondiente en la imagen de entrada.
-Este tipo de transformaciones se expresan como \eqref{eq:7_operacion_puntual}:
+Este tipo de transformaciones se expresan como \eqref{eq:7_operacion_puntual}
 \begin{equation}
     I_{salida}(x,y) = T(I_{entrada}(x,y))
     \label{eq:7_operacion_puntual}
@@ -400,7 +401,7 @@ por lo que son muy adecuadas para su implementación eficiente en arquitecturas 
 \paragraph{Operaciones espaciales} \label{subsubsubsec:3_5_1_2_operaciones_espaciales}
 Las operaciones espaciales, en contraposición, son aquellas en las que el valor de cada píxel de 
 salida depende no sólo del píxel de entrada correspondiente, sino de un conjunto de píxeles vecnios. 
-De forma general, pueden expresarse como \eqref{eq:8_operacion_espacial}:
+De forma general, pueden expresarse como \eqref{eq:8_operacion_espacial}
 \begin{equation}
     I_{salida}(x,y) = T(I_{entrada}(S_{x,y}))
     \label{eq:8_operacion_espacial}
@@ -486,7 +487,7 @@ emplear un gráfico de perfiles de intensidad, cuya finalidad es mostrar cómo v
 de trayectorias concretas de la imagen. En el contexto de este TFM, se consideran específicamente los perfiles 
 horizontal y vertical que atraviesan el centro de la imagen.
 
-Si $I(x,y)$ representa la intensidad luminosa de la imagen, y $(x_c, y_c)$ denota su posición central, los perfiles pueden expresarse como:
+Si $I(x,y)$ representa la intensidad luminosa de la imagen, y $(x_c, y_c)$ denota su posición central, los perfiles pueden expresarse como \eqref{eq:9_perfiles_intensidad}
 \begin{equation}
     P_H(x) = I(x, y_c), \qquad P_V(y) = I(x_c, y)
     \label{eq:9_perfiles_intensidad}
@@ -537,7 +538,7 @@ sombra presentes en los laterales y la zona inferior de la imagen.
 
 Esta herramienta de diagnóstico cuenta con una gran ventaja, y es que conserva el orden espacial de las intensidades a lo largo de cada recorrido.
 Gracias a ello, el gráfico permite identificar transiciones asociadas a bordes o cambios bruscos de intensidad, regiones más o menos uniformes,
-gradientes suaves de iluminación\dots{} A diferencia del histograma, que resume cuántos píxeles poseen una determinada intensidad sin indicar dónde se
+gradientes suaves de iluminación, etc. A diferencia del histograma, que resume cuántos píxeles poseen una determinada intensidad sin indicar dónde se
 encuentran, el gráfico de perfiles muestra cómo se distribuyen dichas intensidades en una sección concreta de la imagen.
 
 Durante el ajuste del contraste, por ejemplo, el gráfico de perfiles de intensidad permite comprobar si las transformaciones aplicadas expanden adecuadamente el rango dinámico 
@@ -727,7 +728,7 @@ La normalización min--max \cite{image_normalization} es una de las técnicas m�
 intensidades. Este método consiste en mapear el valor mínimo presente en la imagen al extremo
 inferior del rango de destino, y el valor máximo al extremo superior. De este modo, los valores
 intermedios se redistribuyen de forma proporcional, permitiendo que la imagen utilice la totalidad
-del rango dinámico disponible. Matemáticamente, la normalización min--max se expresa como \eqref{eq:10_normalizacion_min_max}:
+del rango dinámico disponible. Matemáticamente, la normalización min--max se expresa como \eqref{eq:10_normalizacion_min_max}.
 \begin{equation}
     I_{salida}(x,y) = \frac{I_{entrada}(x,y) - I_{min}}{I_{max} - I_{min}}
     \label{eq:10_normalizacion_min_max}
@@ -766,7 +767,7 @@ normalización min--max sobre una imagen a color.
 Para mitigar la influencia de valores extremos, es habitual emplear una variante de la
 normalización min--max basada en percentiles. En este caso, en lugar de utilizar los valores
 mínimo y máximo absolutos de la imagen, se seleccionan percentiles bajos y altos del histograma
-como límites del rango de reescalado. Matemáticamente, esta técnica se define como \eqref{eq:11_normalizacion_min_max_percentiles}:
+como límites del rango de reescalado. Matemáticamente, esta técnica se define como \eqref{eq:11_normalizacion_min_max_percentiles}.
 \begin{equation}
     I_{salida}(x,y) = \frac{I_{entrada}(x,y) - P_{inf}}{P_{sup} - P_{inf}}
     \label{eq:11_normalizacion_min_max_percentiles}
@@ -805,11 +806,12 @@ explícitamente el histograma.
 
 \subparagraph{Ajuste de brillo} \label{subsubsubsec:3_5_3_5_0_ajuste_brillo}
 Una de las transformaciones más básicas es el ajuste de brillo \cite{contrast_brightness_adjustment}, que consiste en el producto de cada valor de intensidad por 
-un parámetro (\(\alpha\)) que controla el nivel de brillo de la imagen. Matemáticamente, se expresa como \eqref{eq:12_ajuste_brillo}:
+un parámetro (\(\alpha\)) que controla el nivel de brillo de la imagen. Matemáticamente, se expresa como \eqref{eq:12_ajuste_brillo}.
 \begin{equation}
     I_{salida}(x, y) = I_{entrada}(x, y) \cdot \alpha
     \label{eq:12_ajuste_brillo}
 \end{equation}
+
 Valores de \(\alpha > 1\) aumentan el brillo de la imagen, mientras que valores de \(\alpha < 1\) lo reducen. Por otro lado, 
 un valor de \(\alpha = 1\) no produce ningún cambio en la imagen, mientras que \(\alpha = 0\) resultaría en una imagen completamente negra.
 
@@ -853,12 +855,12 @@ significativa la estructura global de la escena.
 
 La implementación llevada a cabo en el presente TFM se basa en la media global de la imagen como punto 
 de referencia para el ajuste de contraste. A partir de esta media, el ajuste de contraste puede expresarse 
-como \eqref{eq:13_ajuste_contraste_media_global}:
+como \eqref{eq:13_ajuste_contraste_media_global}
 \begin{equation}
     I_{salida}(x,y) = \beta \left(I_{entrada}(x,y) - \mu\right) + \mu
     \label{eq:13_ajuste_contraste_media_global}
 \end{equation}
-Donde \(\mu\) representa la media global de los valores de intensidad de la imagen, y \(\beta\) es un parámetro que controla el nivel de contraste.
+donde \(\mu\) representa la media global de los valores de intensidad de la imagen, y \(\beta\) es un parámetro que controla el nivel de contraste.
 Cuando $\beta = 1$, la imagen no se modifica.
 Si $\beta > 1$, las diferencias respecto a la media aumentan y el contraste se incrementa.
 Si $0 < \beta < 1$, dichas diferencias se comprimen y el contraste disminuye, produciendo una
@@ -899,12 +901,12 @@ sobre una imagen a color, utilizando distintos valores de \(\beta\) para ilustra
 \subparagraph{Transformación de intensidad afín} \label{subsubsubsec:3_5_3_5_0_transformacion_intensidad_afín}
 Un enfoque más general tanto para el ajuste de brillo como de contraste es la aplicación de una transformación de intensidad afín \cite{affine_transformation}, 
 que combina ambos ajustes en una única operación. Esta transformación introduce dos parámetros: la ganancia (\(a\)) y el sesgo (\(b\)). 
-Matemáticamente, se define como \eqref{eq:14_transformacion_intensidad_afin}:
+Matemáticamente, se define como \eqref{eq:14_transformacion_intensidad_afin}
 \begin{equation}
     I_{salida}(x,y) = a \cdot I_{entrada}(x,y) + b
     \label{eq:14_transformacion_intensidad_afin}
 \end{equation}
-Donde \(a\) ajusta la pendiente de la función de transformación, afectando al contraste, mientras que \(b\) desplaza la función verticalmente, modificando el brillo.
+donde \(a\) ajusta la pendiente de la función de transformación, afectando al contraste, mientras que \(b\) desplaza la función verticalmente, modificando el brillo.
 Valores de \(a > 1\) aumentan el contraste, mientras que \(0 < a < 1\) lo reducen. Por otro lado, \(b > 0\) incrementa el brillo, y \(b < 0\) lo disminuye.
 En el caso de \(a = 1\) y \(b = 0\), la imagen no se modifica. La \autoref{fig:16_affine_intensity_transformation_example} muestra un ejemplo de aplicación de 
 la transformación de intensidad afín sobre una imagen a color, utilizando distintos valores de \(a\) y \(b\) para ilustrar su efecto sobre la imagen.
@@ -941,11 +943,12 @@ la transformación de intensidad afín sobre una imagen a color, utilizando dist
 La corrección gamma es una transformación no lineal que ajusta la luminosidad de una imagen.
 Consiste en la aplicación de una función exponencial a los valores de intensidad, controlada 
 por un parámetro denominado \textit{gamma} (\(\gamma\)) \cite{gamma_correction}.
-Se define mediante la siguiente ecuación \eqref{eq:15_correccion_gamma}:
+Se define mediante la siguiente ecuación \eqref{eq:15_correccion_gamma}.
 \begin{equation}
     I_{salida}(x, y) = I_{entrada}(x, y) \cdot c ^{\gamma}
     \label{eq:15_correccion_gamma}
 \end{equation}
+
 Valores de $\gamma < 1$ realzan las zonas oscuras de la imagen, mientras que valores de 
 $\gamma > 1$ atenúan las zonas más claras. La constante \(c\) se utiliza para normalizar 
 los valores de intensidad y asegurar que permanezcan dentro del rango válido. La 
@@ -985,7 +988,7 @@ La mejora del contraste también puede realizarse mediante la aplicación de la 
 que proporciona una transición suave entre las regiones de baja y alta intensidad. A diferencia 
 de la corrección gamma, la función sigmoide permite enfatizar el contraste en torno a un rango 
 de intensidades específico, controlando la pendiente y el punto de inflexión de la curva.
-Matemáticamente, se expresa como \eqref{eq:16_funcion_sigmoide}:
+Matemáticamente, se expresa como \eqref{eq:16_funcion_sigmoide}
 \begin{equation}
     I_{salida}(x, y) = \frac{1}{1 + e^{-k (I_{entrada}(x, y) - I_0)}}
     \label{eq:16_funcion_sigmoide}
@@ -1038,16 +1041,17 @@ Donde \(G(x,y)\) representa la máscara de ganancia espacial que define el facto
 En la implementación utilizada en este TFM, se incorpora además un parámetro de
 intensidad de aplicación, denominado \textit{strength} ($s \in [0,1]$), que permite controlar de forma
 continua la transición entre no corregir y aplicar la corrección completa. Para ello se define
-una ganancia efectiva \eqref{eq:18_compensacion_luz_ganancia_efectiva}:
+una ganancia efectiva \eqref{eq:18_compensacion_luz_ganancia_efectiva}
 \begin{equation}
     G_{ef}(x,y) = 1 + \left(G(x,y)-1\right)\cdot s
     \label{eq:18_compensacion_luz_ganancia_efectiva}
 \end{equation}
-y la salida final viene dada por \eqref{eq:19_compensacion_luz_salida_efectiva}:
+y la salida final viene dada por \eqref{eq:19_compensacion_luz_salida_efectiva}.
 \begin{equation}
     I_{salida}(x,y) = I_{entrada}(x,y) \cdot G_{ef}(x,y)
     \label{eq:19_compensacion_luz_salida_efectiva}
 \end{equation}
+
 Cuando $s=0$, se obtiene $G_{ef}(x,y)=1$ para todo $(x,y)$ y la imagen permanece inalterada.
 Cuando $s=1$, se aplica la compensación completa definida por $G(x,y)$. En la \autoref{fig:19_light_compensation_example} se muestra 
 un ejemplo de aplicación, utilizando la misma máscara de compensación de luz con diferentes valores de $s$.
@@ -1103,7 +1107,7 @@ este TFM.
 El filtro gaussiano \cite{gaussian_filter} es uno de los métodos más empleados para la reducción de 
 ruido de alta frecuencia. Se trata de un filtro lineal que realiza un suavizado progresivo de la 
 imagen mediante la convolución con una máscara basada en la función gaussiana.
-La función gaussiana en dos dimensiones se define como \eqref{eq:20_filtro_gaussiano}:
+La función gaussiana en dos dimensiones se define como \eqref{eq:20_filtro_gaussiano}
 \begin{equation}
     G(x,y) = \frac{1}{2 \pi \sigma^2} e^{-\frac{x^2 + y^2}{2 \sigma^2}}
     \label{eq:20_filtro_gaussiano}
@@ -1112,11 +1116,12 @@ donde \(\sigma\) es la desviación estándar que controla el grado de suavizado.
 El tamaño de la ventana de convolución no se fija manualmente, sino que se calcula
 dinámicamente a partir de \(\sigma\), de modo que la máscara cubra aproximadamente el
 rango efectivo de la distribución gaussiana. Con un factor de truncamiento \(t=3\),
-el tamaño del \textit{kernel} \(k\) se define como \eqref{eq:21_kernel_gaussiano_dinamico}:
+el tamaño del \textit{kernel} \(k\) se define como \eqref{eq:21_kernel_gaussiano_dinamico}.
 \begin{equation}
     k = 2\left\lceil t\,\sigma \right\rceil + 1, \qquad t=3
     \label{eq:21_kernel_gaussiano_dinamico}
 \end{equation}
+
 Esta expresión garantiza que \(k\) sea siempre impar y que la ventana de convolución
 se adapte automáticamente al nivel de suavizado seleccionado.
 
@@ -1165,7 +1170,7 @@ la eliminación del ruido impulsivo, como el conocido ruido de tipo \textit{sal 
 A diferencia de los filtros lineales, este filtro sustitye directamente el valor de cada píxel 
 por la mediana de los valores de intensidad presentes en su vecindad definida por una ventana
 de tamaño \(k \times k\).
-Matemáticamente, el proceso se describe como \eqref{eq:21_filtro_mediana}:
+Matemáticamente, el proceso se describe como \eqref{eq:21_filtro_mediana}
 \begin{equation}
     I_{salida}(x,y) = \text{mediana} \{ I_{entrada}(i,j) \mid (i,j) \in S_{x,y} \}
     \label{eq:21_filtro_mediana}
@@ -1225,7 +1230,7 @@ De forma conceptual, el proceso consiste en generar una versión suavizada de la
 compararla con esta. La diferencia entre ambas resalta las transiciones de intensidad, que se
 corresponden principalmente con los bordes. Esta información se añade posteriormente a la imagen
 original, aumentando el contraste local en dichas zonas y, por tanto, la percepción de nitidez.
-Matemáticamente se puede expresar como \eqref{eq:22_unsharp_masking}:
+Matemáticamente se puede expresar como \eqref{eq:22_unsharp_masking}
 \begin{equation}
     I_{salida}(x,y) = I_{entrada}(x,y) + \sigma \left( I_{entrada}(x,y) - I_{suavizada}(x,y) \right)
     \label{eq:22_unsharp_masking}
@@ -1409,7 +1414,7 @@ fidelidad cromática de la imagen.
 En el marco de este TFM, el balance de blancos se implementa mediante dos métodos clásicos:
 \textit{Gray World} y \textit{Max RGB}. Ambos enfoques comparten la misma idea: aplicar
 factores de ganancia independientes a cada canal de color. Si $I_R(x,y)$, $I_G(x,y)$ e $I_B(x,y)$
-denotan los canales de entrada, la corrección puede expresarse de forma general como \eqref{eq:23_balance_blancos_forma_general}:
+denotan los canales de entrada, la corrección puede expresarse de forma general como \eqref{eq:23_balance_blancos_forma_general}
 \begin{equation}
     I'_{R}(x,y)=g_R\,I_R(x,y), \quad I'_{G}(x,y)=g_G\,I_G(x,y), \quad I'_{B}(x,y)=g_B\,I_B(x,y)
     \label{eq:23_balance_blancos_forma_general}
@@ -1418,19 +1423,19 @@ donde $g_R$, $g_G$ y $g_B$ son las ganancias estimadas para cada canal.
 
 \textbf{Método Gray World.} Este método parte de la hipótesis de que, en promedio, una escena
 natural contiene una distribución cromática aproximadamente neutra. Por tanto, se calcula la media
-de cada canal \eqref{eq:24_balance_blancos_gray_world_medias}:
+de cada canal \eqref{eq:24_balance_blancos_gray_world_medias}
 \begin{equation}
     \mu_R = \frac{1}{HW}\sum_{x=0}^{H-1}\sum_{y=0}^{W-1} I_R(x,y), \;
     \mu_G = \frac{1}{HW}\sum_{x=0}^{H-1}\sum_{y=0}^{W-1} I_G(x,y), \;
     \mu_B = \frac{1}{HW}\sum_{x=0}^{H-1}\sum_{y=0}^{W-1} I_B(x,y)
     \label{eq:24_balance_blancos_gray_world_medias}
 \end{equation}
-y se define una media global como referencia para la corrección \eqref{eq:25_balance_blancos_gray_world_media_global}:
+y se define una media global como referencia para la corrección \eqref{eq:25_balance_blancos_gray_world_media_global}.
 \begin{equation}
     \mu = \frac{\mu_R + \mu_G + \mu_B}{3}
     \label{eq:25_balance_blancos_gray_world_media_global}
 \end{equation}
-Las ganancias se obtienen entonces como \eqref{eq:26_balance_blancos_gray_world_ganancias}:
+Las ganancias se obtienen entonces como \eqref{eq:26_balance_blancos_gray_world_ganancias}
 \begin{equation}
     g_R = \frac{\mu}{\mu_R + \varepsilon}, \quad g_G = \frac{\mu}{\mu_G + \varepsilon}, \quad g_B = \frac{\mu}{\mu_B + \varepsilon}
     \label{eq:26_balance_blancos_gray_world_ganancias}
@@ -1438,17 +1443,17 @@ Las ganancias se obtienen entonces como \eqref{eq:26_balance_blancos_gray_world_
 donde $\varepsilon$ es una constante pequeña para evitar divisiones por cero.
 
 \textbf{Método Max RGB.} Este otro enfoque asume que, tras la corrección, al menos un píxel de cada
-canal debería alcanzar el nivel de referencia máximo. Para ello se calculan los máximos de cada canal \eqref{eq:27_balance_blancos_max_rgb_maximos}:
+canal debería alcanzar el nivel de referencia máximo. Para ello se calculan los máximos de cada canal \eqref{eq:27_balance_blancos_max_rgb_maximos}
 \begin{equation}
     M_R = \max_{x,y} I_R(x,y), \quad M_G = \max_{x,y} I_G(x,y), \quad M_B = \max_{x,y} I_B(x,y)
     \label{eq:27_balance_blancos_max_rgb_maximos}
 \end{equation}
-y se toma como referencia el máximo global entre los tres canales \eqref{eq:28_balance_blancos_max_rgb_referencia}:
+y se toma como referencia el máximo global entre los tres canales \eqref{eq:28_balance_blancos_max_rgb_referencia}.
 \begin{equation}
     M = \max(M_R, M_G, M_B)
     \label{eq:28_balance_blancos_max_rgb_referencia}
 \end{equation}
-Las ganancias quedan definidas por \eqref{eq:29_balance_blancos_max_rgb_ganancias}:
+Las ganancias quedan definidas por \eqref{eq:29_balance_blancos_max_rgb_ganancias}.
 \begin{equation}
     g_R = \frac{M}{M_R + \varepsilon}, \quad g_G = \frac{M}{M_G + \varepsilon}, \quad g_B = \frac{M}{M_B + \varepsilon}
     \label{eq:29_balance_blancos_max_rgb_ganancias}
@@ -1514,7 +1519,7 @@ posterior.
 
 La conversión no se realiza como una simple combinación de los valores de los canales 
 rojo, verde y azul, sino que se emplean ponderaciones específicas para reflejar la
-percepción humana del brillo. La fórmula comúnmente utilizada es \eqref{eq:30_rgb_to_grayscale}:
+percepción humana del brillo. La fórmula comúnmente utilizada es \eqref{eq:30_rgb_to_grayscale}.
 \begin{equation}
     I_{gris}(x,y) = 0.2989 \cdot I_{R}(x,y) + 0.5870 \cdot I_{G}(x,y) + 0.1140 \cdot I_{B}(x,y)
     \label{eq:30_rgb_to_grayscale}
@@ -1605,7 +1610,7 @@ y una gestión transparente de la ejecución tanto en CPU como en GPU.
 \subsubsection{Tensores en la representación de imágenes} \label{subsubsec:3_6_2_tensores_representacion_imagenes}
 En \textit{PyTorch}, las imágenes digitales se representan mediante tensores \cite{torch_tensor}. Estos pueden entenderse 
 como generalizaciones de vectores y matrices a múltiples dimensiones. Desde un punto de vista matemático, 
-un tensor de orden $n$ puede expresarse como \eqref{eq:31_tensor_representation}:
+un tensor de orden $n$ puede expresarse como \eqref{eq:31_tensor_representation}
 \begin{equation}
     T_{i_1 i_2 \ldots i_n} \in \mathbb{R}^{d_1 \times d_2 \times \ldots \times d_n}
     \label{eq:31_tensor_representation}

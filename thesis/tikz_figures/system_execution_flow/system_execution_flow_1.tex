@@ -11,7 +11,7 @@
     ]
 
     \node (ui) [startstop] {\textbf{Interfaz gráfica}};
-    \node (raw_load) [process, right of=ui] {\textbf{Carga de imagen}\\\textbf{\textit{RAW}}};
+    \node (raw_load) [process, right of=ui] {\textbf{Carga de imagen}\\\textbf{RAW}};
     \node (processing) [process, right of=raw_load] {\textbf{Procesamiento} \\ \textbf{de imagen}};
     \node (defining) [process, right of=processing] {\textbf{Definición del}\\\textbf{\textit{pipeline}}};
     \node (export) [startstop, right of=defining] {\textbf{\textit{Pipeline}}\\\textbf{exportado}};
