@@ -1,2 +1,94 @@
 \section{\textit{Stack} tecnológico} \label{sec:appendix_B_technology_stack}
-[...]
+
+Este apéndice resume el conjunto de tecnologías empleadas durante el desarrollo
+del TFM. La selección del \textit{stack} se basa en la experiencia previa,
+la idoneidad para el tipo de proyecto y la disponibilidad de recursos.
+
+\subsection{Lenguaje de desarrollo: Python}
+
+La aplicación desarrollada se basa en Python \cite{python}, que actúa como lenguaje base tanto para
+la implementación del núcleo de procesamiento como para la construcción de la
+interfaz gráfica y de las utilidades auxiliares de prueba, ejecución y
+validación.
+
+Python resulta especialmente adecuado por varios motivos. 
+En primer lugar, dispone de un ecosistema muy consolidado de bibliotecas científicas y 
+técnicas, particularmente útiles en el contexto de tratamiento numérico de datos e imágenes.
+Además, ofrece una sintaxis expresiva y un ciclo de desarrollo ágil, lo que facilita la 
+iteración rápida sobre prototipos y algoritmos. Por último, su amplia adopción 
+favorece la mantenibilidad del proyecto y la reproducibilidad del trabajo realizado.
+
+\subsection{Bibliotecas principales: PyTorch, PyQt6 y pytest}
+
+Sobre Python se apoyan las bibliotecas principales que articulan la
+aplicación.
+
+Por una parte, \textit{PyTorch} \cite{pytorch} actúa como \textit{framework} de
+procesamiento numérico y representación tensorial de imágenes. Su papel es fundamental, 
+ya que permite modelar las imágenes como tensores,
+aplicar operaciones vectorizadas de forma eficiente y ejecutar el
+procesamiento tanto en CPU como en GPU cuando el hardware lo permite.
+
+Por otra parte, la interfaz de usuario se implementa mediante
+PyQt6 \cite{pyqt6}. Esta biblioteca proporciona los componentes necesarios para
+desarrollar una GUI modular, estructurada en paneles y \textit{widgets} especializados,
+cumpliendo con todas las necesidades de interacción, visualización y control requeridas.
+
+De manera complementaria, el proyecto incorpora \textit{pytest} \cite{pytest}
+como marco principal de pruebas y el \textit{plugin}
+\textit{pytest-benchmark} \cite{pytest_benchmark} para la evaluación de
+rendimiento. Estas herramientas permiten estructurar la validación funcional de
+los distintos módulos de procesamiento y, al mismo tiempo, obtener métricas
+temporales repetibles sobre la ejecución de \textit{pipelines} y operaciones
+individuales.
+
+\subsection{Entorno de desarrollo: Visual Studio Code}
+
+Visual Studio Code (VSCode) \cite{code} es el entorno de desarrollo integrado (IDE) utilizado.
+
+Su elección responde a su ligereza, su amplia compatibilidad con
+Python y su buena integración con extensiones orientadas a formateo,
+inspección estática, depuración y gestión del repositorio. Este IDE facilita 
+enormemente el flujo de trabajo, ya que permite trabajar de forma integrada 
+tanto en el desarrollo del código de la aplicación como en la redacción de la 
+memoria en \LaTeX{}.
+
+\subsection{Control de versiones: Git y GitHub}
+
+La gestión de versiones se articula mediante Git \cite{git}, con GitHub \cite{github} como
+plataforma remota de alojamiento y respaldo del repositorio principal: \url{https://github.com/rubennmg/TFM}{}.
+
+Git permite mantener un historial estructurado de cambios, registrando la
+evolución progresiva del desarrollo, la incorporación de nuevas
+funcionalidades y la corrección de incidencias.
+
+Por su parte, GitHub aporta una capa adicional de trazabilidad y disponibilidad,
+al centralizar el código fuente en un repositorio accesible y sincronizado. Así
+pues, el proyecto dispone de un mecanismo fiable para preservar el trabajo,
+consultar revisiones anteriores y mantener una referencia estable de las
+distintas etapas del proyecto.
+
+\subsection{Sistema operativo: Fedora Linux}
+
+Para el desarrollo del proyecto se ha adoptado Fedora Linux \cite{fedora} como entorno principal de trabajo, 
+utilizándose tanto en las fases de implementación como en las de ejecución y validación de la aplicación.
+
+Este sistema operativo ofrece un contexto especialmente favorable para el desarrollo técnico, al contar con 
+un ecosistema bien integrado para Python y una cómoda gestión de dependencias. Asimismo, proporciona herramientas 
+avanzadas que facilitan el proceso de desarrollo.
+
+Por otro lado, el uso de un entorno basado en Linux contribuye a una mejor compatibilidad con bibliotecas y flujos 
+de trabajo habituales en el contexto del proyecto, lo que repercute 
+en una mayor eficiencia y estabilidad del mismo.
+
+\subsection{Terminal: Warp}
+
+Warp \cite{warp} es la terminal de trabajo utilizada durante el desarrollo. 
+Esta herramienta se emplea básicamente para la ejecución de comandos, 
+aunque incluye también un sinfín de funcionalidades adicionales que mejoran la 
+experiencia de trabajo en consola.
+
+Su uso resulta útil como punto de entrada operativo al proyecto, al concentrar
+las tareas repetitivas de desarrollo y validación en un entorno moderno. 
+Integrada con el resto del \textit{stack}, facilita un flujo de trabajo más ágil y 
+una interacción directa y continua con las herramientas de desarrollo y ejecución del sistema.
