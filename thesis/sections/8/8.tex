@@ -62,32 +62,32 @@ descrito anteriormente.
 \subsubsection{Reconstrucción de color} \label{subsubsec:8_2_1_bayer}
 \paragraph{Debayer}
 
-\subparagraph{CP-D1 -- Validación de parámetros válidos}
+\subparagraph{CP-D1 -- Validación de parámetros válidos}\label{cp:CP-D1}
 \testcasetable
 {\texttt{algorithm\_name=``debayer3x''}, \texttt{layout=Layout.RGGB}}
 {Construcción correcta de la operación, sin excepciones, con persistencia de parámetros}
 
-\subparagraph{CP-D2 -- Validación de algoritmo no soportado}
+\subparagraph{CP-D2 -- Validación de algoritmo no soportado}\label{cp:CP-D2}
 \testcasetable
 {\texttt{algorithm\_name=``invalid\_debayer''}, \texttt{layout=Layout.RGGB}}
 {Excepción \texttt{ValueError}.}
 
-\subparagraph{CP-D3 -- Aplicación funcional \texttt{debayer2x2}}
+\subparagraph{CP-D3 -- Aplicación funcional \texttt{debayer2x2}}\label{cp:CP-D3}
 \testcasetable
 {Tensor monocanal \texttt{[1,4,4]} en coma flotante; algoritmo \texttt{debayer2x2}}
 {Tensor RGB \texttt{[3,4,4]} igual a \texttt{expected\_debayer2x2}}
 
-\subparagraph{CP-D4 -- Aplicación funcional \texttt{debayer3x3}}
+\subparagraph{CP-D4 -- Aplicación funcional \texttt{debayer3x3}}\label{cp:CP-D4}
 \testcasetable
 {Misma entrada base de CP-D3; algoritmo \texttt{debayer3x3}}
 {Tensor RGB \texttt{[3,4,4]} igual a \texttt{expected\_debayer3x3}}
 
-\subparagraph{CP-D5 -- Aplicación funcional \texttt{debayer5x5}}
+\subparagraph{CP-D5 -- Aplicación funcional \texttt{debayer5x5}}\label{cp:CP-D5}
 \testcasetable
 {Misma entrada base de CP-D3; algoritmo \texttt{debayer5x5}}
 {Tensor RGB \texttt{[3,4,4]} igual a \texttt{expected\_debayer5x5}}
 
-\subparagraph{CP-D6 -- Aplicación funcional \texttt{debayersplit}}
+\subparagraph{CP-D6 -- Aplicación funcional \texttt{debayersplit}}\label{cp:CP-D6}
 \testcasetable
 {Misma entrada base de CP-D3; algoritmo \texttt{debayersplit}}
 {Tensor RGB \texttt{[3,4,4]} igual a \texttt{expected\_debayersplit}}
@@ -95,46 +95,46 @@ descrito anteriormente.
 \subsubsection{Operaciones de color} \label{subsubsec:8_2_2_color}
 
 \paragraph{ColorToGray}
-\subparagraph{CP-CG1 -- Entrada inválida por número de canales}
+\subparagraph{CP-CG1 -- Entrada inválida por número de canales}\label{cp:CP-CG1}
 \testcasetable
 {Tensor \texttt{[1,4,4]}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-CG2 -- Conversión RGB a escala de grises}
+\subparagraph{CP-CG2 -- Conversión RGB a escala de grises}\label{cp:CP-CG2}
 \testcasetable
 {Tensor RGB \texttt{[3,4,4]} en coma flotante}
 {Tensor \texttt{[1,4,4]} obtenido con pesos $(0.2989, 0.5870, 0.1140)$, con coincidencia numérica respecto a referencia}
 
 \paragraph{GrayToColor}
-\subparagraph{CP-GC1 -- Entrada inválida por canales}
+\subparagraph{CP-GC1 -- Entrada inválida por canales}\label{cp:CP-GC1}
 \testcasetable
 {Tensor \texttt{[3,4,4]}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-GC2 -- Conversión monocanal a RGB}
+\subparagraph{CP-GC2 -- Conversión monocanal a RGB}\label{cp:CP-GC2}
 \testcasetable
 {Tensor \texttt{[1,4,4]}}
 {Tensor \texttt{[3,4,4]} por repetición del canal de entrada}
 
 \paragraph{RgbToHsv}
-\subparagraph{CP-RH1 -- Conversión canónica RGB$\rightarrow$HSV}
+\subparagraph{CP-RH1 -- Conversión canónica RGB$\rightarrow$HSV}\label{cp:CP-RH1}
 \testcasetable
 {Tensor \texttt{[[[1.0]],[[0.0]],[[0.0]]]} (RGB correspondiente a rojo puro)}
 {Tensor \texttt{[[[0.0]],[[1.0]],[[1.0]]]} (HSV correspondiente a rojo puro)}
 
 \paragraph{HsvToRgb}
-\subparagraph{CP-HR1 -- Conversión canónica HSV$\rightarrow$RGB}
+\subparagraph{CP-HR1 -- Conversión canónica HSV$\rightarrow$RGB}\label{cp:CP-HR1}
 \testcasetable
 {Tensor \texttt{[[[0.0]],[[1.0]],[[1.0]]]} (HSV correspondiente a rojo puro)}
 {Tensor \texttt{[[[1.0]],[[0.0]],[[0.0]]]} (RGB correspondiente a rojo puro)}
 
 \paragraph{Conversión de ida y vuelta RGB$\leftrightarrow$HSV}
-\subparagraph{CP-RT1 -- Roundtrip RGB$\rightarrow$HSV$\rightarrow$RGB}
+\subparagraph{CP-RT1 -- Roundtrip RGB$\rightarrow$HSV$\rightarrow$RGB}\label{cp:CP-RT1}
 \testcasetable
 {Tensor RGB \texttt{[3,4,4]}}
 {Reconstrucción RGB con igualdad aproximada al original (\texttt{atol=1e-3})}
 
-\subparagraph{CP-RT2 -- Roundtrip HSV$\rightarrow$RGB$\rightarrow$HSV}
+\subparagraph{CP-RT2 -- Roundtrip HSV$\rightarrow$RGB$\rightarrow$HSV}\label{cp:CP-RT2}
 \testcasetable
 {Tensor HSV \texttt{[3,4,4]}}
 {Reconstrucción HSV con igualdad aproximada al original (\texttt{atol=1e-3})}
@@ -144,183 +144,183 @@ descrito anteriormente.
 \subsubsection{Operaciones de filtrado y mejora} \label{subsubsec:8_2_3_filters}
 
 \paragraph{SigmoidContrast}
-\subparagraph{CP-SC1 -- Ganancia inválida}
+\subparagraph{CP-SC1 -- Ganancia inválida}\label{cp:CP-SC1}
 \testcasetable
 {\texttt{gain=-1.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-SC2 -- \textit{Cutoff} inválido}
+\subparagraph{CP-SC2 -- \textit{Cutoff} inválido}\label{cp:CP-SC2}
 \testcasetable
 {\texttt{cutoff=1.5}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-SC3 -- Aplicación funcional}
+\subparagraph{CP-SC3 -- Aplicación funcional}\label{cp:CP-SC3}
 \testcasetable
 {Tensor \texttt{[3,4,4]}, \texttt{cutoff=1.0}, \texttt{gain=10.0}}
 {Salida igual a la referencia analítica sigmoide reescalada}
 
 \paragraph{GammaAdjustment}
-\subparagraph{CP-GA1 -- Constante multiplicativa inválida}
+\subparagraph{CP-GA1 -- Constante multiplicativa inválida}\label{cp:CP-GA1}
 \testcasetable
 {\texttt{c=0.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-GA2 -- Exponente inválido}
+\subparagraph{CP-GA2 -- Exponente inválido}\label{cp:CP-GA2}
 \testcasetable
 {\texttt{gamma=0.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-GA3 -- Aplicación funcional}
+\subparagraph{CP-GA3 -- Aplicación funcional}\label{cp:CP-GA3}
 \testcasetable
 {Tensor \texttt{[3,4,4]}, \texttt{c=2.0}, \texttt{gamma=0.5}}
 {$\mathrm{clamp}((x^{0.5})\cdot 2.0, 0, 1)$}
 
 \paragraph{GaussianFilter}
-\subparagraph{CP-GF1 -- Sigma inválido}
+\subparagraph{CP-GF1 -- Sigma inválido}\label{cp:CP-GF1}
 \testcasetable
 {\texttt{sigma=0.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-GF2 -- Aplicación funcional}
+\subparagraph{CP-GF2 -- Aplicación funcional}\label{cp:CP-GF2}
 \testcasetable
 {Tensor \texttt{[3,5,5]}, \texttt{sigma=1.0}}
 {Coincidencia con referencia \texttt{GaussianBlur(kernel\_size=7, sigma=1.0)}}
 
 \paragraph{MedianFilter}
-\subparagraph{CP-MF1 -- Kernel no válido (cero)}
+\subparagraph{CP-MF1 -- Kernel no válido (cero)}\label{cp:CP-MF1}
 \testcasetable
 {\texttt{kernel\_size=0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-MF2 -- Kernel no válido (par)}
+\subparagraph{CP-MF2 -- Kernel no válido (par)}\label{cp:CP-MF2}
 \testcasetable
 {\texttt{kernel\_size=2}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-MF3 -- Eliminación de impulso}
+\subparagraph{CP-MF3 -- Eliminación de impulso}\label{cp:CP-MF3}
 \testcasetable
 {Tensor \texttt{[1,5,5]} con impulso central a 1.0; \texttt{kernel\_size=3}}
 {Tensor nulo \texttt{[1,5,5]}}
 
 \paragraph{HistogramEqualization}
-\subparagraph{CP-HE1 -- Ecualización funcional}
+\subparagraph{CP-HE1 -- Ecualización funcional}\label{cp:CP-HE1}
 \testcasetable
 {Tensor \texttt{[3,4,4]} en coma flotante}
 {Igualdad aproximada (\texttt{atol=1e-2}) con referencia \texttt{torchvision.equalize} en dominio \texttt{uint8}}
 
 \paragraph{CLAHE}
-\subparagraph{CP-CL1 -- \textit{Clip limit} inválido}
+\subparagraph{CP-CL1 -- \textit{Clip limit} inválido}\label{cp:CP-CL1}
 \testcasetable
 {\texttt{clip\_limit=0.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-CL2 -- Tamaño de rejilla inválido}
+\subparagraph{CP-CL2 -- Tamaño de rejilla inválido}\label{cp:CP-CL2}
 \testcasetable
 {\texttt{grid\_size=0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-CL3 -- Aplicación funcional CLAHE}
+\subparagraph{CP-CL3 -- Aplicación funcional CLAHE}\label{cp:CP-CL3}
 \testcasetable
 {Tensor \texttt{[3,16,16]}, \texttt{clip\_limit=2.0}, \texttt{grid\_size=8}}
 {Coincidencia con \texttt{kornia.enhance.equalize\_clahe(..., grid\_size=(8,8))}}
 
 \paragraph{UnsharpMasking}
-\subparagraph{CP-US1 -- Kernel no válido (par)}
+\subparagraph{CP-US1 -- Kernel no válido (par)}\label{cp:CP-US1}
 \testcasetable
 {\texttt{kernel\_size=4}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-US2 -- Sigma inválido}
+\subparagraph{CP-US2 -- Sigma inválido}\label{cp:CP-US2}
 \testcasetable
 {\texttt{kernel\_size=3, sigma=0.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-US3 -- Aplicación funcional}
+\subparagraph{CP-US3 -- Aplicación funcional}\label{cp:CP-US3}
 \testcasetable
 {Tensor \texttt{[3,5,5]}, \texttt{kernel\_size=3}, \texttt{sigma=1.0}}
 {Coincidencia con \texttt{kornia.filters.unsharp\_mask}}
 
 \paragraph{AffineIntensityTransformation}
-\subparagraph{CP-AI1 -- Tipo inválido en \texttt{gain}}
+\subparagraph{CP-AI1 -- Tipo inválido en \texttt{gain}}\label{cp:CP-AI1}
 \testcasetable
 {\texttt{gain="1.0"}}
 {Excepción \texttt{TypeError}}
 
-\subparagraph{CP-AI2 -- Rango inválido en \texttt{gain}}
+\subparagraph{CP-AI2 -- Rango inválido en \texttt{gain}}\label{cp:CP-AI2}
 \testcasetable
 {\texttt{gain=-1.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-AI3 -- Tipo inválido en \texttt{bias}}
+\subparagraph{CP-AI3 -- Tipo inválido en \texttt{bias}}\label{cp:CP-AI3}
 \testcasetable
 {\texttt{bias="0.0"}}
 {Excepción \texttt{TypeError}}
 
-\subparagraph{CP-AI4 -- Aplicación funcional}
+\subparagraph{CP-AI4 -- Aplicación funcional}\label{cp:CP-AI4}
 \testcasetable
 {Tensor \texttt{[3,4,4]}, \texttt{gain=1.5}, \texttt{bias=0.1}}
 {Salida $x\cdot 1.5 + 0.1$}
 
 \paragraph{BrightnessAdjustment}
-\subparagraph{CP-BR1 -- Tipo inválido de \texttt{alfa}}
+\subparagraph{CP-BR1 -- Tipo inválido de \texttt{alfa}}\label{cp:CP-BR1}
 \testcasetable
 {\texttt{alfa="1.0"}}
 {Excepción \texttt{TypeError}}
 
-\subparagraph{CP-BR2 -- Valor inválido de \texttt{alfa}}
+\subparagraph{CP-BR2 -- Valor inválido de \texttt{alfa}}\label{cp:CP-BR2}
 \testcasetable
 {\texttt{alfa=-1.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-BR3 -- Aplicación funcional}
+\subparagraph{CP-BR3 -- Aplicación funcional}\label{cp:CP-BR3}
 \testcasetable
 {Tensor \texttt{[3,4,4]}, \texttt{alfa=1.25}}
 {Salida $x\cdot 1.25$}
 
 \paragraph{LightCompensation}
-\subparagraph{CP-LC1 -- Intensidad de compensación inválida}
+\subparagraph{CP-LC1 -- Intensidad de compensación inválida}\label{cp:CP-LC1}
 \testcasetable
 {\texttt{strength=-0.1}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-LC2 -- Forma inválida del mapa de ganancia}
+\subparagraph{CP-LC2 -- Forma inválida del mapa de ganancia}\label{cp:CP-LC2}
 \testcasetable
 {\texttt{light\_gain\_compensation} con forma \texttt{[1,2,3]}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-LC3 -- Aplicación funcional}
+\subparagraph{CP-LC3 -- Aplicación funcional}\label{cp:CP-LC3}
 \testcasetable
 {Tensor \texttt{[3,2,2]}, mapa \texttt{[[1.0,1.2],[0.8,1.5]]}, \texttt{strength=0.5}}
 {Salida $x\cdot(1 + (g-1)\cdot 0.5)$ por píxel}
 
 \paragraph{MeanContrastAdjustment}
-\subparagraph{CP-MC1 -- Tipo inválido de \texttt{beta}}
+\subparagraph{CP-MC1 -- Tipo inválido de \texttt{beta}}\label{cp:CP-MC1}
 \testcasetable
 {\texttt{beta="1.0"}}
 {Excepción \texttt{TypeError}}
 
-\subparagraph{CP-MC2 -- Rango inválido de \texttt{beta}}
+\subparagraph{CP-MC2 -- Rango inválido de \texttt{beta}}\label{cp:CP-MC2}
 \testcasetable
 {\texttt{beta=-1.0}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-MC3 -- Aplicación funcional}
+\subparagraph{CP-MC3 -- Aplicación funcional}\label{cp:CP-MC3}
 \testcasetable
 {Tensor \texttt{[3,4,4]}, \texttt{beta=1.5}}
 {Salida $(x-\mu)\cdot 1.5 + \mu$, siendo $\mu$ la media global}
 
 \paragraph{WhiteBalance}
-\subparagraph{CP-WB1 -- Método no soportado}
+\subparagraph{CP-WB1 -- Método no soportado}\label{cp:CP-WB1}
 \testcasetable
 {\texttt{method="unsupported"}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-WB2 -- Método \texttt{gray\_world}}
+\subparagraph{CP-WB2 -- Método \texttt{gray\_world}}\label{cp:CP-WB2}
 \testcasetable
 {Tensor RGB \texttt{[3,2,2]} con valores conocidos}
 {Escalado por canal respecto a media global de canales, con coincidencia exacta frente a referencia}
 
-\subparagraph{CP-WB3 -- Método \texttt{max\_rgb}}
+\subparagraph{CP-WB3 -- Método \texttt{max\_rgb}}\label{cp:CP-WB3}
 \testcasetable
 {Tensor RGB \texttt{[3,2,2]} con valores conocidos}
 {Escalado por canal respecto a máximo global de canales, con coincidencia exacta frente a referencia}
@@ -328,48 +328,48 @@ descrito anteriormente.
 \subsubsection{Operaciones geométricas} \label{subsubsec:8_2_4_geometry}
 
 \paragraph{Flip}
-\subparagraph{CP-FL1 -- Tipo inválido de parámetro}
+\subparagraph{CP-FL1 -- Tipo inválido de parámetro}\label{cp:CP-FL1}
 \testcasetable
 {\texttt{horizontal="yes"}}
 {Excepción \texttt{TypeError}}
 
-\subparagraph{CP-FL2 -- Volteo horizontal}
+\subparagraph{CP-FL2 -- Volteo horizontal}\label{cp:CP-FL2}
 \testcasetable
 {Tensor \texttt{[1,4,4]}, \texttt{horizontal=True}}
 {Inversión del eje de anchura}
 
-\subparagraph{CP-FL3 -- Volteo vertical}
+\subparagraph{CP-FL3 -- Volteo vertical}\label{cp:CP-FL3}
 \testcasetable
 {Tensor \texttt{[1,4,4]}, \texttt{horizontal=False}}
 {Inversión del eje de altura}
 
-\subparagraph{CP-FL4 -- Doble aplicación (involución)}
+\subparagraph{CP-FL4 -- Doble aplicación (involución)}\label{cp:CP-FL4}
 \testcasetable
 {Doble aplicación sobre tensor \texttt{[1,4,4]}}
 {Recuperación exacta del tensor original}
 
 \paragraph{Rotate}
-\subparagraph{CP-RO1 -- Tipo inválido de ángulo}
+\subparagraph{CP-RO1 -- Tipo inválido de ángulo}\label{cp:CP-RO1}
 \testcasetable
 {\texttt{angle="90"}}
 {Excepción \texttt{TypeError}}
 
-\subparagraph{CP-RO2 -- Rango inválido de ángulo}
+\subparagraph{CP-RO2 -- Rango inválido de ángulo}\label{cp:CP-RO2}
 \testcasetable
 {\texttt{angle=720}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-RO3 -- Rotación general}
+\subparagraph{CP-RO3 -- Rotación general}\label{cp:CP-RO3}
 \testcasetable
 {Tensor \texttt{[3,4,4]}, \texttt{angle=30}}
 {Igualdad con referencia \texttt{torchvision.rotate(..., expand=False)} con \texttt{atol=1e-5}}
 
-\subparagraph{CP-RO4 -- Rotación nula}
+\subparagraph{CP-RO4 -- Rotación nula}\label{cp:CP-RO4}
 \testcasetable
 {Tensor \texttt{[3,4,4]}, \texttt{angle=0}}
 {Identidad exacta}
 
-\subparagraph{CP-RO5 -- Rotación completa}
+\subparagraph{CP-RO5 -- Rotación completa}\label{cp:CP-RO5}
 \testcasetable
 {Tensor \texttt{[3,4,4]}, \texttt{angle=360}}
 {Identidad exacta}
@@ -379,23 +379,23 @@ descrito anteriormente.
 \subsubsection{Operaciones de formato numérico} \label{subsubsec:8_2_5_format}
 
 \paragraph{RealToRGB8}
-\subparagraph{CP-R8-1 -- Tipo de entrada inválido}
+\subparagraph{CP-R8-1 -- Tipo de entrada inválido}\label{cp:CP-R8-1}
 \testcasetable
 {Tensor entero \texttt{[3,4,4]}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-R8-2 -- Conversión funcional a 8 bits}
+\subparagraph{CP-R8-2 -- Conversión funcional a 8 bits}\label{cp:CP-R8-2}
 \testcasetable
 {Tensor flotante \texttt{[3,4,4]}}
 {Tensor 8 bits igual a referencia \texttt{torchvision.convert\_image\_dtype}}
 
 \paragraph{RGB8ToReal}
-\subparagraph{CP-8R-1 -- Tipo de entrada inválido}
+\subparagraph{CP-8R-1 -- Tipo de entrada inválido}\label{cp:CP-8R-1}
 \testcasetable
 {Tensor flotante \texttt{[3,4,4]}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-8R-2 -- Conversión funcional a real}
+\subparagraph{CP-8R-2 -- Conversión funcional a real}\label{cp:CP-8R-2}
 \testcasetable
 {Tensor entero \texttt{[3,4,4]}}
 {Tensor en coma flotante igual a referencia \texttt{torchvision.convert\_image\_dtype}}
@@ -405,35 +405,89 @@ descrito anteriormente.
 \subsubsection{Operaciones de normalización} \label{subsubsec:8_2_6_normalization}
 
 \paragraph{MinMaxNormalization}
-\subparagraph{CP-MM1 -- Normalización min-max por canal}
+\subparagraph{CP-MM1 -- Normalización min-max por canal}\label{cp:CP-MM1}
 \testcasetable
 {Tensor \texttt{[2,2,2]} con valores conocidos (canal 0: 0..3; canal 1: 5..10)}
 {Normalización por canal con expresión $\frac{x-x_{\min}}{x_{\max}-x_{\min}+\epsilon}$}
 
-\subparagraph{CP-MM2 -- Caso de borde: tensor constante}
+\subparagraph{CP-MM2 -- Caso de borde: tensor constante}\label{cp:CP-MM2}
 \testcasetable
 {Tensor constante \texttt{[1,4,4]} de unos}
 {Tensor nulo \texttt{[1,4,4]}}
 
 \paragraph{MinMaxPercentileNormalization}
-\subparagraph{CP-MP1 -- Percentiles inválidos por igualdad}
+\subparagraph{CP-MP1 -- Percentiles inválidos por igualdad}\label{cp:CP-MP1}
 \testcasetable
 {\texttt{lower\_percentile=0.5}, \texttt{upper\_percentile=0.5}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-MP2 -- Percentil inferior fuera de rango}
+\subparagraph{CP-MP2 -- Percentil inferior fuera de rango}\label{cp:CP-MP2}
 \testcasetable
 {\texttt{lower\_percentile=-0.1}, \texttt{upper\_percentile=0.9}}
 {Excepción \texttt{ValueError}}
 
-\subparagraph{CP-MP3 -- Normalización por percentiles}
+\subparagraph{CP-MP3 -- Normalización por percentiles}\label{cp:CP-MP3}
 \testcasetable
 {Tensor \texttt{[1,2,2]} con valores \texttt{\{0,1,2,100\}}, \texttt{lower=0.25}, \texttt{upper=0.75}}
 {Normalización basada en cuantiles y acotado al intervalo $[0,1]$}
 
 \newpage
 
-\subsection{Conclusiones} \label{subsec:8_3_conclusiones}
+\subsection{Matriz de trazabilidad} \label{subsec:8_3_matriz_trazabilidad}
+Con el objetivo de explicitar la relación entre los requisitos definidos en la
+\autoref{subsec:6_1_requisitos_usuario} y la evidencia de verificación presentada en
+esta sección, se incluye en la \autoref{tab:8_matriz_trazabilidad_pruebas_requisitos} 
+una matriz de trazabilidad centrada en los requisitos verificables mediante pruebas unitarias 
+del componente de procesado. Dicha matriz vincula cada requisito con los casos de prueba
+correspondientes, identificados mediante su código \texttt{CP-*}.
+
+\newcommand{\cplink}[1]{\hyperref[cp:#1]{\texttt{#1}}}
+
+\begin{table}[htbp]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{5pt}
+    \begin{tabularx}{\textwidth}{|p{2.5cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+        \hline
+        \rowcolor[gray]{0.90}
+        \textbf{Requisito} & \textbf{Descripción resumida} & \textbf{Casos de prueba asociados} \\
+        \hline
+        \hyperref[req:rf-4-4]{\texttt{RF 4.4}} & Validación de parámetros y prevención de ejecuciones inválidas &
+        \cplink{CP-D2}, \cplink{CP-SC1}, \cplink{CP-SC2}, \cplink{CP-GA1}, \cplink{CP-GA2}, \cplink{CP-GF1}, \cplink{CP-MF1}, \cplink{CP-MF2}, \cplink{CP-CL1}, \cplink{CP-CL2}, \cplink{CP-US1}, \cplink{CP-US2}, \cplink{CP-AI1}, \cplink{CP-AI2}, \cplink{CP-AI3}, \cplink{CP-BR1}, \cplink{CP-BR2}, \cplink{CP-LC1}, \cplink{CP-LC2}, \cplink{CP-MC1}, \cplink{CP-MC2}, \cplink{CP-WB1}, \cplink{CP-RO1}, \cplink{CP-RO2}, \cplink{CP-MP1}, \cplink{CP-MP2} \\
+        \hline
+        \hyperref[req:rf-5-1]{\texttt{RF 5.1}} & Operaciones de mejora y filtrado disponibles &
+        \cplink{CP-SC3}, \cplink{CP-GA3}, \cplink{CP-GF2}, \cplink{CP-MF3}, \cplink{CP-HE1}, \cplink{CP-CL3}, \cplink{CP-US3}, \cplink{CP-AI4}, \cplink{CP-BR3}, \cplink{CP-LC3}, \cplink{CP-MC3}, \cplink{CP-WB2}, \cplink{CP-WB3} \\
+        \hline
+        \hyperref[req:rf-5-2]{\texttt{RF 5.2}} & Conversiones entre espacios de color soportados &
+        \cplink{CP-CG1}, \cplink{CP-CG2}, \cplink{CP-GC1}, \cplink{CP-GC2}, \cplink{CP-RH1}, \cplink{CP-HR1}, \cplink{CP-RT1}, \cplink{CP-RT2} \\
+        \hline
+        \hyperref[req:rf-5-3]{\texttt{RF 5.3}} & Transformaciones geométricas (volteo y rotación) &
+        \cplink{CP-FL1}, \cplink{CP-FL2}, \cplink{CP-FL3}, \cplink{CP-FL4}, \cplink{CP-RO1}, \cplink{CP-RO2}, \cplink{CP-RO3}, \cplink{CP-RO4}, \cplink{CP-RO5} \\
+        \hline
+        \hyperref[req:rf-5-4]{\texttt{RF 5.4}} & Normalizaciones de intensidad (mín.-máx. y percentiles) &
+        \cplink{CP-MM1}, \cplink{CP-MM2}, \cplink{CP-MP1}, \cplink{CP-MP2}, \cplink{CP-MP3} \\
+        \hline
+        \hyperref[req:rf-5-5]{\texttt{RF 5.5}} & \textit{Demosaicing} con variantes de algoritmo &
+        \cplink{CP-D1}, \cplink{CP-D2}, \cplink{CP-D3}, \cplink{CP-D4}, \cplink{CP-D5}, \cplink{CP-D6} \\
+        \hline
+        \hyperref[req:rf-5-6]{\texttt{RF 5.6}} & Conversión de formato numérico (real $\leftrightarrow$ RGB8) &
+        \cplink{CP-R8-1}, \cplink{CP-R8-2}, \cplink{CP-8R-1}, \cplink{CP-8R-2} \\
+        \hline
+        \hyperref[req:rnf-6-1]{\texttt{RNF 6.1}} & Verificabilidad mediante pruebas unitarias &
+        Conjunto completo de casos \texttt{CP-*} definidos en el apartado \ref{subsec:8_2_especificacion_pruebas_unitarias} \\
+        \hline
+    \end{tabularx}
+    \caption{Matriz de trazabilidad entre requisitos y casos de prueba}
+    \label{tab:8_matriz_trazabilidad_pruebas_requisitos}
+\end{table}
+
+La trazabilidad presentada evidencia que los requisitos funcionales del núcleo de
+procesado y el requisito de calidad asociado a verificabilidad se encuentran cubiertos
+mediante casos de prueba explícitos.
+
+\newpage
+
+\subsection{Conclusiones} \label{subsec:8_4_conclusiones}
 Con base en el planteamiento definido y en los casos de prueba implementados, se considera
 validado el comportamiento funcional del componente de procesado en las categorías analizadas.
 La cobertura de escenarios nominales, validaciones de entrada y condiciones de error permite
