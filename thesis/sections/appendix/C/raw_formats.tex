@@ -1,2 +1,113 @@
 \section{Formatos de imagen cruda} \label{sec:appendix_C_raw_formats}
-[...]
+
+Este apéndice resume aspectos relevantes sobre
+formatos de imagen cruda desde una perspectiva práctica, centrándose en 
+sus características fundamentales, su uso en distintos contextos y las
+implicaciones que tienen a nivel de implementación.
+
+\subsection{Generalidades de los formatos crudos}
+
+En términos generales, una imagen cruda almacena directamente las muestras del sensor con el menor
+nivel posible de procesado en cámara. A diferencia de formatos finales como
+\texttt{.jpg}, el dato crudo prioriza fidelidad radiométrica frente a tamaño o
+portabilidad inmediata.
+
+El caso más representativo es \texttt{.raw} "genérico": un volcado binario de
+píxeles en el orden de adquisición, sin estructura estandarizada de metadatos.
+Por este motivo, para interpretar correctamente el fichero suelen ser necesarios,
+además de los datos de píxel, parámetros como:
+
+\begin{itemize}[noitemsep]
+    \item ancho y alto de imagen,
+    \item profundidad de bits efectiva (por ejemplo, 10, 12, 14 o 16 bits),
+    \item patrón Bayer (\texttt{RGGB}, \texttt{GRBG}, \texttt{GBRG}, \texttt{BGGR}),
+    \item endianness (\textit{little} o \textit{big endian}),
+    \item posible empaquetado de bits por píxel.
+\end{itemize}
+
+Estos parámetros pueden ser proporcionados por el sistema de adquisición, inferidos a
+partir de convenciones de nomenclatura o almacenados en un archivo auxiliar de
+metadatos.
+
+\subsection{Consideraciones prácticas y curiosidades}
+
+En entornos industriales y científicos es habitual que el fichero de imagen se
+entregue junto con un archivo auxiliar de metadatos (\texttt{.ini}, \texttt{.cfg},
+\texttt{.txt}, \texttt{.json}, \texttt{.xml}, \texttt{.hdr}, etc.). Esta
+estrategia simplifica la adquisición y reduce dependencias de formato, aunque
+obliga al \textit{software} de carga a mantener coherencia estricta entre ambos
+ficheros.
+
+En sistemas embebidos, cuando la cadena de adquisición es fija, es común
+asumir dimensiones y configuración constantes por aplicación. Esto permite
+maximizar rendimiento y minimizar complejidad de procesamiento, a costa de reducir
+flexibilidad ante cambios de sensor o perfil de captura.
+
+Por otro lado, en fotografía digital profesional predominan formatos propietarios
+de fabricante (por ejemplo, \texttt{.CR2}, \texttt{.CR3}, \texttt{.NEF},
+\texttt{.ARW}, \texttt{.RAF}, \texttt{.ORF}, \texttt{.RW2}), que sí integran
+metadatos dentro del propio fichero que contiene los píxeles de la imagen. 
+En estos casos, la lectura suele apoyarse en bibliotecas específicas de \textit{decoding} RAW.
+
+\newpage
+
+\subsection{Formatos crudos más comunes}
+
+Las \autoref{tab:appendix_c_raw_formats_common_i} y
+\autoref{tab:appendix_c_raw_formats_common_ii} resumen los formatos de imagen
+cruda más representativos en la práctica, su contexto típico de uso y la forma en
+que se gestionan los metadatos.
+
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\hsize=0.95\hsize\raggedright\arraybackslash}X|>{\hsize=1.00\hsize\raggedright\arraybackslash}X|>{\hsize=0.85\hsize\raggedright\arraybackslash}X|>{\hsize=1.20\hsize\raggedright\arraybackslash}X|}
+        \hline
+        \rowcolor[gray]{0.90}
+        \textbf{Formato / Extensión} & \textbf{Ámbito típico} & \textbf{Metadatos} & \textbf{Notas de uso} \\
+        \hline
+        \texttt{.raw} (genérico) & Visión industrial, sensores embebidos, captura científica & Externos o implícitos en la configuración del sistema & Máxima simplicidad de almacenamiento; requiere conocer geometría, bits y patrón de color para decodificar. \\
+        \hline
+        \texttt{.dng} (Digital Negative) & Fotografía y archivado interoperable & Integrados en el propio fichero & Alternativa abierta con amplia compatibilidad; facilita preservación y trazabilidad. \\
+        \hline
+        \texttt{.ari}, \texttt{.3fr}, \texttt{.fff}, \texttt{.iiq}, \texttt{.x3f} & Cine digital y captura profesional de alta gama & Integrados (propietarios) & Orientados a máxima calidad y rango dinámico; suelen implicar flujos de trabajo especializados. \\
+        \hline
+        \texttt{.raw} + \textit{sidecar} (\texttt{.ini}, \texttt{.cfg}, \texttt{.json}, \texttt{.xml}, \texttt{.hdr}) & Microscopía, teledetección e instrumentación científica & Externos en fichero auxiliar & Patrón frecuente cuando se prioriza reproducibilidad experimental y control explícito de parámetros. \\
+        \hline
+    \end{tabularx}
+    \caption{Resumen de formatos de imagen cruda y contexto de uso (I)}
+    \label{tab:appendix_c_raw_formats_common_i}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \footnotesize
+    \renewcommand{\arraystretch}{1.15}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabularx}{\textwidth}{|>{\hsize=0.75\hsize\raggedright\arraybackslash}X|>{\hsize=1.35\hsize\raggedright\arraybackslash}X|>{\hsize=0.90\hsize\raggedright\arraybackslash}X|}
+        \hline
+        \rowcolor[gray]{0.90}
+        \textbf{Fabricante / ecosistema} & \textbf{Extensiones RAW más comunes} & \textbf{Observación práctica} \\
+        \hline
+        Canon & \texttt{.cr2}, \texttt{.cr3}, \texttt{.crw} & Evolución de formatos propietarios con cambios de estructura entre generaciones. \\
+        \hline
+        Nikon & \texttt{.nef}, \texttt{.nrw} & Ampliamente soportado por librerías de revelado RAW y herramientas de catálogo. \\
+        \hline
+        Sony & \texttt{.arw}, \texttt{.sr2}, \texttt{.srf} & Presencia habitual en flujos híbridos foto-vídeo de alta resolución. \\
+        \hline
+        Fujifilm / Olympus / Panasonic / Pentax & \texttt{.raf}, \texttt{.orf}, \texttt{.rw2}, \texttt{.pef} & Formatos consolidados en fotografía, con semánticas internas específicas por marca. \\
+        \hline
+        Otros fabricantes y nichos & \texttt{.dcr}, \texttt{.kdc}, \texttt{.mos}, \texttt{.rwl}, \texttt{.mef}, \texttt{.mrw}, \texttt{.srw}, etc. & La heterogeneidad de metadatos y compresión refuerza la necesidad de \textit{decoders} especializados. \\
+        \hline
+    \end{tabularx}
+    \caption{Listado de extensiones RAW propietarias más comunes (II)}
+    \label{tab:appendix_c_raw_formats_common_ii}
+\end{table}
+
+Como referencia operativa dentro de este TFM, los \textit{loaders}
+implementados en la arquitectura del sistema (\autoref{subsubsec:7_3_2_loaders}) dan soporte directo a
+\texttt{.raw}, \texttt{.arw} y \texttt{.dng}, mientras que
+\texttt{.pkl.gz} y \texttt{.jpg} se incluyen como formatos auxiliares para
+ensayo, validación y pruebas de integración.
