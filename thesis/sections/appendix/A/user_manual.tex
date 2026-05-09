@@ -1,2 +1,246 @@
 \section{Manual de usuario} \label{sec:appendix_A_user_manual}
-[...]
+
+El presente apéndice describe el flujo básico de uso de la aplicación
+desarrollada. Su propósito es servir como
+guía operativa para la puesta en marcha del entorno, la ejecución de la
+aplicación, la interacción con la interfaz durante una sesión completa de
+tratamiento de imagen y la exportación del perfil de operaciones que actúa como
+entrada del módulo de \textit{benchmarking}.
+
+\subsection{Preparación del entorno}
+
+La aplicación interactiva se ejecuta como una aplicación de escritorio basada en
+Python y PyQt6. Como paso previo, debe prepararse un entorno virtual e instalarse
+las dependencias del proyecto.
+
+\subsubsection{Creación del entorno virtual}
+
+El \autoref{lst:venv_setup} muestra los comandos necesarios para crear y activar un
+entorno virtual desde el directorio \texttt{app/} del proyecto.
+
+\begin{lstlisting}[language=bash, caption={Creación y activación del entorno virtual}, label={lst:venv_setup}]
+cd app
+python -m venv .venv
+source .venv/bin/activate
+\end{lstlisting}
+
+\subsubsection{Instalación de dependencias}
+
+Una vez activado el entorno, deben instalarse las dependencias definidas
+en \texttt{requirements.txt}, como se muestra en el \autoref{lst:install_dependencies}.
+
+\begin{lstlisting}[language=bash, caption={Instalación de dependencias de la aplicación}, label={lst:install_dependencies}]
+pip install --upgrade pip
+pip install -r requirements.txt
+\end{lstlisting}
+
+\noindent Debe tenerse en cuenta que el uso de GPU depende de la disponibilidad
+de CUDA en el sistema y de una instalación compatible de PyTorch. En ausencia de
+soporte CUDA, la aplicación permanece operativa utilizando CPU. La instalación 
+de CUDA puede realizarse siguiendo las instrucciones oficiales de NVIDIA, 
+disponibles en \url{https://developer.nvidia.com/cuda-downloads}.
+
+\newpage
+
+\subsection{Puesta en marcha de la aplicación}
+
+La aplicación puede ejecutarse en modo normal o en modo de desarrollo con
+\textit{hot reload}. Para la utilización habitual del sistema, basta con lanzar
+la aplicación principal.
+
+\subsubsection{Ejecución estándar}
+En el \autoref{lst:launch_app} se muestra el comando para iniciar la aplicación interactiva
+desde el directorio \texttt{app/}.
+
+\begin{lstlisting}[language=bash, caption={Lanzamiento de la aplicación interactiva}, label={lst:launch_app}]
+cd app
+source .venv/bin/activate
+python app.py
+\end{lstlisting}
+
+\subsection{Visión general de la interfaz}
+
+Al iniciarse la aplicación, se muestra la ventana principal maximizada, como se observa 
+en la \autoref{fig:appendix_a_gui_overview}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{sections/appendix/A/img/1.png}
+    \caption{Visión general de la aplicación interactiva}
+    \label{fig:appendix_a_gui_overview}
+\end{figure}
+
+\newpage
+
+\subsection{Flujo básico de uso}
+
+Se describe a continuación una sesión típica de trabajo, desde la carga de una
+imagen hasta la generación del perfil de operaciones reutilizable por el módulo
+de \textit{benchmarking}.
+
+\subsubsection{Carga de imagen}
+
+El primer paso consiste en pulsar el botón \textit{Open file...} del panel
+izquierdo y seleccionar una imagen compatible con alguno de los formatos
+soportados por la aplicación. Tras la carga, el sistema actualiza la vista
+principal, la información de la imagen y los elementos de análisis visual
+disponibles, como puede observarse en la \autoref{fig:appendix_a_load_image}.
+
+\begin{figure}[h!]
+    \centering        
+    \includegraphics[width=0.9\textwidth]{sections/appendix/A/img/2.png}
+    \caption{Carga inicial de una imagen en la aplicación}
+    \label{fig:appendix_a_load_image}
+\end{figure}
+
+Una vez cargada la imagen, la aplicación muestra en el panel izquierdo un
+histograma RGB y un gráfico de perfiles centrales de intensidad, mientras que el
+visor central refleja tanto la imagen como la información técnica asociada.
+
+\subsubsection{Inspección visual inicial}
+
+Antes de modificar el \textit{pipeline}, resulta recomendable realizar una
+inspección visual inicial de la imagen cargada. Para ello, el usuario puede:
+
+\begin{itemize}[noitemsep]
+    \item observar la distribución tonal mediante el histograma RGB,
+    \item analizar los perfiles centrales de intensidad,
+    \item revisar los metadatos mostrados en la pestaña \textit{Image Info},
+    \item utilizar zoom y desplazamiento sobre el visor principal.
+\end{itemize}
+
+\newpage
+
+\subsubsection{Definición del \textit{pipeline} de procesado}
+
+El núcleo de interacción de la herramienta es la construcción del
+\textit{pipeline} de operaciones. Desde el selector del panel izquierdo, el
+usuario puede añadir nuevas operaciones a la secuencia de procesado. Cada nueva
+operación se incorpora al final del \textit{pipeline} y aparece, a su vez, en el
+panel derecho con su control de parámetros correspondiente. En la 
+\autoref{fig:appendix_a_pipeline_build} se muestra el resultado tras añadir una 
+operación.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{sections/appendix/A/img/3.png}
+    \caption{Construcción inicial del \textit{pipeline} de procesado}
+    \label{fig:appendix_a_pipeline_build}
+\end{figure}
+
+El flujo normal de uso consiste en encadenar operaciones de forma
+incremental, observando tras cada modificación el efecto resultante sobre la
+imagen procesada y ajustando los parámetros de cada operación según sea necesario.
+
+\newpage
+
+\subsubsection{Ajuste de parámetros}
+
+Cada operación activa presenta en el panel derecho un conjunto de controles
+específico. Dichos controles permiten modificar parámetros numéricos, seleccionar
+métodos o ajustar configuraciones particulares según la naturaleza de cada
+operación, como se muestra en la \autoref{fig:appendix_a_parameters}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.76\textwidth]{sections/appendix/A/img/4.png}
+    \caption{Modificación de parámetros de las operaciones activas}
+    \label{fig:appendix_a_parameters}
+\end{figure}
+
+Durante esta fase, el usuario puede reajustar tantas veces como resulte necesario
+la secuencia de operaciones, observando en tiempo real su efecto sobre la imagen.
+
+\subsubsection{Guardado de la imagen procesada}
+
+Una vez alcanzado un resultado visual satisfactorio, la imagen procesada puede
+guardarse pulsando el botón \textit{Save file...}. Esta operación genera una
+salida en formato \texttt{.jpg} a partir del estado actual del \textit{pipeline}.
+En la \autoref{fig:appendix_a_save_image} se muestra el diálogo de guardado.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.76\textwidth]{sections/appendix/A/img/5.png}
+    \caption{Guardado de la imagen procesada}
+    \label{fig:appendix_a_save_image}
+\end{figure}
+
+\newpage
+
+\subsection{Generación del perfil de operaciones}
+
+Uno de los resultados más relevantes de la interacción con la aplicación es la
+posibilidad de exportar el \textit{pipeline} de operaciones en formato
+\textit{json}.
+
+Para ello, debe utilizarse el botón \textit{Generate profile} del panel izquierdo.
+La aplicación abrirá un diálogo de guardado y generará un fichero
+\texttt{operations\_profile.json} o cualquier otro nombre especificado por el
+usuario. En la \autoref{fig:appendix_a_export_profile} se muestra 
+el diálogo de exportación del perfil.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{sections/appendix/A/img/6.png}
+    \caption{Exportación del perfil de operaciones del \textit{pipeline}}
+    \label{fig:appendix_a_export_profile}
+\end{figure}
+
+Conceptualmente, dicho fichero contiene una lista ordenada de operaciones, donde
+cada entrada almacena el nombre de la operación y el conjunto de parámetros
+asociados a ella. Este fichero sigue la estructura mostrada en el \autoref{lst:profile_structure}.
+
+\begin{lstlisting}[caption={Estructura conceptual de un perfil exportado}, label={lst:profile_structure}]
+[
+    {
+        "operation": "Debayer",
+        "params": {
+            "algorithm_name": "debayer5x5"
+        }
+    },
+    {
+        "operation": "MinMaxPercentileNormalization",
+        "params": {
+            "lower_percentile": 0.01,
+            "upper_percentile": 0.98
+        }
+    },
+    ...
+]
+\end{lstlisting}
+
+\newpage
+
+\subsection{Ejecución del \textit{benchmarking} a partir del perfil exportado}
+
+Una vez generado el perfil, este puede emplearse como entrada directa del módulo
+de \textit{benchmarking}. La ejecución se realiza desde el directorio
+\texttt{app/} mediante \textit{pytest}, utilizando el argumento
+\texttt{-{}-bench-profile} para indicar la ruta del fichero \textit{json}, como
+se muestra en el \autoref{lst:benchmark_execution}.
+
+\begin{lstlisting}[language=bash, caption={Ejecución del benchmarking sobre un perfil exportado}, label={lst:benchmark_execution}]
+cd app
+source .venv/bin/activate
+pytest benchmark/run.py --bench-profile=operations_profile.json
+\end{lstlisting}
+
+Si el perfil se encuentra almacenado en otra ubicación o bajo otro nombre, basta
+con sustituir la ruta anterior por la correspondiente. Se muestra un ejemplo en el \autoref{lst:benchmark_execution_explicit}.
+
+\begin{lstlisting}[language=bash, caption={Ejemplo de ejecución con ruta explícita}, label={lst:benchmark_execution_explicit}]
+pytest benchmark/run.py --bench-profile=pipelines/pipeline_1.json
+\end{lstlisting}
+
+Durante la ejecución, el módulo construye dinámicamente el \textit{pipeline}
+definido en el perfil y lo evalúa sobre distintas combinaciones de tamaño de
+imagen, tipo de dato y dispositivo de procesamiento. Los resultados se almacenan 
+automáticamente en el directorio \texttt{.benchmarks/}. Desde la terminal se muestra un 
+resumen de los resultados obtenidos, como se puede observar en la \autoref{fig:appendix_a_benchmark_run}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{sections/appendix/A/img/7.png}
+    \caption{Ejemplo de salida en terminal tras la ejecución del \textit{benchmarking}}
+    \label{fig:appendix_a_benchmark_run}
+\end{figure}
