@@ -1,43 +1,48 @@
 \section{Benchmarking} \label{sec:9_benchmarking}
-En esta sección se presenta el análisis de los resultados de rendimiento obtenidos a través del módulo 
-de \textit{benchmarking}. Se detalla a continuación el objetivo de dicho análisis, la metodología seguida para 
+\captionsetup[table]{justification=centering,singlelinecheck=false}
+\captionsetup[figure]{justification=centering,singlelinecheck=false}
+\newcommand{\thead}[1]{\shortstack[c]{\bfseries #1}}
+
+En esta sección se presenta el análisis de los resultados obtenidos a través del módulo
+de \textit{benchmarking}. Se detalla el objetivo de dicho análisis, la metodología seguida para
 su ejecución, el entorno experimental utilizado y las comparativas realizadas.
 
 \subsection{Objetivo} \label{sec:9_benchmarking_objective}
-El objetivo de este análisis es realizar una comparación sistemática del rendimiento de \textit{pipelines} de procesado 
-de imágenes bajo distintas condiciones de ejecución, considerando tanto la influencia del hardware como de las configuraciones de procesado.
-\noindent{De forma concreta, el análisis persigue responder a las siguientes preguntas:}
+El objetivo de este análisis es la comparación del rendimiento de distintos
+\textit{pipelines} de procesado de imágenes bajo diversas condiciones de ejecución.
+Para ello, se tendrá en cuenta tanto la influencia del hardware como las diferentes configuraciones de procesamiento,
+con el fin de evaluar su eficiencia en escenarios de procesamiento en tiempo real.
+\noindent En particular, el análisis busca responder a las siguientes preguntas:
 
 \begin{enumerate}[noitemsep]
 	\item ¿Qué ganancia aporta la ejecución de \textit{pipelines} de procesado en GPU respecto a CPU?
 	\item ¿Cómo varía el rendimiento con la resolución de imagen y con el tipo numérico empleado?
-	\item ¿Qué impacto tiene incrementar la complejidad del \textit{pipeline} de procesado?
+	\item ¿Qué impacto tiene el aumento de la complejidad del \textit{pipeline} de procesado?
 	\item ¿Qué diferencias de coste temporal presentan los módulos de \textit{Debayer} implementados?
-	\item ¿Cuál es el rendimiento en escenarios de uso realistas, propios de entornos de procesamiento en tiempo real?
+	\item ¿Cuál es el rendimiento en escenarios de uso realistas?
 \end{enumerate}
 
 \subsection{Metodología} \label{sec:9_benchmarking_methodology}
-Los resultados analizados en esta sección proceden de los artefactos JSON generados por el módulo
-de \textit{benchmarking} de la aplicación (\texttt{app/benchmark}), ejecutado sobre tres equipos
-independientes y distintas definiciones de \textit{pipelines} de procesado. 
-En concreto, se han definido los siguientes perfiles de ejecución:
+Los resultados analizados proceden de los artefactos JSON generados por el módulo
+de \textit{benchmarking}, ejecutado sobre tres equipos
+independientes y las siguientes definiciones de \textit{pipelines} de procesado:
 
 \begin{itemize}[noitemsep]
-	\item \texttt{standard\_run}: \textit{pipeline} simple de complejidad reducida.
-	\begin{enumerate}[noitemsep]
-		\item \textit{Debayer5x5()}
-		\item \textit{SigmoidContrast(gain=2.25, cutoff=0.25)}
-		\item \textit{RealToRGB8()}
-	\end{enumerate}
-	\item \texttt{complex\_run}: \textit{pipeline} complejo con más operaciones.
-	\begin{enumerate}[noitemsep]
-		\item \textit{Debayer5x5()}
-		\item \textit{MinMaxNormalization()}
-		\item \textit{GammaAdjustment(c=1.65, gamma=0.8)}
-		\item \textit{UnsharpMasking(kernel\_size=9, sigma=3.0)}
-		\item \textit{RealToRGB8()}
-		
-	\end{enumerate}
+	\item \texttt{standard\_run}: \textit{pipeline} simple de complejidad reducida, consta de las siguientes operaciones:
+	      \begin{enumerate}[noitemsep]
+		      \item \textit{Debayer5x5()}
+		      \item \textit{SigmoidContrast(gain=2.25, cutoff=0.25)}
+		      \item \textit{RealToRGB8()}
+	      \end{enumerate}
+	\item \texttt{complex\_run}: \textit{pipeline} complejo con más operaciones, consta de:
+	      \begin{enumerate}[noitemsep]
+		      \item \textit{Debayer5x5()}
+		      \item \textit{MinMaxNormalization()}
+		      \item \textit{GammaAdjustment(c=1.65, gamma=0.8)}
+		      \item \textit{UnsharpMasking(kernel\_size=9, sigma=3.0)}
+		      \item \textit{RealToRGB8()}
+
+	      \end{enumerate}
 	\item \texttt{debayer2x2\_run}, \texttt{debayer3x3\_run}, \texttt{debayer5x5\_run},
 	      \texttt{debayerSplit\_run}: perfiles dedicados para comparar las variantes de \textit{Debayer} implementadas.
 \end{itemize}
@@ -53,7 +58,136 @@ En concreto, se han definido los siguientes perfiles de ejecución:
 \newpage
 
 \subsection{Entorno experimental} \label{subsec:9_benchmarking_environment}
-[...]
+Los escenarios de evaluación se han ejecutado sobre tres plataformas hardware
+independientes, seleccionadas con el objetivo de cubrir un espectro amplio de
+contextos de uso. Cada una de ellas representa un perfil distinto de
+despliegue. A continuación se describen las características técnicas de cada equipo y el
+escenario de uso que representan.
 
-\subsection{Análisis} \label{subsec:9_benchmarking_analysis}
-[...]
+\subsubsection{Equipo 1. Estación de trabajo de alto rendimiento} \label{subsubsec:equipo1}
+
+El Equipo 1 corresponde a una estación de trabajo de
+escritorio, representativa de un entorno de desarrollo, experimentación y
+validación de algoritmos. Su especificación de hardware se
+detalla en la \autoref{tab:equipo1_specs}.
+
+\begin{table}[h!]
+	\centering
+	\renewcommand{\arraystretch}{1.25}
+	\setlength{\tabcolsep}{10pt}
+	\begin{tabularx}{0.85\linewidth}{|>{\hsize=0.55\hsize\centering\arraybackslash}X|>{\hsize=0.85\hsize\centering\arraybackslash}X|>{\hsize=0.6\hsize\centering\arraybackslash}X|}
+		\hline
+		\rowcolor[gray]{0.90}
+		\thead{Componente} & \thead{Modelo}         & \thead{Especificaciones}                                                                \\
+		\hline
+		\rowcolor{white}
+		CPU                 & AMD Ryzen 9 9950X3D     & 16 núcleos / 32 hilos, arquitectura x86\_64, 192 MB caché L3 (64 MB + 128 MB 3D V-Cache) \\
+		\hline
+		\rowcolor{white}
+		GPU                 & NVIDIA GeForce RTX 5090 & Arquitectura Blackwell, 32 GB VRAM                                                       \\
+		\hline
+		\rowcolor{white}
+		Memoria RAM         & DDR5                    & 128 GB                                                                                   \\
+		\hline
+	\end{tabularx}
+	\caption{Especificaciones técnicas del Equipo 1}
+	\label{tab:equipo1_specs}
+\end{table}
+
+Este equipo se emplea como referencia de rendimiento máximo dentro del estudio. Su combinación de componentes lo sitúa en el
+extremo superior del espectro de capacidades disponibles para el desarrollo de algoritmos de visión por computador.
+En el contexto del \textit{benchmarking}, permite establecer la cota superior de rendimiento alcanzable para
+cada \textit{pipeline} y analizar la escalabilidad de las implementaciones en condiciones donde los recursos
+hardware no actúan como factor limitante.
+
+\newpage
+
+\subsubsection{Equipo 2. Sistema embebido de gama alta} \label{subsubsec:equipo2}
+
+El Equipo 2 corresponde a una plataforma de desarrollo NVIDIA Jetson AGX Orin,
+un sistema embebido diseñado para cargas de trabajo
+de inteligencia artificial y procesado de señales en entornos con restricciones
+de energía, espacio y disipación térmica. Sus características se recogen en la
+\autoref{tab:equipo2_specs}.
+
+\begin{table}[h!]
+	\centering
+	\renewcommand{\arraystretch}{1.25}
+	\setlength{\tabcolsep}{10pt}
+	\begin{tabularx}{0.85\linewidth}{|>{\hsize=0.55\hsize\centering\arraybackslash}X|>{\hsize=0.85\hsize\centering\arraybackslash}X|>{\hsize=0.6\hsize\centering\arraybackslash}X|}
+		\hline
+		\rowcolor[gray]{0.90}
+		\thead{Componente} & \thead{Modelo}         & \thead{Especificaciones}                          \\
+		\hline
+		\rowcolor{white}
+		CPU                 & NVIDIA Carmel (ARMv8.2) & 8 núcleos, arquitectura aarch64, 8 MB L2 + 4 MB L3 \\
+		\hline
+		\rowcolor{white}
+		GPU                 & NVIDIA Volta            & 512 núcleos CUDA + 64 núcleos Tensor               \\
+		\hline
+		\rowcolor{white}
+		Memoria RAM         & LPDDR5                  & 64 GB (compartida CPU/GPU)                         \\
+		\hline
+	\end{tabularx}
+	\caption{Especificaciones técnicas del Equipo 2}
+	\label{tab:equipo2_specs}
+\end{table}
+
+La arquitectura del AGX Orin presenta características diferenciales respecto a
+una estación de trabajo convencional. Opera sobre arquitectura ARM. Como elemento distintivo, 
+destaca su modelo de memoria unificada. Los 64 GB de RAM son compartidos entre CPU y GPU, eliminando la
+necesidad de transferencias explícitas entre memorias y reduciendo la sobrecarga
+asociada al movimiento de datos. No obstante, esta memoria opera a anchos de
+banda inferiores a los de una GPU discreta de escritorio.
+
+En el contexto del análisis, este equipo representa un escenario de despliegue en entornos
+industriales o de robótica avanzada, donde se requiere capacidad de cómputo significativa en
+un formato compacto y con consumo energético contenido. Ejemplos incluyen sistemas de inspección
+visual en líneas de producción, vehículos autónomos, robótica móvil y plataformas de
+adquisición de datos en campo.
+
+\newpage
+
+\subsubsection{Equipo 3. Sistema embebido de gama media} \label{subsubsec:equipo3}
+
+El Equipo 3 se corresponde con una plataforma NVIDIA Jetson Orin Nano, un módulo
+de sistema orientado a aplicaciones de inferencia y procesado de señales con
+restricciones más severas de coste y consumo energético. Sus especificaciones se
+presentan en la \autoref{tab:equipo3_specs}.
+
+\begin{table}[h!]
+	\centering
+	\renewcommand{\arraystretch}{1.25}
+	\setlength{\tabcolsep}{10pt}
+	\begin{tabularx}{0.85\linewidth}{|>{\hsize=0.55\hsize\raggedright\arraybackslash}X|>{\hsize=0.85\hsize\centering\arraybackslash}X|>{\hsize=0.6\hsize\centering\arraybackslash}X|}
+		\hline
+		\rowcolor[gray]{0.90}
+		\thead{Componente} & \thead{Modelo}      & \thead{Especificaciones}             \\
+		\hline
+		\rowcolor{white}
+		CPU                 & ARMv8 (Cortex-A78AE) & 6 núcleos, arquitectura aarch64       \\
+		\hline
+		\rowcolor{white}
+		GPU                 & NVIDIA Ampere        & 1024 núcleos CUDA + 32 núcleos Tensor \\
+		\hline
+		\rowcolor{white}
+		Memoria RAM         & LPDDR5               & 8 GB (compartida CPU/GPU)             \\
+		\hline
+	\end{tabularx}
+	\caption{Especificaciones técnicas del Equipo 3}
+	\label{tab:equipo3_specs}
+\end{table}
+
+El Orin Nano incorpora una GPU basada en arquitectura NVIDIA Ampere con 1024
+núcleos CUDA, el doble que el AGX Orin, si bien con un ancho de banda de memoria
+y un consumo energético significativamente menores. Los 8 GB de memoria
+compartida son un factor bastante limitante para el procesado de imágenes de gran
+resolución. Al igual que el AGX Orin, opera sobre arquitectura ARM.
+
+En el contexto de este análisis, este equipo representa un escenario de despliegue
+en dispositivos de bajo coste y consumo mínimo, orientados a aplicaciones de visión
+integradas en productos comerciales, sensores inteligentes, cámaras de inspección
+portátiles y sistemas \textit{edge} en arquitecturas de \textit{edge computing}.
+
+\newpage
+
