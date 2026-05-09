@@ -14,6 +14,7 @@
 \usepackage{colortbl}
 \usepackage[hypcap=false]{caption}
 \usepackage{subcaption}
+\captionsetup[table]{justification=centering,singlelinecheck=false}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumitem}
@@ -168,6 +169,43 @@
 	{\fontsize{14pt}{14pt} \textbf{TUTOR: \fontsize{16pt}{16pt} \textit{\tutor}}} \\
 	\vspace{2\baselineskip}
 	{\fontsize{14pt}{14pt} {\textbf{\mydate}}}
+\end{titlepage}}
+
+\newcommand{\originalitydeclaration}{
+\begin{titlepage}
+    \thispagestyle{empty}
+    \centering
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{m{10cm} m{1cm} m{3cm}}
+			\includegraphics[width=86mm]{img/logo_uniovi.jpg} & & \vspace{1.52mm} \includegraphics[width=23mm]{img/logo_epi.png}  \\
+		\end{tabular}
+	\end{table}
+
+	\vspace{4\baselineskip}
+	{\fontsize{16pt}{16pt}\selectfont \textbf{DECLARACIÓN DE ORIGINALIDAD}} \\
+	\vspace{3\baselineskip}
+
+	\begin{minipage}{0.8\textwidth}
+	\setlength{\parindent}{2em}
+	D. Rubén Martínez Ginzo con DNI 53777665P como alumno del Máster
+	Universitario en Ingeniería Informática de la Universidad de Oviedo,
+	DECLARO que el Trabajo Fin de Máster titulado
+	
+	\noindent\textit{\mytitle}	
+	es de mi auditoría, es original y las fuentes 
+	bibliográficas utilizadas han sido debidamente citadas.
+	\end{minipage}
+	
+	\vspace{3\baselineskip}
+	{\small En Gijón, a ... de .......... de 2026}
+
+	\begin{minipage}{0.84\textwidth}
+		\centering
+		\vspace{4\baselineskip}
+
+		Firmado: \meNoD
+	\end{minipage}
 \end{titlepage}}
 
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
