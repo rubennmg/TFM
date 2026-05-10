@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{8pt}
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Pipeline} & \textbf{Resolución} & \textbf{CPU (ms)} & \textbf{GPU (ms)} & \textbf{Speedup} & \textbf{Reducción (\%)} \\
+\hline
+standard & 256x256 & 0.378 & 0.155 & 2.44x & 59.05 \\
+\hline
+standard & 512x512 & 1.081 & 0.216 & 4.99x & 79.96 \\
+\hline
+standard & 1024x1024 & 12.620 & 0.438 & 28.81x & 96.53 \\
+\hline
+standard & 2048x2048 & 88.310 & 1.572 & 56.17x & 98.22 \\
+\hline
+complex & 256x256 & 1.679 & 0.351 & 4.78x & 79.08 \\
+\hline
+complex & 512x512 & 5.487 & 0.428 & 12.82x & 92.20 \\
+\hline
+complex & 1024x1024 & 43.320 & 0.721 & 60.08x & 98.34 \\
+\hline
+complex & 2048x2048 & 222.534 & 2.294 & 97.01x & 98.97 \\
+\hline
+\end{tabular}
+\caption{Comparativa CPU vs GPU}
+\label{tab:cpu_gpu_equipo1_float32_latency}
+\end{table}

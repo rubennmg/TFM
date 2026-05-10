@@ -1,0 +1,45 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{8pt}
+\begin{tabular}{|l|c|c|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Pipeline} & \textbf{Resolución} & \textbf{Dispositivo} & \textbf{FPS} & \textbf{Cumple 30 FPS} \\
+\hline
+standard & 256x256 & CPU & 2648.5 & Sí \\
+\hline
+standard & 256x256 & GPU & 6466.8 & Sí \\
+\hline
+standard & 512x512 & CPU & 925.5 & Sí \\
+\hline
+standard & 512x512 & GPU & 4619.3 & Sí \\
+\hline
+standard & 1024x1024 & CPU & 79.2 & Sí \\
+\hline
+standard & 1024x1024 & GPU & 2283.1 & Sí \\
+\hline
+standard & 2048x2048 & CPU & 11.3 & No \\
+\hline
+standard & 2048x2048 & GPU & 636.1 & Sí \\
+\hline
+complex & 256x256 & CPU & 595.4 & Sí \\
+\hline
+complex & 256x256 & GPU & 2845.5 & Sí \\
+\hline
+complex & 512x512 & CPU & 182.2 & Sí \\
+\hline
+complex & 512x512 & GPU & 2337.0 & Sí \\
+\hline
+complex & 1024x1024 & CPU & 23.1 & No \\
+\hline
+complex & 1024x1024 & GPU & 1387.0 & Sí \\
+\hline
+complex & 2048x2048 & CPU & 4.5 & No \\
+\hline
+complex & 2048x2048 & GPU & 435.9 & Sí \\
+\hline
+\end{tabular}
+\caption{Viabilidad temporal a 30 FPS para la comparativa CPU vs GPU}
+\label{tab:cpu_gpu_equipo1_realtime_30fps}
+\end{table}
