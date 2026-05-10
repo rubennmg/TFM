@@ -211,7 +211,6 @@ def _plot_latency(data: dict[PipelineKey, dict[str, dict[DeviceKey, float]]]) ->
         if idx == 0:
             ax.set_ylabel("Latencia mediana (ms, escala logarítmica)")
 
-    fig.suptitle("Latencia CPU vs GPU", fontsize=12)
     fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.98))
     fig.savefig(FIG_DIR / "fig_cpu_gpu_latency_equipo1_float32.pdf")
     plt.close(fig)
