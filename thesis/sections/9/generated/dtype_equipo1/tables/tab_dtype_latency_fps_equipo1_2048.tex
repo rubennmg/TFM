@@ -1,0 +1,25 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{|l|c|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Pipeline} & \textbf{Dtype} & \textbf{Latencia GPU (ms)} & \textbf{Rendimiento GPU (FPS)} \\
+\hline
+standard & float16 & 1.002 & 997.8 \\
+\hline
+standard & float32 & 1.572 & 636.1 \\
+\hline
+standard & float64 & 21.011 & 47.6 \\
+\hline
+complex & float16 & 1.624 & 615.7 \\
+\hline
+complex & float32 & 2.294 & 435.9 \\
+\hline
+complex & float64 & 23.486 & 42.6 \\
+\hline
+\end{tabular}
+\caption{Impacto del tipo numérico en latencia y rendimiento GPU para resolución \texttt{2048x2048} (Equipo 1).}
+\label{tab:dtype_latency_fps_equipo1_2048}
+\end{table}

@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{|l|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Pipeline} & \textbf{float16 / float32} & \textbf{float64 / float32} \\
+\hline
+standard & 0.64x & 13.36x \\
+\hline
+complex & 0.71x & 10.24x \\
+\hline
+\end{tabular}
+\caption{Relación de latencia respecto a \texttt{float32} para resolución \texttt{2048x2048} (valores menores que 1 indican mejora).}
+\label{tab:dtype_ratio_vs_float32_equipo1_2048}
+\end{table}
