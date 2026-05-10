@@ -593,3 +593,41 @@ relativo de cada variante en función de la resolución, manteniendo la referenc
 \input{sections/9/generated/debayer_equipo1/tables/tab_debayer_gpu_relative_vs_best_equipo1_float32.tex}
 
 \newpage
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.90\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_relative_vs_best_equipo1_float32.pdf}
+    \caption{Comparativa relativa de módulos Debayer respecto al mejor caso}
+    \label{fig:debayer_gpu_relative_vs_best_equipo1_float32}
+\end{figure}
+
+En resoluciones bajas, la
+distancia entre variantes es mayor (hasta \(1.82\times\) en \texttt{256x256}), mientras
+que en resoluciones altas se reduce parcialmente para algunas implementaciones
+intermedias, sin alterar el orden relativo global. Las tres curvas siguen una tendencia similar, 
+excepto en \texttt{1024x1024}, donde \texttt{DebayerSplit} y \texttt{Debayer3x3} se acercan entre sí.
+
+Desde la perspectiva operativa, incluso en \texttt{2048x2048} todos los módulos
+mantienen tasas elevadas de procesamiento en GPU. No obstante, cuando el presupuesto temporal del pipeline global es
+estricto, la elección del módulo de \textit{Debayer} es relevante, ya que el
+sobrecoste relativo entre variantes puede condicionar el margen disponible para etapas
+posteriores de procesado.
+
+El análisis confirma el comportamiento esperado de las distintas
+implementaciones de \textit{Debayer} atendiendo a su coste computacional.
+\texttt{Debayer2x2} constituye la opción más eficiente en términos de latencia, ya que
+emplea la ventana de procesamiento (2x2) más reducida para reconstruir la información de color
+y, por tanto, minimiza el número de accesos a memoria y de operaciones por píxel.
+\texttt{DebayerSplit} introduce un coste adicional al separar y recombinar los canales
+durante el procesado, aunque mantiene una penalización moderada frente al mejor caso.
+Por su parte, \texttt{Debayer3x3} y especialmente \texttt{Debayer5x5} utilizan
+ventanas de procesamiento de mayor tamaño, lo que incrementa el número de muestras
+consideradas por píxel y eleva la presión sobre memoria y cómputo.
+
+No obstante, todas las implementaciones mantienen tasas elevadas de procesamiento en GPU, por lo que
+la elección del módulo de \textit{demosaicing} no debe basarse únicamente en la latencia medida.
+En la práctica, dicha elección dependerá tanto de las restricciones de rendimiento del sistema como
+de las expectativas finales de calidad de reconstrucción, buscándose un equilibrio entre coste
+temporal, fidelidad cromática y margen disponible para el resto de etapas del \textit{pipeline}.
+
+\newpage
