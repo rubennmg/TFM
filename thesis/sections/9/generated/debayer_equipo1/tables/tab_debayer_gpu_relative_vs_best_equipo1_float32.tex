@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{|c|r|r|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Resolución} & \textbf{Debayer2x2} & \textbf{DebayerSplit} & \textbf{Debayer3x3} & \textbf{Debayer5x5} \\
+\hline
+256x256 & 1.00x & 1.64x & 1.72x & 1.82x \\
+\hline
+512x512 & 1.00x & 1.29x & 1.38x & 1.46x \\
+\hline
+1024x1024 & 1.00x & 1.19x & 1.24x & 1.39x \\
+\hline
+2048x2048 & 1.00x & 1.20x & 1.43x & 1.56x \\
+\hline
+\end{tabular}
+\caption{Comparativa relativa de módulos Debayer respecto al mejor caso}
+\label{tab:debayer_gpu_relative_vs_best_equipo1_float32}
+\end{table}

@@ -544,3 +544,52 @@ trabajo aumenta.
 
 \newpage
 
+\subsubsection{Comparativa de módulos de \textit{Debayer}} \label{subsubsec:debayer_comparison}
+
+En este apartado se compara el rendimiento de los módulos de \textit{Debayer}
+implementados, aislando esta operación como factor principal de análisis.
+El estudio se centra en los resultados de GPU del Equipo 1. Para evitar interferencias
+del tipo numérico, se fija \texttt{float32} en toda la comparativa.
+
+La \autoref{tab:debayer_gpu_latency_equipo1_float32} y la \autoref{fig:debayer_gpu_latency_vs_resolution_equipo1_float32} 
+muestran la latencia mediana de cada módulo para las distintas resoluciones evaluadas.
+
+\input{sections/9/generated/debayer_equipo1/tables/tab_debayer_gpu_latency_equipo1_float32.tex}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.90\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_latency_vs_resolution_equipo1_float32.pdf}
+    \caption{Comparativa de latencia de módulos de Debayer}
+    \label{fig:debayer_gpu_latency_vs_resolution_equipo1_float32}
+\end{figure}
+
+Se observa un patrón de ordenación estable en todo el rango de resoluciones. La variante
+\texttt{Debayer2x2} presenta sistemáticamente la menor latencia, seguida de
+\texttt{DebayerSplit}, \texttt{Debayer3x3} y \texttt{Debayer5x5}. Esta jerarquía se
+mantiene desde \texttt{256x256} hasta \texttt{2048x2048}, lo que indica un
+comportamiento consistente de las implementaciones en el dispositivo de referencia.
+
+\newpage
+
+Para cuantificar la diferencia en el caso más exigente, la
+\autoref{tab:debayer_gpu_ranking_2048_equipo1_float32} y la \autoref{fig:debayer_gpu_ranking_2048_equipo1_float32} 
+presentan el ranking en \texttt{2048x2048}. 
+La latencia de \texttt{Debayer5x5} es \(1.56\times\) la del mejor caso (\texttt{Debayer2x2}), mientras que \texttt{DebayerSplit} 
+se mantiene en \((1.20\times)\).
+
+\input{sections/9/generated/debayer_equipo1/tables/tab_debayer_gpu_ranking_2048_equipo1_float32.tex}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.86\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_ranking_2048_equipo1_float32.pdf}
+    \caption{Ranking de módulos de Debayer en \texttt{2048x2048}}
+    \label{fig:debayer_gpu_ranking_2048_equipo1_float32}
+\end{figure}
+
+En la \autoref{tab:debayer_gpu_relative_vs_best_equipo1_float32} y en la \autoref{fig:debayer_gpu_relative_vs_best_equipo1_float32} se muestra
+la comparación relativa de cada módulo respecto al mejor caso (\texttt{Debayer2x2}) para cada resolución. Esto refleja el sobrecoste 
+relativo de cada variante en función de la resolución, manteniendo la referencia constante.
+
+\input{sections/9/generated/debayer_equipo1/tables/tab_debayer_gpu_relative_vs_best_equipo1_float32.tex}
+
+\newpage
