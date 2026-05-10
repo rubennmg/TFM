@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Pipeline} & \textbf{256->512} & \textbf{512->1024} & \textbf{1024->2048} & \textbf{256->2048} \\
+\hline
+standard & 1.40x & 2.02x & 3.59x & 10.17x \\
+\hline
+complex & 1.22x & 1.68x & 3.18x & 6.53x \\
+\hline
+\end{tabular}
+\caption{Factores de escalado temporal en GPU por salto de resolución y factor total (\texttt{float32}).}
+\label{tab:resolution_scaling_summary_equipo1_float32}
+\end{table}

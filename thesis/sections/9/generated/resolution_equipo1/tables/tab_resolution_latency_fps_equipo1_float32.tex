@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{7pt}
+\begin{tabular}{|l|c|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Pipeline} & \textbf{Resolución} & \textbf{Latencia GPU (ms)} & \textbf{Rendimiento GPU (FPS)} \\
+\hline
+standard & 256x256 & 0.155 & 6466.8 \\
+\hline
+standard & 512x512 & 0.216 & 4619.3 \\
+\hline
+standard & 1024x1024 & 0.438 & 2283.1 \\
+\hline
+standard & 2048x2048 & 1.572 & 636.1 \\
+\hline
+complex & 256x256 & 0.351 & 2845.5 \\
+\hline
+complex & 512x512 & 0.428 & 2337.0 \\
+\hline
+complex & 1024x1024 & 0.721 & 1387.0 \\
+\hline
+complex & 2048x2048 & 2.294 & 435.9 \\
+\hline
+\end{tabular}
+\caption{Latencia mediana y rendimiento en FPS en GPU por resolución para el Equipo 1 (\texttt{float32}).}
+\label{tab:resolution_latency_fps_equipo1_float32}
+\end{table}
