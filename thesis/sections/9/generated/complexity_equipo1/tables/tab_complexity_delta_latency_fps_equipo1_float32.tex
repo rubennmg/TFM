@@ -1,0 +1,21 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|c|r|r|r|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Resolución} & \textbf{Standard (ms)} & \textbf{Complex (ms)} & \textbf{Delta (ms)} & \textbf{Caída FPS (\%)} \\
+\hline
+256x256 & 0.155 & 0.351 & 0.197 & 56.0 \\
+\hline
+512x512 & 0.216 & 0.428 & 0.211 & 49.4 \\
+\hline
+1024x1024 & 0.438 & 0.721 & 0.283 & 39.3 \\
+\hline
+2048x2048 & 1.572 & 2.294 & 0.722 & 31.5 \\
+\hline
+\end{tabular}
+\caption{Impacto absoluto de complejidad en latencia y rendimiento}
+\label{tab:complexity_delta_latency_fps_equipo1_float32}
+\end{table}
