@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Literal, Sequence, TypedDict
+from typing import Literal, Sequence, TypedDict, cast
 
 import matplotlib
 
@@ -33,7 +33,6 @@ class RowRecord(TypedDict):
     cpu_ms: float
     gpu_ms: float
     speedup: float
-    reduction: float
 
 
 def _ensure_dirs() -> None:
@@ -96,7 +95,6 @@ def _build_rows(
             cpu_s = data[pipeline][resolution]["cpu"]
             gpu_s = data[pipeline][resolution]["cuda"]
             speedup = cpu_s / gpu_s
-            reduction = (1.0 - (gpu_s / cpu_s)) * 100.0
             rows.append(
                 {
                     "pipeline": PIPELINES[pipeline],
@@ -104,35 +102,36 @@ def _build_rows(
                     "cpu_ms": cpu_s * 1000.0,
                     "gpu_ms": gpu_s * 1000.0,
                     "speedup": speedup,
-                    "reduction": reduction,
                 }
             )
     return rows
 
 
 def _write_latency_table(rows: list[RowRecord]) -> None:
+    latex_nl = "\\\\"
     lines = [
         "\\begin{table}[htbp]",
         "\\centering",
         "\\renewcommand{\\arraystretch}{1.2}",
         "\\setlength{\\tabcolsep}{8pt}",
-        "\\begin{tabular}{|l|c|r|r|r|r|}",
+        "\\begin{tabular}{|l|c|r|r|r|}",
         "\\hline",
         "\\rowcolor[gray]{0.90}",
-        "\\textbf{Pipeline} & \\textbf{Resolución} & \\textbf{CPU (ms)} & \\textbf{GPU (ms)} & \\textbf{Speedup} & \\textbf{Reducción (\\%)} \\\\",
+        "\\textbf{Pipeline} & \\textbf{Resolución} & \\textbf{CPU (ms)} & \\textbf{GPU (ms)} & \\textbf{Speedup} "
+        + latex_nl,
         "\\hline",
     ]
 
     for row in rows:
         lines.append(
-            f"{row['pipeline']} & {row['resolution']} & {row['cpu_ms']:.3f} & {row['gpu_ms']:.3f} & {row['speedup']:.2f}x & {row['reduction']:.2f} \\\\"
+            f"{row['pipeline']} & {row['resolution']} & {row['cpu_ms']:.3f} & {row['gpu_ms']:.3f} & {row['speedup']:.2f}x {latex_nl}"
         )
         lines.append("\\hline")
 
     lines.extend(
         [
             "\\end{tabular}",
-            "\\caption{Comparativa CPU vs GPU en el Equipo 1 para \\texttt{float32}.}",
+            "\\caption{Comparativa CPU vs GPU}",
             "\\label{tab:cpu_gpu_equipo1_float32_latency}",
             "\\end{table}",
             "",
@@ -245,7 +244,6 @@ def _plot_speedup(rows: list[RowRecord]) -> None:
     ax.set_xticklabels(RESOLUTION_ORDER)
     ax.set_xlabel("Resolución")
     ax.set_ylabel("Speedup CPU/GPU")
-    ax.set_title("Ganancia relativa de GPU frente a CPU")
     ax.axhline(1.0, color="black", linestyle="--", linewidth=1.0)
     ax.legend(loc="upper left")
 
@@ -270,6 +268,67 @@ def _plot_speedup(rows: list[RowRecord]) -> None:
 
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_cpu_gpu_speedup_equipo1_float32.pdf")
+    plt.close(fig)
+
+
+def _plot_fps(data: dict[PipelineKey, dict[str, dict[DeviceKey, float]]]) -> None:
+    plt.style.use("seaborn-v0_8-whitegrid")
+    fig, axes = plt.subplots(1, 2, figsize=(10.8, 4.5), sharey=True)
+
+    colors = {"cpu": "#1f4e79", "cuda": "#2a9d8f"}
+    labels = {"cpu": "CPU", "cuda": "GPU"}
+    x = list(range(len(RESOLUTION_ORDER)))
+
+    for idx, (pipeline, title) in enumerate(PIPELINES.items()):
+        ax = axes[idx]
+        for device in ["cpu", "cuda"]:
+            dev = cast(DeviceKey, device)
+            fps_values = [
+                1.0 / data[pipeline][resolution][dev] for resolution in RESOLUTION_ORDER
+            ]
+            ax.plot(
+                x,
+                fps_values,
+                marker="o",
+                linewidth=2.2,
+                color=colors[device],
+                label=labels[device],
+            )
+
+        ax.axhline(30.0, color="#6c757d", linestyle="--", linewidth=1.1)
+        ax.axhline(60.0, color="#343a40", linestyle="--", linewidth=1.1)
+        ax.text(
+            0.02,
+            30.0,
+            "30 FPS",
+            color="#6c757d",
+            fontsize=8,
+            va="bottom",
+            ha="left",
+            transform=ax.get_yaxis_transform(),
+        )
+        ax.text(
+            0.02,
+            60.0,
+            "60 FPS",
+            color="#343a40",
+            fontsize=8,
+            va="bottom",
+            ha="left",
+            transform=ax.get_yaxis_transform(),
+        )
+
+        ax.set_title(title)
+        ax.set_xticks(x)
+        ax.set_xticklabels(RESOLUTION_ORDER)
+        ax.set_xlabel("Resolución")
+        ax.set_yscale("log")
+        ax.legend(loc="upper right", frameon=True)
+        if idx == 0:
+            ax.set_ylabel("FPS (escala logarítmica)")
+
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.98))
+    fig.savefig(FIG_DIR / "fig_cpu_gpu_fps_equipo1_float32.pdf")
     plt.close(fig)
 
 
@@ -326,6 +385,7 @@ def main() -> None:
     _write_realtime_table(rows)
     _plot_latency(data)
     _plot_speedup(rows)
+    _plot_fps(data)
 
     print(f"Assets generated in: {OUTPUT_DIR}")
 
