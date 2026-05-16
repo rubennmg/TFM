@@ -51,6 +51,11 @@ def _shape_label(shape: Sequence[int]) -> str:
     return f"{shape[1]}x{shape[2]}"
 
 
+def _resolution_mpix(resolution: str) -> float:
+    width, height = (int(value) for value in resolution.split("x"))
+    return (width * height) / 1_000_000.0
+
+
 def _dtype_label(raw_dtype: str) -> DTypeKey | None:
     if "float16" in raw_dtype:
         return "float16"
@@ -111,7 +116,7 @@ def _write_latency_fps_table(
         "\\begin{tabular}{|l|c|r|r|}",
         "\\hline",
         "\\rowcolor[gray]{0.90}",
-        "\\textbf{Pipeline} & \\textbf{Resolución} & \\textbf{Latencia GPU (ms)} & \\textbf{Rendimiento GPU (FPS)} \\\\",
+        "\\textbf{Pipeline} & \\textbf{Resolución} & \\textbf{Latencia (ms)} & \\textbf{Rendimiento (FPS)} \\\\",
         "\\hline",
     ]
 
@@ -127,7 +132,7 @@ def _write_latency_fps_table(
     lines.extend(
         [
             "\\end{tabular}",
-            "\\caption{Latencia mediana y rendimiento en FPS en GPU por resolución para el Equipo 1 (\\texttt{float32}).}",
+            "\\caption{Latencia mediana y rendimiento por resolución}",
             "\\label{tab:resolution_latency_fps_equipo1_float32}",
             "\\end{table}",
             "",
@@ -168,7 +173,7 @@ def _write_scaling_summary_table(
     lines.extend(
         [
             "\\end{tabular}",
-            "\\caption{Factores de escalado temporal en GPU por salto de resolución y factor total (\\texttt{float32}).}",
+            "\\caption{Factores de escalado temporal por salto de resolución y factor total acumulado}",
             "\\label{tab:resolution_scaling_summary_equipo1_float32}",
             "\\end{table}",
             "",
@@ -176,6 +181,50 @@ def _write_scaling_summary_table(
     )
 
     (TAB_DIR / "tab_resolution_scaling_summary_equipo1_float32.tex").write_text(
+        "\n".join(lines)
+    )
+
+
+def _write_mpix_efficiency_table(
+    data: dict[PipelineKey, dict[DeviceKey, dict[DTypeKey, dict[str, float]]]],
+) -> None:
+    latex_nl = "\\\\"
+    lines = [
+        "\\begin{table}[htbp]",
+        "\\centering",
+        "\\renewcommand{\\arraystretch}{1.2}",
+        "\\setlength{\\tabcolsep}{5pt}",
+        "\\begin{tabular}{|l|c|r|r|r|r|}",
+        "\\hline",
+        "\\rowcolor[gray]{0.90}",
+        "\\textbf{Pipeline} & \\textbf{Resolución} & \\textbf{MPix} & \\textbf{Latencia (ms)} & \\textbf{ms/MPix} & \\textbf{MPix/s} "
+        + latex_nl,
+        "\\hline",
+    ]
+
+    for pipeline in PIPELINE_ORDER:
+        for resolution in RESOLUTION_ORDER:
+            latency_s = data[pipeline]["cuda"]["float32"][resolution]
+            latency_ms = latency_s * 1000.0
+            mpix = _resolution_mpix(resolution)
+            ms_per_mpix = latency_ms / mpix
+            mpix_per_s = mpix / latency_s
+            lines.append(
+                f"{PIPELINES[pipeline]} & {resolution} & {mpix:.3f} & {latency_ms:.3f} & {ms_per_mpix:.2f} & {mpix_per_s:.0f} \\\\"
+            )
+            lines.append("\\hline")
+
+    lines.extend(
+        [
+            "\\end{tabular}",
+            "\\caption{Coste temporal normalizado por MPix y rendimiento en MPix/s por resolución}",
+            "\\label{tab:resolution_mpix_efficiency_equipo1_float32}",
+            "\\end{table}",
+            "",
+        ]
+    )
+
+    (TAB_DIR / "tab_resolution_mpix_efficiency_equipo1_float32.tex").write_text(
         "\n".join(lines)
     )
 
@@ -250,30 +299,97 @@ def _plot_scaling(
     data: dict[PipelineKey, dict[DeviceKey, dict[DTypeKey, dict[str, float]]]],
 ) -> None:
     plt.style.use("seaborn-v0_8-whitegrid")
-    fig, axes = plt.subplots(1, 2, figsize=(10.8, 4.5), sharey=True)
-    step_labels = ["256->512", "512->1024", "1024->2048"]
+    fig, ax = plt.subplots(figsize=(8.8, 4.8))
+    step_labels = ["512x512", "1024x1024", "2048x2048"]
     x = list(range(3))
-    color = "#2a9d8f"
+    colors = {"standard_run": "#2a9d8f", "complex_run": "#e76f51"}
+    reference = [4.0, 16.0, 64.0]
 
-    for idx, pipeline in enumerate(PIPELINE_ORDER):
-        ax = axes[idx]
+    for pipeline in PIPELINE_ORDER:
         vals = [data[pipeline]["cuda"]["float32"][r] for r in RESOLUTION_ORDER]
-        factors = [vals[1] / vals[0], vals[2] / vals[1], vals[3] / vals[2]]
-        ax.plot(x, factors, marker="o", linewidth=2.2, color=color, label="GPU")
+        factors = [vals[1] / vals[0], vals[2] / vals[0], vals[3] / vals[0]]
+        ax.plot(
+            x,
+            factors,
+            marker="o",
+            linewidth=2.2,
+            color=colors[pipeline],
+            label=PIPELINES[pipeline],
+        )
 
-        ax.set_title(PIPELINES[pipeline])
-        ax.set_xticks(x)
-        ax.set_xticklabels(step_labels)
-        ax.set_xlabel("Saltos de resolución")
-        ax.legend(loc="upper right", frameon=True)
-        if idx == 0:
-            ax.set_ylabel("Factor de escalado")
+    ax.plot(
+        x,
+        reference,
+        marker="o",
+        linewidth=1.6,
+        linestyle="--",
+        color="#343a40",
+        label="Referencia proporcional",
+    )
+    ax.set_xticks(x)
+    ax.set_xticklabels(step_labels)
+    ax.set_xlabel("Resolución respecto a 256x256")
+    ax.set_ylabel("Factor de escalado temporal acumulado")
+    ax.legend(loc="upper right", frameon=True)
 
     fig.suptitle(
-        "Factor de crecimiento por salto de resolución (Equipo 1, float32)", fontsize=12
+        "Factor de escalado acumulado por resolución (Equipo 1, float32)", fontsize=12
     )
     fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.94))
     fig.savefig(FIG_DIR / "fig_resolution_scaling_factor_equipo1_float32.pdf")
+    plt.close(fig)
+
+
+def _plot_mpix_efficiency(
+    data: dict[PipelineKey, dict[DeviceKey, dict[DTypeKey, dict[str, float]]]],
+) -> None:
+    plt.style.use("seaborn-v0_8-whitegrid")
+    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.8))
+    x = list(range(len(RESOLUTION_ORDER)))
+    colors = {"standard_run": "#2a9d8f", "complex_run": "#e76f51"}
+
+    for pipeline in PIPELINE_ORDER:
+        latencies_s = [
+            data[pipeline]["cuda"]["float32"][resolution]
+            for resolution in RESOLUTION_ORDER
+        ]
+        mpix_values = [_resolution_mpix(resolution) for resolution in RESOLUTION_ORDER]
+        ms_per_mpix = [
+            (latency_s * 1000.0) / mpix
+            for latency_s, mpix in zip(latencies_s, mpix_values)
+        ]
+        mpix_per_s = [
+            mpix / latency_s for latency_s, mpix in zip(latencies_s, mpix_values)
+        ]
+
+        axes[0].plot(
+            x,
+            ms_per_mpix,
+            marker="o",
+            linewidth=2.2,
+            color=colors[pipeline],
+            label=PIPELINES[pipeline],
+        )
+        axes[1].plot(
+            x,
+            mpix_per_s,
+            marker="o",
+            linewidth=2.2,
+            color=colors[pipeline],
+            label=PIPELINES[pipeline],
+        )
+
+    axes[0].set_ylabel("ms/MPix")
+    axes[1].set_ylabel("MPix/s")
+
+    for ax in axes:
+        ax.set_xticks(x)
+        ax.set_xticklabels(RESOLUTION_ORDER)
+        ax.set_xlabel("Resolución")
+        ax.legend(loc="best", frameon=True)
+
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.94))
+    fig.savefig(FIG_DIR / "fig_resolution_mpix_efficiency_equipo1_float32.pdf")
     plt.close(fig)
 
 
@@ -312,10 +428,12 @@ def main() -> None:
 
     _write_latency_fps_table(data)
     _write_scaling_summary_table(data)
+    _write_mpix_efficiency_table(data)
     _write_scaling_dtype_table(data)
 
     _plot_latency(data)
     _plot_scaling(data)
+    _plot_mpix_efficiency(data)
     _plot_fps(data)
 
     print(f"Assets generated in: {OUTPUT_DIR}")
