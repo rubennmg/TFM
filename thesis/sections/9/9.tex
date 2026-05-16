@@ -310,88 +310,91 @@ Los umbrales habituales en tiempo real son \(30\,\mathrm{FPS}\) (\(33.33\,\mathr
 
 \subsubsection{Impacto de la resolución de imagen} \label{subsubsec:resolution_impact}
 
-Este apartado analiza de forma específica cómo varía el coste temporal del procesado al
-incrementar la resolución de la imagen de entrada. El análisis se restringe a los resultados 
+En esta sección se analiza cómo varía el coste temporal del procesado al
+incrementar la resolución de la imagen de entrada. Se utilizan los resultados 
 en GPU del Equipo 1 con \texttt{float32} como dato numérico para \texttt{standard\_run} y
 \texttt{complex\_run}.
 
+La resolución es una variable muy importante en el procesamiento digital de imágenes, ya que 
+determina el número de píxeles sobre los que debe operar las distintas etapas 
+del \textit{pipeline}. En una ejecución acelerada por GPU, el impacto temporal 
+de aumentar la resolución no tiene por qué ser estrictamente proporcional al número de píxeles.
+Esto es porque, además del coste computacional asociado a cada uno de ellos, existen costes fijos relacionados con el lanzamiento
+de operaciones, gestión de memoria y sincronización. Por este motivo, en este análisis se cuantifica tanto el coste 
+absoluto como el coste relativo de aumentar la resolución, con el fin de caracterizar su impacto sobre el rendimiento en GPU.
+
 La \autoref{tab:resolution_latency_fps_equipo1_float32} resume la latencia mediana y el
-rendimiento equivalente en FPS para cada resolución. Se observa un incremento progresivo
-del tiempo de ejecución al aumentar el tamaño de la imagen, aunque las latencias se
-mantienen en un rango muy reducido incluso para las resoluciones más exigentes.
+rendimiento equivalente en FPS para cada resolución.
 
 \input{sections/9/generated/resolution_equipo1/tables/tab_resolution_latency_fps_equipo1_float32.tex}
 
-Tal como muestra la \autoref{fig:resolution_latency_equipo1_float32}, el crecimiento de
-la latencia no es lineal con el número de píxeles. En \texttt{standard\_run}, la latencia
-pasa de \(0.155\,\mathrm{ms}\) en \texttt{256x256} a \(1.572\,\mathrm{ms}\) en
-\texttt{2048x2048}. En \texttt{complex\_run}, el incremento va de
-\(0.351\,\mathrm{ms}\) a \(2.294\,\mathrm{ms}\). Aunque el intervalo analizado multiplica
-por 64 el número de píxeles, el coste temporal sólo aumenta \(10.17\times\) en el
-\textit{pipeline} estándar y \(6.53\times\) en el complejo, lo que evidencia una
-escalabilidad favorable en GPU.
+A nivel absoluto, la latencia aumenta de forma progresiva con la resolución. En el perfil estándar, 
+el tiempo pasa de \(0.155\,\mathrm{ms}\) en \texttt{256x256} a \(1.572\,\mathrm{ms}\) en \texttt{2048x2048}. El escalado temporal
+total es de aproximadamente \(10\times\). En el perfil complejo, el incremento va de \(0.352\,\mathrm{ms}\) a \(2.294\,\mathrm{ms}\), 
+con un factor de escalado aproximado de \(6\times\).
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.95\textwidth]{sections/9/generated/resolution_equipo1/figures/fig_resolution_latency_equipo1_float32.pdf}
-    \caption{Impacto de la resolución sobre la latencia mediana}
-    \label{fig:resolution_latency_equipo1_float32}
-\end{figure}
-
-\newpage
-
-Para cuantificar la intensidad del crecimiento, la
-\autoref{tab:resolution_scaling_summary_equipo1_float32} presenta el factor de escalado
+Para cuantificar este comportamiento, la
+\autoref{tab:resolution_scaling_summary_equipo1_float32} muestra el factor de escalado
 por salto de resolución y el factor acumulado entre \texttt{256x256} y
-\texttt{2048x2048} previamente mencionado. Dado que cada salto duplica la anchura y la altura de la imagen, el
-número de píxeles se multiplica por cuatro en cada transición. Los factores medidos son
-inferiores a ese crecimiento teórico en ambos \textit{pipelines}.
+\texttt{2048x2048}. Cada salto de resolución duplica el ancho y el alto de la imagen, por lo 
+que el número de píxeles se multiplica por cuatro. Si el coste temporal creciera de forma estrictamente 
+proporcional al número de píxeles, cada salto presentaría un factor cercano a \(4\times\) y el factor acumulado sería cercano a \(64\times\).
 
 \input{sections/9/generated/resolution_equipo1/tables/tab_resolution_scaling_summary_equipo1_float32.tex}
 
-La diferencia en el salto de resolución \texttt{256->2048} entre ambos perfiles sugiere que, 
-para el \textit{pipeline} complejo, una parte mayor del tiempo de
-ejecución corresponde a costes fijos o a operaciones menos sensibles al tamaño de imagen,
-mientras que el \textit{pipeline} estándar refleja con mayor claridad el aumento de carga
-asociado al número de píxeles.
+\newpage
 
-Desde la perspectiva de despliegue, la
-\autoref{fig:resolution_fps_equipo1_float32} muestra que el margen frente al umbral de
-\(30\,\mathrm{FPS}\) sigue siendo amplio en todo el rango estudiado. Incluso en
-\texttt{2048x2048}, el rendimiento alcanza \(636.1\,\mathrm{FPS}\) en
-\texttt{standard\_run} y \(435.9\,\mathrm{FPS}\) en \texttt{complex\_run}. Por tanto, en
-la resolución condiciona la latencia, pero no compromete la viabilidad
-temporal de los dos perfiles evaluados.
+El escalado temporal observado es menor que el escalado en número de píxeles, lo que indica que el aumento de 
+resolución no penaliza de forma severa el rendimiento en GPU. Para caracterizar de forma más precisa 
+este comportamiento, se normaliza la latencia respecto al número de megapíxeles procesados. Así se diferencia
+claramente entre el aumento absoluto del tiempo de ejecución y el coste relativo de procesar cada unidad de 
+imagen. La \autoref{tab:resolution_mpix_efficiency_equipo1_float32} muestra esta información.
+
+\input{sections/9/generated/resolution_equipo1/tables/tab_resolution_mpix_efficiency_equipo1_float32.tex}
+
+Se observan dos claras tendencias: el coste por megapíxel disminuye al aumentar la resolución, por lo que, 
+en sentido opuesto, el rendimiento por megapíxel aumenta. La \autoref{fig:resolution_mpix_efficiency_equipo1_float32} representa gráficamente 
+sendos comportamientos.
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.92\textwidth]{sections/9/generated/resolution_equipo1/figures/fig_resolution_fps_equipo1_float32.pdf}
-    \caption{Impacto de la resolución sobre el rendimiento en FPS. Eje vertical en escala logarítmica}
-    \label{fig:resolution_fps_equipo1_float32}
+    \includegraphics[width=0.95\textwidth]{sections/9/generated/resolution_equipo1/figures/fig_resolution_mpix_efficiency_equipo1_float32.pdf}
+    \caption{Coste normalizado y rendimiento por MPix}
+    \label{fig:resolution_mpix_efficiency_equipo1_float32}
 \end{figure}
+
+La conclusión es por tanto que, aunque la latencia total aumenta, cada píxel adicional penaliza cada vez menos el rendimiento.
+Este comportamiento puede interpretarse mediante un modelo simplificado de latencia compuesto por un témino fijo y un 
+término dependiente del número de píxeles \eqref{eq:resolution_latency_model}:
+\begin{equation}
+    T(N) = T_{0} + k \cdot N
+    \label{eq:resolution_latency_model}
+\end{equation}
+donde \(T(N)\) representa la latencia total, \(N\) es el número de megapíxeles, \(T_{0}\) es el coste fijo asociado a la 
+ejecución en GPU y \(k\) es el coste incremental por megapíxel.
 
 \newpage
 
-Como comprobación complementaria, la
-\autoref{tab:resolution_scaling_by_dtype_equipo1} muestra el factor total
-\texttt{256->2048} para \texttt{float16}, \texttt{float32} y \texttt{float64}.
+En resoluciones bajas, el término fijo \(T_{0}\) domina la latencia total, por lo que el coste por megapíxel es alto. 
+Sin embargo, a medida que aumenta la resolución, el término incremental \(k \cdot N\) se vuelve más dominante, amortizando 
+el coste fijo y reduciendo el coste por megapíxel, lo que se traduce en un aumento del rendimiento por megapíxel.
 
-\input{sections/9/generated/resolution_equipo1/tables/tab_resolution_scaling_by_dtype_equipo1.tex}
+\vspace{2em}
 
-Se observa como, para \textit{float16} y \textit{float32}, el escalado es relativamente
-similar, mientras que para \textit{float64} se dispara. Esto anticipa evidencias que se desarrollarán de forma más específica 
-en el siguiente apartado.
+Por lo tanto, el análisis realizado muestra que la resolución de la imagen de entrada tiene un impacto claro sobre la 
+latencia, pero que dicho impacto queda moderado por el comportamiento paralelo de la ejecución en GPU.
+El aumento del número de píxeles incrementa el tiempo total de procesamiento, aunque no en la misma proporción que 
+crece el tamaño de la imagen. Incrementar la resolución implica indirectamente una mejora de rendimiento por megapíxel, 
+rendimiento el cual llegaría a estabilizarse en torno a un valor asintótico a medida que el número de píxeles
+se incrementa. 
 
-El análisis confirma que la resolución de entrada es una variable importante que influye
-en el coste temporal del sistema, pero también que la ejecución en GPU ofrece un margen
-operativo suficiente para sostener procesamiento en tiempo real en las configuraciones
-evaluadas. Más allá del cumplimiento del umbral de referencia, los resultados indican que el 
-aumento de resolución puede asumirse con un impacto controlado siempre que se mantenga la ejecución 
-acelerada por GPU. No obstante, el comportamiento observado
-también muestra que el efecto de la resolución no puede analizarse de forma aislada, ya que depende del
-tipo numérico empleado y de la composición del \textit{pipeline}. Por este motivo, los siguientes apartados
-profundizan en estos factores para determinar en qué condiciones el margen de rendimiento disponible
-puede verse reducido.
+Así pues, en términos teóricos, la resolución de entrada actúa como un factor de incremento de la 
+latencia absoluta, pero con un impacto marginal decreciente dentro del rango de resoluciones evaluado. Esto es,
+cada aumento de resolución añade carga computacional al \textit{pipeline}, pero el coste temporal asociado a cada 
+nuevo píxel tiende a ser menor que el observado en resoluciones inferiores. A efectos únicamente de resolución,
+el factor limitante que determinaría el valor máximo de esta variable sería el punto en el que el incremento de 
+píxeles deje de ser absorbido de forma eficiente y el coste por megapíxel deje de disminuir o se estabilice. En el 
+rango analizado, sin embargo, no se observa todavía una degradación de este tipo.
 
 \newpage
 
