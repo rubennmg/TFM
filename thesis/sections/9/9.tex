@@ -198,7 +198,7 @@ portátiles y sistemas \textit{edge} en arquitecturas de \textit{edge computing}
 
 \subsection{Análisis de resultados} \label{subsec:9_benchmarking_analysis}
 
-En esta subsección se presentan las comparativas realizadas. 
+En esta sección se presentan las comparativas realizadas. 
 Se analiza el impacto del dispositivo de cómputo, 
 la resolución de la imagen de entrada, el tipo de dato empleado durante el 
 procesado, la complejidad del \textit{pipeline}, las variantes del módulo de 
@@ -209,23 +209,24 @@ procesado, la complejidad del \textit{pipeline}, las variantes del módulo de
 Esta primera comparativa evalúa la ganancia de rendimiento obtenida al ejecutar los
 \textit{pipelines} en GPU frente a CPU. Se toman como referencia los resultados del Equipo 1.
 Para aislar el efecto del dispositivo de cómputo y evitar solapamientos con los apartados
-posteriores, en este subapartado se emplean únicamente los resultados en \texttt{float32} de los perfiles
+posteriores, en esta sección se emplean únicamente los resultados en \texttt{float32} de los perfiles
 \texttt{standard\_run} y \texttt{complex\_run}.
 
 La \autoref{tab:cpu_gpu_equipo1_float32_latency} recoge la latencia mediana\footnotemark[4]
 observada en ambas plataformas para cada resolución evaluada, junto con el \textit{speedup}\footnotemark[5]
-CPU/GPU.
+CPU/GPU. Se espera que el rendimiento en GPU sea muy superior al de CPU, debido a la gran capacidad de aprovechamiento
+de paralelismo masivo y características que se adelantaron en la \autoref{subsec:3_8_computacion_acelerada_gpu}
+sobre este tipo de dispositivo.
 
 \input{sections/9/generated/cpu_gpu_equipo1/tables/tab_cpu_gpu_float32_latency.tex}
 
-Los resultados muestran una clara tendencia. El rendimiento en GPU aumenta al crecer
-la resolución de entrada y también al incrementar la carga computacional del \textit{pipeline}.
+En una primera instancia, los resultados confirman la expectativa. El rendimiento en GPU
+respecto a CPU aumenta enormemente al crecer la resolución de entrada y al incrementar 
+la carga computacional del \textit{pipeline}.
 En \texttt{standard\_run}, el \textit{speedup} pasa de \(2.44\times\) en
 \texttt{256x256} a \(56.17\times\) en \texttt{2048x2048}. En
-\texttt{complex\_run}, esta diferencia es mucho mayor, alcanzando
-\(97.01\times\) en \texttt{2048x2048}. Este comportamiento refleja un mayor aprovechamiento de la
-capacidad de paralelismo efectivo en GPU cuando aumenta el volumen de datos y el número
-de operaciones por píxel, como se adelantó en la \autoref{subsec:3_8_computacion_acelerada_gpu}.
+\texttt{complex\_run} esta diferencia es mucho mayor, alcanzando
+\(97.01\times\) en \texttt{2048x2048}.
 
 \footnotetext[4]{Se emplea la mediana en lugar de la media como métrica de latencia, ya que es menos
 sensible a la presencia de valores atípicos.}
@@ -233,32 +234,34 @@ sensible a la presencia de valores atípicos.}
 \footnotetext[5]{El \textit{speedup} se calcula como el cociente entre la latencia en CPU y la latencia en GPU.
 Representa la mejora relativa en rendimiento al ejecutar en GPU.}
 
+\newpage
+
 Complementando lo anterior, la \autoref{fig:cpu_gpu_equipo1_latency_float32} muestra la evolución de la latencia 
 mediana en ambos dispositivos a medida que aumenta la resolución de la imagen de entrada. Dicha evolución se 
-representa en escala logarítmica para facilitar la comparación de ambas tendencias.
-
-\newpage
+representa en escala logarítmica para facilitar la comparación de ambas tendencias. La diferencia es tanta que, de representarse 
+en escala lineal, la curva de la GPU quedaría aplanada cerca del eje horizontal, dificultando la apreciación de su crecimiento.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.95\textwidth]{sections/9/generated/cpu_gpu_equipo1/figures/fig_cpu_gpu_latency_equipo1_float32.pdf}
-	\caption{Latencia mediana CPU vs GPU. Eje vertical en escala logarítmica}
+	\includegraphics[width=0.9\textwidth]{sections/9/generated/cpu_gpu_equipo1/figures/fig_cpu_gpu_latency_equipo1_float32.pdf}
+	\caption{Latencia mediana CPU vs GPU}
 	\label{fig:cpu_gpu_equipo1_latency_float32}
 \end{figure}
 
-Se aprecia con claridad que ambas curvas crecen con la resolución, pero con pendientes distintas,
-siendo la de CPU significativamente más pronunciada. Además, la separación entre ambas no es constante, 
+Se aprecia con claridad que ambas curvas crecen con la resolución, pero con pendientes muy distintas,
+siendo la de CPU más pronunciada. La separación entre ambas no es constante, 
 sino que aumenta progresivamente con la resolución. Esta tendencia es más acusada en el \textit{pipeline} complejo. 
-Para una misma resolución, la distancia entre CPU y GPU es mayor que en el \textit{pipeline} estándar, especialmente en
-las resoluciones más altas. En resoluciones bajas, sobre todo en \texttt{256x256}, la ventaja de la GPU es menor, lo 
-que sugiere que parte del coste total puede estar asociado a sobrecargas fijas de ejecución, transferencia o inicialización.
+En resoluciones bajas, sobre todo en \texttt{256x256}, la ventaja de la GPU es menor. Esto se debe a que, en estas condiciones, 
+donde el número de píxeles es reducido, la CPU puede procesar la imagen de forma eficiente, mientras que los costes fijos 
+asociados a la transferencia de datos y memoria en GPU penalizan su rendimiento relativo. Sin embargo, la GPU sigue superando 
+a la CPU incluso en estas condiciones.
 
-En la \autoref{fig:cpu_gpu_equipo1_speedup_float32} se muestra la evolución del \textit{speedup} CPU/GPU con la resolución, 
-en forma de gráfico de barras para cada \textit{pipeline}.
+La \autoref{fig:cpu_gpu_equipo1_speedup_float32} muestra la evolución del \textit{speedup} CPU/GPU con la resolución, 
+en forma de gráfico de barras. Cada \textit{pipeline} se representa de forma independiente.
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=0.95\textwidth]{sections/9/generated/cpu_gpu_equipo1/figures/fig_cpu_gpu_speedup_equipo1_float32.pdf}
+	\includegraphics[width=0.75\textwidth]{sections/9/generated/cpu_gpu_equipo1/figures/fig_cpu_gpu_speedup_equipo1_float32.pdf}
 	\caption{\textit{Speedup} CPU/GPU por resolución}
 	\label{fig:cpu_gpu_equipo1_speedup_float32}
 \end{figure}
@@ -271,27 +274,37 @@ También se observa que, para todas las resoluciones evaluadas, la ganancia rela
 \textit{pipeline} complejo, lo que refuerza la conclusión de que la GPU aprovecha mejor su capacidad 
 de paralelismo efectivo a medida que aumenta la carga computacional.
 
-Desde la perspectiva de uso realista, la \autoref{tab:cpu_gpu_equipo1_realtime_30fps} 
-evalúa el cumplimiento de un umbral de \(30\,\mathrm{FPS}\)\footnotemark[6]. 
-En CPU, dicho objetivo deja de cumplirse para \texttt{standard\_run} en \texttt{2048x2048} 
-y para \texttt{complex\_run} a partir de \texttt{1024x1024}. En GPU, en cambio, se mantiene 
-un margen holgado en todas las configuraciones analizadas.
+Desde la perspectiva de uso realista, la \autoref{fig:cpu_gpu_equipo1_fps_float32} 
+representa el rendimiento equivalente en FPS\footnotemark[6] para CPU y GPU, incorporando
+como referencia los umbrales de \(30\,\mathrm{FPS}\) y \(60\,\mathrm{FPS}\). También se presenta 
+en escala logarítmica.
 
-\input{sections/9/generated/cpu_gpu_equipo1/tables/tab_cpu_gpu_realtime_30fps.tex}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.95\textwidth]{sections/9/generated/cpu_gpu_equipo1/figures/fig_cpu_gpu_fps_equipo1_float32.pdf}
+	\caption{Rendimiento CPU vs GPU en FPS}
+	\label{fig:cpu_gpu_equipo1_fps_float32}
+\end{figure}
 
-Los datos del Equipo 1 establecen una conclusión de vital importancia para el resto del análisis.
-Y es que la elección del dispositivo de cómputo es el factor con mayor impacto sobre el rendimiento global
-del sistema. La ejecución en GPU no sólo reduce la latencia absoluta, sino que también mejora la escalabilidad del 
+En CPU, el margen temporal se reduce de forma progresiva al aumentar la resolución. El umbral
+de \(30\,\mathrm{FPS}\) deja de cumplirse para \texttt{standard\_run} en \texttt{2048x2048}
+y para \texttt{complex\_run} a partir de \texttt{1024x1024}. En GPU, en cambio, los dos
+perfiles se mantienen ampliamente por encima de los umbrales de referencia en todas las
+resoluciones, evidenciando un margen operativo mucho mayor.
+
+\vspace{3em}
+
+Los datos analizados establecen una conclusión de vital importancia para el resto del análisis.
+Y es que la elección del dispositivo de cómputo es el factor con mayor impacto sobre el rendimiento final. 
+La ejecución en GPU no sólo reduce la latencia absoluta, sino que también mejora la escalabilidad del 
 procesado cuando aumentan la resolución y la complejidad del \textit{pipeline}. Esto implica que, para configuraciones
-exigentes, el uso de CPU puede convertirse en un importante cuello de botella. 
-
+exigentes, el uso de CPU se convierte en un importante cuello de botella. 
 Por tanto, la GPU se posiciona como la opción preferente para los perfiles de ejecución orientados a procesamiento en 
 tiempo real. A partir de esta observación, los apartados posteriores se centran en caracterizar qué otros factores
 influyen en el rendimiento una vez fijada la GPU como plataforma de referencia.
 
-\footnotetext[6]{Una tasa de \(30\,\mathrm{FPS}\) equivale a un tiempo máximo de procesamiento de \(33.33\,\mathrm{ms}\) por imagen, 
-valor habitualmente utilizado como referencia en aplicaciones de visión en tiempo real. 
-Se calcula como \(FPS = \frac{1000\,\mathrm{ms/s}}{\text{latencia en ms}}\).}
+\footnotetext[6]{Los FPS expresan la tasa de imágenes procesadas por segundo: \(FPS = \frac{1000\,\mathrm{ms/s}}{\text{latencia (ms)}}\). 
+Los umbrales habituales en tiempo real son \(30\,\mathrm{FPS}\) (\(33.33\,\mathrm{ms}\)) y \(60\,\mathrm{FPS}\) (\(16.67\,\mathrm{ms}\)).}
 
 \newpage
 
