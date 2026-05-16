@@ -28,21 +28,26 @@ de \textit{benchmarking}, ejecutado sobre tres equipos
 independientes y las siguientes definiciones de \textit{pipelines} de procesado:
 
 \begin{itemize}[noitemsep]
-	\item \texttt{standard\_run}: \textit{pipeline} simple de complejidad reducida, consta de las siguientes operaciones:
+	\item \texttt{standard\_run}: \textit{pipeline} simple de complejidad reducida. De ahora en adelante, se referirá 
+	a este como ``\textit{Pipeline} estándar'' o, simplemente,``\texttt{standard}''. Consta de las siguientes operaciones:
 	      \begin{enumerate}[noitemsep]
 		      \item \textit{Debayer5x5()}
 		      \item \textit{SigmoidContrast(gain=2.25, cutoff=0.25)}
 		      \item \textit{RealToRGB8()}
 	      \end{enumerate}
-	\item \texttt{complex\_run}: \textit{pipeline} complejo con más operaciones, consta de:
-	      \begin{enumerate}[noitemsep]
-		      \item \textit{Debayer5x5()}
-		      \item \textit{MinMaxNormalization()}
-		      \item \textit{GammaAdjustment(c=1.65, gamma=0.8)}
-		      \item \textit{UnsharpMasking(kernel\_size=9, sigma=3.0)}
-		      \item \textit{RealToRGB8()}
-
-	      \end{enumerate}
+	\item \texttt{complex\_run}: \textit{pipeline} complejo con más operaciones. Se referirá 
+	a este como ``\textit{Pipeline} complejo'' o, simplemente, ``\texttt{complex}''. Consta de las siguientes operaciones:
+	        {\setlength{\multicolsep}{0pt}
+			\begin{multicols}{2}
+				\begin{enumerate}[noitemsep]
+					\item \textit{Debayer5x5()}
+					\item \textit{MinMaxNormalization()}
+					\item \textit{GammaAdjustment(c=1.65, gamma=0.8)}
+					\item \textit{UnsharpMasking(kernel\_size=9, sigma=3.0)}
+					\item \textit{RealToRGB8()}
+				\end{enumerate}
+			\end{multicols}
+			}
 	\item \texttt{debayer2x2\_run}, \texttt{debayer3x3\_run}, \texttt{debayer5x5\_run},
 	      \texttt{debayerSplit\_run}: perfiles dedicados para comparar las variantes de \textit{Debayer} implementadas.
 \end{itemize}
@@ -133,7 +138,7 @@ de energía, espacio y disipación térmica. Sus características se recogen en 
 	\label{tab:equipo2_specs}
 \end{table}
 
-La arquitectura del AGX Orin presenta características diferenciales respecto a
+Su arquitectura presenta características diferenciales respecto a
 una estación de trabajo convencional. Opera sobre arquitectura ARM. Como elemento distintivo, 
 destaca su modelo de memoria unificada. Los 64 GB de RAM son compartidos entre CPU y GPU, eliminando la
 necesidad de transferencias explícitas entre memorias y reduciendo la sobrecarga
@@ -178,7 +183,7 @@ presentan en la \autoref{tab:equipo3_specs}.
 	\label{tab:equipo3_specs}
 \end{table}
 
-El Orin Nano incorpora una GPU basada en arquitectura NVIDIA Ampere con 1024
+Incorpora una GPU basada en arquitectura NVIDIA Ampere con 1024
 núcleos CUDA, el doble que el AGX Orin, si bien con un ancho de banda de memoria
 y un consumo energético significativamente menores. Los 8 GB de memoria
 compartida son un factor bastante limitante para el procesado de imágenes de gran
