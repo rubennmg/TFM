@@ -517,15 +517,18 @@ que no pueda satisfacerse con \texttt{float32}.
 
 \subsubsection{Impacto de la complejidad del \textit{pipeline}} \label{subsubsec:complexity_impact}
 
-Este apartado aísla la complejidad del \textit{pipeline} como factor de
-análisis principal dentro de la ejecución en GPU. Para ello se comparan de forma directa
-los perfiles \texttt{standard\_run} y \texttt{complex\_run} sobre el Equipo 1,
-manteniendo \texttt{float32} como tipo numérico.
+Esta sección aísla la complejidad del \textit{pipeline} como factor de
+análisis principal dentro de la ejecución en GPU. Para ello se comparan
+\texttt{standard\_run} y \texttt{complex\_run} sobre el Equipo 1,
+manteniendo \texttt{float32} como tipo numérico. Ambos \textit{pipelines} difieren en el número de 
+etapas y operaciones realizadas, siendo el \textit{pipeline} complejo más exigente en términos de carga computacional.
 
-La \autoref{fig:complexity_latency_equipo1_float32} muestra, en primer lugar, la latencia
+La \autoref{fig:complexity_latency_equipo1_float32} muestra la latencia
 mediana de ambos perfiles para cada resolución evaluada. Esta representación anticipa
 el coste absoluto de cada \textit{pipeline} antes de normalizar la comparación
-mediante métricas relativas.
+mediante métricas relativas. Se observa cómo, en términos absolutos, y en todas las resoluciones,
+el \textit{pipeline} complejo introduce una penalización de rendimiento respecto al perfil estándar, 
+aunque el impacto varía en función de la resolución.
 
 \begin{figure}[h!]
     \centering
@@ -534,41 +537,32 @@ mediante métricas relativas.
     \label{fig:complexity_latency_equipo1_float32}
 \end{figure}
 
-La métrica principal de este análisis es el ratio \(\textit{complex}/\textit{standard}\), que cuantifica
+La métrica principal de este análisis es el cociente \(\textit{complex}/\textit{standard}\), que cuantifica
 el sobrecoste relativo asociado al incremento de operaciones del \textit{pipeline}.
-La \autoref{tab:complexity_ratio_equipo1_float32} resume este ratio por resolución.
+La \autoref{tab:complexity_ratio_equipo1_float32} muestra este factor por resolución.
 
 \input{sections/9/generated/complexity_equipo1/tables/tab_complexity_ratio_equipo1_float32.tex}
 
-Se observa que el sobrecoste relativo disminuye a medida que aumenta la resolución. El
-ratio pasa de \(2.27\times\) en \texttt{256x256} a \(1.46\times\) en
+El sobrecoste relativo disminuye a medida que aumenta la resolución. La relación 
+pasa de \(2.27\times\) en \texttt{256x256} a \(1.46\times\) en
 \texttt{2048x2048}. Este comportamiento indica que, en resoluciones bajas, las etapas
 adicionales del \textit{pipeline} complejo pesan proporcionalmente más sobre el tiempo
-total. En resoluciones altas, en cambio, el mayor volumen de datos favorece una mejor
-amortización de la carga adicional sobre la GPU.
+total. En resoluciones altas, en cambio, el impacto relativo de la complejidad es menor.
 
 \newpage
 
-Desde la perspectiva absoluta, la
+De nuevo desde la perspectiva absoluta, la
 \autoref{tab:complexity_delta_latency_fps_equipo1_float32} muestra el incremento de latencia 
 y la caída de FPS al pasar de \texttt{standard\_run} a \texttt{complex\_run} para cada resolución.
-La \autoref{fig:complexity_delta_latency_equipo1_float32} aísla el primero de los factores.
 
 \input{sections/9/generated/complexity_equipo1/tables/tab_complexity_delta_latency_fps_equipo1_float32.tex}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.69\textwidth]{sections/9/generated/complexity_equipo1/figures/fig_complexity_delta_latency_equipo1_float32.pdf}
-    \caption{Incremento absoluto de latencia al pasar de \texttt{standard\_run} a \texttt{complex\_run}}
-    \label{fig:complexity_delta_latency_equipo1_float32}
-\end{figure}
 
 La diferencia absoluta de latencia confirma que el aumento de complejidad tiene un coste
 medible, pero contenido en términos prácticos. En las tres primeras resoluciones, el
 incremento se mantiene por debajo de \(0.3\,\mathrm{ms}\). El mayor salto aparece en
 \texttt{2048x2048}, donde la latencia adicional alcanza \(0.722\,\mathrm{ms}\).
-
-Respecto al rendimiento, la \autoref{fig:complexity_fps_drop_equipo1_float32} representa la caída porcentual de FPS al pasar de \texttt{standard\_run} a \texttt{complex\_run}.
+Respecto al rendimiento, la \autoref{fig:complexity_fps_drop_equipo1_float32} 
+representa la caída porcentual de FPS al pasar de \texttt{standard\_run} a \texttt{complex\_run}.
 
 \begin{figure}[h!]
     \centering
@@ -578,24 +572,40 @@ Respecto al rendimiento, la \autoref{fig:complexity_fps_drop_equipo1_float32} re
 \end{figure}
 
 Existen descensos entre el \(56.0\%\) y el \(31.5\%\), con una caída porcentual menor en las resoluciones más
-altas. Estos descensos reflejan la misma tendencia observada en el impacto relativo, indicanco que el \textit{pipeline} 
+altas. Estos descensos reflejan la misma tendencia observada en el impacto relativo, indicando que el \textit{pipeline} 
 complejo introduce una penalización de rendimiento que es más acusada en resoluciones bajas, 
 pero que se atenúa a medida que aumenta la resolución de entrada.
+
+\newpage
+
+La misma penalización puede normalizarse respecto al tamaño de la imagen para estimar el coste
+adicional introducido por cada megapíxel procesado. Para ello, la
+\autoref{tab:complexity_delta_mpix_equipo1_float32} divide el incremento absoluto de latencia entre
+el número de megapíxeles de cada resolución.
+
+\input{sections/9/generated/complexity_equipo1/tables/tab_complexity_delta_mpix_equipo1_float32.tex}
+
+Se observa que el coste incremental por megapíxel disminuye de forma muy acusada al aumentar la resolución. 
+Mientras que en 256x256 el \textit{pipeline} complejo añade aproximadamente 3,00 ms/MPix, en 2048x2048 este 
+valor se reduce hasta 0,17 ms/MPix. Por tanto, aunque la complejidad incrementa la latencia total, el coste 
+adicional asociado a cada megapíxel procesado disminuye a medida que aumenta la resolución.
+
+\vspace{2em}
 
 El análisis refleja que la complejidad del \textit{pipeline} es un
 factor relevante en el rendimiento, aunque su impacto no puede generalizarse
 únicamente a partir del número de etapas u operaciones añadidas. El coste final depende
-en gran medida de la naturaleza de las operaciones incorporadas, ya que no todas ejercen
+en gran medida de la naturaleza de las operaciones, ya que no todas ejercen
 la misma presión sobre la GPU. Las operaciones puntuales por píxel, las operaciones
-espaciales con acceso a vecindarios, las transformaciones con mayor demanda de memoria o
+espaciales, las transformaciones con mayor demanda de memoria o
 las etapas con menor grado de paralelismo pueden afectar de forma distinta a la latencia
 final. Por tanto, la complejidad no sólo debe entenderse como una cuestión de cantidad de
 procesado, sino también como una cuestión de composición del \textit{pipeline}.
 
-Un resultado especialmente destacable es que el impacto relativo de dicha complejidad se
+Un resultado especialmente destacable es que el impacto relativo de la complejidad se
 reduce a medida que aumenta la resolución de entrada. Aunque el \textit{pipeline} complejo
 siempre introduce una penalización medible, esta representa una fracción menor de la
-latencia total en las resoluciones más altas. Como se mencionó anteriormente, bajo ejecución en GPU, el
+latencia total en las resoluciones más altas. Esto es porque, bajo ejecución en GPU, el
 mayor volumen de datos permite amortizar mejor determinadas etapas adicionales y aprovechar
 con mayor eficacia el paralelismo disponible. En consecuencia, añadir operaciones al flujo
 de procesado no afecta de forma uniforme a todas las configuraciones. El impacto es más
