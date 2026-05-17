@@ -616,10 +616,35 @@ trabajo aumenta.
 
 \subsubsection{Comparativa de módulos de \textit{Debayer}} \label{subsubsec:debayer_comparison}
 
-En este apartado se compara el rendimiento de los módulos de \textit{Debayer}
+En esta sección se compara el rendimiento de los módulos de \textit{Debayer}
 implementados, aislando esta operación como factor principal de análisis.
 El estudio se centra en los resultados de GPU del Equipo 1. Para evitar interferencias
-del tipo numérico, se fija \texttt{float32} en toda la comparativa.
+del tipo numérico, se fija \texttt{float32} en toda la comparativa. Se utilizan \textit{pipelines}
+específicos que incluyen únicamente la etapa de \textit{Debayer} para cada variante. La 
+\autoref{tab:debayer_expected_cost} resume la estrategia de reconstrucción empleada por cada módulo 
+y el coste esperado en términos de latencia.
+
+\begin{table}[htbp]
+    \centering
+    \renewcommand{\arraystretch}{1.2}
+    \setlength{\tabcolsep}{7pt}
+    \begin{tabular}{|l|l|c|}
+        \hline
+        \rowcolor[gray]{0.90}
+        \textbf{Módulo} & \textbf{Estrategia} & \textbf{Coste esperado} \\
+        \hline
+        \texttt{Debayer2x2} & Reconstrucción local con vecindario mínimo & Bajo \\
+        \hline
+        \texttt{DebayerSplit} & Separación/recombinación de canales & Bajo-medio \\
+        \hline
+        \texttt{Debayer3x3} & Vecindario 3x3 & Medio \\
+        \hline
+        \texttt{Debayer5x5} & Vecindario 5x5 & Alto \\
+        \hline
+    \end{tabular}
+    \caption{Estrategia de reconstrucción y coste esperado de los módulos de \textit{Debayer}}
+    \label{tab:debayer_expected_cost}
+\end{table}
 
 La \autoref{tab:debayer_gpu_latency_equipo1_float32} y la \autoref{fig:debayer_gpu_latency_vs_resolution_equipo1_float32} 
 muestran la latencia mediana de cada módulo para las distintas resoluciones evaluadas.
@@ -628,22 +653,22 @@ muestran la latencia mediana de cada módulo para las distintas resoluciones eva
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.90\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_latency_vs_resolution_equipo1_float32.pdf}
-    \caption{Comparativa de latencia de módulos de Debayer}
+    \includegraphics[width=0.75\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_latency_vs_resolution_equipo1_float32.pdf}
+    \caption{Comparativa de latencia de módulos de \textit{Debayer}}
     \label{fig:debayer_gpu_latency_vs_resolution_equipo1_float32}
 \end{figure}
 
 Se observa un patrón de ordenación estable en todo el rango de resoluciones. La variante
 \texttt{Debayer2x2} presenta sistemáticamente la menor latencia, seguida de
 \texttt{DebayerSplit}, \texttt{Debayer3x3} y \texttt{Debayer5x5}. Esta jerarquía se
-mantiene desde \texttt{256x256} hasta \texttt{2048x2048}, lo que indica un
-comportamiento consistente de las implementaciones en el dispositivo de referencia.
+mantiene desde \texttt{256x256} hasta \texttt{2048x2048}, lo que confirma la relación 
+entre la estrategia de reconstrucción y el coste temporal.
 
 \newpage
 
 Para cuantificar la diferencia en el caso más exigente, la
 \autoref{tab:debayer_gpu_ranking_2048_equipo1_float32} y la \autoref{fig:debayer_gpu_ranking_2048_equipo1_float32} 
-presentan el ranking en \texttt{2048x2048}. 
+presentan la clasificación en \texttt{2048x2048}. 
 La latencia de \texttt{Debayer5x5} es \(1.56\times\) la del mejor caso (\texttt{Debayer2x2}), mientras que \texttt{DebayerSplit} 
 se mantiene en \((1.20\times)\).
 
@@ -651,8 +676,8 @@ se mantiene en \((1.20\times)\).
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.86\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_ranking_2048_equipo1_float32.pdf}
-    \caption{Ranking de módulos de Debayer en \texttt{2048x2048}}
+    \includegraphics[width=0.75\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_ranking_2048_equipo1_float32.pdf}
+    \caption{Clasificación de módulos de \textit{Debayer} en \texttt{2048x2048}}
     \label{fig:debayer_gpu_ranking_2048_equipo1_float32}
 \end{figure}
 
@@ -666,8 +691,8 @@ relativo de cada variante en función de la resolución, manteniendo la referenc
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.90\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_relative_vs_best_equipo1_float32.pdf}
-    \caption{Comparativa relativa de módulos Debayer respecto al mejor caso}
+    \includegraphics[width=0.80\textwidth]{sections/9/generated/debayer_equipo1/figures/fig_debayer_gpu_relative_vs_best_equipo1_float32.pdf}
+    \caption{Comparativa relativa de módulos \textit{Debayer} respecto a \texttt{Debayer2x2}}
     \label{fig:debayer_gpu_relative_vs_best_equipo1_float32}
 \end{figure}
 
@@ -677,11 +702,17 @@ que en resoluciones altas se reduce parcialmente para algunas implementaciones
 intermedias, sin alterar el orden relativo global. Las tres curvas siguen una tendencia similar, 
 excepto en \texttt{1024x1024}, donde \texttt{DebayerSplit} y \texttt{Debayer3x3} se acercan entre sí.
 
-Desde la perspectiva operativa, incluso en \texttt{2048x2048} todos los módulos
-mantienen tasas elevadas de procesamiento en GPU. No obstante, cuando el presupuesto temporal del pipeline global es
-estricto, la elección del módulo de \textit{Debayer} es relevante, ya que el
-sobrecoste relativo entre variantes puede condicionar el margen disponible para etapas
-posteriores de procesado.
+Por último, la \autoref{tab:debayer_2048_mpix_cost_equipo1_float32} resume el coste de cada módulo en la resolución máxima, 
+especificando la diferencia absoluta de latencia respecto al mejor caso y el coste por megapíxel de cada variante.
+
+\input{sections/9/generated/debayer_equipo1/tables/tab_debayer_2048_mpix_cost_equipo1_float32.tex}
+
+Se observa un crecimiento progresivo del coste por megapíxel, desde \(0.21\,\mathrm{ms/MPix}\) en \texttt{Debayer2x2} hasta \(0.33\,\mathrm{ms/MPix}\) 
+en \texttt{Debayer5x5}, directamente relacionado con las diferencias absolutas de latencia entre cada módulo. Este coste por megapíxel es un 
+gran indicador para determinar qué módulo de \textit{Debayer} es más adecuado en función del contexto operativo.
+
+
+\newpage
 
 El análisis confirma el comportamiento esperado de las distintas
 implementaciones de \textit{Debayer} atendiendo a su coste computacional.
@@ -694,10 +725,10 @@ Por su parte, \texttt{Debayer3x3} y especialmente \texttt{Debayer5x5} utilizan
 ventanas de procesamiento de mayor tamaño, lo que incrementa el número de muestras
 consideradas por píxel y eleva la presión sobre memoria y cómputo.
 
-No obstante, todas las implementaciones mantienen tasas elevadas de procesamiento en GPU, por lo que
-la elección del módulo de \textit{demosaicing} no debe basarse únicamente en la latencia medida.
+No obstante, la elección del módulo de \textit{demosaicing} no debe basarse únicamente en la latencia medida.
 En la práctica, dicha elección dependerá tanto de las restricciones de rendimiento del sistema como
 de las expectativas finales de calidad de reconstrucción, buscándose un equilibrio entre coste
-temporal, fidelidad cromática y margen disponible para el resto de etapas del \textit{pipeline}.
+temporal, fidelidad cromática y margen disponible para el resto de etapas.
+
 
 \newpage
