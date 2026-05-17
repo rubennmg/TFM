@@ -730,5 +730,160 @@ En la práctica, dicha elección dependerá tanto de las restricciones de rendim
 de las expectativas finales de calidad de reconstrucción, buscándose un equilibrio entre coste
 temporal, fidelidad cromática y margen disponible para el resto de etapas.
 
+\newpage
+
+\subsubsection{Comparativa entre plataformas y validación en escenarios de uso realistas} \label{subsubsec:platform_comparison_results}
+
+Los resultados analizados en las secciones anteriores caracterizan el comportamiento
+del sistema tomando el Equipo 1 como referencia principal. Dicho equipo representa un
+entorno de escritorio de muy altas prestaciones y permite establecer una cota superior de
+rendimiento. No obstante, este análisis no depende únicamente de ese
+techo de rendimiento, sino también del comportamiento en plataformas más próximas a
+escenarios de despliegue real.
+
+Por este motivo, en este apartado se comparan los resultados de los
+tres equipos evaluados. Se utilizan los perfiles \texttt{standard\_run} y
+\texttt{complex\_run} en \texttt{float32}, considerando todas las resoluciones
+evaluadas. La \autoref{tab:interteam_latency_fps_float32} resume la latencia mediana y
+el rendimiento equivalente en FPS para cada plataforma.
+
+\input{sections/9/generated/interteam/tables/tab_interteam_latency_fps_float32.tex}
 
 \newpage
+
+La \autoref{fig:interteam_latency_standard_linear_float32} y la \autoref{fig:interteam_latency_complex_linear_float32} muestran la evolución de la latencia
+mediana por resolución para cada equipo, diferenciando entre el perfil estándar y el complejo. Se representa la información
+en escala lineal.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.65\textwidth]{sections/9/generated/interteam/figures/fig_interteam_latency_standard_linear_float32.pdf}
+	\caption{Comparativa de latencia entre equipos para \texttt{standard\_run}}
+	\label{fig:interteam_latency_standard_linear_float32}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+	\includegraphics[width=0.65\textwidth]{sections/9/generated/interteam/figures/fig_interteam_latency_complex_linear_float32.pdf}
+	\caption{Comparativa de latencia entre equipos para \texttt{complex\_run}}
+	\label{fig:interteam_latency_complex_linear_float32}
+\end{figure}
+
+Se observa una evolución similar en ambas gráficas. El Equipo 1
+presenta las menores latencias en todo el rango de resoluciones, seguido del Equipo 2 y,
+finalmente, del Equipo 3. Esta ordenación se mantiene tanto en \texttt{standard\_run}
+como en \texttt{complex\_run}. La separación entre equipos aumenta considerablemente al crecer la
+resolución y la carga computacional. En \texttt{2048x2048}, el perfil estándar pasa de
+\(1.572\,\mathrm{ms}\) en el Equipo 1 a \(16.956\,\mathrm{ms}\) en el Equipo 2 y
+\(31.137\,\mathrm{ms}\) en el Equipo 3. En el perfil complejo, las latencias para esa
+misma resolución son \(2.294\,\mathrm{ms}\), \(31.467\,\mathrm{ms}\) y
+\(57.575\,\mathrm{ms}\), respectivamente.
+
+Estos resultados evidencian varios aspectos. Por un lado, el Equipo 1 queda
+claramente separado como referencia de máximo rendimiento. Por otro, los equipos
+embebidos conservan un margen operativo interesante, especialmente si se tiene en
+cuenta que representan plataformas con restricciones de potencia, memoria y disipación
+mucho más limitantes. La diferencia entre ambos también es significativa. El
+Equipo 2 mantiene una mayor capacidad de absorción ante resoluciones altas y
+\textit{pipelines} complejos, mientras que el Equipo 3 se aproxima antes a su límite
+operativo. Cabe mencionar que, en 1024x1024, la diferencia relativa entre ambos es menor 
+en el \textit{pipeline} complejo que en el estándar. Esto sugiere que el Equipo 3 aprovecha mejor 
+el perfil complejo en esta resolución, o al menos que el incremento de complejidad 
+computacional penaliza proporcionalmente menos a este equipo que al Equipo 2.
+
+\newpage
+
+Las evidencias anteriores pueden expresarse de forma más directa graficando el rendimiento en FPS en
+cada resolución. La \autoref{fig:interteam_fps_comparison_float32} compara esta métrica
+para los tres equipos, separando de nuevo el perfil estándar y el complejo. Se presentan los resultados
+en escala logarítmica para facilitar la visualización.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.85\textwidth]{sections/9/generated/interteam/figures/fig_interteam_fps_comparison_log_float32.pdf}
+    \caption{Comparativa de FPS entre equipos}
+    \label{fig:interteam_fps_comparison_float32}
+\end{figure}
+
+La jerarquía entre equipos se mantiene respecto al análisis de latencia --Equipo 1, seguido del Equipo 2 y finalmente del
+Equipo 3--. La lectura de los resultados desde la perspectiva de FPS permite interpretar el margen operativo de cada equipo
+de forma más intuitiva. Dado que el Equipo 1 se mantiene con un margen operativo muy amplio, en la \autoref{fig:interteam_embedded_fps_comparison_log_float32}
+se grafican exclusivamente los equipos embebidos (2 y 3) para facilitar su comparativa.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.85\textwidth]{sections/9/generated/interteam/figures/fig_interteam_embedded_fps_comparison_log_float32.pdf}
+    \caption{Comparativa de FPS entre equipos embebidos}
+    \label{fig:interteam_embedded_fps_comparison_log_float32}
+\end{figure}
+
+Ambos equipos se aproximan progresivamente a los límites de referencia a medida que aumenta la resolución. En el perfil estándar,
+los dos se mantienen por encima del umbral mínimo de 30 FPS. Si bien es cierto que, en \texttt{2048x2048}, el Equipo 3 se aproxima peligrosamente
+al límite (32.1 FPS). El Equipo 2 obtiene 59.0 FPS en dicha resolución. En el perfil complejo, la degradación de rendimiento es 
+más acusada. Ambos equipos se sitúan en torno al umbral de 60 FPS en \texttt{1024x1024}. Sin embargo, en \texttt{2048x2048} el Equipo 3
+no alcanza el umbral mínimo de 30 FPS (17.4 FPS), mientras que el Equipo 2 se mantiene ligeramente por encima (31.8 FPS).
+
+\newpage
+
+Lo expuesto confirma que la viabilidad de la ejecución en plataformas embebidas puede verse comprometida bajo ciertas condiciones de carga,
+aunque el margen operativo es suficiente para sostener escenarios de uso realistas en resoluciones moderadas o con \textit{pipelines} sencillos.
+Sin embargo, ¿cuánta pérdida de rendimiento relativo se produce al utilizar este tipo de plataformas?
+
+Para dimensionar lo anterior, la
+\autoref{tab:interteam_normalized_vs_equipo1_gpu} y la
+\autoref{fig:interteam_vs_equipo1_scaling_float32} presentan una comparación normalizada
+tomando el Equipo 1 como referencia. 
+
+\input{sections/9/generated/interteam/tables/tab_interteam_normalized_vs_equipo1_gpu.tex}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.92\textwidth]{sections/9/generated/interteam/figures/fig_interteam_vs_equipo1_scaling_float32.pdf}
+    \caption{Latencia relativa frente al Equipo 1}
+    \label{fig:interteam_vs_equipo1_scaling_float32}
+\end{figure}
+
+Se observa cómo el rendimiento relativo respecto al Equipo 1 no sigue una tendencia constante. En ambos equipos y en ambos perfiles, la mayor distancia relativa 
+se produce en la resolución intermedia (\texttt{512x512}). Desde este punto, el rendimiento relativo mejora progresivamente 
+a medida que aumenta la resolución, siendo esta mejora más notable en el Equipo 2. Aun así, en la resolución máxima, el Equipo 2 se sitúa en torno a 
+un \(10\times\) de latencia respecto al Equipo 1, lo cual sigue siendo una diferencia muy importante. Resulta interesante destacar, de nuevo, que la mayor pérdida
+de rendimiento se produce en resoluciones intermedias (\texttt{512x512} y \texttt{1024x1024}), lo que sugiere que el escalado de la latencia no es lineal con el 
+número de píxeles y que existen factores adicionales que influyen en el rendimiento relativo, como pueden ser la eficiencia del paralelismo o la gestión de memoria en cada plataforma.
+
+\newpage
+
+De forma complementaria, se puede analizar el escalado relativo entre equipos a medida que aumenta la resolución. Así se puede 
+determinar si el aumento de resolución afecta de forma similar a cada plataforma o si, por el contrario, el escalado de la latencia es diferente en cada caso. 
+
+Teniendo esto en cuenta, la \autoref{tab:interteam_self_scaling_256_gpu} y la
+\autoref{fig:interteam_gpu_scaling_float32} comparan cada equipo frente a su propio resultado en la resolución \texttt{256x256}.
+
+\input{sections/9/generated/interteam/tables/tab_interteam_self_scaling_256_gpu.tex}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.92\textwidth]{sections/9/generated/interteam/figures/fig_interteam_gpu_scaling_float32.pdf}
+    \caption{Escalado interno de latencia respecto a \texttt{256x256} para cada equipo}
+    \label{fig:interteam_gpu_scaling_float32}
+\end{figure}
+
+Para analizar estos resultados, lo primero que se debe observar es la pendiente de cada curva. Cuanto más pronunciada sea la pendiente, mayor será el impacto de la resolución sobre la latencia y, 
+por lo tanto, menor será la escalabilidad a medida que aumenta la resolución. En este sentido, el Equipo 1 presenta una pendiente más suave que los equipos embebidos, demostrando 
+que es el que mejor escala. Por su parte, el Equipo 2 presenta una curva bastante similar a la del Equipo 1 en términos de pendiente en ambos \textit{pipelines}, por lo que posee un escalado de 
+latencia muy parecido. El Equipo 3 también presenta una pendiente parecida a la de los otros dos equipos, pero se descontrola a partir de \texttt{1024x1024}.
+
+\newpage
+
+La comparativa entre plataformas confirma que el rendimiento es altamente dependiente del hardware disponible, pero también que la implementación mantiene un 
+comportamiento funcional en escenarios distintos al equipo de referencia. En dichos escenarios, el comportamiento analizado permite diferenciar dos niveles de viabilidad.
+
+El Equipo 2 mantiene un rendimiento compatible con procesamiento en tiempo real en todo el rango evaluado, 
+aunque en 2048x2048 el margen se reduce de forma notable. En el perfil estándar alcanza prácticamente el umbral de 60 FPS, mientras que en el perfil complejo se sitúa ligeramente por encima de 30 
+FPS. Esto lo convierte en una plataforma adecuada para escenarios embebidos de altas prestaciones, siempre que el presupuesto temporal disponible se gestione con cuidado.
+
+El Equipo 3, por su parte, presenta un comportamiento más limitado, aunque sigue siendo válido para muchas aplicaciones. En 1024x1024 mantiene tasas superiores a 60 FPS en el perfil estándar y próximas a 
+ese umbral en el perfil complejo. Sin embargo, en 2048x2048 sólo conserva viabilidad clara en el perfil estándar, mientras que el perfil complejo cae por debajo de 30 FPS. Por tanto, en esta plataforma 
+la combinación de máxima resolución y mayor carga de procesado excede el margen temporal disponible para un escenario interactivo estricto.
+
+La elección correcta de la plataforma dependerá de las necesidades específicas del caso de uso, del presupuesto disponible y de las expectativas de rendimiento. El análisis realizado permite dimensionar 
+el impacto de cada plataforma en el rendimiento y, por tanto, tomar decisiones informadas sobre la idoneidad de cada una en función de los requisitos operativos y las restricciones del entorno de despliegue.
