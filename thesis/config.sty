@@ -209,6 +209,17 @@
 	\end{minipage}
 \end{titlepage}}
 
+\newcommand{\intentionallyblankpage}{
+\clearpage
+\thispagestyle{no-rightmark}
+\vspace*{\fill}
+\begin{center}
+\textit{Página intencionadamente en blanco}
+\end{center}
+\vspace*{\fill}
+\clearpage
+}
+
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
 \renewcommand{\subsectionmark}[1]{}
 
@@ -234,6 +245,19 @@
       \textbf{UNIVERSIDAD DE OVIEDO} \newline
       \textbf{Escuela Politécnica de Ingeniería de Gijón}}}
   \fancyhead[R]{\textit{\rightmark}}
+  \fancyfoot[L]{\meNoD}
+  \fancyfoot[R]{{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0.4pt}
+  \setlength{\headsep}{20pt}
+}
+
+\fancypagestyle{no-rightmark}{
+  \fancyhf{}
+  \fancyhead[L]{\includegraphics[height=16mm]{img/logo_epi.png}
+    \hspace{1em} \Longstack[l]{
+      \textbf{UNIVERSIDAD DE OVIEDO} \newline
+      \textbf{Escuela Politécnica de Ingeniería de Gijón}}}
   \fancyfoot[L]{\meNoD}
   \fancyfoot[R]{{Hoja \thepage \hspace{1pt} de \pageref{LastPage}}}
   \renewcommand{\headrulewidth}{0.4pt}
