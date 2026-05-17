@@ -292,7 +292,7 @@ y para \texttt{complex\_run} a partir de \texttt{1024x1024}. En GPU, en cambio, 
 perfiles se mantienen ampliamente por encima de los umbrales de referencia en todas las
 resoluciones, evidenciando un margen operativo mucho mayor.
 
-\vspace{3em}
+\vspace{2em}
 
 Los datos analizados establecen una conclusión de vital importancia para el resto del análisis.
 Y es que la elección del dispositivo de cómputo es el factor con mayor impacto sobre el rendimiento final. 
@@ -364,7 +364,7 @@ sendos comportamientos.
 \end{figure}
 
 La conclusión es por tanto que, aunque la latencia total aumenta, cada píxel adicional penaliza cada vez menos el rendimiento.
-Este comportamiento puede interpretarse mediante un modelo simplificado de latencia compuesto por un témino fijo y un 
+Este comportamiento puede interpretarse mediante un modelo simplificado de latencia compuesto por un término fijo y un 
 término dependiente del número de píxeles \eqref{eq:resolution_latency_model}:
 \begin{equation}
     T(N) = T_{0} + k \cdot N
@@ -400,10 +400,39 @@ rango analizado, sin embargo, no se observa todavía una degradación de este ti
 
 \subsubsection{Impacto del tipo numérico} \label{subsubsec:data_type_impact}
 
-Tras analizar el efecto de la resolución, en esta sección se estudia la influencia
+En esta sección se estudia la influencia
 del tipo numérico sobre el rendimiento en GPU. En concreto, se comparan
 \texttt{float16}, \texttt{float32} y \texttt{float64} para los perfiles
 \texttt{standard\_run} y \texttt{complex\_run}, utilizando los resultados del Equipo 1.
+
+
+El tipo numérico determina el número de bytes utilizados para representar cada elemento 
+del tensor y, por tanto, influye directamente en el volumen de memoria necesario para almacenar 
+y transferir los datos. En imágenes representadas como tensores, esta diferencia se multiplica 
+por el número de píxeles y canales, por lo que puede tener un impacto relevante en operaciones 
+intensivas sobre memoria. La Tabla \autoref{tab:dtype_memory} resume el tamaño de cada tipo numérico 
+y su relación respecto a \textit{float32}, que se toma como referencia.
+
+\begin{table}[h]
+	\centering
+	\renewcommand{\arraystretch}{1.2}
+	\setlength{\tabcolsep}{7pt}
+	\begin{tabular}{|l|r|r|}
+		\hline
+		\rowcolor[gray]{0.90}
+		\textbf{Dtype} & \textbf{Bytes por elemento} & \textbf{Memoria relativa} \\
+		\hline
+		\textit{float16} & 2 bytes & 0,5x frente a \textit{float32} \\
+		\hline
+		\textit{float32} & 4 bytes & 1x \\
+		\hline
+		\textit{float64} & 8 bytes & 2x frente a \textit{float32} \\
+		\hline
+	\end{tabular}
+\caption{Tamaño de representación y memoria relativa de los tipos numéricos evaluados}
+\label{tab:dtype_memory}
+\end{table}
+
 
 Con el fin de aislar este factor y observar su impacto en el régimen de mayor carga,
 el análisis principal se centra en la resolución \texttt{2048x2048}. La
@@ -416,8 +445,10 @@ Los resultados muestran que \texttt{float16} es la opción más eficiente en GPU
 \texttt{standard\_run}, la latencia baja de \(1.572\,\mathrm{ms}\) en \texttt{float32} a
 \(1.002\,\mathrm{ms}\) en \texttt{float16}. En \texttt{complex\_run}, el descenso es de
 \(2.294\,\mathrm{ms}\) a \(1.624\,\mathrm{ms}\). En sentido opuesto,
-\texttt{float64} introduce una gran penalización, con \(21.011\,\mathrm{ms}\) y
+\texttt{float64} introduce una enorme penalización, con \(21.011\,\mathrm{ms}\) y
 \(23.486\,\mathrm{ms}\), respectivamente.
+
+\newpage
 
 Para facilitar una comparación relativa independiente de la magnitud absoluta de
 latencia, la \autoref{tab:dtype_ratio_vs_float32_equipo1_2048} normaliza los tiempos
@@ -429,50 +460,58 @@ mejora frente a la referencia y valores por encima de 1 indican degradación.
 En \texttt{standard\_run}, \texttt{float16} reduce el coste hasta
 \(0.64\times\), mientras que \texttt{float64} lo incrementa hasta \(13.36\times\). En
 \texttt{complex\_run}, \texttt{float16} se sitúa en \(0.71\times\) y \texttt{float64} en
-\(10.24\times\). Esta asimetría indica que el uso de precisión doble tiene un impacto
-desproporcionado en la ejecución acelerada y debe reservarse para casos donde exista una
-necesidad numérica explícita.
-
-\newpage
-
-Desde la perspectiva de tiempo real, la
-\autoref{fig:dtype_fps_equipo1_2048} confirma que la elección de \textit{dtype} afecta
-de forma directa al margen operativo. Todos los tipos mantienen holgura sobre
-\(30\,\mathrm{FPS}\), incluso en \texttt{2048x2048}. Sin embargo, el margen cambia de
-forma sustancial. \texttt{float16} alcanza \(997.8\,\mathrm{FPS}\) en
-\texttt{standard\_run} y \(615.7\,\mathrm{FPS}\) en \texttt{complex\_run}, mientras que
-\texttt{float64} reduce esos valores a \(47.6\,\mathrm{FPS}\) y
-\(42.6\,\mathrm{FPS}\).
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.95\textwidth]{sections/9/generated/dtype_equipo1/figures/fig_dtype_fps_equipo1_2048.pdf}
-    \caption{Impacto del tipo numérico sobre el rendimiento en FPS para \texttt{2048x2048}}
-    \label{fig:dtype_fps_equipo1_2048}
-\end{figure}
+\(10.24\times\). Estos valores pueden compararse directamente con la relación de memoria mostrada 
+en la \autoref{tab:dtype_memory}. La mejora de rendimiento de \texttt{float16} es algo menor que 
+la reducción de memoria, lo que sugiere que el ahorro de memoria no se traduce de forma lineal en 
+mejora de rendimiento. Por otra parte, la degradación de rendimiento que introduce \texttt{float64}
+es mucho mayor que el incremento de memoria, lo que demuestra que el coste de procesamiento asociado
+a este tipo de dato es desproporcionadamente alto en comparación con su impacto en el almacenamiento.
 
 Como comprobación de consistencia, la
-\autoref{tab:dtype_consistency_1024_2048_equipo1} compara los ratios normalizados en
-\texttt{1024x1024} y \texttt{2048x2048}. Aunque varía la intensidad exacta del efecto,
-se conserva la tendencia general. \texttt{float16} mejora el rendimiento en torno a un \(30-40\%\) respecto a
-\texttt{float32}, mientras que \texttt{float64} lo degrada enormemente.
+\autoref{tab:dtype_consistency_1024_2048_equipo1} compara los valores relativos de latencia
+respecto a \texttt{float32} normalizados en \texttt{1024x1024} y \texttt{2048x2048}. Aunque en \texttt{1024x1024}
+varía la intensidad exacta del efecto, se conserva la tendencia general. \texttt{float16} mejora 
+el rendimiento en torno a un \(30-40\%\) respecto a \texttt{float32}, mientras que \texttt{float64} 
+lo degrada enormemente.
 
 \input{sections/9/generated/dtype_equipo1/tables/tab_dtype_consistency_1024_2048_equipo1.tex}
 
+\newpage
+
+En términos de rendimiento en FPS, la
+\autoref{fig:dtype_fps_all_resolutions_equipo1} muestra que la elección de \textit{dtype} afecta
+de forma directa al margen operativo. Todos los tipos mantienen holgura sobre los umbrales de
+\(30\,\mathrm{FPS}\) y \(60\,\mathrm{FPS}\), incluso en \texttt{2048x2048}. Sin embargo, en \texttt{float64} 
+el margen disponible se reduce de forma sustancial respecto a \texttt{float16} y \texttt{float32},
+especialmente en la resolución máxima.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.95\textwidth]{sections/9/generated/dtype_equipo1/figures/fig_dtype_fps_all_resolutions_equipo1.pdf}
+    \caption{Impacto del tipo numérico sobre el rendimiento por resolución}
+    \label{fig:dtype_fps_all_resolutions_equipo1}
+\end{figure}
+
+\vspace{2em}
+
 El análisis evidencia que el tipo numérico condiciona de forma significativa la latencia,
-el margen temporal disponible y la portabilidad de la solución. Aunque \texttt{float16}
-proporciona el mejor rendimiento en las pruebas realizadas, no se considera la opción más
-adecuada como configuración por defecto, ya que su disponibilidad y eficiencia dependen en
-mayor medida del hardware utilizado y no todas las GPUs ofrecen soporte completo o un
-comportamiento óptimo con este tipo numérico. En este contexto, \texttt{float32} representa
-la mejor alternativa: mantiene un rendimiento muy elevado, conserva un
-margen amplio para procesamiento en tiempo real y ofrece una relación más estable entre
-precisión, coste computacional y compatibilidad hardware. Por el contrario, \texttt{float64}
-queda descartado como alternativa práctica, dado que la degradación de rendimiento observada
-es demasiado acusada y las posibles mejoras de precisión no justifican la pérdida de margen
-temporal en los \textit{pipelines} evaluados. Su uso debería limitarse a casos excepcionales
-en los que exista una necesidad numérica demostrable que no pueda satisfacerse con
-\texttt{float32}.
+el margen temporal disponible y también la portabilidad de la solución. 
+
+\texttt{float16} proporciona el mejor rendimiento, pero no se 
+considera la opción más adecuada como configuración por defecto, ya que su disponibilidad y 
+eficiencia dependen en mayor medida del hardware utilizado y no todas las GPUs ofrecen soporte 
+completo o un comportamiento óptimo con este tipo numérico. Además, la mejora de rendimiento 
+que introduce no justifica la pérdida de precisión. 
+
+\texttt{float32} representa la mejor alternativa. Mantiene un rendimiento muy elevado, conserva un
+margen operativo amplio para procesamiento en tiempo real y ofrece una relación más estable entre
+precisión, coste computacional y compatibilidad hardware. 
+
+Por el contrario, \texttt{float64} queda descartado como alternativa práctica, dado que la 
+degradación de rendimiento observada es demasiado acusada y las posibles mejoras de precisión 
+no justifican la pérdida de margen temporal en los \textit{pipelines} evaluados. 
+Su uso debería limitarse a casos excepcionales en los que exista una necesidad numérica demostrable
+que no pueda satisfacerse con \texttt{float32}.
 
 \newpage
 
