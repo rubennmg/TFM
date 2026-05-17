@@ -111,7 +111,7 @@ def _write_latency_fps_table_2048(
         "\\begin{tabular}{|l|c|r|r|}",
         "\\hline",
         "\\rowcolor[gray]{0.90}",
-        "\\textbf{Pipeline} & \\textbf{Dtype} & \\textbf{Latencia GPU (ms)} & \\textbf{Rendimiento GPU (FPS)} "
+        "\\textbf{Pipeline} & \\textbf{Dtype} & \\textbf{Latencia (ms)} & \\textbf{Rendimiento (FPS)} "
         + LATEX_NL,
         "\\hline",
     ]
@@ -128,7 +128,7 @@ def _write_latency_fps_table_2048(
     lines.extend(
         [
             "\\end{tabular}",
-            "\\caption{Impacto del tipo numérico en latencia y rendimiento GPU para resolución \\texttt{2048x2048} (Equipo 1).}",
+            "\\caption{Impacto del tipo numérico en latencia y rendimiento para \\texttt{2048x2048}}",
             "\\label{tab:dtype_latency_fps_equipo1_2048}",
             "\\end{table}",
             "",
@@ -166,7 +166,7 @@ def _write_ratio_vs_float32_table_2048(
     lines.extend(
         [
             "\\end{tabular}",
-            "\\caption{Relación de latencia respecto a \\texttt{float32} para resolución \\texttt{2048x2048} (valores menores que 1 indican mejora).}",
+            "\\caption{Relación de latencia respecto a \\texttt{float32} para \\texttt{2048x2048}}",
             "\\label{tab:dtype_ratio_vs_float32_equipo1_2048}",
             "\\end{table}",
             "",
@@ -210,7 +210,7 @@ def _write_consistency_table_1024_2048(
     lines.extend(
         [
             "\\end{tabular}",
-            "\\caption{Consistencia del impacto de \\texttt{dtype} entre \\texttt{1024x1024} y \\texttt{2048x2048} (normalizado respecto a \\texttt{float32}).}",
+            "\\caption{Relación de latencia respecto a \\texttt{float32} para \\texttt{1024x1024} y \\texttt{2048x2048}}",
             "\\label{tab:dtype_consistency_1024_2048_equipo1}",
             "\\end{table}",
             "",
@@ -288,34 +288,83 @@ def _plot_ratio_vs_float32_2048(
     plt.close(fig)
 
 
-def _plot_fps_2048(
+def _plot_ratio_vs_float32_all_resolutions(
     data: dict[PipelineKey, dict[DeviceKey, dict[DTypeKey, dict[str, float]]]],
 ) -> None:
     plt.style.use("seaborn-v0_8-whitegrid")
-    fig, axes = plt.subplots(1, 2, figsize=(10.8, 4.6), sharey=True)
-    x = list(range(len(DTYPE_ORDER)))
-    color = "#2a9d8f"
+    fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.8), sharey=True)
+    x = list(range(len(RESOLUTION_ORDER)))
+    colors = {"float16": "#2a9d8f", "float32": "#457b9d", "float64": "#e76f51"}
 
     for idx, pipeline in enumerate(PIPELINE_ORDER):
         ax = axes[idx]
-        fps_vals = [
-            1.0 / data[pipeline]["cuda"][dtype]["2048x2048"] for dtype in DTYPE_ORDER
-        ]
-        ax.bar(x, fps_vals, width=0.5, color=color, label="GPU")
+        for dtype in DTYPE_ORDER:
+            ratios = [
+                data[pipeline]["cuda"][dtype][resolution]
+                / data[pipeline]["cuda"]["float32"][resolution]
+                for resolution in RESOLUTION_ORDER
+            ]
+            ax.plot(
+                x,
+                ratios,
+                marker="o",
+                linewidth=2.2,
+                color=colors[dtype],
+                label=dtype,
+            )
+
+        ax.axhline(1.0, color="#343a40", linestyle="--", linewidth=1.1)
+        ax.set_title(PIPELINES[pipeline])
+        ax.set_xticks(x)
+        ax.set_xticklabels(RESOLUTION_ORDER)
+        ax.set_xlabel("Resolución")
+        ax.legend(loc="upper left", frameon=True)
+        if idx == 0:
+            ax.set_ylabel("Latencia relativa (float32 = 1)")
+
+    fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.94))
+    fig.savefig(FIG_DIR / "fig_dtype_ratio_vs_float32_all_resolutions_equipo1.pdf")
+    plt.close(fig)
+
+
+def _plot_fps_all_resolutions(
+    data: dict[PipelineKey, dict[DeviceKey, dict[DTypeKey, dict[str, float]]]],
+) -> None:
+    plt.style.use("seaborn-v0_8-whitegrid")
+    fig, axes = plt.subplots(1, 2, figsize=(12.0, 4.8), sharey=True)
+    x = list(range(len(RESOLUTION_ORDER)))
+    width = 0.24
+    offsets = [-width, 0.0, width]
+    colors = {"float16": "#2a9d8f", "float32": "#457b9d", "float64": "#e76f51"}
+
+    for idx, pipeline in enumerate(PIPELINE_ORDER):
+        ax = axes[idx]
+        for dtype, offset in zip(DTYPE_ORDER, offsets):
+            fps_vals = [
+                1.0 / data[pipeline]["cuda"][dtype][resolution]
+                for resolution in RESOLUTION_ORDER
+            ]
+            ax.bar(
+                [value + offset for value in x],
+                fps_vals,
+                width=width,
+                color=colors[dtype],
+                label=dtype,
+            )
 
         ax.axhline(30.0, color="#d62728", linestyle="--", linewidth=1.4, label="30 FPS")
         ax.axhline(60.0, color="#9467bd", linestyle="--", linewidth=1.4, label="60 FPS")
         ax.set_title(PIPELINES[pipeline])
         ax.set_xticks(x)
-        ax.set_xticklabels(DTYPE_ORDER)
-        ax.set_xlabel("Tipo numérico")
+        ax.set_xticklabels(RESOLUTION_ORDER)
+        ax.set_xlabel("Resolución")
         ax.set_yscale("log")
         ax.legend(loc="upper right", frameon=True)
         if idx == 0:
             ax.set_ylabel("Rendimiento (FPS, escala logarítmica)")
 
     fig.tight_layout(rect=(0.0, 0.0, 1.0, 0.94))
-    fig.savefig(FIG_DIR / "fig_dtype_fps_equipo1_2048.pdf")
+    fig.savefig(FIG_DIR / "fig_dtype_fps_all_resolutions_equipo1.pdf")
     plt.close(fig)
 
 
@@ -329,7 +378,8 @@ def main() -> None:
 
     _plot_latency_2048(data)
     _plot_ratio_vs_float32_2048(data)
-    _plot_fps_2048(data)
+    _plot_ratio_vs_float32_all_resolutions(data)
+    _plot_fps_all_resolutions(data)
 
     print(f"Assets generated in: {OUTPUT_DIR}")
 
