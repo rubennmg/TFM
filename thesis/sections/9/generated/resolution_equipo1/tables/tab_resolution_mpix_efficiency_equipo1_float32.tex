@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|l|c|r|r|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Pipeline} & \textbf{Resolución} & \textbf{MPix} & \textbf{Latencia (ms)} & \textbf{ms/MPix} & \textbf{MPix/s} \\
+\hline
+standard & 256x256 & 0.066 & 0.155 & 2.36 & 424 \\
+\hline
+standard & 512x512 & 0.262 & 0.216 & 0.83 & 1211 \\
+\hline
+standard & 1024x1024 & 1.049 & 0.438 & 0.42 & 2394 \\
+\hline
+standard & 2048x2048 & 4.194 & 1.572 & 0.37 & 2668 \\
+\hline
+complex & 256x256 & 0.066 & 0.351 & 5.36 & 186 \\
+\hline
+complex & 512x512 & 0.262 & 0.428 & 1.63 & 613 \\
+\hline
+complex & 1024x1024 & 1.049 & 0.721 & 0.69 & 1454 \\
+\hline
+complex & 2048x2048 & 4.194 & 2.294 & 0.55 & 1828 \\
+\hline
+\end{tabular}
+\caption{Coste temporal normalizado por MPix y rendimiento en MPix/s por resolución}
+\label{tab:resolution_mpix_efficiency_equipo1_float32}
+\end{table}

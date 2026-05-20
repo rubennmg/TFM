@@ -1,0 +1,25 @@
+\begin{table}[htbp]
+\centering
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|c|c|r|r|r|r|}
+\hline
+\rowcolor[gray]{0.90}
+\textbf{Equipo} & \textbf{Pipeline} & \textbf{256x256} & \textbf{512x512} & \textbf{1024x1024} & \textbf{2048x2048} \\
+\hline
+Equipo1 & standard & 1.00x & 1.40x & 2.83x & 10.17x \\
+\hline
+Equipo1 & complex & 1.00x & 1.22x & 2.05x & 6.53x \\
+\hline
+Equipo2 & standard & 1.00x & 2.98x & 4.31x & 11.12x \\
+\hline
+Equipo2 & complex & 1.00x & 2.90x & 4.58x & 9.44x \\
+\hline
+Equipo3 & standard & 1.00x & 2.30x & 4.06x & 13.84x \\
+\hline
+Equipo3 & complex & 1.00x & 2.29x & 3.78x & 11.92x \\
+\hline
+\end{tabular}
+\caption{Escalado interno de latencia respecto a \texttt{256x256}}
+\label{tab:interteam_self_scaling_256_gpu}
+\end{table}
