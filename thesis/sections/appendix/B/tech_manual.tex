@@ -1,0 +1,276 @@
+\section{Manual técnico} \label{sec:appendix_B_tech_manual}
+
+Este apéndice describe la organización técnica del proyecto y recoge una guía
+práctica para la extensión de la aplicación con nuevas operaciones de procesado y nuevos
+cargadores de formatos de imagen.
+
+\subsection{Objetivo del Manual Técnico}
+
+El sistema se ha diseñado para que la incorporación de nuevas funcionalidades no
+requiera modificar de forma transversal toda la aplicación. En particular, dos de
+los puntos de extensión más importantes son las operaciones de procesado y los
+\textit{loaders} de imagen. Ambos siguen una estructura común basada en clases
+base, modelos compartidos y registros centralizados.
+
+\noindent{El propósito de este manual técnico es servir como guía para:}
+
+\begin{itemize}[noitemsep]
+    \item Localizar los módulos principales en el código fuente
+    \item Comprender el flujo de integración de una operación de procesado
+    \item Comprender el flujo de integración de un nuevo formato de imagen
+    \item Mantener la separación entre núcleo de procesamiento, carga de datos, interfaz gráfica y \textit{benchmarking}
+    \item Facilitar que el proyecto pueda evolucionar sin comprometer su mantenibilidad
+\end{itemize}
+
+Esta capacidad de extensión es una de las principales ventajas de la
+arquitectura desarrollada. Una nueva operación puede añadirse implementando una
+clase concreta y registrando su definición visual, mientras que un nuevo formato
+de imagen puede incorporarse mediante un \textit{loader} específico sin alterar la
+lógica general del controlador.
+
+\newpage
+
+\subsection{Estructura general del proyecto}
+
+El código fuente se organiza en torno a varios módulos principales que reflejan las
+diferentes responsabilidades del sistema. Esta división permite que cada parte evolucione 
+de forma independiente y reduce la probabilidad de introducir dependencias innecesarias.
+
+\begin{itemize}[noitemsep]
+    \item \path{core/}: contiene las operaciones de procesamiento de imagen: filtrado, color, geometría, normalización, formato y procesado Bayer.
+    \item \path{core/image_operation.py}: define la clase base \texttt{ImageOperation}, de la que heredan las operaciones concretas.
+    \item \path{core/registry.py}: mantiene el registro de operaciones disponibles mediante el decorador \\ \texttt{@register\_operation}.
+    \item \path{loaders/}: contiene las clases encargadas de la carga de imágenes desde distintos formatos.
+    \item \path{loaders/base_loader.py}: define la interfaz común \texttt{ImageLoader}.
+    \item \path{loaders/image_loader.py}: centraliza la selección del \textit{loader} adecuado a partir de la extensión del fichero.
+    \item \path{models/}: contiene modelos compartidos como \texttt{Image}, \texttt{Metadata} y \texttt{OperationDefinition}.
+    \item \path{controller.py}: coordina la carga de imágenes, la ejecución de operaciones y la actualización de la interfaz.
+    \item \path{gui/}: implementa la interfaz gráfica y los controles asociados a las operaciones.
+    \item \path{benchmark/}: contiene la infraestructura para ejecutar perfiles de operaciones y obtener métricas de rendimiento.
+    \item \path{tests/}: contiene pruebas funcionales de operaciones, formatos, geometría, color y normalización.
+\end{itemize}
+
+La idea fundamental es que el controlador no necesita conocer los detalles
+internos de cada operación ni de cada formato de fichero. Para las operaciones,
+trabaja con nombres registrados en el registro global de operaciones. Para las imágenes,
+delega la carga en \path{loaders/image_loader.py}, que selecciona el \textit{loader}
+adecuado en función de la extensión.
+
+\newpage
+
+\subsection{Cómo añadir una nueva operación de procesado}
+
+Las operaciones de procesado se implementan como clases que heredan de
+\texttt{ImageOperation}. Esta clase base define el método público \texttt{\_\_call\_\_},
+comprueba que la entrada y la salida son tensores de imagen válidos y mide el
+tiempo de ejecución de la operación. La clase concreta sólo debe implementar el
+método \texttt{apply}.
+
+\noindent{El flujo recomendado para añadir una nueva operación es el siguiente:}
+
+\begin{enumerate}[noitemsep]
+    \item Crear un nuevo fichero en el subpaquete adecuado de \path{core/}
+    \item Definir una clase que herede de \texttt{ImageOperation}
+    \item Decorar la clase con \texttt{@register\_operation}
+    \item Implementar el método \texttt{apply(self, x: Tensor) -> Tensor}
+    \item Validar los parámetros en el constructor de la operación
+    \item Añadir una entrada en \path{models/operation_definition.py} para que la operación aparezca en la interfaz gráfica
+    \item Añadir pruebas en \path{tests/} cuando la operación tenga comportamiento no trivial
+\end{enumerate}
+
+El \autoref{lst:technical_manual_operation_example} muestra un ejemplo reducido
+de operación de inversión de intensidad para imágenes representadas como tensores
+reales en el rango \texttt{[0, 1]}.
+
+\begin{lstlisting}[style=pythonstyle, caption={Ejemplo simplificado de nueva operación de procesado}, label={lst:technical_manual_operation_example}]
+from torch import Tensor
+
+from core import _tensor_utils as T_u
+from core.image_operation import ImageOperation
+from core.registry import register_operation
+
+
+@register_operation
+class InvertIntensity(ImageOperation):
+    def apply(self, x: Tensor) -> Tensor:
+        T_u.assert_real_valued_tensor(x)
+        return 1.0 - x
+\end{lstlisting}
+
+El decorador \texttt{@register\_operation} introduce la clase en el registro global
+de operaciones. De esta forma, el controlador puede instanciarla a partir de su
+nombre sin depender directamente del módulo donde está implementada.
+
+\newpage
+
+Si la operación no tiene parámetros, basta con añadir una definición de tipo
+\texttt{no\_param}, como se muestra en el
+\autoref{lst:technical_manual_operation_definition_no_param}.
+
+\begin{lstlisting}[style=pythonstyle, caption={Definición de operación sin parámetros}, label={lst:technical_manual_operation_definition_no_param}]
+OperationDefinition(
+    name="InvertIntensity",
+    label="Invert Intensity",
+    category="Filters",
+    control_type="no_param",
+)
+\end{lstlisting}
+
+Si la operación requiere parámetros numéricos, se recomienda definir una lista de
+\texttt{FloatParamSpec}. Estos objetos describen el nombre interno del parámetro,
+su etiqueta visible, el rango permitido, el paso de ajuste y el valor por defecto.
+El \autoref{lst:technical_manual_operation_definition_params} muestra un ejemplo
+con un parámetro \texttt{factor}.
+
+\begin{lstlisting}[style=pythonstyle, caption={Definición de operación con parámetros}, label={lst:technical_manual_operation_definition_params}]
+_FILTER_EXAMPLE_PARAMS = [
+    FloatParamSpec(
+        key="factor",
+        label="Factor",
+        minimum=0.0,
+        maximum=2.0,
+        step=0.01,
+        default=1.0,
+    ),
+]
+
+OperationDefinition(
+    name="ExampleOperation",
+    label="Example Operation",
+    category="Filters",
+    control_type="filter",
+    params=_FILTER_EXAMPLE_PARAMS,
+    default_params=_build_filter_params(_FILTER_EXAMPLE_PARAMS),
+)
+\end{lstlisting}
+
+Es importante que el valor de \texttt{name} coincida exactamente con el nombre de
+la clase registrada. Esta coincidencia permite que el perfil de operaciones, la
+interfaz gráfica y el módulo de \textit{benchmarking} utilicen el mismo
+identificador. Así, una operación añadida correctamente queda disponible en la
+interfaz, puede exportarse dentro de un perfil y puede ser ejecutada por el
+sistema de medición de rendimiento.
+
+En caso de requerir un control gráfico específico, debe añadirse un nuevo tipo de
+control en \path{gui/right_panel/widgets/} y conectarlo desde el panel
+derecho. Sin embargo, muchas operaciones pueden reutilizar controles existentes,
+especialmente las operaciones sin parámetros o aquellas basadas en parámetros
+numéricos simples.
+
+\newpage
+
+\subsection{Cómo añadir un nuevo \textit{loader} de formato de imagen}
+
+Los \textit{loaders} encapsulan la lógica de lectura de cada formato de imagen.
+Todos heredan de la clase base \texttt{ImageLoader}. Esta interfaz obliga a declarar
+las extensiones soportadas, los formatos asociados y el método \texttt{load}. El
+resultado debe ser siempre una instancia del modelo \texttt{Image}, que contiene el
+tensor de imagen, su copia original, el formato, el espacio de color y los metadatos.
+
+\noindent{El flujo recomendado para añadir un nuevo formato es el siguiente:}
+
+\begin{enumerate}[noitemsep]
+    \item Crear una nueva clase en \path{loaders/} heredando de \texttt{ImageLoader}
+    \item Declarar la propiedad \texttt{extensions} con las extensiones soportadas en minúsculas
+    \item Declarar la propiedad \texttt{formats} con los valores correspondientes de \texttt{ImageFormat}
+    \item Implementar \texttt{load(path, device)} devolviendo un objeto \texttt{Image} completo
+    \item Registrar el nuevo \textit{loader} en la lista \texttt{\_LOADERS} de \texttt{loaders/image\_loader.py}
+    \item Añadir el nuevo valor de \texttt{ImageFormat} si el formato no existe todavía
+    \item Añadir pruebas de carga con una imagen mínima representativa del formato
+\end{enumerate}
+
+\newpage
+
+El \autoref{lst:technical_manual_loader_example} muestra la estructura básica de
+un \textit{loader}. El ejemplo es muy genérico, la función de lectura
+concreta dependerá del formato y de la biblioteca utilizada.
+
+\begin{lstlisting}[style=pythonstyle, caption={Estructura simplificada de un nuevo loader}, label={lst:technical_manual_loader_example}]
+import torch
+from torch import Tensor
+
+from loaders.base_loader import ImageLoader
+from models.enums.color_space import ColorSpace
+from models.enums.image_formats import ImageFormat
+from models.image import Image
+from models.metadata import Metadata
+
+
+class TiffLoader(ImageLoader):
+    @property
+    def extensions(self) -> list[str]:
+        return ["tif", "tiff"]
+
+    @property
+    def formats(self) -> list[ImageFormat]:
+        return [ImageFormat.TIFF]
+
+    def load(self, path: str, device) -> Image:
+        tensor: Tensor = read_tiff_as_tensor(path)
+        tensor = tensor.to(dtype=torch.float32, device=device)
+
+        if not tensor.is_contiguous():
+            tensor = tensor.contiguous()
+
+        return Image(
+            tensor=tensor,
+            original_tensor=tensor.clone(),
+            operation_result_tensor=tensor.clone(),
+            path=path,
+            name=path.split("/")[-1],
+            image_format=ImageFormat.TIFF,
+            color_space=ColorSpace.RGB,
+            metadata=Metadata(
+                width=tensor.shape[2],
+                height=tensor.shape[1],
+                bit_depth=16,
+                bayer_pattern=None,
+            ),
+        )
+\end{lstlisting}
+
+\newpage
+
+Una vez implementado el \textit{loader}, debe añadirse a la lista de cargadores
+disponibles. El \autoref{lst:technical_manual_loader_registry} muestra el punto
+de integración.
+
+\begin{lstlisting}[style=pythonstyle, caption={Registro de un nuevo loader}, label={lst:technical_manual_loader_registry}]
+from loaders.tiff_loader import TiffLoader
+
+_LOADERS: list[ImageLoader] = [
+    RawLoader(),
+    ArwLoader(),
+    DngLoader(),
+    JpgLoader(),
+    PklGzLoader(),
+    TiffLoader(),
+]
+\end{lstlisting}
+
+Con esta modificación, el sistema incorpora automáticamente las extensiones del
+nuevo \textit{loader} al mapa interno de extensiones. La interfaz gráfica también
+se beneficia de esta integración, ya que el filtro de selección de archivos se
+construye a partir de las extensiones soportadas por los \textit{loaders}
+registrados.
+
+\newpage
+
+\subsection{Recomendaciones de mantenimiento}
+
+Para conservar la extensibilidad del proyecto, las ampliaciones futuras deberían
+seguir las mismas reglas de separación aplicadas durante el desarrollo del
+sistema. Las recomendaciones principales son las siguientes:
+
+\begin{itemize}[noitemsep]
+    \item Mantener las operaciones de procesado dentro de \texttt{core/}, evitando dependencias directas con la interfaz gráfica.
+    \item Validar parámetros en el constructor de cada operación para detectar configuraciones inválidas antes de ejecutar el procesamiento.
+    \item Usar \texttt{@register\_operation} en toda operación nueva para mantener el mecanismo de descubrimiento centralizado.
+    \item Mantener sincronizados el nombre de la clase, el campo \texttt{name} de \texttt{OperationDefinition} y los perfiles exportados.
+    \item Reutilizar controles gráficos existentes siempre que sea posible antes de crear nuevos \textit{widgets}.
+    \item Encapsular la lectura de formatos en \textit{loaders} independientes, sin introducir lógica específica de formato en el controlador.
+    \item Devolver siempre objetos \texttt{Image} completos desde los \textit{loaders}, incluyendo \texttt{Metadata} y \texttt{ColorSpace}.
+    \item Asegurar que los tensores generados son contiguos y tienen la forma esperada por el núcleo de procesamiento.
+    \item Añadir pruebas unitarias o de integración para toda operación o formato nuevo que pueda afectar al flujo principal.
+    \item Mantener actualizado el perfil de \textit{benchmarking} cuando una nueva operación deba evaluarse en términos de rendimiento.
+\end{itemize}
