@@ -10,7 +10,7 @@ class Resize(ImageOperation):
     """Class to resize image tensors.
     Uses Kornia's Resize implementation.
 
-    See: https://kornia.readthedocs.io/en/stable/augmentation.module.html#kornia.augmentation.Resize
+    See: https://kornia.readthedocs.io/en/stable/geometry.transform.html#kornia.geometry.transform.resize
 
     Args:
         ImageOperation (ImageOperation): Base class for image operations.
