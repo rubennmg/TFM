@@ -1,42 +1,103 @@
 \section{Conclusiones} \label{sec:conclusiones}
 
-La realización de este Trabajo Fin de Máster ha supuesto un proceso largo, exigente y muy enriquecedor. 
-Desde el inicio, el proyecto planteaba un reto amplio: acercar el procesamiento de imágenes crudas a un 
-entorno interactivo, flexible y evaluable, donde no sólo importase obtener un resultado visual correcto, 
-sino también entender cómo se comportan los \textit{pipelines} de procesado, qué implicaciones tienen 
-sobre el rendimiento y cómo se pueden configurar para distintos escenarios.
+\subsection{Resumen} \label{subsec:conclusiones_resumen}
 
-Uno de los aspectos más interesantes del proyecto ha sido precisamente esa mezcla de disciplinas. 
-Por una parte, ha sido necesario estudiar el procesamiento digital de imágenes, los formatos crudos, 
-la reconstrucción de color y las operaciones habituales de mejora visual. Por otra, ha sido necesario 
-diseñar una aplicación completa, con una arquitectura clara, una interfaz manejable y una forma cómoda 
-de construir y modificar secuencias de operaciones. A esto se suma el desarrollo del sistema de \textit{benchmarking}, 
-que ha permitido comprobar el comportamiento real de diferentes \textit{pipelines} y no quedarse únicamente 
-en una valoración visual o funcional.
+El presente Trabajo Fin de Máster ha tratado el diseño, desarrollo y evaluación de una
+aplicación interactiva para el procesamiento de imágenes en formato crudo, con especial
+atención a la definición de \textit{pipelines} de procesado, la mejora visual de la imagen
+y el análisis del rendimiento en escenarios de ejecución acelerada por GPU. El trabajo ha
+partido de un estudio previo del problema para la definición de una base de conocimiento
+sólida sobre la que fundamentar el desarrollo.
 
-El resultado final es una herramienta que permite cargar imágenes, aplicar operaciones de procesado, ajustar 
-parámetros, observar el resultado y exportar perfiles reproducibles para que sean evaluados.
-En ese sentido, el trabajo no termina únicamente en una aplicación que funciona, sino en una propuesta completa: 
-una forma de experimentar con imágenes crudas, construir flujos de procesado y estudiar cómo se comportan bajo 
-diferentes condiciones.
+A partir de dicha base, se ha definido el alcance funcional del sistema y se ha planteado
+una arquitectura orientada a separar con claridad la interfaz gráfica, la lógica de control,
+los modelos de datos, las operaciones de procesamiento y la evaluación de rendimiento.
+Todo esto ha permitido el desarrollo de una solución modular, en la que las operaciones se
+comportan como unidades independientes, parametrizables y combinables. Sobre esta arquitectura
+se ha construido una aplicación que permite cargar imágenes, inspeccionarlas, aplicar
+operaciones de procesado, ajustar parámetros de forma interactiva, visualizar el resultado
+y exportar perfiles reproducibles. Estos perfiles constituyen el vínculo entre la fase de
+experimentación visual y la fase de evaluación objetiva del rendimiento.
 
-Ha sido un proyecto marcado por un equilibrio constante entre ambición y realismo. El ámbito del procesamiento de 
-imágenes es muy amplio, y en muchos momentos surgieron posibles mejoras, nuevas operaciones, alternativas de diseño o líneas 
-de análisis que podían haber ampliado todavía más el alcance del trabajo. Sin embargo, una parte importante del proceso ha 
-consistido en decidir hasta dónde llegar, qué priorizar y cómo mantener una línea de desarrollo asumible. Esta gestión del 
-alcance ha sido uno de los aprendizajes más valiosos, ya que en un proyecto de estas dimensiones no todo consiste en añadir 
-funcionalidades, sino en construir una solución consistente y bien cerrada.
+El trabajo no se ha limitado únicamente al desarrollo de la aplicación interactiva. También se ha
+implementado un conjunto de pruebas unitarias para validar el comportamiento de las operaciones
+de procesado y se ha desarrollado un programa de \textit{benchmarking} capaz de ejecutar los
+perfiles definidos bajo distintas condiciones experimentales. Este módulo permite analizar
+el impacto del dispositivo de cómputo, la resolución de entrada, el tipo numérico utilizado, la
+complejidad del \textit{pipeline} y la plataforma hardware empleada. Así pues, la solución
+desarrollada no sólo proporciona una herramienta de edición y exploración, sino también un
+entorno de medición que facilita la interpretación del coste computacional asociado a cada
+configuración.
 
-En términos generales, el grado de satisfacción con el resultado obtenido es muy alto. El proyecto ha permitido aplicar 
-conocimientos adquiridos durante la formación académica, pero también ha obligado a desarrollar otros nuevos: organización, 
-documentación, análisis crítico, diseño de software, validación experimental y comunicación de resultados.
+La principal contribución del trabajo reside en la integración de estas dos dimensiones en un
+mismo flujo: por un lado, una herramienta interactiva para construir y ajustar \textit{pipelines}
+de procesamiento de imágenes crudas; por otro, un mecanismo reproducible para evaluar dichos
+\textit{pipelines} en términos de rendimiento. Esto permite cerrar el ciclo entre
+diseño, ejecución y análisis por completo. El usuario puede experimentar visualmente con una secuencia de
+operaciones, exportarla como perfil declarativo y estudiar posteriormente su comportamiento en
+distintos dispositivos y resoluciones. El gran valor de esta propuesta radica la capacidad de 
+conexión entre la intuición visual del diseño y el rigor de la evaluación experimental.
 
-Este Trabajo Fin de Máster representa, por tanto, algo más que la finalización de una etapa académica. Supone la materialización de una 
-idea que ha ido evolucionando hasta convertirse en una herramienta funcional, evaluada y documentada. Quedan abiertas posibles mejoras y 
-ampliaciones, como ocurre con cualquier proyecto con recorrido, pero esa posibilidad de continuar trabajando sobre la solución también 
-demuestra que la base construida es sólida.
+Otra aportación relevante es la organización modular del componente de procesado. La definición de
+operaciones independientes facilita la incorporación de nuevos algoritmos, la reutilización de
+funcionalidades y la validación aislada de cada transformación. Esta estructura es muy
+adecuada en un dominio como el procesamiento de imágenes, donde es habitual comparar variantes,
+modificar parámetros y construir cadenas de operaciones con diferentes niveles de complejidad. 
 
-El balance final es muy positivo. El proyecto ha permitido profundizar en un campo de gran interés, enfrentarse a problemas 
-reales de diseño e implementación y desarrollar una solución que une procesamiento de imagen, interacción y análisis de rendimiento. 
-Más allá del resultado concreto, queda la experiencia de haber recorrido un proceso completo de investigación, desarrollo y evaluación, 
-y la sensación de haber dado un paso importante en la forma de afrontar grandes proyectos.
+\newpage
+
+Los resultados obtenidos mediante \textit{benchmarking} permiten extraer varias conclusiones técnicas.
+La ejecución en GPU ofrece, evidentemente, una mejora muy significativa frente a CPU, especialmente a medida que crece
+la resolución de entrada y aumenta la carga de procesamiento. También se observa que el comportamiento
+del sistema no depende únicamente del número de píxeles, sino de la interacción entre resolución,
+tipo numérico, complejidad y características concretas de la plataforma hardware.
+Las pruebas realizadas sobre equipos de escritorio y plataformas embebidas muestran que la viabilidad
+del procesamiento en tiempo real es alcanzable en un rango amplio de condiciones, aunque queda
+limitada por el margen operativo disponible en cada dispositivo y las necesidades específicas de cada 
+aplicación.
+
+Desde el punto de vista del alcance del proyecto, puede considerarse que los objetivos planteados se
+han cumplido de forma satisfactoria. Se ha desarrollado una aplicación funcional, se ha definido un
+modelo de perfiles exportables, se han implementado operaciones representativas de procesado, se ha
+validado su comportamiento mediante pruebas y se ha realizado un análisis experimental sobre varias
+configuraciones de ejecución. El resultado final es una base sólida sobre la que continuar trabajando,
+tanto desde una perspectiva de mejora de producto como desde una perspectiva de investigación aplicada
+al rendimiento de \textit{pipelines} de visión por computador.
+
+\subsection{Trabajos futuros} \label{subsec:conclusiones_trabajo_futuro}
+
+Aunque la solución desarrollada cumple con los objetivos establecidos, existen varias líneas de trabajo
+que permitirían ampliar su alcance. Una primera mejora consistiría en la incorporación de nuevas operaciones de
+procesado y algoritmos de \textit{demosaicing}, incluyendo métodos más avanzados o adaptativos que
+permitan comparar no sólo el coste temporal, sino también la calidad visual obtenida.
+
+Otra línea natural sería profundizar en la optimización del rendimiento. El sistema actual ya permite
+aprovechar la ejecución sobre GPU, pero podrían estudiarse técnicas específicas para reducir copias de
+memoria, encadenar operaciones de forma más eficiente o adaptar automáticamente el tipo numérico y la
+resolución en función de las restricciones temporales del entorno. También sería interesante extender el
+módulo de \textit{benchmarking} con nuevos indicadores, como consumo energético, uso de memoria o
+variabilidad temporal, especialmente relevantes en plataformas embebidas.
+
+Finalmente, la aplicación podría evolucionar hacia un entorno más completo de experimentación visual.
+Entre las posibles mejoras se incluyen la edición no lineal de \textit{pipelines}, la comparación simultánea
+de varias configuraciones, la importación de perfiles ya generados, el soporte de nuevos formatos crudos
+y una integración más directa con sistemas de adquisición de imagen en tiempo real.
+
+\newpage
+
+\subsection{Valoración personal} \label{subsec:conclusiones_valoracion_personal}
+
+En el plano personal, la realización de este trabajo ha supuesto un proceso exigente y muy formativo. El
+proyecto ha requerido combinar conocimientos de procesamiento de imagen, diseño de software, pruebas, análisis experimental 
+y documentación técnica. También ha obligado a tomar decisiones
+de alcance, priorizar funcionalidades y mantener una línea de desarrollo coherente pese a la amplitud del
+problema. Quedan abiertas posibles mejoras y ampliaciones, como ocurre con
+cualquier proyecto con recorrido, pero esa posibilidad de continuar trabajando sobre la solución también
+demuestra que la base construida es muy sólida.
+
+El balance final es muy positivo. Más allá de la aplicación concreta desarrollada, el proyecto ha permitido
+recorrer un proceso completo de análisis, diseño, implementación, validación y evaluación. La solución
+obtenida demuestra que es posible construir un entorno flexible para experimentar con imágenes crudas y,
+al mismo tiempo, estudiar de forma reproducible el rendimiento de los \textit{pipelines} resultantes. Por
+todo esto, este Trabajo Fin de Máster no sólo representa el cierre de una etapa académica, sino también una
+base técnica sobre la que podrían desarrollarse nuevas mejoras y líneas de investigación futuras.
