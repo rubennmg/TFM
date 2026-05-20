@@ -1,0 +1,135 @@
+@startuml application_class_diagram
+skinparam backgroundColor transparent
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam defaultFontName DejaVu Sans
+skinparam defaultFontSize 26
+skinparam packageFontSize 28
+skinparam classFontSize 26
+skinparam classAttributeFontSize 24
+skinparam nodesep 45
+skinparam ranksep 40
+skinparam class {
+  BackgroundColor #FAFAFA
+  BorderColor #333333
+  ArrowColor #333333
+}
+
+package "GUI" as GUI {
+  class MainWindow
+  class LeftPanel
+  class RightPanel
+  class ImageViewer
+}
+
+package "Loaders" as Loaders {
+  abstract class ImageLoader {
+    extensions
+    formats
+    load(path, device)
+  }
+
+  class RawLoader
+  class ArwLoader
+  class DngLoader
+  class PklGzLoader
+  class JpgLoader
+}
+
+package "Controller" as ControllerPackage {
+  class Controller {
+    image
+    operations_profile
+    operation_logs
+    load_image(path)
+    add_pipeline_operation(name)
+    update_operation_params(index, params)
+    reset_image()
+    generate_operations_profile()
+  }
+}
+
+package "Core" as Core {
+  abstract class ImageOperation {
+    execution_time
+    __call__(x)
+    apply(x)
+  }
+
+  class SigmoidContrast
+  class GammaAdjustment
+  class Debayer
+  class RealToRGB8
+  class "..." as MoreOperations
+}
+
+package "Models" as Models {
+  class Image {
+    tensor
+    original_tensor
+    operation_result_tensor
+    path
+    name
+    image_format
+    color_space
+    metadata
+  }
+
+  class Metadata {
+    width
+    height
+    bit_depth
+    bayer_pattern
+  }
+
+  class OperationDefinition {
+    name
+    label
+    category
+    control_type
+    params
+    default_params
+  }
+
+  enum ColorSpace
+  enum ImageFormat
+  enum Layout
+}
+
+GUI -[hidden]right- ControllerPackage
+ControllerPackage -[hidden]right---- Core
+GUI -[hidden]down---- Loaders
+Loaders -[hidden]right- Models
+ControllerPackage -[hidden]down---- Models
+
+Image *-- Metadata
+Image --> ColorSpace
+Image --> ImageFormat
+Metadata --> Layout
+
+ImageLoader <|-- RawLoader
+ImageLoader <|-- ArwLoader
+ImageLoader <|-- DngLoader
+ImageLoader <|-- PklGzLoader
+ImageLoader <|-- JpgLoader
+ImageLoader -right.> Image
+
+ImageOperation <|-- SigmoidContrast
+ImageOperation <|-- GammaAdjustment
+ImageOperation <|-- Debayer
+ImageOperation <|-- RealToRGB8
+ImageOperation <|-- MoreOperations
+
+Controller -down-> Image
+Controller -down-> OperationDefinition
+Controller --> ImageLoader
+Controller -right-> ImageOperation
+
+MainWindow *-- LeftPanel
+MainWindow *-- RightPanel
+MainWindow *-- ImageViewer
+MainWindow -right-> Controller
+
+@enduml

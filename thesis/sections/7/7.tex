@@ -46,6 +46,8 @@ en la Figura \ref{fig:32_flujo_ejecucion_sistema}.
 \subsection{Arquitectura} \label{subsec:7_2_arquitectura}
 Se presenta a continuación la arquitectura del sistema desarrollado. Dicha arquitectura
 se ha planteado y diseñado siguiendo los objetivos y principios mencionados anteriormente.
+Finalmente, se muestra un diagrama de clases simplificado que complementa la vista 
+arquitectónica general.
 
 \subsubsection{Enfoque arquitectónico} \label{subsubsec:7_2_1_enfoque_arquitectonico}
 El sistema desarrollado sigue un enfoque de arquitectura en capas, combinando el patrón 
@@ -76,6 +78,36 @@ A partir de esta organización, se logra una arquitectura modular, mantenible y 
 en la que es posible incorporar nuevas operaciones de procesamiento de imágenes, ampliar el 
 soporte de formatos de entrada o introducir nuevas métricas de rendimiento de forma muy sencilla, 
 sin afectar al conjunto global del sistema. 
+
+\newpage
+
+\clearpage
+\KOMAoptions{paper=landscape,DIV=6}
+\newgeometry{top=3.5cm, bottom=2.5cm, left=2.3cm, right=2.3cm}
+\setlength{\headheight}{49.60443pt}
+\addtolength{\topmargin}{-30.05453pt}
+\fancyheadoffset{0pt}
+
+\thispagestyle{fancy}
+
+\subsubsection{Diagrama de clases} \label{subsubsec:7_2_2_diagrama_clases}
+Como complemento a la vista arquitectónica anterior, la \autoref{fig:34_class_diagram} muestra una
+representación estática simplificada de las clases principales de la aplicación y de sus relaciones más
+relevantes. Dichas clases y elementos se describen en detalle en las secciones siguientes.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{puml_figures/class_diagram/application_class_diagram.pdf}
+    \caption{Diagrama de clases simplificado de la aplicación}
+    \label{fig:34_class_diagram}
+\end{figure}
+
+\clearpage
+\addtolength{\topmargin}{30.05453pt}
+\KOMAoptions{paper=portrait,DIV=last}
+\restoregeometry
+\fancyheadoffset{0pt}
+
 
 \newpage
 
@@ -935,4 +967,3 @@ y difícil de interpretar.
     \caption{Diagrama de paquetes de la aplicación}
     \label{fig:54_package_diagram}
 \end{figure}
-
