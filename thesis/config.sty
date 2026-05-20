@@ -110,6 +110,11 @@
 \definecolor{darkred}{RGB}{139,0,0}
 \definecolor{darkgreen}{RGB}{0,100,0}
 \definecolor{darkblue}{RGB}{0,0,139}
+\definecolor{codebackground}{RGB}{248,248,248}
+\definecolor{codekeyword}{RGB}{0,63,127}
+\definecolor{codestring}{RGB}{163,21,21}
+\definecolor{codecomment}{RGB}{0,128,0}
+\definecolor{codenumber}{RGB}{110,110,110}
 
 % ----------------------------------------
 % Document Constants
@@ -300,11 +305,41 @@
   stringstyle=\color{red}
 }
 
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{codekeyword}\bfseries,
+    commentstyle=\itshape\color{codecomment},
+    stringstyle=\color{codestring},
+    numberstyle=\tiny\color{codenumber},
+    backgroundcolor=\color{codebackground},
+    numbers=left,
+    stepnumber=1,
+    frame=single,
+    framerule=0.4pt,
+    rulecolor=\color{black!45},
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    tabsize=4,
+    keepspaces=true,
+    showstringspaces=false,
+    columns=fullflexible,
+    upquote=true,
+    aboveskip=1em,
+    belowskip=1em,
+    framexleftmargin=1.5em,
+    xleftmargin=0.075\textwidth,
+    xrightmargin=0.05\textwidth,
+    morekeywords={self,None,True,False},
+}
+
 \lstset{
     basicstyle=\ttfamily\small,
     keywordstyle=\color{black}\bfseries,
     commentstyle=\itshape\color{gray},
     stringstyle=\color{red},
+    backgroundcolor=\color{codebackground},
     numbers=left,
     numberstyle=\tiny,
     stepnumber=1,
