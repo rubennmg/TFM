@@ -498,7 +498,7 @@ muestra su disposición respecto al resto de la interfaz.
     \vspace{1em}
 
     Finalmente, en la parte inferior del panel izquierdo, se renderizan dos botones adicionales (\autoref{fig:41_op_profile_save_image_buttons}).
-    El primero de ellos genera un perfil de ejecución en formato \textit{json} que representa el \textit{pipeline} de operaciones. Su 
+    El primero de ellos genera un perfil de ejecución en formato JSON que representa el \textit{pipeline} de operaciones. Su 
     función es la exportación de la secuencia de operaciones aplicadas para su análisis en el módulo de \textit{benchmarking}. 
     El segundo botón permite guardar la imagen procesada en formato \textit{jpg}.
 \end{minipage}\hfill
@@ -852,7 +852,7 @@ mínimo y máximo, lo que se corresponde con la operación mostrada en la \autor
 El componente \textit{Benchmark} se encarga de medir y analizar el rendimiento de los \textit{pipelines} de operaciones 
 definidos por el usuario desde la \textit{GUI}. Su implementación se basa en \textit{pytest} \cite{pytest} y en el 
 \textit{plugin} \textit{pytest-benchmark} \cite{pytest_benchmark}, lo que permite ejecutar medidas de rendimiento de forma repetitiva y
-con salida estructurada en formato \textit{json}.
+con salida estructurada en formato JSON.
 
 \paragraph{Arquitectura interna} \label{par:7_3_6_1_arquitectura_interna_benchmark}
 El módulo se organiza alrededor de dos piezas principales: un archivo de configuración
@@ -865,7 +865,7 @@ general del \textit{benchmark} de la lógica específica de ejecución. Las func
     parámetros comunes de ejecución (unidad temporal en milisegundos, \textit{warmup} activo,
     criterio de ordenación y tiempo máximo por caso).
     \item \textbf{Perfil de ejecución externo.} El módulo añade el argumento de línea de comandos
-    \texttt{-{}-bench-profile}, que recibe la ruta de un fichero \textit{json} con la definición del
+    \texttt{-{}-bench-profile}, que recibe la ruta de un fichero JSON con la definición del
     \textit{pipeline} a evaluar.
     \item \textbf{Construcción dinámica del \textit{pipeline}.} Mediante una \textit{fixture}
     (\texttt{pipeline\_factory}), cada entrada del perfil se transforma en una instancia real de
@@ -879,7 +879,7 @@ general del \textit{benchmark} de la lógica específica de ejecución. Las func
 \noindent{Para cada caso de la matriz experimental definida, el flujo es el siguiente:}
 
 \begin{enumerate}[noitemsep]
-    \item Carga y validación del perfil \textit{json} recibido por \texttt{-{}-bench-profile}, que representa el \textit{pipeline} de operaciones a evaluar.
+    \item Carga y validación del perfil JSON recibido por \texttt{-{}-bench-profile}, que representa el \textit{pipeline} de operaciones a evaluar.
     \item Resolución de operaciones por nombre a través de \texttt{OPERATION\_REGISTRY}.
     \item Instanciación de cada operación con sus parámetros.
     \item Construcción de una función \textit{pipeline} que aplica secuencialmente todas las operaciones recogidas en el mismo.
@@ -900,7 +900,7 @@ se basa en los siguientes principios:
 \begin{itemize}[noitemsep]
     \item \textbf{Interfaz de intercambio (GUI $\leftrightarrow$ Benchmark).}
     Desde la interfaz gráfica, el usuario exporta el \textit{pipeline} actual; el \textit{Controller}
-    lo serializa como una lista ordenada de operaciones y parámetros en formato \textit{json}.
+    lo serializa como una lista ordenada de operaciones y parámetros en formato JSON.
     Ese fichero se convierte en la entrada directa del módulo \textit{Benchmark}.
     \item \textbf{Consistencia funcional (Core compartido).}
     El \textit{Benchmark} no reimplementa operaciones: instancia exactamente las mismas clases
