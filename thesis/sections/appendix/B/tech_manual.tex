@@ -185,7 +185,7 @@ El \autoref{lst:technical_manual_loader_example} muestra la estructura básica d
 un \textit{loader}. El ejemplo es muy genérico, la función de lectura
 concreta dependerá del formato y de la biblioteca utilizada.
 
-\begin{lstlisting}[style=pythonstyle, caption={Estructura simplificada de un nuevo loader}, label={lst:technical_manual_loader_example}]
+\begin{lstlisting}[style=pythonstyle, caption={Estructura simplificada de un nuevo \textit{loader}}, label={lst:technical_manual_loader_example}]
 import torch
 from torch import Tensor
 
@@ -235,7 +235,7 @@ Una vez implementado el \textit{loader}, debe añadirse a la lista de cargadores
 disponibles. El \autoref{lst:technical_manual_loader_registry} muestra el punto
 de integración.
 
-\begin{lstlisting}[style=pythonstyle, caption={Registro de un nuevo loader}, label={lst:technical_manual_loader_registry}]
+\begin{lstlisting}[style=pythonstyle, caption={Registro de un nuevo \textit{loader}}, label={lst:technical_manual_loader_registry}]
 from loaders.tiff_loader import TiffLoader
 
 _LOADERS: list[ImageLoader] = [
@@ -274,3 +274,8 @@ sistema. Las recomendaciones principales son las siguientes:
     \item Añadir pruebas unitarias o de integración para toda operación o formato nuevo que pueda afectar al flujo principal.
     \item Mantener actualizado el perfil de \textit{benchmarking} cuando una nueva operación deba evaluarse en términos de rendimiento.
 \end{itemize}
+
+\subsection{Contribuciones}
+El código fuente del proyecto se encuentra disponible en \textit{GitHub}. Se aceptan contribuciones siguiendo las pautas de desarrollo establecidas en este 
+manual técnico. Para cualquier duda o sugerencia, se recomienda abrir un \textit{issue} en el repositorio o contactar directamente con el autor.
+A continuación se proporciona el enlace al repositorio: \url{https://github.com/rubennmg/TFM_app}.
