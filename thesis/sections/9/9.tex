@@ -31,7 +31,7 @@ independientes y las siguientes definiciones de \textit{pipelines} de procesado:
 
 \begin{itemize}[noitemsep]
 	\item \texttt{standard\_run}: \textit{pipeline} simple de complejidad reducida. De ahora en adelante, se referirá 
-	a este como ``\textit{Pipeline} estándar'' o, simplemente,``\texttt{standard}''. Consta de las siguientes operaciones:
+	a este como ``\textit{Pipeline} estándar'' o, simplemente, ``\texttt{standard}''. Consta de las siguientes operaciones:
 	      \begin{enumerate}[noitemsep]
 		      \item \textit{Debayer5x5()}
 		      \item \textit{SigmoidContrast(gain=2.25, cutoff=0.25)}
@@ -240,7 +240,7 @@ Representa la mejora relativa en rendimiento al ejecutar en GPU.}
 
 Complementando lo anterior, la \autoref{fig:cpu_gpu_equipo1_latency_float32} muestra la evolución de la latencia 
 mediana en ambos dispositivos a medida que aumenta la resolución de la imagen de entrada. Dicha evolución se 
-representa en escala logarítmica para facilitar la comparación de ambas tendencias. La diferencia es tanta que, de representarse 
+representa en escala logarítmica para facilitar la comparación de ambas tendencias. La diferencia es tan acusada que, de representarse 
 en escala lineal, la curva de la GPU quedaría aplanada cerca del eje horizontal, dificultando la apreciación de su crecimiento.
 
 \begin{figure}[h!]
@@ -318,10 +318,10 @@ en GPU del Equipo 1 con \texttt{float32} como dato numérico para \texttt{standa
 \texttt{complex\_run}.
 
 La resolución es una variable muy importante en el procesamiento digital de imágenes, ya que 
-determina el número de píxeles sobre los que debe operar las distintas etapas 
+determina el número de píxeles sobre los que deben operar las distintas etapas 
 del \textit{pipeline}. En una ejecución acelerada por GPU, el impacto temporal 
 de aumentar la resolución no tiene por qué ser estrictamente proporcional al número de píxeles.
-Esto es porque, además del coste computacional asociado a cada uno de ellos, existen costes fijos relacionados con el lanzamiento
+Esto se debe a que, además del coste computacional asociado a cada uno de ellos, existen costes fijos relacionados con el lanzamiento
 de operaciones, gestión de memoria y sincronización. Por este motivo, en este análisis se cuantifica tanto el coste 
 absoluto como el coste relativo de aumentar la resolución, con el fin de caracterizar su impacto sobre el rendimiento en GPU.
 
@@ -365,7 +365,7 @@ sendos comportamientos.
     \label{fig:resolution_mpix_efficiency_equipo1_float32}
 \end{figure}
 
-La conclusión es por tanto que, aunque la latencia total aumenta, cada píxel adicional penaliza cada vez menos el rendimiento.
+La conclusión es, por tanto, que aunque la latencia total aumenta, cada píxel adicional penaliza cada vez menos el rendimiento.
 Este comportamiento puede interpretarse mediante un modelo simplificado de latencia compuesto por un término fijo y un 
 término dependiente del número de píxeles \eqref{eq:resolution_latency_model}:
 \begin{equation}
@@ -412,7 +412,7 @@ El tipo numérico determina el número de bytes utilizados para representar cada
 del tensor y, por tanto, influye directamente en el volumen de memoria necesario para almacenar 
 y transferir los datos. En imágenes representadas como tensores, esta diferencia se multiplica 
 por el número de píxeles y canales, por lo que puede tener un impacto relevante en operaciones 
-intensivas sobre memoria. La Tabla \autoref{tab:dtype_memory} resume el tamaño de cada tipo numérico 
+intensivas sobre memoria. La \autoref{tab:dtype_memory} resume el tamaño de cada tipo numérico 
 y su relación respecto a \textit{float32}, que se toma como referencia.
 
 \begin{table}[h]
@@ -607,7 +607,7 @@ procesado, sino también como una cuestión de composición del \textit{pipeline
 Un resultado especialmente destacable es que el impacto relativo de la complejidad se
 reduce a medida que aumenta la resolución de entrada. Aunque el \textit{pipeline} complejo
 siempre introduce una penalización medible, esta representa una fracción menor de la
-latencia total en las resoluciones más altas. Esto es porque, bajo ejecución en GPU, el
+latencia total en las resoluciones más altas. Esto se debe a que, bajo ejecución en GPU, el
 mayor volumen de datos permite amortizar mejor determinadas etapas adicionales y aprovechar
 con mayor eficacia el paralelismo disponible. En consecuencia, añadir operaciones al flujo
 de procesado no afecta de forma uniforme a todas las configuraciones. El impacto es más
@@ -847,8 +847,8 @@ tomando el Equipo 1 como referencia.
 
 Se observa cómo el rendimiento relativo respecto al Equipo 1 no sigue una tendencia constante. En ambos equipos y en ambos perfiles, la mayor distancia relativa 
 se produce en la resolución intermedia (\texttt{512x512}). Desde este punto, el rendimiento relativo mejora progresivamente 
-a medida que aumenta la resolución, siendo esta mejora más notable en el Equipo 2. Aun así, en la resolución máxima, el Equipo 2 se sitúa en torno a 
-un \(10\times\) de latencia respecto al Equipo 1, lo cual sigue siendo una diferencia muy importante. Resulta interesante destacar, de nuevo, que la mayor pérdida
+a medida que aumenta la resolución, siendo esta mejora más notable en el Equipo 2. Aun así, en la resolución máxima, el Equipo 2 se sitúa en una latencia en torno a 10 veces superior a la del Equipo 1, 
+lo cual sigue siendo una diferencia muy importante. Resulta interesante destacar, de nuevo, que la mayor pérdida
 de rendimiento se produce en resoluciones intermedias (\texttt{512x512} y \texttt{1024x1024}), lo que sugiere que el escalado de la latencia no es lineal con el 
 número de píxeles y que existen factores adicionales que influyen en el rendimiento relativo, como pueden ser la eficiencia del paralelismo o la gestión de memoria en cada plataforma.
 

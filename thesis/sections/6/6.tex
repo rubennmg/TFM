@@ -1,5 +1,5 @@
 \section{Análisis} \label{sec:6_analisis}
-Se detallan en esta sección los requisitos de usuario que influencian el diseño y desarrollo del sistema. A partir de los mismos, se 
+Se detallan en esta sección los requisitos de usuario que condicionan el diseño y desarrollo del sistema. A partir de ellos, se 
 construye un mapa de historias de usuario, propio de la metodología Scrum, utilizado para organizar el trabajo en sprints.
 Finalmente, se presentan los prototipos de interfaz de usuario y el mapa de navegación.
 
@@ -7,7 +7,7 @@ Finalmente, se presentan los prototipos de interfaz de usuario y el mapa de nave
 \subsection{Requisitos de usuario} \label{subsec:6_1_requisitos_usuario}
 A continuación, se enumeran los requisitos de usuario, organizados en requisitos funcionales y no funcionales. Los requisitos funcionales describen las capacidades 
 y comportamientos específicos que el sistema debe cumplir para satisfacer las necesidades del usuario, mientras que los requisitos no funcionales 
-definen características de calidad, tales como el rendimiento, usabilidad, fiabilidad y mantenibilidad.
+definen características de calidad, tales como el rendimiento, la usabilidad, la fiabilidad y la mantenibilidad.
 
 \subsubsection{Requisitos funcionales} \label{subsubsec:6_1_1_requisitos_funcionales}
 Se presentan los requisitos funcionales del sistema, organizados en áreas temáticas que reflejan sus principales funcionalidades.
@@ -62,7 +62,7 @@ Se presentan los requisitos funcionales del sistema, organizados en áreas temá
 		\item[5.2.] El sistema debe ofrecer conversiones de color entre los espacios soportados, incluyendo RGB, HSV y escala de grises.\label{req:rf-5-2}
 		\item[5.3.] El sistema debe ofrecer transformaciones geométricas, incluyendo volteo, rotación y redimensionado.\label{req:rf-5-3}
 		\item[5.4.] El sistema debe ofrecer normalizaciones de intensidad, incluyendo normalización mín.-máx. estándar, con parámetros explícitos y por percentiles.\label{req:rf-5-4}
-		\item[5.5.] El sistema debe ofrecer operación de \textit{demosaicing} para imágenes Bayer con selección de algoritmo, incluyendo al menos variantes \texttt{2x2}, \texttt{3x3}, \texttt{5x5} y \texttt{Split}.\label{req:rf-5-5}
+		\item[5.5.] El sistema debe ofrecer operaciones de \textit{demosaicing} para imágenes Bayer con selección de algoritmo, incluyendo al menos variantes \texttt{2x2}, \texttt{3x3}, \texttt{5x5} y \texttt{Split}.\label{req:rf-5-5}
 		\item[5.6.] El sistema debe ofrecer conversiones de formato numérico entre representación en coma flotante y representación RGB de 8 bits.\label{req:rf-5-6}
 	\end{enumerate}
 
@@ -315,7 +315,7 @@ permitir un procesamiento eficiente y flexible de las imágenes.
 \begin{itemize}[noitemsep]
 	\item Se debe implementar la funcionalidad de carga de imágenes desde disco, soportando diferentes
 	formatos de imagen cruda.
-	\item Se debe de analizar la estructura de los tensores resultantes de la carga de imágenes para 
+	\item Se debe analizar la estructura de los tensores resultantes de la carga de imágenes para 
 	optimizar su uso en el procesamiento posterior.
 \end{itemize}
 
@@ -334,7 +334,7 @@ conversión de imágenes Bayer a formatos de color estándar, facilitando su vis
 
 \paragraph{Ajuste de contraste mediante función sigmoide} \label{hist:ajuste_contraste_funcion_sigmoide}
 Como desarrollador, quiero implementar la funcionalidad de ajuste de contraste mediante función sigmoide para
-permitir una mejora no lineal del contraste en las imágenes y analizar su efecto sobre la calidad visual de las mismas.
+permitir una mejora no lineal del contraste en las imágenes y analizar su efecto sobre su calidad visual.
 
 \noindent{Criterios de aceptación:}
 \begin{itemize}[noitemsep]
@@ -352,7 +352,7 @@ los resultados de las implementaciones de Debayering y ajuste de contraste.
 
 \noindent{Criterios de aceptación:}
 \begin{itemize}[noitemsep]
-	\item Se debe de mostrar la imagen resultante de las operaciones de Debayering y ajuste de contraste de forma sencilla utilizando,
+	\item Se debe mostrar la imagen resultante de las operaciones de Debayering y ajuste de contraste de forma sencilla utilizando,
 	por ejemplo, Matplotlib.
 	\item Se debe permitir la visualización de la imagen original junto con la imagen procesada para facilitar la comparación.
 	\item Se debe garantizar que la visualización represente correctamente los valores de intensidad y color de la imagen.
@@ -382,7 +382,7 @@ a los usuarios cargar imágenes de forma sencilla y directa a través de la apli
 	\item El diálogo de selección debe filtrar los archivos para mostrar únicamente aquellos con formatos de imagen soportados.
 	\item Al seleccionarse una imagen válida, esta debe cargarse y mostrarse en el visor central de la interfaz.
 	\item Si el usuario intenta cargar un archivo con formato no soportado o un archivo inválido, el sistema debe mostrar un mensaje de error claro y no bloquear la aplicación.
-	\item La funcionalidad de carga debe de permitir la adición de otros formatos de imagen en el futuro con un impacto mínimo sobre el resto del sistema.
+	\item La funcionalidad de carga debe permitir la adición de otros formatos de imagen en el futuro con un impacto mínimo sobre el resto del sistema.
 \end{itemize}
 
 \newpage
@@ -394,7 +394,7 @@ permitir a los usuarios ver las imágenes cargadas y los resultados de las opera
 \noindent{Criterios de aceptación:}
 \begin{itemize}[noitemsep]
 	\item La interfaz debe incluir un visor central que muestre la imagen cargada y se actualice dinámicamente tras cada operación aplicada o ajuste de parámetros.
-	\item La interfaz debe mostrar iformación relevante sobre la imagen cargada, como sus especificaciones técnicas (resolución, formato, etc.).
+	\item La interfaz debe mostrar información relevante sobre la imagen cargada, como sus especificaciones técnicas (resolución, formato, etc.).
 \end{itemize}
 
 \paragraph{Diseño de Arquitectura} \label{hist:diseno_arquitectura}
@@ -485,7 +485,7 @@ la interfaz.
 	\item El sistema debe garantizar que la exportación se realice de forma eficiente y sin errores, proporcionando retroalimentación al usuario sobre el éxito o cualquier problema ocurrido durante el proceso.
 \end{itemize}
 
-\paragraph{Implementación de operaciones de propcesado II} \label{hist:implementacion_operaciones_procesado_ii}
+\paragraph{Implementación de operaciones de procesado II} \label{hist:implementacion_operaciones_procesado_ii}
 Como desarrollador, quiero implementar un conjunto adicional de operaciones de procesado de imágenes para ampliar 
 las funcionalidades disponibles en el sistema.
 
@@ -512,7 +512,7 @@ una ejecución eficiente de las operaciones aplicadas.
 \begin{itemize}[noitemsep]
 	\item Se deben implementar snapshots intermedios que permitan recalcular solo las operaciones necesarias al modificar parámetros o agregar nuevas transformaciones.
 	\item Se deben identificar y aplicar técnicas de optimización para la ejecución secuencial de operaciones de procesamiento, reduciendo la redundancia de cálculos.
-	\item Se debe garantizar que la recuperación de snapshots no afecte la consistencia de los resultados finales.
+	\item Se debe garantizar que la recuperación de snapshots no afecte a la consistencia de los resultados finales.
 	\item Se debe evaluar el rendimiento del sistema antes y después de aplicar optimizaciones para validar mejoras significativas.
 	\item El sistema debe mantener un uso eficiente de la memoria, evitando cargas innecesarias de imágenes o resultados intermedios.
 \end{itemize}
@@ -552,7 +552,7 @@ facilitando el análisis comparativo entre distintas configuraciones de manera r
 	\item El módulo debe ser capaz de interpretar los archivos de \textit{pipeline} exportados desde la interfaz gráfica, reproduciendo fielmente las secuencias de operaciones y parámetros definidos por el usuario.
 	\item El módulo debe generar informes detallados que incluyan métricas de tiempo de ejecución y cualquier otra métrica relevante para cada \textit{pipeline}.
 	\item El módulo debe ser configurable, permitiendo la evaluación de distintos \textit{pipelines} bajo diferentes escenarios y contextos de ejecución.
-	\item La implementación debe garantizar que las operaciones de \textit{benchmarking} no modifiquen los datos originales ni afecten el estado de la sesión de la interfaz gráfica.
+	\item La implementación debe garantizar que las operaciones de \textit{benchmarking} no modifiquen los datos originales ni afecten al estado de la sesión de la interfaz gráfica.
 \end{itemize}
 
 \paragraph{Implementación de operaciones de procesado III} \label{hist:implementacion_operaciones_procesado_iii}
@@ -615,7 +615,7 @@ operaciones de procesamiento.
     \item El guardado debe integrarse con el flujo de procesamiento, permitiendo guardar imágenes intermedias o finales según sea necesario.
 \end{itemize}
 
-\paragraph{Selección de dispositvo de ejecución} \label{hist:seleccion_dispositivo_ejecucion}
+\paragraph{Selección de dispositivo de ejecución} \label{hist:seleccion_dispositivo_ejecucion}
 Como desarrollador, quiero implementar la funcionalidad de selección de dispositivo de ejecución (CPU o GPU)
 desde la interfaz gráfica para permitir a los usuarios elegir el entorno de procesamiento.
 
@@ -624,7 +624,7 @@ desde la interfaz gráfica para permitir a los usuarios elegir el entorno de pro
 	\item La interfaz debe incluir una opción claramente identificada para seleccionar el dispositivo de ejecución.
 	\item Al seleccionar la opción de dispositivo, el sistema debe verificar la disponibilidad de GPU CUDA y ajustar el entorno de ejecución en consecuencia.
 	\item El sistema debe proporcionar retroalimentación al usuario sobre el dispositivo seleccionado y su disponibilidad.
-	\item Se debe garantizar que la selección de dispositivo se aplique de forma eficiente, sin afectar la estabilidad o el rendimiento del sistema.
+	\item Se debe garantizar que la selección de dispositivo se aplique de forma eficiente, sin afectar a la estabilidad ni al rendimiento del sistema.
 \end{itemize}
 
 \newpage
@@ -639,7 +639,7 @@ las acciones realizadas por el usuario durante la interacción con el sistema.
     \item Cada evento registrado debe incluir información de tiempo precisa, indicando el momento exacto en que se ejecutó la acción.
     \item La interfaz gráfica debe incluir un panel o visor de log donde se muestren en tiempo real los eventos registrados.
     \item Si el evento es la ejecución de una operación de procesamiento, el log debe incluir el tiempo de ejecución de la operación en milisegundos.
-    \item El sistema debe garantizar que el registro de eventos sea persistente durante la sesión y que no afecte el rendimiento general del sistema.
+    \item El sistema debe garantizar que el registro de eventos sea persistente durante la sesión y que no afecte al rendimiento global.
 \end{itemize}
 
 \paragraph{Revisión UX/UI} \label{hist:revision_ux_ui}

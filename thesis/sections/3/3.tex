@@ -36,7 +36,7 @@ impacto en la era digital actual \cite{pdi}.
 
 Para que una imagen pueda ser procesada y tratada por un sistema informático, debe
 abandonar su naturaleza continua y transformarse en el único lenguaje que la 
-máquina es capaz de intepretar: el dato discreto.
+máquina es capaz de interpretar: el dato discreto.
 
 \newpage
 
@@ -99,7 +99,7 @@ con un valor cuantificado que refleja la intensidad luminosa o color en esa posi
     \label{eq:4_imagen_matriz}
 \end{equation}
 No obstante, la forma concreta que adopta esta representación matricial depende de la naturaleza 
-cromática de la imagen. En el caso de imágenes en escala de grises, tal y como mostró en la 
+cromática de la imagen. En el caso de imágenes en escala de grises, tal y como se mostró en la 
 \autoref{fig:1_muestreo_cuantificacion}, cada píxel queda descrito por un único valor 
 de intensidad $i \in [0, I]$, donde $I$ es el valor máximo determinado por la profundidad de bits \eqref{eq:5_imagen_gris}.  
 \begin{equation}
@@ -129,7 +129,7 @@ de uno a otro sin que se pierda información cromática. En el contexto de este 
 existen varios espacios de color que resultan relevantes.
 
 \subsubsection{RGB} \label{subsubsubsec:3_3_1_rgb}
-El espacio de color RGB es el modelo aditivo más comúnmente utilizado en los sitemas de captura,
+El espacio de color RGB es el modelo aditivo más comúnmente utilizado en los sistemas de captura,
 representación y visualización de imágenes digitales. En este modelo, los colores se generan 
 mediante la combinación de tres componentes primarias: Rojo (\textit{Red}), Verde (\textit{Green}) y Azul (\textit{Blue}),
 cuyas intensidades determinan el color final percibido.
@@ -222,7 +222,7 @@ información visual en tres componentes independientes:
 
 Este espacio de color facilita la aplicación de técnicas de procesamiento que actúan selectivamente
 sobre el brillo o el color, permitiendo, por ejemplo, realizar ajustes de iluminación sin alterar 
-la esencia cromática de la imagen. Esta es la principal diferencia respecto a lo que ocure en el 
+la esencia cromática de la imagen. Esta es la principal diferencia respecto a lo que ocurre en el 
 espacio RGB, donde la información de color y brillo se encuentra intrínsecamente entrelazada en 
 sus tres canales.
 
@@ -261,7 +261,7 @@ una imagen a color en sus tres componentes constituyentes.
 \subsubsection{Otros} \label{subsubsubsec:3_3_3_otros}
 Además de los ya mencionados, existen otros espacios de color ampliamente utilizados en el contexto del procesamiento
 digital de imágenes y la codificación visual que, aunque no se emplean en este TFM, resultan relevantes
-por sus propiedades particulares y su impacto em técnicas de análisis y compresión de imágenes
+por sus propiedades particulares y su impacto en técnicas de análisis y compresión de imágenes.
 
 \begin{itemize}
     \item \textbf{L*a*b*.} Este espacio de color fue diseñado para aproximar la percepción
@@ -304,7 +304,7 @@ constituye la base sobre la que se desarrollan los métodos de procesamiento pro
 permitiendo un mayor control sobre la información radiométrica y cromática de la imagen.
 
 \subsubsection{Imágenes en formato crudo} \label{subsec:3_4_1_formato_crudo}
-Las imágenes en formato crudo (RAW), representan la forma más directa y fiel de los datos capturados
+Las imágenes en formato crudo (RAW) representan la forma más directa y fiel de los datos capturados
 por un sensor de imagen digital \cite{raw_image_formats}. A diferencia de los formatos convencionales procesados
 y comprimidos, los formatos crudos almacenan los valores de intensidad registrados por el sensor con un procesamiento 
 mínimo o nulo, preservando la información original de la escena capturada.
@@ -341,9 +341,9 @@ vecinos y del patrón de filtros utilizado. Como resultado, se obtiene una image
 en la que cada píxel dispone de información en los tres canales de color.
 
 Existen múltiples algoritmos de \textit{demosaicing}, que difieren en complejidad, coste computacional y
-calidad visual del resultado. Métodos sencillos basados en interpolación bilineal o
-enfoques más complejos que tienen en cuenta gradientes, bordes y características locales de la
-imagen. No obstante, todos ellos comparten el mismo objetivo: reconstruir
+calidad visual del resultado. Estos métodos pueden ser sencillos, basados en interpolación bilineal, 
+o más complejos, teniendo en cuenta gradientes, bordes y características locales de la imagen. 
+No obstante, todos ellos comparten el mismo objetivo: reconstruir
 una representación cromática coherente a partir de datos incompletos.
 
 El \textit{demosaicing} constituye el primer paso de cualquier \textit{pipeline de procesado de
@@ -362,8 +362,8 @@ destinados a la manipulación y el análisis de imágenes digitales mediante sis
 Su objetivo principal es la transformación de una imagen de entrada en otra que resulte más adecuada 
 para una determinada tarea, como la mejora visual, la extracción de información relevante o 
 la preparación para etapas posteriores de procesado \cite{fundamentals_digital_image_processing}.
-En el contexto de este TFM, el procesamiento digital de imágenes constituye la base sobre la que se 
-aplican los distintos algoritmos aplicados a los datos crudos capturados por el sensor.
+En el contexto de este TFM, esta disciplina constituye la base sobre la que se implementan los distintos 
+algoritmos destinados a tratar los datos crudos capturados por el sensor.
 
 \subsubsection{Operaciones puntuales y operaciones espaciales} \label{subsubsec:3_5_1_operaciones_puntuales_espaciales}
 Los métodos matemáticos y algoritmos aplicables sobre imágenes digitales pueden clasificarse como 
@@ -400,7 +400,7 @@ por lo que son muy adecuadas para su implementación eficiente en arquitecturas 
 
 \paragraph{Operaciones espaciales} \label{subsubsubsec:3_5_1_2_operaciones_espaciales}
 Las operaciones espaciales, en contraposición, son aquellas en las que el valor de cada píxel de 
-salida depende no sólo del píxel de entrada correspondiente, sino de un conjunto de píxeles vecnios. 
+salida depende no sólo del píxel de entrada correspondiente, sino de un conjunto de píxeles vecinos. 
 De forma general, pueden expresarse como \eqref{eq:8_operacion_espacial}
 \begin{equation}
     I_{salida}(x,y) = T(I_{entrada}(S_{x,y}))
@@ -410,7 +410,7 @@ donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \
 y \(T\) es una función que combina estos valores.
 
 Este tipo de operaciones permite explotar la correlación espacial existente entre píxeles adyacentes. 
-Son las empleadas en tareas de reducción de ruido, el realce de bordes y la detección de características.
+Se emplean en tareas de reducción de ruido, realce de bordes y detección de características.
 En el contexto de este TFM, se consideran principalmente:
 
 \begin{itemize}[noitemsep]
@@ -434,12 +434,12 @@ que permitan evaluar la distribución de intensidades y la calidad visual de la 
 Para evaluar la calidad visual de una imagen digital y guiar el ajuste de los parámetros de las 
 operaciones de procesado, es necesario emplear herramientas de diagnóstico que analicen la distribución 
 de intensidades y la información visual presente en la imagen. Dichas herramientas permiten identificar posibles 
-problemas relacionados con la exposición, el contraste o la pérdida de detalle, influenciando en la toma de 
+problemas relacionados con la exposición, el contraste o la pérdida de detalle, lo que influye en la toma de 
 decisiones de procesado.
 
 \paragraph{El histograma} \label{subsubsubsec:3_5_2_1_histograma}
 La representación gráfica del histograma de una imagen digital es la principal herramienta para 
-analizar la distribución de intensidades y evaluar la calidad visual de la misma. Desde el punto 
+analizar la distribución de intensidades y evaluar su calidad visual. Desde el punto 
 de vista matemático, el histograma describe la distribución de frecuencias de los 
 valores de intensidad presentes en la imagen, proporcionando una representación global de cómo 
 se reparte la información luminosa a lo largo de su rango dinámico.
@@ -465,7 +465,7 @@ correspondiente.
     \label{fig:7_image_and_histogram}
 \end{figure}
 
-Intepretar correctamente el histograma permite identificar el correcto revelado de la imagen, 
+Interpretar correctamente el histograma permite identificar si el revelado de la imagen es correcto, 
 así como los ajustes que pueden llegar a ser necesarios para mejorar su apariencia visual \cite{camera_histogram}.
 Por ejemplo, un histograma concentrado en la zona izquierda indica una imagen subexpuesta, mientras
 que una acumulación de valores en la zona derecha sugiere sobreexposición. Asimismo, la presencia de
@@ -533,7 +533,7 @@ con sus correspondientes gráficos de perfiles de intensidad.
 En el primero de los ejemplos (\autoref{fig:8_a_dog_center_overlay} y \autoref{fig:8_b_dog_center_profile_plot}), se pueden observar las numerosas
 variaciones de intensidad presentes a lo largo de ambos perfiles, distinguiendo transiciones asociadas a bordes, regiones de iluminación más uniforme
 y oscilaciones vinculadas a la variedad de texturas. En el segundo ejemplo (\autoref{fig:8_c_raw_intensity_overlay} y \autoref{fig:8_d_raw_intensity_profile_plot}),
-un ejemplo mucho más sencillo, se aprecia una clara evolución y distribución de las intensidades a lo largo de ambos perfiles, dsitinguiendo claramente las zonas de 
+un ejemplo mucho más sencillo, se aprecia una clara evolución y distribución de las intensidades a lo largo de ambos perfiles, distinguiendo claramente las zonas de 
 sombra presentes en los laterales y la zona inferior de la imagen.
 
 Esta herramienta de diagnóstico cuenta con una gran ventaja, y es que conserva el orden espacial de las intensidades a lo largo de cada recorrido.
@@ -554,7 +554,7 @@ La mejora del contraste es una de las técnicas más comunes en el procesamiento
 Influye directamente en la percepción visual de los detalles y en la calidad global de la imagen.
 Muchas imágenes, especialmente aquellas capturadas en condiciones de iluminación no controladas
 o a partir de datos crudos, presentan una distribución de intensidades limitada que no aprovecha 
-el completamnete el rango dinámico disponible. En estos casos, la mejora del contraste permite 
+completamente el rango dinámico disponible. En estos casos, la mejora del contraste permite 
 redistribuir los niveles de intensidad para resaltar detalles relevantes sin introducir 
 artefactos visuales \cite{visual_artifacts}.
 
@@ -600,13 +600,13 @@ con diferentes niveles de contraste, tanto en escala de grises como en color.
     \label{fig:9_contrast_examples}
 \end{figure}
 
-A continuación, se describen una serie de técnicas comúnmente empleadas en el procesamiento digital
+A continuación, se describe una serie de técnicas comúnmente empleadas en el procesamiento digital
 de imágenes y que son relevantes para el desarrollo del presente TFM.
 
 \newpage
 
 \paragraph{Ecualización global del histograma} \label{subsubsubsec:3_5_3_2_ecualizacion_global_histograma}
-La ecualización global del histograma \cite{histogram_equalization} es una ténica clásica de mejora del contraste que actúa sobre 
+La ecualización global del histograma \cite{histogram_equalization} es una técnica clásica de mejora del contraste que actúa sobre 
 la imagen completa. Su objetivo es redistribuir los valores de intensidad de forma que el histograma 
 resultante sea aproximadamente uniforme a lo largo del rango dinámico disponible.
 
@@ -677,7 +677,7 @@ crecimiento de los picos del histograma local.
 
 En la \autoref{fig:11_clahe_example} se muestra un ejemplo de aplicación de CLAHE sobre una imagen.
 De nuevo, la imagen original (\autoref{fig:11_a_original_image}) es una imagen en formato crudo en etapas
-tempranas de revelado. El resultado en este caso, muestra una mejora del contraste más sutil pero efectiva
+tempranas de revelado. El resultado, en este caso, muestra una mejora del contraste más sutil pero efectiva
 (\autoref{fig:11_c_clahed_image}), con un histograma resultante (\autoref{fig:11_d_clahed_histogram})
 que refleja una distribución de intensidades mejorada sin los picos tan pronunciados de la ecualización 
 global (\autoref{fig:10_d_equalized_histogram}).
@@ -1030,14 +1030,14 @@ la función sigmoide sobre una imagen a color.
 \subparagraph{Compensación de luz} \label{subsubsubsec:3_5_3_5_3_compensacion_luz}
 La compensación de luz es una operación puntual orientada a corregir variaciones espaciales de
 iluminación. Se trata de una operación distinta a las mencionadas anteriormente, ya que utiliza 
-direcramente una máscara de ganancia espacial que se aplica de forma multiplicativa a la imagen de entrada.
+directamente una máscara de ganancia espacial que se aplica de forma multiplicativa a la imagen de entrada.
 Esta máscara se representa como una matriz bidimensional de igual tamaño a dicha imagen.
 Matemáticamente puede describirse como \eqref{eq:17_compensacion_luz_mascara}:
 \begin{equation}
     I_{salida}(x,y) = I_{entrada}(x,y) \cdot G(x,y)
     \label{eq:17_compensacion_luz_mascara}
 \end{equation}
-Donde \(G(x,y)\) representa la máscara de ganancia espacial que define el factor de corrección en cada punto de la imagen.
+donde \(G(x,y)\) representa la máscara de ganancia espacial que define el factor de corrección en cada punto de la imagen.
 En la implementación utilizada en este TFM, se incorpora además un parámetro de
 intensidad de aplicación, denominado \textit{strength} ($s \in [0,1]$), que permite controlar de forma
 continua la transición entre no corregir y aplicar la corrección completa. Para ello se define
@@ -1090,7 +1090,7 @@ la corrección.
 \newpage
 
 \subsubsection{Filtrado espacial y reducción de ruido} \label{subsec:3_5_4_filtrado_espacial_reduccion_ruido}
-Las operaciones de mejora del contrastre suelen ir acompañadas de técnicas de filtrado espacial. Esto
+Las operaciones de mejora del contraste suelen ir acompañadas de técnicas de filtrado espacial. Esto
 suele ser muy común cuando la imagen presenta ruido o irregularidades introducidas durante la captura 
 o el proceso de digitalización. El ruido se manifiesta habitualmente como variaciones aleatorias de 
 intensidad que pueden degradar la calidad visual y dificultar la interpretación de los detalles presentes
@@ -1167,7 +1167,7 @@ progresivo.
 \paragraph{Filtrado no lineal: filtro de mediana} \label{subsubsec:3_5_4_2_filtrado_no_lineal_filtro_mediana}
 El filtro de mediana \cite{median_filter} es un método de filtrado no lineal diseñado específicamente para 
 la eliminación del ruido impulsivo, como el conocido ruido de tipo \textit{sal y pimienta} \cite{salt_pepper_noise}.
-A diferencia de los filtros lineales, este filtro sustitye directamente el valor de cada píxel 
+A diferencia de los filtros lineales, este filtro sustituye directamente el valor de cada píxel 
 por la mediana de los valores de intensidad presentes en su vecindad definida por una ventana
 de tamaño \(k \times k\).
 Matemáticamente, el proceso se describe como \eqref{eq:21_filtro_mediana}
@@ -1178,7 +1178,7 @@ Matemáticamente, el proceso se describe como \eqref{eq:21_filtro_mediana}
 donde \(S_{x,y}\) es el conjunto de píxeles vecinos alrededor de la posición \((x,y)\).
 
 El filtro de mediana es especialmente eficaz para eliminar píxeles atípicos sin afectar
-significativamente los bordes y detalles de la imagen. Esto se debe a que la mediana es menos sensible
+significativamente a los bordes y detalles de la imagen. Esto se debe a que la mediana es menos sensible
 a valores extremos. Otros filtros, como el filtro de media \cite{mean_filter} o el mismo filtro gaussiano, 
 suelen difuminar los bordes y detalles al promediar los valores de intensidad. En contrapartida, el filtro 
 de mediana es más costoso computacionalmente.
@@ -1240,7 +1240,7 @@ y \(\sigma\) es un factor de escala que controla la intensidad del realce.
 El realce se aplica sobre una ventana de tamaño \(k \times k\) alrededor de cada píxel.
 En la \autoref{fig:22_unsharp_masking_example} se muestra un ejemplo de aplicación de
 \textit{Unsharp Masking} sobre una imagen a color, utilizando diferentes valores de \(k\) y \(\sigma\),
-que ilustran el efecto de realce progresivo de los bordes y detalles y nitidez de la imagen.
+que ilustran el efecto de realce progresivo de los bordes y detalles de la imagen.
 
 \begin{figure}[h!]
     \centering
@@ -1328,7 +1328,7 @@ imagen.
 
 En la \autoref{fig:24_rotation_example} se muestra un ejemplo de aplicación de rotación sobre
 una imagen a color, ilustrando los resultados obtenidos al rotar la imagen 45°
-y 135° respectivamente.
+y 135°, respectivamente.
 
 \begin{figure}[h!]
     \centering
@@ -1369,7 +1369,7 @@ efectos sobre la calidad de la imagen resultante. El método de interpolación u
 bilineal \cite{bilineal_interpolation}, que ofrece un buen equilibrio entre calidad y eficiencia computacional.
 
 En la \autoref{fig:24_resizing_example} se muestra un ejemplo de aplicación de redimensionamiento sobre una imagen a color, 
-ilustrando los resultados obtenidos al redimensionar la imagen original de 1024x768 a 1000x600 píxeles y a 800x1400 píxeles respectivamente.
+ilustrando los resultados obtenidos al redimensionar la imagen original de 1024x768 a 1000x600 píxeles y a 800x1400 píxeles, respectivamente.
 
 \begin{figure}[h!]
     \centering
@@ -1463,9 +1463,9 @@ Ambos métodos presentan ventajas y limitaciones complementarias. \textit{Gray W
 más estable cuando la escena contiene variedad cromática suficiente, mientras que \textit{Max RGB}
 puede resultar más efectivo en situaciones donde existen referencias brillantes bien definidas.
 No obstante, ambos pueden verse afectados por escenas con distribución de color muy sesgada o por
-saturaciones locales. En las \autoref{fig:25_white_balance_example} y \autoref{fig:26_white_balance_example} se muestran 
+saturaciones locales. En la \autoref{fig:25_white_balance_example} y la \autoref{fig:26_white_balance_example} se muestran 
 ejemplos de aplicación de ambos métodos sobre la misma imagen a color, ilustrando las diferencias en el resultado final.
-Debe hacerse notar que, la imagen utilizada para este ejemplo es una imagen directamente \textit{debayerizada}, sin ningún tipo de 
+Cabe señalar que la imagen utilizada para este ejemplo es una imagen directamente \textit{debayerizada}, sin ningún tipo de 
 corrección previa.
 
 \begin{figure}[h!]

@@ -9,7 +9,7 @@ El sistema desarrollado tiene dos objetivos. Por un lado, proporcionar una inter
 gráfica sencilla, que permita la carga de imágenes en formato crudo y la aplicación de
 filtros y operaciones de procesamiento. Este proceso tiene como propósito la definición 
 interactiva de \textit{pipelines} de procesado de imágenes. Estos \textit{pipelines} 
-deben de poder ser exportados a un formato estándar. 
+deben poder ser exportados a un formato estándar. 
 
 Por otra parte, el sistema debe incorporar un módulo de \textit{benchmarking}
 que permita analizar el rendimiento computacional de los \textit{pipelines} definidos. 
@@ -140,7 +140,7 @@ Sus atributos principales son:
 \begin{itemize}[noitemsep]
     \item \texttt{\textbf{tensor}} $\rightarrow$ Tensor con el estado actual de la imagen.
     \item \texttt{\textbf{original\_tensor}} $\rightarrow$ Tensor inmutable que preserva la imagen original 
-    cargada, permitiendo operaciones de reseteo.
+    cargada, permitiendo operaciones de restablecimiento.
     \item \texttt{\textbf{operation\_result\_tensor}} $\rightarrow$ Tensor temporal que almacena el resultado 
     de la última operación aplicada, facilitando la previsualización antes de confirmar cambios.
     \item \texttt{\textbf{path}} y \texttt{\textbf{name}} $\rightarrow$ Información de ubicación e identificación del archivo.
@@ -257,7 +257,7 @@ dinámico de todas las operaciones disponibles.
         \item Valida que la entrada sea un tensor 3D (C,H,W).
         \item Invoca el método abstracto \texttt{apply()}.
         \item Valida que la salida sea un tensor 3D.
-        \item Garantiza que el tensor de salida sea contíguo en memoria.
+        \item Garantiza que el tensor de salida sea contiguo en memoria.
         \item Proporciona validación de tipos de entrada y salida.
     \end{enumerate}
     \item \texttt{\textbf{apply(x)}} $\rightarrow$ Método abstracto que implementa la lógica específica 
@@ -345,7 +345,7 @@ categorías:
 
 \subsubsection{Controller} \label{subsubsec:7_3_4_controller}
 El \textit{Controller} actúa como el coordinador central del sistema. Su responsabilidad principal es la 
-orquesatación de la interacción de entra la interfaz gráfica, los \textit{loaders} y el motor de 
+orquestación de la interacción entre la interfaz gráfica, los \textit{loaders} y el motor de 
 procesamiento (\textit{Core}). Mantiene el estado de la imagen cargada, gestiona el \textit{pipeline} de operaciones 
 y mantiene un registro de eventos. A continuación, se describen en detalle sus principales cometidos.
 
@@ -355,7 +355,7 @@ y mantiene un registro de eventos. A continuación, se describen en detalle sus 
 \begin{enumerate}[noitemsep]
     \item La guarda como imagen actual.
     \item Controla su estado tras la aplicación de operaciones.
-    \item Mantiene una copia de referencia de la imagen original para permitir reseteos.
+    \item Mantiene una copia de referencia de la imagen original para permitir restablecimientos.
 \end{enumerate}
 
 Este flujo garantiza que el usuario pueda experimentar con diferentes operaciones sin perder 
@@ -379,7 +379,7 @@ o imágenes de gran tamaño, ya que cada modificación requiere recalcular desde
 
 \newpage
 
-\paragraph{Sistema de \textit{snaphots}} \label{par:7_3_4_3_sistema_snapshots}
+\paragraph{Sistema de \textit{snapshots}} \label{par:7_3_4_3_sistema_snapshots}
 Para optimizar el rendimiento, el \textit{Controller} implementa un sistema de \textit{snapshots}. Este sistema
 guarda estados intermedios de la imagen tras la aplicación de cierto número de operaciones. De este modo,
 cuando se modifica una operación en el \textit{pipeline}, el \textit{Controller} puede restaurar el estado 
@@ -493,7 +493,7 @@ muestra su disposición respecto al resto de la interfaz.
     Actúa como una pila: añade nuevas operaciones al final de la lista y permite eliminar la última operación aplicada. Esta pila se maneja 
     con los botones ``+'' y ``-'' ubicados en la parte inferior derecha del componente. El botón ``+'' despliega un menú con todas las operaciones
     disponibles, organizadas por categorías. Cada operación se aplica con sus parámetros por defecto, aunque el usuario puede modificarlos 
-    posteriormente. Además, en la parte inferior izquierda del componente, se rederiza un botón de tipo \textit{toggle} [CPU/GPU] que permite 
+    posteriormente. Además, en la parte inferior izquierda del componente, se renderiza un botón de tipo \textit{toggle} [CPU/GPU] que permite 
     cambiar el dispositivo de procesamiento en el que se ejecutan las operaciones, mostrando el dispositivo seleccionado.
     \vspace{1em}
 
@@ -524,7 +524,7 @@ muestra su disposición respecto al resto de la interfaz.
 \newpage
 
 \paragraph{Visor central (\textit{ImageViewer})} \label{par:7_3_5_2_image_viewer}
-El visor central es el componente principal de toda la interfaz. Es el encargado de mostrar la imagen cargada y procesada, actualizdándose 
+El visor central es el componente principal de toda la interfaz. Es el encargado de mostrar la imagen cargada y procesada, actualizándose 
 cada vez que se aplica una nueva operación o se lleva a cabo un ajuste de parámetros. Además, muestra información técnica sobre la imagen y 
 el propio procesamiento. En la \autoref{fig:42_gui_image_viewer_overview} se muestra su disposición respecto al resto de la interfaz.
 
@@ -568,7 +568,7 @@ La primera de las pestañas (\textit{Image Info}) muestra información técnica 
 La segunda de las pestañas (\textit{Logger}) muestra un registro de eventos que representa todas las acciones realizadas por el usuario durante la sesión actual.
 Esta pestaña tiene una función meramente informativa, proporcionando retroalimentación al usuario sobre las operaciones aplicadas, los cambios de parámetros, el dispositivo de procesamiento seleccionado, etc.
 En la \autoref{fig:44_logger_tab_pane} se muestra un ejemplo de esta pestaña, que refleja el registro de acciones realizadas para la toma de las capturas de pantalla anteriores:
-Carga de imagen $\rightarrow$ Aplicación de \textit{Debyaer} $\rightarrow$ Aplicación de Normalización mín. máx. $\rightarrow$ Aplicación de Ecualización de Histograma $\rightarrow$ Aplicación de Ajuste \textit{Gamma}.
+Carga de imagen $\rightarrow$ Aplicación de \textit{Debayer} $\rightarrow$ Aplicación de Normalización mín. máx. $\rightarrow$ Aplicación de Ecualización de Histograma $\rightarrow$ Aplicación de Ajuste \textit{Gamma}.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.98\textwidth]{sections/7/img/logger_tab_pane.png}
@@ -576,9 +576,9 @@ Carga de imagen $\rightarrow$ Aplicación de \textit{Debyaer} $\rightarrow$ Apli
     \label{fig:44_logger_tab_pane}
 \end{figure}
 
-Además, tras la aplicación de cada operación, se muestra el tiempo de ejecución de la misma en milisegundos, que permite obtener una primera referencia sobre el rendimiento de cada operación aplicada.
+Además, tras la aplicación de cada operación, se muestra el tiempo de ejecución en milisegundos, lo que permite obtener una primera referencia sobre el rendimiento de cada operación aplicada.
 Como desde la propia aplicación se puede modificar el dispositivo de procesamiento (CPU o GPU), pueden hacerse pequeñas comparativas de rendimiento de forma sencilla e interactiva, lo 
-que puede ser de gran utilidad. En la \autoref{fig:45_logger_cuda_cpu} se muestra un ejemplo de esta funcionalidad, donde se observa la aplicación de ciertas operaciones en ambos dispositvos 
+que puede ser de gran utilidad. En la \autoref{fig:45_logger_cuda_cpu} se muestra un ejemplo de esta funcionalidad, donde se observa la aplicación de ciertas operaciones en ambos dispositivos 
 de ejecución y los tiempos correspondientes.
 
 \begin{figure}[h!]
@@ -605,7 +605,7 @@ El panel derecho se encarga de renderizar controles sobre las operaciones aplica
 y ajustar sus parámetros. Cada vez que se añade una nueva operación al \textit{pipeline} de procesamiento, se añade 
 un control específico para dicha operación en el panel derecho. En la \autoref{fig:47_gui_right_panel_overview} 
 se muestra su disposición respecto al resto de la interfaz, así como un ejemplo de los controles renderizados 
-para un \textit{pipeline} en específico.
+para un \textit{pipeline} específico.
 
 \begin{figure}[h!]
     \centering
@@ -621,7 +621,7 @@ se han desarrollado diferentes tipos de controles para cada caso.
 El primer tipo de control es el específico para operaciones que requieren la selección de tipo de algoritmo o método 
 a aplicar, esto es, una selección entre varias opciones predefinidas. Este es el caso de la operación \textit{Debayer}, que 
 tiene diferentes módulos implementados, y de la operación de Balance de Blancos (\textit{White Balance}), que permite la 
-selección entre diferentes algoritmos. Dicho control, muetra un simple menú desplegable de tipo \textit{dropdown} con las opciones 
+selección entre diferentes algoritmos. Dicho control muestra un simple menú desplegable de tipo \textit{dropdown} con las opciones 
 disponibles para cada operación, como se muestra en la \autoref{fig:48_op_controls_method_selection}.
 
 \begin{figure}[h!]
